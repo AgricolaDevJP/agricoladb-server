@@ -1,7 +1,9 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -63,5 +65,12 @@ func (Card) Edges() []ent.Edge {
 func (Card) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("revision_id", "literal_id").Unique(),
+	}
+}
+
+func (Card) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entgql.RelayConnection(),
+		entgql.QueryField(),
 	}
 }

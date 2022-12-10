@@ -21,6 +21,31 @@ func (r *cardResolver) VictoryPoint(ctx context.Context, obj *ent.Card) (ent.Nod
 	panic(fmt.Errorf("not implemented: VictoryPoint - victoryPoint"))
 }
 
+// TotalCount is the resolver for the totalCount field.
+func (r *cardConnectionResolver) TotalCount(ctx context.Context, obj *ent.CardConnection) (ent.Noder, error) {
+	panic(fmt.Errorf("not implemented: TotalCount - totalCount"))
+}
+
+// TotalCount is the resolver for the totalCount field.
+func (r *cardSpecialColorConnectionResolver) TotalCount(ctx context.Context, obj *ent.CardSpecialColorConnection) (ent.Noder, error) {
+	panic(fmt.Errorf("not implemented: TotalCount - totalCount"))
+}
+
+// TotalCount is the resolver for the totalCount field.
+func (r *cardTypeConnectionResolver) TotalCount(ctx context.Context, obj *ent.CardTypeConnection) (ent.Noder, error) {
+	panic(fmt.Errorf("not implemented: TotalCount - totalCount"))
+}
+
+// TotalCount is the resolver for the totalCount field.
+func (r *deckConnectionResolver) TotalCount(ctx context.Context, obj *ent.DeckConnection) (ent.Noder, error) {
+	panic(fmt.Errorf("not implemented: TotalCount - totalCount"))
+}
+
+// TotalCount is the resolver for the totalCount field.
+func (r *productConnectionResolver) TotalCount(ctx context.Context, obj *ent.ProductConnection) (ent.Noder, error) {
+	panic(fmt.Errorf("not implemented: TotalCount - totalCount"))
+}
+
 // Node is the resolver for the node field.
 func (r *queryResolver) Node(ctx context.Context, id int) (ent.Noder, error) {
 	panic(fmt.Errorf("not implemented: Node - node"))
@@ -29,6 +54,41 @@ func (r *queryResolver) Node(ctx context.Context, id int) (ent.Noder, error) {
 // Nodes is the resolver for the nodes field.
 func (r *queryResolver) Nodes(ctx context.Context, ids []int) ([]ent.Noder, error) {
 	panic(fmt.Errorf("not implemented: Nodes - nodes"))
+}
+
+// Cards is the resolver for the cards field.
+func (r *queryResolver) Cards(ctx context.Context, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.CardWhereInput) (*ent.CardConnection, error) {
+	panic(fmt.Errorf("not implemented: Cards - cards"))
+}
+
+// CardSpecialColors is the resolver for the cardSpecialColors field.
+func (r *queryResolver) CardSpecialColors(ctx context.Context, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.CardSpecialColorWhereInput) (*ent.CardSpecialColorConnection, error) {
+	panic(fmt.Errorf("not implemented: CardSpecialColors - cardSpecialColors"))
+}
+
+// CardTypes is the resolver for the cardTypes field.
+func (r *queryResolver) CardTypes(ctx context.Context, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.CardTypeWhereInput) (*ent.CardTypeConnection, error) {
+	panic(fmt.Errorf("not implemented: CardTypes - cardTypes"))
+}
+
+// Decks is the resolver for the decks field.
+func (r *queryResolver) Decks(ctx context.Context, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.DeckWhereInput) (*ent.DeckConnection, error) {
+	panic(fmt.Errorf("not implemented: Decks - decks"))
+}
+
+// Products is the resolver for the products field.
+func (r *queryResolver) Products(ctx context.Context, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.ProductWhereInput) (*ent.ProductConnection, error) {
+	panic(fmt.Errorf("not implemented: Products - products"))
+}
+
+// Revisions is the resolver for the revisions field.
+func (r *queryResolver) Revisions(ctx context.Context, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.RevisionWhereInput) (*ent.RevisionConnection, error) {
+	panic(fmt.Errorf("not implemented: Revisions - revisions"))
+}
+
+// TotalCount is the resolver for the totalCount field.
+func (r *revisionConnectionResolver) TotalCount(ctx context.Context, obj *ent.RevisionConnection) (ent.Noder, error) {
+	panic(fmt.Errorf("not implemented: TotalCount - totalCount"))
 }
 
 // MinPlayersNumber is the resolver for the minPlayersNumber field.
@@ -114,8 +174,38 @@ func (r *cardWhereInputResolver) VictoryPointLte(ctx context.Context, obj *ent.C
 // Card returns generated.CardResolver implementation.
 func (r *Resolver) Card() generated.CardResolver { return &cardResolver{r} }
 
+// CardConnection returns generated.CardConnectionResolver implementation.
+func (r *Resolver) CardConnection() generated.CardConnectionResolver {
+	return &cardConnectionResolver{r}
+}
+
+// CardSpecialColorConnection returns generated.CardSpecialColorConnectionResolver implementation.
+func (r *Resolver) CardSpecialColorConnection() generated.CardSpecialColorConnectionResolver {
+	return &cardSpecialColorConnectionResolver{r}
+}
+
+// CardTypeConnection returns generated.CardTypeConnectionResolver implementation.
+func (r *Resolver) CardTypeConnection() generated.CardTypeConnectionResolver {
+	return &cardTypeConnectionResolver{r}
+}
+
+// DeckConnection returns generated.DeckConnectionResolver implementation.
+func (r *Resolver) DeckConnection() generated.DeckConnectionResolver {
+	return &deckConnectionResolver{r}
+}
+
+// ProductConnection returns generated.ProductConnectionResolver implementation.
+func (r *Resolver) ProductConnection() generated.ProductConnectionResolver {
+	return &productConnectionResolver{r}
+}
+
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
+
+// RevisionConnection returns generated.RevisionConnectionResolver implementation.
+func (r *Resolver) RevisionConnection() generated.RevisionConnectionResolver {
+	return &revisionConnectionResolver{r}
+}
 
 // CardWhereInput returns generated.CardWhereInputResolver implementation.
 func (r *Resolver) CardWhereInput() generated.CardWhereInputResolver {
@@ -123,5 +213,11 @@ func (r *Resolver) CardWhereInput() generated.CardWhereInputResolver {
 }
 
 type cardResolver struct{ *Resolver }
+type cardConnectionResolver struct{ *Resolver }
+type cardSpecialColorConnectionResolver struct{ *Resolver }
+type cardTypeConnectionResolver struct{ *Resolver }
+type deckConnectionResolver struct{ *Resolver }
+type productConnectionResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type revisionConnectionResolver struct{ *Resolver }
 type cardWhereInputResolver struct{ *Resolver }
