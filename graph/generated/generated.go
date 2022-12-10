@@ -3,7 +3,7 @@
 package generated
 
 import (
-	"agricoladb/graph/model"
+	"agricoladb/ent"
 	"bytes"
 	"context"
 	"errors"
@@ -36,7 +36,9 @@ type Config struct {
 }
 
 type ResolverRoot interface {
+	Card() CardResolver
 	Query() QueryResolver
+	CardWhereInput() CardWhereInputResolver
 }
 
 type DirectiveRoot struct {
@@ -44,13 +46,19 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Card struct {
+		Ancestors                       func(childComplexity int) int
+		CardSpecialColor                func(childComplexity int) int
+		CardSpecialColorID              func(childComplexity int) int
 		CardType                        func(childComplexity int) int
+		CardTypeID                      func(childComplexity int) int
+		Children                        func(childComplexity int) int
 		Cost                            func(childComplexity int) int
 		Deck                            func(childComplexity int) int
-		Description                     func(childComplexity int) int
+		DeckID                          func(childComplexity int) int
+		FunctionText                    func(childComplexity int) int
 		HasActionsBoosterIcon           func(childComplexity int) int
-		HasArrow                        func(childComplexity int) int
-		HasBonus                        func(childComplexity int) int
+		HasArrrow                       func(childComplexity int) int
+		HasBonusPointIcon               func(childComplexity int) int
 		HasBreadIcon                    func(childComplexity int) int
 		HasBuildingResourceProviderIcon func(childComplexity int) int
 		HasCropProviderIcon             func(childComplexity int) int
@@ -61,29 +69,36 @@ type ComplexityRoot struct {
 		HasGoodsProviderIcon            func(childComplexity int) int
 		HasHiringFareIcon               func(childComplexity int) int
 		HasLivestockProviderIcon        func(childComplexity int) int
-		HasNegativeBonus                func(childComplexity int) int
+		HasNegativeBonusPointIcon       func(childComplexity int) int
 		HasPanIcon                      func(childComplexity int) int
 		HasPointsProviderIcon           func(childComplexity int) int
 		HasSlashAndBurnIcon             func(childComplexity int) int
 		ID                              func(childComplexity int) int
-		IsMutableVictoryPoint           func(childComplexity int) int
 		IsOfficialJa                    func(childComplexity int) int
+		IsVariableVictoryPoint          func(childComplexity int) int
 		LiteralID                       func(childComplexity int) int
 		MinPlayersNumber                func(childComplexity int) int
 		NameEn                          func(childComplexity int) int
 		NameJa                          func(childComplexity int) int
-		OriginCards                     func(childComplexity int) int
 		PlayAgricolaCardID              func(childComplexity int) int
 		Prerequisite                    func(childComplexity int) int
 		PrintedID                       func(childComplexity int) int
-		Product                         func(childComplexity int) int
-		RepublishedCards                func(childComplexity int) int
+		Products                        func(childComplexity int) int
+		Revision                        func(childComplexity int) int
 		RevisionID                      func(childComplexity int) int
-		SpecialColor                    func(childComplexity int) int
 		VictoryPoint                    func(childComplexity int) int
 	}
 
+	CardSpecialColor struct {
+		Cards  func(childComplexity int) int
+		ID     func(childComplexity int) int
+		Key    func(childComplexity int) int
+		NameEn func(childComplexity int) int
+		NameJa func(childComplexity int) int
+	}
+
 	CardType struct {
+		Cards  func(childComplexity int) int
 		ID     func(childComplexity int) int
 		Key    func(childComplexity int) int
 		NameEn func(childComplexity int) int
@@ -91,39 +106,77 @@ type ComplexityRoot struct {
 	}
 
 	Deck struct {
+		Cards      func(childComplexity int) int
 		ID         func(childComplexity int) int
 		Key        func(childComplexity int) int
 		NameEn     func(childComplexity int) int
 		NameJa     func(childComplexity int) int
+		Revision   func(childComplexity int) int
 		RevisionID func(childComplexity int) int
 	}
 
+	PageInfo struct {
+		EndCursor       func(childComplexity int) int
+		HasNextPage     func(childComplexity int) int
+		HasPreviousPage func(childComplexity int) int
+		StartCursor     func(childComplexity int) int
+	}
+
 	Product struct {
-		ID            func(childComplexity int) int
-		IsOfficialJa  func(childComplexity int) int
-		Key           func(childComplexity int) int
-		NameEn        func(childComplexity int) int
-		NameJa        func(childComplexity int) int
-		PublishedYear func(childComplexity int) int
-		RevisionID    func(childComplexity int) int
+		Cards        func(childComplexity int) int
+		ID           func(childComplexity int) int
+		IsOfficialJa func(childComplexity int) int
+		Key          func(childComplexity int) int
+		NameEn       func(childComplexity int) int
+		NameJa       func(childComplexity int) int
+		Revision     func(childComplexity int) int
+		RevisionID   func(childComplexity int) int
 	}
 
 	Query struct {
-		Cards                          func(childComplexity int) int
-		FindCardByRevisionAndLiteralID func(childComplexity int, input model.RevisionAndLiteralID) int
+		Node  func(childComplexity int, id int) int
+		Nodes func(childComplexity int, ids []int) int
 	}
 
-	SpecialColor struct {
-		ID     func(childComplexity int) int
-		Key    func(childComplexity int) int
-		NameEn func(childComplexity int) int
-		NameJa func(childComplexity int) int
+	Revision struct {
+		Cards    func(childComplexity int) int
+		Decks    func(childComplexity int) int
+		ID       func(childComplexity int) int
+		Key      func(childComplexity int) int
+		NameEn   func(childComplexity int) int
+		NameJa   func(childComplexity int) int
+		Products func(childComplexity int) int
 	}
 }
 
+type CardResolver interface {
+	MinPlayersNumber(ctx context.Context, obj *ent.Card) (ent.Noder, error)
+
+	VictoryPoint(ctx context.Context, obj *ent.Card) (ent.Noder, error)
+}
 type QueryResolver interface {
-	Cards(ctx context.Context) ([]*model.Card, error)
-	FindCardByRevisionAndLiteralID(ctx context.Context, input model.RevisionAndLiteralID) (*model.Card, error)
+	Node(ctx context.Context, id int) (ent.Noder, error)
+	Nodes(ctx context.Context, ids []int) ([]ent.Noder, error)
+}
+
+type CardWhereInputResolver interface {
+	MinPlayersNumber(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
+	MinPlayersNumberNeq(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
+	MinPlayersNumberIn(ctx context.Context, obj *ent.CardWhereInput, data []ent.Noder) error
+	MinPlayersNumberNotIn(ctx context.Context, obj *ent.CardWhereInput, data []ent.Noder) error
+	MinPlayersNumberGt(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
+	MinPlayersNumberGte(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
+	MinPlayersNumberLt(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
+	MinPlayersNumberLte(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
+
+	VictoryPoint(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
+	VictoryPointNeq(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
+	VictoryPointIn(ctx context.Context, obj *ent.CardWhereInput, data []ent.Noder) error
+	VictoryPointNotIn(ctx context.Context, obj *ent.CardWhereInput, data []ent.Noder) error
+	VictoryPointGt(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
+	VictoryPointGte(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
+	VictoryPointLt(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
+	VictoryPointLte(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
 }
 
 type executableSchema struct {
@@ -141,12 +194,47 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
+	case "Card.ancestors":
+		if e.complexity.Card.Ancestors == nil {
+			break
+		}
+
+		return e.complexity.Card.Ancestors(childComplexity), true
+
+	case "Card.cardSpecialColor":
+		if e.complexity.Card.CardSpecialColor == nil {
+			break
+		}
+
+		return e.complexity.Card.CardSpecialColor(childComplexity), true
+
+	case "Card.cardSpecialColorID":
+		if e.complexity.Card.CardSpecialColorID == nil {
+			break
+		}
+
+		return e.complexity.Card.CardSpecialColorID(childComplexity), true
+
 	case "Card.cardType":
 		if e.complexity.Card.CardType == nil {
 			break
 		}
 
 		return e.complexity.Card.CardType(childComplexity), true
+
+	case "Card.cardTypeID":
+		if e.complexity.Card.CardTypeID == nil {
+			break
+		}
+
+		return e.complexity.Card.CardTypeID(childComplexity), true
+
+	case "Card.children":
+		if e.complexity.Card.Children == nil {
+			break
+		}
+
+		return e.complexity.Card.Children(childComplexity), true
 
 	case "Card.cost":
 		if e.complexity.Card.Cost == nil {
@@ -162,12 +250,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Card.Deck(childComplexity), true
 
-	case "Card.description":
-		if e.complexity.Card.Description == nil {
+	case "Card.deckID":
+		if e.complexity.Card.DeckID == nil {
 			break
 		}
 
-		return e.complexity.Card.Description(childComplexity), true
+		return e.complexity.Card.DeckID(childComplexity), true
+
+	case "Card.functionText":
+		if e.complexity.Card.FunctionText == nil {
+			break
+		}
+
+		return e.complexity.Card.FunctionText(childComplexity), true
 
 	case "Card.hasActionsBoosterIcon":
 		if e.complexity.Card.HasActionsBoosterIcon == nil {
@@ -176,19 +271,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Card.HasActionsBoosterIcon(childComplexity), true
 
-	case "Card.hasArrow":
-		if e.complexity.Card.HasArrow == nil {
+	case "Card.hasArrrow":
+		if e.complexity.Card.HasArrrow == nil {
 			break
 		}
 
-		return e.complexity.Card.HasArrow(childComplexity), true
+		return e.complexity.Card.HasArrrow(childComplexity), true
 
-	case "Card.hasBonus":
-		if e.complexity.Card.HasBonus == nil {
+	case "Card.hasBonusPointIcon":
+		if e.complexity.Card.HasBonusPointIcon == nil {
 			break
 		}
 
-		return e.complexity.Card.HasBonus(childComplexity), true
+		return e.complexity.Card.HasBonusPointIcon(childComplexity), true
 
 	case "Card.hasBreadIcon":
 		if e.complexity.Card.HasBreadIcon == nil {
@@ -260,12 +355,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Card.HasLivestockProviderIcon(childComplexity), true
 
-	case "Card.hasNegativeBonus":
-		if e.complexity.Card.HasNegativeBonus == nil {
+	case "Card.hasNegativeBonusPointIcon":
+		if e.complexity.Card.HasNegativeBonusPointIcon == nil {
 			break
 		}
 
-		return e.complexity.Card.HasNegativeBonus(childComplexity), true
+		return e.complexity.Card.HasNegativeBonusPointIcon(childComplexity), true
 
 	case "Card.hasPanIcon":
 		if e.complexity.Card.HasPanIcon == nil {
@@ -295,13 +390,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Card.ID(childComplexity), true
 
-	case "Card.isMutableVictoryPoint":
-		if e.complexity.Card.IsMutableVictoryPoint == nil {
-			break
-		}
-
-		return e.complexity.Card.IsMutableVictoryPoint(childComplexity), true
-
 	case "Card.isOfficialJa":
 		if e.complexity.Card.IsOfficialJa == nil {
 			break
@@ -309,7 +397,14 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Card.IsOfficialJa(childComplexity), true
 
-	case "Card.literalId":
+	case "Card.isVariableVictoryPoint":
+		if e.complexity.Card.IsVariableVictoryPoint == nil {
+			break
+		}
+
+		return e.complexity.Card.IsVariableVictoryPoint(childComplexity), true
+
+	case "Card.literalID":
 		if e.complexity.Card.LiteralID == nil {
 			break
 		}
@@ -337,14 +432,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Card.NameJa(childComplexity), true
 
-	case "Card.originCards":
-		if e.complexity.Card.OriginCards == nil {
-			break
-		}
-
-		return e.complexity.Card.OriginCards(childComplexity), true
-
-	case "Card.playAgricolaCardId":
+	case "Card.playAgricolaCardID":
 		if e.complexity.Card.PlayAgricolaCardID == nil {
 			break
 		}
@@ -358,40 +446,33 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Card.Prerequisite(childComplexity), true
 
-	case "Card.printedId":
+	case "Card.printedID":
 		if e.complexity.Card.PrintedID == nil {
 			break
 		}
 
 		return e.complexity.Card.PrintedID(childComplexity), true
 
-	case "Card.product":
-		if e.complexity.Card.Product == nil {
+	case "Card.products":
+		if e.complexity.Card.Products == nil {
 			break
 		}
 
-		return e.complexity.Card.Product(childComplexity), true
+		return e.complexity.Card.Products(childComplexity), true
 
-	case "Card.republishedCards":
-		if e.complexity.Card.RepublishedCards == nil {
+	case "Card.revision":
+		if e.complexity.Card.Revision == nil {
 			break
 		}
 
-		return e.complexity.Card.RepublishedCards(childComplexity), true
+		return e.complexity.Card.Revision(childComplexity), true
 
-	case "Card.revisionId":
+	case "Card.revisionID":
 		if e.complexity.Card.RevisionID == nil {
 			break
 		}
 
 		return e.complexity.Card.RevisionID(childComplexity), true
-
-	case "Card.specialColor":
-		if e.complexity.Card.SpecialColor == nil {
-			break
-		}
-
-		return e.complexity.Card.SpecialColor(childComplexity), true
 
 	case "Card.victoryPoint":
 		if e.complexity.Card.VictoryPoint == nil {
@@ -399,6 +480,48 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Card.VictoryPoint(childComplexity), true
+
+	case "CardSpecialColor.cards":
+		if e.complexity.CardSpecialColor.Cards == nil {
+			break
+		}
+
+		return e.complexity.CardSpecialColor.Cards(childComplexity), true
+
+	case "CardSpecialColor.id":
+		if e.complexity.CardSpecialColor.ID == nil {
+			break
+		}
+
+		return e.complexity.CardSpecialColor.ID(childComplexity), true
+
+	case "CardSpecialColor.key":
+		if e.complexity.CardSpecialColor.Key == nil {
+			break
+		}
+
+		return e.complexity.CardSpecialColor.Key(childComplexity), true
+
+	case "CardSpecialColor.nameEn":
+		if e.complexity.CardSpecialColor.NameEn == nil {
+			break
+		}
+
+		return e.complexity.CardSpecialColor.NameEn(childComplexity), true
+
+	case "CardSpecialColor.nameJa":
+		if e.complexity.CardSpecialColor.NameJa == nil {
+			break
+		}
+
+		return e.complexity.CardSpecialColor.NameJa(childComplexity), true
+
+	case "CardType.cards":
+		if e.complexity.CardType.Cards == nil {
+			break
+		}
+
+		return e.complexity.CardType.Cards(childComplexity), true
 
 	case "CardType.id":
 		if e.complexity.CardType.ID == nil {
@@ -428,6 +551,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.CardType.NameJa(childComplexity), true
 
+	case "Deck.cards":
+		if e.complexity.Deck.Cards == nil {
+			break
+		}
+
+		return e.complexity.Deck.Cards(childComplexity), true
+
 	case "Deck.id":
 		if e.complexity.Deck.ID == nil {
 			break
@@ -456,12 +586,54 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Deck.NameJa(childComplexity), true
 
-	case "Deck.revisionId":
+	case "Deck.revision":
+		if e.complexity.Deck.Revision == nil {
+			break
+		}
+
+		return e.complexity.Deck.Revision(childComplexity), true
+
+	case "Deck.revisionID":
 		if e.complexity.Deck.RevisionID == nil {
 			break
 		}
 
 		return e.complexity.Deck.RevisionID(childComplexity), true
+
+	case "PageInfo.endCursor":
+		if e.complexity.PageInfo.EndCursor == nil {
+			break
+		}
+
+		return e.complexity.PageInfo.EndCursor(childComplexity), true
+
+	case "PageInfo.hasNextPage":
+		if e.complexity.PageInfo.HasNextPage == nil {
+			break
+		}
+
+		return e.complexity.PageInfo.HasNextPage(childComplexity), true
+
+	case "PageInfo.hasPreviousPage":
+		if e.complexity.PageInfo.HasPreviousPage == nil {
+			break
+		}
+
+		return e.complexity.PageInfo.HasPreviousPage(childComplexity), true
+
+	case "PageInfo.startCursor":
+		if e.complexity.PageInfo.StartCursor == nil {
+			break
+		}
+
+		return e.complexity.PageInfo.StartCursor(childComplexity), true
+
+	case "Product.cards":
+		if e.complexity.Product.Cards == nil {
+			break
+		}
+
+		return e.complexity.Product.Cards(childComplexity), true
 
 	case "Product.id":
 		if e.complexity.Product.ID == nil {
@@ -498,66 +670,92 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Product.NameJa(childComplexity), true
 
-	case "Product.publishedYear":
-		if e.complexity.Product.PublishedYear == nil {
+	case "Product.revision":
+		if e.complexity.Product.Revision == nil {
 			break
 		}
 
-		return e.complexity.Product.PublishedYear(childComplexity), true
+		return e.complexity.Product.Revision(childComplexity), true
 
-	case "Product.revisionId":
+	case "Product.revisionID":
 		if e.complexity.Product.RevisionID == nil {
 			break
 		}
 
 		return e.complexity.Product.RevisionID(childComplexity), true
 
-	case "Query.cards":
-		if e.complexity.Query.Cards == nil {
+	case "Query.node":
+		if e.complexity.Query.Node == nil {
 			break
 		}
 
-		return e.complexity.Query.Cards(childComplexity), true
-
-	case "Query.findCardByRevisionAndLiteralId":
-		if e.complexity.Query.FindCardByRevisionAndLiteralID == nil {
-			break
-		}
-
-		args, err := ec.field_Query_findCardByRevisionAndLiteralId_args(context.TODO(), rawArgs)
+		args, err := ec.field_Query_node_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.FindCardByRevisionAndLiteralID(childComplexity, args["input"].(model.RevisionAndLiteralID)), true
+		return e.complexity.Query.Node(childComplexity, args["id"].(int)), true
 
-	case "SpecialColor.id":
-		if e.complexity.SpecialColor.ID == nil {
+	case "Query.nodes":
+		if e.complexity.Query.Nodes == nil {
 			break
 		}
 
-		return e.complexity.SpecialColor.ID(childComplexity), true
+		args, err := ec.field_Query_nodes_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
 
-	case "SpecialColor.key":
-		if e.complexity.SpecialColor.Key == nil {
+		return e.complexity.Query.Nodes(childComplexity, args["ids"].([]int)), true
+
+	case "Revision.cards":
+		if e.complexity.Revision.Cards == nil {
 			break
 		}
 
-		return e.complexity.SpecialColor.Key(childComplexity), true
+		return e.complexity.Revision.Cards(childComplexity), true
 
-	case "SpecialColor.nameEn":
-		if e.complexity.SpecialColor.NameEn == nil {
+	case "Revision.decks":
+		if e.complexity.Revision.Decks == nil {
 			break
 		}
 
-		return e.complexity.SpecialColor.NameEn(childComplexity), true
+		return e.complexity.Revision.Decks(childComplexity), true
 
-	case "SpecialColor.nameJa":
-		if e.complexity.SpecialColor.NameJa == nil {
+	case "Revision.id":
+		if e.complexity.Revision.ID == nil {
 			break
 		}
 
-		return e.complexity.SpecialColor.NameJa(childComplexity), true
+		return e.complexity.Revision.ID(childComplexity), true
+
+	case "Revision.key":
+		if e.complexity.Revision.Key == nil {
+			break
+		}
+
+		return e.complexity.Revision.Key(childComplexity), true
+
+	case "Revision.nameEn":
+		if e.complexity.Revision.NameEn == nil {
+			break
+		}
+
+		return e.complexity.Revision.NameEn(childComplexity), true
+
+	case "Revision.nameJa":
+		if e.complexity.Revision.NameJa == nil {
+			break
+		}
+
+		return e.complexity.Revision.NameJa(childComplexity), true
+
+	case "Revision.products":
+		if e.complexity.Revision.Products == nil {
+			break
+		}
+
+		return e.complexity.Revision.Products(childComplexity), true
 
 	}
 	return 0, false
@@ -567,7 +765,12 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
-		ec.unmarshalInputRevisionAndLiteralId,
+		ec.unmarshalInputCardSpecialColorWhereInput,
+		ec.unmarshalInputCardTypeWhereInput,
+		ec.unmarshalInputCardWhereInput,
+		ec.unmarshalInputDeckWhereInput,
+		ec.unmarshalInputProductWhereInput,
+		ec.unmarshalInputRevisionWhereInput,
 	)
 	first := true
 
@@ -613,31 +816,29 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "../schema.graphqls", Input: `# GraphQL schema example
-#
-# https://gqlgen.com/getting-started/
-
-type Card {
+	{Name: "../ent.graphqls", Input: `directive @goField(forceResolver: Boolean, name: String) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
+directive @goModel(model: String, models: [String!]) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
+type Card implements Node {
   id: ID!
-  literalId: String!
-  printedId: String
-  revisionId: Int!
-  playAgricolaCardId: Int
-  cardType: CardType!
-  product: [Product!]!
-  deck: Deck
-  nameJa: String!
-  nameEn: String!
+  literalID: String!
+  revisionID: ID!
+  printedID: String
+  playAgricolaCardID: String
+  deckID: ID
+  cardTypeID: ID!
+  cardSpecialColorID: ID
+  nameJa: String
+  nameEn: String
   minPlayersNumber: Int
   prerequisite: String
   cost: String
-  description: String!
+  functionText: String
   isOfficialJa: Boolean!
   victoryPoint: Int
-  isMutableVictoryPoint: Boolean!
-  hasArrow: Boolean!
-  hasBonus: Boolean!
-  hasNegativeBonus: Boolean!
+  isVariableVictoryPoint: Boolean!
+  hasArrrow: Boolean!
+  hasBonusPointIcon: Boolean!
+  hasNegativeBonusPointIcon: Boolean!
   hasPanIcon: Boolean!
   hasBreadIcon: Boolean!
   hasFarmPlannerIcon: Boolean!
@@ -652,51 +853,729 @@ type Card {
   hasFellTreesIcon: Boolean!
   hasSlashAndBurnIcon: Boolean!
   hasHiringFareIcon: Boolean!
-  specialColor: SpecialColor
-  originCards: [Card!]!
-  republishedCards: [Card!]!
+  revision: Revision!
+  products: [Product!]
+  deck: Deck
+  cardType: CardType!
+  cardSpecialColor: CardSpecialColor
+  children: [Card!]
+  ancestors: [Card!]
 }
-
-type Product {
+type CardSpecialColor implements Node {
   id: ID!
-  revisionId: Int!
   key: String!
-  nameJa: String!
-  nameEn: String!
-  publishedYear: Int
+  nameJa: String
+  nameEn: String
+  cards: [Card!]
+}
+"""
+CardSpecialColorWhereInput is used for filtering CardSpecialColor objects.
+Input was generated by ent.
+"""
+input CardSpecialColorWhereInput {
+  not: CardSpecialColorWhereInput
+  and: [CardSpecialColorWhereInput!]
+  or: [CardSpecialColorWhereInput!]
+  """id field predicates"""
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  """key field predicates"""
+  key: String
+  keyNEQ: String
+  keyIn: [String!]
+  keyNotIn: [String!]
+  keyGT: String
+  keyGTE: String
+  keyLT: String
+  keyLTE: String
+  keyContains: String
+  keyHasPrefix: String
+  keyHasSuffix: String
+  keyEqualFold: String
+  keyContainsFold: String
+  """name_ja field predicates"""
+  nameJa: String
+  nameJaNEQ: String
+  nameJaIn: [String!]
+  nameJaNotIn: [String!]
+  nameJaGT: String
+  nameJaGTE: String
+  nameJaLT: String
+  nameJaLTE: String
+  nameJaContains: String
+  nameJaHasPrefix: String
+  nameJaHasSuffix: String
+  nameJaIsNil: Boolean
+  nameJaNotNil: Boolean
+  nameJaEqualFold: String
+  nameJaContainsFold: String
+  """name_en field predicates"""
+  nameEn: String
+  nameEnNEQ: String
+  nameEnIn: [String!]
+  nameEnNotIn: [String!]
+  nameEnGT: String
+  nameEnGTE: String
+  nameEnLT: String
+  nameEnLTE: String
+  nameEnContains: String
+  nameEnHasPrefix: String
+  nameEnHasSuffix: String
+  nameEnIsNil: Boolean
+  nameEnNotNil: Boolean
+  nameEnEqualFold: String
+  nameEnContainsFold: String
+  """cards edge predicates"""
+  hasCards: Boolean
+  hasCardsWith: [CardWhereInput!]
+}
+type CardType implements Node {
+  id: ID!
+  key: String!
+  nameJa: String
+  nameEn: String
+  cards: [Card!]
+}
+"""
+CardTypeWhereInput is used for filtering CardType objects.
+Input was generated by ent.
+"""
+input CardTypeWhereInput {
+  not: CardTypeWhereInput
+  and: [CardTypeWhereInput!]
+  or: [CardTypeWhereInput!]
+  """id field predicates"""
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  """key field predicates"""
+  key: String
+  keyNEQ: String
+  keyIn: [String!]
+  keyNotIn: [String!]
+  keyGT: String
+  keyGTE: String
+  keyLT: String
+  keyLTE: String
+  keyContains: String
+  keyHasPrefix: String
+  keyHasSuffix: String
+  keyEqualFold: String
+  keyContainsFold: String
+  """name_ja field predicates"""
+  nameJa: String
+  nameJaNEQ: String
+  nameJaIn: [String!]
+  nameJaNotIn: [String!]
+  nameJaGT: String
+  nameJaGTE: String
+  nameJaLT: String
+  nameJaLTE: String
+  nameJaContains: String
+  nameJaHasPrefix: String
+  nameJaHasSuffix: String
+  nameJaIsNil: Boolean
+  nameJaNotNil: Boolean
+  nameJaEqualFold: String
+  nameJaContainsFold: String
+  """name_en field predicates"""
+  nameEn: String
+  nameEnNEQ: String
+  nameEnIn: [String!]
+  nameEnNotIn: [String!]
+  nameEnGT: String
+  nameEnGTE: String
+  nameEnLT: String
+  nameEnLTE: String
+  nameEnContains: String
+  nameEnHasPrefix: String
+  nameEnHasSuffix: String
+  nameEnIsNil: Boolean
+  nameEnNotNil: Boolean
+  nameEnEqualFold: String
+  nameEnContainsFold: String
+  """cards edge predicates"""
+  hasCards: Boolean
+  hasCardsWith: [CardWhereInput!]
+}
+"""
+CardWhereInput is used for filtering Card objects.
+Input was generated by ent.
+"""
+input CardWhereInput {
+  not: CardWhereInput
+  and: [CardWhereInput!]
+  or: [CardWhereInput!]
+  """id field predicates"""
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  """literal_id field predicates"""
+  literalID: String
+  literalIDNEQ: String
+  literalIDIn: [String!]
+  literalIDNotIn: [String!]
+  literalIDGT: String
+  literalIDGTE: String
+  literalIDLT: String
+  literalIDLTE: String
+  literalIDContains: String
+  literalIDHasPrefix: String
+  literalIDHasSuffix: String
+  literalIDEqualFold: String
+  literalIDContainsFold: String
+  """revision_id field predicates"""
+  revisionID: ID
+  revisionIDNEQ: ID
+  revisionIDIn: [ID!]
+  revisionIDNotIn: [ID!]
+  """printed_id field predicates"""
+  printedID: String
+  printedIDNEQ: String
+  printedIDIn: [String!]
+  printedIDNotIn: [String!]
+  printedIDGT: String
+  printedIDGTE: String
+  printedIDLT: String
+  printedIDLTE: String
+  printedIDContains: String
+  printedIDHasPrefix: String
+  printedIDHasSuffix: String
+  printedIDIsNil: Boolean
+  printedIDNotNil: Boolean
+  printedIDEqualFold: String
+  printedIDContainsFold: String
+  """play_agricola_card_id field predicates"""
+  playAgricolaCardID: String
+  playAgricolaCardIDNEQ: String
+  playAgricolaCardIDIn: [String!]
+  playAgricolaCardIDNotIn: [String!]
+  playAgricolaCardIDGT: String
+  playAgricolaCardIDGTE: String
+  playAgricolaCardIDLT: String
+  playAgricolaCardIDLTE: String
+  playAgricolaCardIDContains: String
+  playAgricolaCardIDHasPrefix: String
+  playAgricolaCardIDHasSuffix: String
+  playAgricolaCardIDIsNil: Boolean
+  playAgricolaCardIDNotNil: Boolean
+  playAgricolaCardIDEqualFold: String
+  playAgricolaCardIDContainsFold: String
+  """deck_id field predicates"""
+  deckID: ID
+  deckIDNEQ: ID
+  deckIDIn: [ID!]
+  deckIDNotIn: [ID!]
+  deckIDIsNil: Boolean
+  deckIDNotNil: Boolean
+  """card_type_id field predicates"""
+  cardTypeID: ID
+  cardTypeIDNEQ: ID
+  cardTypeIDIn: [ID!]
+  cardTypeIDNotIn: [ID!]
+  """card_special_color_id field predicates"""
+  cardSpecialColorID: ID
+  cardSpecialColorIDNEQ: ID
+  cardSpecialColorIDIn: [ID!]
+  cardSpecialColorIDNotIn: [ID!]
+  cardSpecialColorIDIsNil: Boolean
+  cardSpecialColorIDNotNil: Boolean
+  """name_ja field predicates"""
+  nameJa: String
+  nameJaNEQ: String
+  nameJaIn: [String!]
+  nameJaNotIn: [String!]
+  nameJaGT: String
+  nameJaGTE: String
+  nameJaLT: String
+  nameJaLTE: String
+  nameJaContains: String
+  nameJaHasPrefix: String
+  nameJaHasSuffix: String
+  nameJaIsNil: Boolean
+  nameJaNotNil: Boolean
+  nameJaEqualFold: String
+  nameJaContainsFold: String
+  """name_en field predicates"""
+  nameEn: String
+  nameEnNEQ: String
+  nameEnIn: [String!]
+  nameEnNotIn: [String!]
+  nameEnGT: String
+  nameEnGTE: String
+  nameEnLT: String
+  nameEnLTE: String
+  nameEnContains: String
+  nameEnHasPrefix: String
+  nameEnHasSuffix: String
+  nameEnIsNil: Boolean
+  nameEnNotNil: Boolean
+  nameEnEqualFold: String
+  nameEnContainsFold: String
+  """min_players_number field predicates"""
+  minPlayersNumber: Int
+  minPlayersNumberNEQ: Int
+  minPlayersNumberIn: [Int!]
+  minPlayersNumberNotIn: [Int!]
+  minPlayersNumberGT: Int
+  minPlayersNumberGTE: Int
+  minPlayersNumberLT: Int
+  minPlayersNumberLTE: Int
+  minPlayersNumberIsNil: Boolean
+  minPlayersNumberNotNil: Boolean
+  """prerequisite field predicates"""
+  prerequisite: String
+  prerequisiteNEQ: String
+  prerequisiteIn: [String!]
+  prerequisiteNotIn: [String!]
+  prerequisiteGT: String
+  prerequisiteGTE: String
+  prerequisiteLT: String
+  prerequisiteLTE: String
+  prerequisiteContains: String
+  prerequisiteHasPrefix: String
+  prerequisiteHasSuffix: String
+  prerequisiteIsNil: Boolean
+  prerequisiteNotNil: Boolean
+  prerequisiteEqualFold: String
+  prerequisiteContainsFold: String
+  """cost field predicates"""
+  cost: String
+  costNEQ: String
+  costIn: [String!]
+  costNotIn: [String!]
+  costGT: String
+  costGTE: String
+  costLT: String
+  costLTE: String
+  costContains: String
+  costHasPrefix: String
+  costHasSuffix: String
+  costIsNil: Boolean
+  costNotNil: Boolean
+  costEqualFold: String
+  costContainsFold: String
+  """function_text field predicates"""
+  functionText: String
+  functionTextNEQ: String
+  functionTextIn: [String!]
+  functionTextNotIn: [String!]
+  functionTextGT: String
+  functionTextGTE: String
+  functionTextLT: String
+  functionTextLTE: String
+  functionTextContains: String
+  functionTextHasPrefix: String
+  functionTextHasSuffix: String
+  functionTextIsNil: Boolean
+  functionTextNotNil: Boolean
+  functionTextEqualFold: String
+  functionTextContainsFold: String
+  """is_official_ja field predicates"""
+  isOfficialJa: Boolean
+  isOfficialJaNEQ: Boolean
+  """victory_point field predicates"""
+  victoryPoint: Int
+  victoryPointNEQ: Int
+  victoryPointIn: [Int!]
+  victoryPointNotIn: [Int!]
+  victoryPointGT: Int
+  victoryPointGTE: Int
+  victoryPointLT: Int
+  victoryPointLTE: Int
+  victoryPointIsNil: Boolean
+  victoryPointNotNil: Boolean
+  """is_variable_victory_point field predicates"""
+  isVariableVictoryPoint: Boolean
+  isVariableVictoryPointNEQ: Boolean
+  """has_arrrow field predicates"""
+  hasArrrow: Boolean
+  hasArrrowNEQ: Boolean
+  """has_bonus_point_icon field predicates"""
+  hasBonusPointIcon: Boolean
+  hasBonusPointIconNEQ: Boolean
+  """has_negative_bonus_point_icon field predicates"""
+  hasNegativeBonusPointIcon: Boolean
+  hasNegativeBonusPointIconNEQ: Boolean
+  """has_pan_icon field predicates"""
+  hasPanIcon: Boolean
+  hasPanIconNEQ: Boolean
+  """has_bread_icon field predicates"""
+  hasBreadIcon: Boolean
+  hasBreadIconNEQ: Boolean
+  """has_farm_planner_icon field predicates"""
+  hasFarmPlannerIcon: Boolean
+  hasFarmPlannerIconNEQ: Boolean
+  """has_actions_booster_icon field predicates"""
+  hasActionsBoosterIcon: Boolean
+  hasActionsBoosterIconNEQ: Boolean
+  """has_points_provider_icon field predicates"""
+  hasPointsProviderIcon: Boolean
+  hasPointsProviderIconNEQ: Boolean
+  """has_goods_provider_icon field predicates"""
+  hasGoodsProviderIcon: Boolean
+  hasGoodsProviderIconNEQ: Boolean
+  """has_food_provider_icon field predicates"""
+  hasFoodProviderIcon: Boolean
+  hasFoodProviderIconNEQ: Boolean
+  """has_crop_provider_icon field predicates"""
+  hasCropProviderIcon: Boolean
+  hasCropProviderIconNEQ: Boolean
+  """has_building_resource_provider_icon field predicates"""
+  hasBuildingResourceProviderIcon: Boolean
+  hasBuildingResourceProviderIconNEQ: Boolean
+  """has_livestock_provider_icon field predicates"""
+  hasLivestockProviderIcon: Boolean
+  hasLivestockProviderIconNEQ: Boolean
+  """has_cut_peat_icon field predicates"""
+  hasCutPeatIcon: Boolean
+  hasCutPeatIconNEQ: Boolean
+  """has_fell_trees_icon field predicates"""
+  hasFellTreesIcon: Boolean
+  hasFellTreesIconNEQ: Boolean
+  """has_slash_and_burn_icon field predicates"""
+  hasSlashAndBurnIcon: Boolean
+  hasSlashAndBurnIconNEQ: Boolean
+  """has_hiring_fare_icon field predicates"""
+  hasHiringFareIcon: Boolean
+  hasHiringFareIconNEQ: Boolean
+  """revision edge predicates"""
+  hasRevision: Boolean
+  hasRevisionWith: [RevisionWhereInput!]
+  """products edge predicates"""
+  hasProducts: Boolean
+  hasProductsWith: [ProductWhereInput!]
+  """deck edge predicates"""
+  hasDeck: Boolean
+  hasDeckWith: [DeckWhereInput!]
+  """card_type edge predicates"""
+  hasCardType: Boolean
+  hasCardTypeWith: [CardTypeWhereInput!]
+  """card_special_color edge predicates"""
+  hasCardSpecialColor: Boolean
+  hasCardSpecialColorWith: [CardSpecialColorWhereInput!]
+  """children edge predicates"""
+  hasChildren: Boolean
+  hasChildrenWith: [CardWhereInput!]
+  """ancestors edge predicates"""
+  hasAncestors: Boolean
+  hasAncestorsWith: [CardWhereInput!]
+}
+"""
+Define a Relay Cursor type:
+https://relay.dev/graphql/connections.htm#sec-Cursor
+"""
+scalar Cursor
+type Deck implements Node {
+  id: ID!
+  key: String!
+  revisionID: ID!
+  nameJa: String
+  nameEn: String
+  cards: [Card!]
+  revision: Revision!
+}
+"""
+DeckWhereInput is used for filtering Deck objects.
+Input was generated by ent.
+"""
+input DeckWhereInput {
+  not: DeckWhereInput
+  and: [DeckWhereInput!]
+  or: [DeckWhereInput!]
+  """id field predicates"""
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  """key field predicates"""
+  key: String
+  keyNEQ: String
+  keyIn: [String!]
+  keyNotIn: [String!]
+  keyGT: String
+  keyGTE: String
+  keyLT: String
+  keyLTE: String
+  keyContains: String
+  keyHasPrefix: String
+  keyHasSuffix: String
+  keyEqualFold: String
+  keyContainsFold: String
+  """revision_id field predicates"""
+  revisionID: ID
+  revisionIDNEQ: ID
+  revisionIDIn: [ID!]
+  revisionIDNotIn: [ID!]
+  """name_ja field predicates"""
+  nameJa: String
+  nameJaNEQ: String
+  nameJaIn: [String!]
+  nameJaNotIn: [String!]
+  nameJaGT: String
+  nameJaGTE: String
+  nameJaLT: String
+  nameJaLTE: String
+  nameJaContains: String
+  nameJaHasPrefix: String
+  nameJaHasSuffix: String
+  nameJaIsNil: Boolean
+  nameJaNotNil: Boolean
+  nameJaEqualFold: String
+  nameJaContainsFold: String
+  """name_en field predicates"""
+  nameEn: String
+  nameEnNEQ: String
+  nameEnIn: [String!]
+  nameEnNotIn: [String!]
+  nameEnGT: String
+  nameEnGTE: String
+  nameEnLT: String
+  nameEnLTE: String
+  nameEnContains: String
+  nameEnHasPrefix: String
+  nameEnHasSuffix: String
+  nameEnIsNil: Boolean
+  nameEnNotNil: Boolean
+  nameEnEqualFold: String
+  nameEnContainsFold: String
+  """cards edge predicates"""
+  hasCards: Boolean
+  hasCardsWith: [CardWhereInput!]
+  """revision edge predicates"""
+  hasRevision: Boolean
+  hasRevisionWith: [RevisionWhereInput!]
+}
+"""
+An object with an ID.
+Follows the [Relay Global Object Identification Specification](https://relay.dev/graphql/objectidentification.htm)
+"""
+interface Node @goModel(model: "agricoladb/ent.Noder") {
+  """The id of the object."""
+  id: ID!
+}
+"""Possible directions in which to order a list of items when provided an ` + "`" + `orderBy` + "`" + ` argument."""
+enum OrderDirection {
+  """Specifies an ascending order for a given ` + "`" + `orderBy` + "`" + ` argument."""
+  ASC
+  """Specifies a descending order for a given ` + "`" + `orderBy` + "`" + ` argument."""
+  DESC
+}
+"""
+Information about pagination in a connection.
+https://relay.dev/graphql/connections.htm#sec-undefined.PageInfo
+"""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+  """When paginating backwards, the cursor to continue."""
+  startCursor: Cursor
+  """When paginating forwards, the cursor to continue."""
+  endCursor: Cursor
+}
+type Product implements Node {
+  id: ID!
+  key: String!
+  revisionID: ID!
   isOfficialJa: Boolean!
+  nameJa: String
+  nameEn: String
+  cards: [Card!]
+  revision: Revision!
 }
-
-type Deck {
-  id: ID!
-  revisionId: Int!
-  key: String!
-  nameJa: String!
-  nameEn: String!
+"""
+ProductWhereInput is used for filtering Product objects.
+Input was generated by ent.
+"""
+input ProductWhereInput {
+  not: ProductWhereInput
+  and: [ProductWhereInput!]
+  or: [ProductWhereInput!]
+  """id field predicates"""
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  """key field predicates"""
+  key: String
+  keyNEQ: String
+  keyIn: [String!]
+  keyNotIn: [String!]
+  keyGT: String
+  keyGTE: String
+  keyLT: String
+  keyLTE: String
+  keyContains: String
+  keyHasPrefix: String
+  keyHasSuffix: String
+  keyEqualFold: String
+  keyContainsFold: String
+  """revision_id field predicates"""
+  revisionID: ID
+  revisionIDNEQ: ID
+  revisionIDIn: [ID!]
+  revisionIDNotIn: [ID!]
+  """is_official_ja field predicates"""
+  isOfficialJa: Boolean
+  isOfficialJaNEQ: Boolean
+  """name_ja field predicates"""
+  nameJa: String
+  nameJaNEQ: String
+  nameJaIn: [String!]
+  nameJaNotIn: [String!]
+  nameJaGT: String
+  nameJaGTE: String
+  nameJaLT: String
+  nameJaLTE: String
+  nameJaContains: String
+  nameJaHasPrefix: String
+  nameJaHasSuffix: String
+  nameJaIsNil: Boolean
+  nameJaNotNil: Boolean
+  nameJaEqualFold: String
+  nameJaContainsFold: String
+  """name_en field predicates"""
+  nameEn: String
+  nameEnNEQ: String
+  nameEnIn: [String!]
+  nameEnNotIn: [String!]
+  nameEnGT: String
+  nameEnGTE: String
+  nameEnLT: String
+  nameEnLTE: String
+  nameEnContains: String
+  nameEnHasPrefix: String
+  nameEnHasSuffix: String
+  nameEnIsNil: Boolean
+  nameEnNotNil: Boolean
+  nameEnEqualFold: String
+  nameEnContainsFold: String
+  """cards edge predicates"""
+  hasCards: Boolean
+  hasCardsWith: [CardWhereInput!]
+  """revision edge predicates"""
+  hasRevision: Boolean
+  hasRevisionWith: [RevisionWhereInput!]
 }
-
-type CardType {
-  id: ID!
-  key: String!
-  nameJa: String!
-  nameEn: String!
-}
-
-type SpecialColor {
-  id: ID!
-  key: String!
-  nameJa: String!
-  nameEn: String!
-}
-
-input RevisionAndLiteralId {
-  revisionId: Int!
-  literalId: String!
-}
-
 type Query {
-  cards: [Card!]!
-  findCardByRevisionAndLiteralId(input: RevisionAndLiteralId!): Card!
+  """Fetches an object given its ID."""
+  node(
+    """ID of the object."""
+    id: ID!
+  ): Node
+  """Lookup nodes by a list of IDs."""
+  nodes(
+    """The list of node IDs."""
+    ids: [ID!]!
+  ): [Node]!
+}
+type Revision implements Node {
+  id: ID!
+  key: String!
+  nameJa: String
+  nameEn: String
+  cards: [Card!]
+  products: [Product!]
+  decks: [Deck!]
+}
+"""
+RevisionWhereInput is used for filtering Revision objects.
+Input was generated by ent.
+"""
+input RevisionWhereInput {
+  not: RevisionWhereInput
+  and: [RevisionWhereInput!]
+  or: [RevisionWhereInput!]
+  """id field predicates"""
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  """key field predicates"""
+  key: String
+  keyNEQ: String
+  keyIn: [String!]
+  keyNotIn: [String!]
+  keyGT: String
+  keyGTE: String
+  keyLT: String
+  keyLTE: String
+  keyContains: String
+  keyHasPrefix: String
+  keyHasSuffix: String
+  keyEqualFold: String
+  keyContainsFold: String
+  """name_ja field predicates"""
+  nameJa: String
+  nameJaNEQ: String
+  nameJaIn: [String!]
+  nameJaNotIn: [String!]
+  nameJaGT: String
+  nameJaGTE: String
+  nameJaLT: String
+  nameJaLTE: String
+  nameJaContains: String
+  nameJaHasPrefix: String
+  nameJaHasSuffix: String
+  nameJaIsNil: Boolean
+  nameJaNotNil: Boolean
+  nameJaEqualFold: String
+  nameJaContainsFold: String
+  """name_en field predicates"""
+  nameEn: String
+  nameEnNEQ: String
+  nameEnIn: [String!]
+  nameEnNotIn: [String!]
+  nameEnGT: String
+  nameEnGTE: String
+  nameEnLT: String
+  nameEnLTE: String
+  nameEnContains: String
+  nameEnHasPrefix: String
+  nameEnHasSuffix: String
+  nameEnIsNil: Boolean
+  nameEnNotNil: Boolean
+  nameEnEqualFold: String
+  nameEnContainsFold: String
+  """cards edge predicates"""
+  hasCards: Boolean
+  hasCardsWith: [CardWhereInput!]
+  """products edge predicates"""
+  hasProducts: Boolean
+  hasProductsWith: [ProductWhereInput!]
+  """decks edge predicates"""
+  hasDecks: Boolean
+  hasDecksWith: [DeckWhereInput!]
 }
 `, BuiltIn: false},
 }
@@ -721,18 +1600,33 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_findCardByRevisionAndLiteralId_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_node_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.RevisionAndLiteralID
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNRevisionAndLiteralId2agricoladbᚋgraphᚋmodelᚐRevisionAndLiteralID(ctx, tmp)
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["input"] = arg0
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_nodes_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 []int
+	if tmp, ok := rawArgs["ids"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ids"))
+		arg0, err = ec.unmarshalNID2ᚕintᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["ids"] = arg0
 	return args, nil
 }
 
@@ -774,7 +1668,7 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _Card_id(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_id(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_id(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -800,9 +1694,9 @@ func (ec *executionContext) _Card_id(ctx context.Context, field graphql.Collecte
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNID2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -818,8 +1712,8 @@ func (ec *executionContext) fieldContext_Card_id(ctx context.Context, field grap
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_literalId(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Card_literalId(ctx, field)
+func (ec *executionContext) _Card_literalID(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_literalID(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -849,7 +1743,7 @@ func (ec *executionContext) _Card_literalId(ctx context.Context, field graphql.C
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Card_literalId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Card_literalID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
@@ -862,49 +1756,8 @@ func (ec *executionContext) fieldContext_Card_literalId(ctx context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_printedId(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Card_printedId(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PrintedID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Card_printedId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Card",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Card_revisionId(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Card_revisionId(ctx, field)
+func (ec *executionContext) _Card_revisionID(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_revisionID(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -931,24 +1784,65 @@ func (ec *executionContext) _Card_revisionId(ctx context.Context, field graphql.
 	}
 	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return ec.marshalNID2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Card_revisionId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Card_revisionID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
+			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_playAgricolaCardId(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Card_playAgricolaCardId(ctx, field)
+func (ec *executionContext) _Card_printedID(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_printedID(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PrintedID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Card_printedID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Card",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Card_playAgricolaCardID(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_playAgricolaCardID(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -970,26 +1864,26 @@ func (ec *executionContext) _Card_playAgricolaCardId(ctx context.Context, field 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Card_playAgricolaCardId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Card_playAgricolaCardID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_cardType(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Card_cardType(ctx, field)
+func (ec *executionContext) _Card_deckID(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_deckID(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1002,7 +1896,48 @@ func (ec *executionContext) _Card_cardType(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.CardType, nil
+		return obj.DeckID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOID2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Card_deckID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Card",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Card_cardTypeID(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_cardTypeID(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CardTypeID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1014,36 +1949,26 @@ func (ec *executionContext) _Card_cardType(ctx context.Context, field graphql.Co
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.CardType)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNCardType2ᚖagricoladbᚋgraphᚋmodelᚐCardType(ctx, field.Selections, res)
+	return ec.marshalNID2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Card_cardType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Card_cardTypeID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_CardType_id(ctx, field)
-			case "key":
-				return ec.fieldContext_CardType_key(ctx, field)
-			case "nameJa":
-				return ec.fieldContext_CardType_nameJa(ctx, field)
-			case "nameEn":
-				return ec.fieldContext_CardType_nameEn(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type CardType", field.Name)
+			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_product(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Card_product(ctx, field)
+func (ec *executionContext) _Card_cardSpecialColorID(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_cardSpecialColorID(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1056,67 +1981,7 @@ func (ec *executionContext) _Card_product(ctx context.Context, field graphql.Col
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Product, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.([]*model.Product)
-	fc.Result = res
-	return ec.marshalNProduct2ᚕᚖagricoladbᚋgraphᚋmodelᚐProductᚄ(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Card_product(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Card",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Product_id(ctx, field)
-			case "revisionId":
-				return ec.fieldContext_Product_revisionId(ctx, field)
-			case "key":
-				return ec.fieldContext_Product_key(ctx, field)
-			case "nameJa":
-				return ec.fieldContext_Product_nameJa(ctx, field)
-			case "nameEn":
-				return ec.fieldContext_Product_nameEn(ctx, field)
-			case "publishedYear":
-				return ec.fieldContext_Product_publishedYear(ctx, field)
-			case "isOfficialJa":
-				return ec.fieldContext_Product_isOfficialJa(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Product", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Card_deck(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Card_deck(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Deck, nil
+		return obj.CardSpecialColorID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1125,37 +1990,25 @@ func (ec *executionContext) _Card_deck(ctx context.Context, field graphql.Collec
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.Deck)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalODeck2ᚖagricoladbᚋgraphᚋmodelᚐDeck(ctx, field.Selections, res)
+	return ec.marshalOID2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Card_deck(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Card_cardSpecialColorID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Deck_id(ctx, field)
-			case "revisionId":
-				return ec.fieldContext_Deck_revisionId(ctx, field)
-			case "key":
-				return ec.fieldContext_Deck_key(ctx, field)
-			case "nameJa":
-				return ec.fieldContext_Deck_nameJa(ctx, field)
-			case "nameEn":
-				return ec.fieldContext_Deck_nameEn(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Deck", field.Name)
+			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_nameJa(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_nameJa(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_nameJa(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1176,14 +2029,11 @@ func (ec *executionContext) _Card_nameJa(ctx context.Context, field graphql.Coll
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_nameJa(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1199,7 +2049,7 @@ func (ec *executionContext) fieldContext_Card_nameJa(ctx context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_nameEn(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_nameEn(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_nameEn(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1220,14 +2070,11 @@ func (ec *executionContext) _Card_nameEn(ctx context.Context, field graphql.Coll
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_nameEn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1243,7 +2090,7 @@ func (ec *executionContext) fieldContext_Card_nameEn(ctx context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_minPlayersNumber(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_minPlayersNumber(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_minPlayersNumber(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1257,7 +2104,7 @@ func (ec *executionContext) _Card_minPlayersNumber(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.MinPlayersNumber, nil
+		return ec.resolvers.Card().MinPlayersNumber(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1266,17 +2113,17 @@ func (ec *executionContext) _Card_minPlayersNumber(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(ent.Noder)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalOInt2agricoladbᚋentᚐNoder(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_minPlayersNumber(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Int does not have child fields")
 		},
@@ -1284,7 +2131,7 @@ func (ec *executionContext) fieldContext_Card_minPlayersNumber(ctx context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_prerequisite(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_prerequisite(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_prerequisite(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1307,9 +2154,9 @@ func (ec *executionContext) _Card_prerequisite(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_prerequisite(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1325,7 +2172,7 @@ func (ec *executionContext) fieldContext_Card_prerequisite(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_cost(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_cost(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_cost(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1348,9 +2195,9 @@ func (ec *executionContext) _Card_cost(ctx context.Context, field graphql.Collec
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_cost(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1366,8 +2213,8 @@ func (ec *executionContext) fieldContext_Card_cost(ctx context.Context, field gr
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_description(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Card_description(ctx, field)
+func (ec *executionContext) _Card_functionText(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_functionText(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1380,24 +2227,21 @@ func (ec *executionContext) _Card_description(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Description, nil
+		return obj.FunctionText, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Card_description(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Card_functionText(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
@@ -1410,7 +2254,7 @@ func (ec *executionContext) fieldContext_Card_description(ctx context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_isOfficialJa(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_isOfficialJa(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_isOfficialJa(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1454,7 +2298,7 @@ func (ec *executionContext) fieldContext_Card_isOfficialJa(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_victoryPoint(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_victoryPoint(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_victoryPoint(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1468,7 +2312,7 @@ func (ec *executionContext) _Card_victoryPoint(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.VictoryPoint, nil
+		return ec.resolvers.Card().VictoryPoint(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1477,17 +2321,17 @@ func (ec *executionContext) _Card_victoryPoint(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*int)
+	res := resTmp.(ent.Noder)
 	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+	return ec.marshalOInt2agricoladbᚋentᚐNoder(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_victoryPoint(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Int does not have child fields")
 		},
@@ -1495,8 +2339,8 @@ func (ec *executionContext) fieldContext_Card_victoryPoint(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_isMutableVictoryPoint(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Card_isMutableVictoryPoint(ctx, field)
+func (ec *executionContext) _Card_isVariableVictoryPoint(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_isVariableVictoryPoint(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1509,7 +2353,7 @@ func (ec *executionContext) _Card_isMutableVictoryPoint(ctx context.Context, fie
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.IsMutableVictoryPoint, nil
+		return obj.IsVariableVictoryPoint, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1526,7 +2370,7 @@ func (ec *executionContext) _Card_isMutableVictoryPoint(ctx context.Context, fie
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Card_isMutableVictoryPoint(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Card_isVariableVictoryPoint(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
@@ -1539,8 +2383,8 @@ func (ec *executionContext) fieldContext_Card_isMutableVictoryPoint(ctx context.
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasArrow(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Card_hasArrow(ctx, field)
+func (ec *executionContext) _Card_hasArrrow(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_hasArrrow(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1553,7 +2397,7 @@ func (ec *executionContext) _Card_hasArrow(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.HasArrow, nil
+		return obj.HasArrrow, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1570,7 +2414,7 @@ func (ec *executionContext) _Card_hasArrow(ctx context.Context, field graphql.Co
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Card_hasArrow(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Card_hasArrrow(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
@@ -1583,8 +2427,8 @@ func (ec *executionContext) fieldContext_Card_hasArrow(ctx context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasBonus(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Card_hasBonus(ctx, field)
+func (ec *executionContext) _Card_hasBonusPointIcon(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_hasBonusPointIcon(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1597,7 +2441,7 @@ func (ec *executionContext) _Card_hasBonus(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.HasBonus, nil
+		return obj.HasBonusPointIcon, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1614,7 +2458,7 @@ func (ec *executionContext) _Card_hasBonus(ctx context.Context, field graphql.Co
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Card_hasBonus(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Card_hasBonusPointIcon(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
@@ -1627,8 +2471,8 @@ func (ec *executionContext) fieldContext_Card_hasBonus(ctx context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasNegativeBonus(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Card_hasNegativeBonus(ctx, field)
+func (ec *executionContext) _Card_hasNegativeBonusPointIcon(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_hasNegativeBonusPointIcon(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1641,7 +2485,7 @@ func (ec *executionContext) _Card_hasNegativeBonus(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.HasNegativeBonus, nil
+		return obj.HasNegativeBonusPointIcon, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1658,7 +2502,7 @@ func (ec *executionContext) _Card_hasNegativeBonus(ctx context.Context, field gr
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Card_hasNegativeBonus(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Card_hasNegativeBonusPointIcon(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
@@ -1671,7 +2515,7 @@ func (ec *executionContext) fieldContext_Card_hasNegativeBonus(ctx context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasPanIcon(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_hasPanIcon(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_hasPanIcon(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1715,7 +2559,7 @@ func (ec *executionContext) fieldContext_Card_hasPanIcon(ctx context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasBreadIcon(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_hasBreadIcon(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_hasBreadIcon(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1759,7 +2603,7 @@ func (ec *executionContext) fieldContext_Card_hasBreadIcon(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasFarmPlannerIcon(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_hasFarmPlannerIcon(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_hasFarmPlannerIcon(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1803,7 +2647,7 @@ func (ec *executionContext) fieldContext_Card_hasFarmPlannerIcon(ctx context.Con
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasActionsBoosterIcon(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_hasActionsBoosterIcon(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_hasActionsBoosterIcon(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1847,7 +2691,7 @@ func (ec *executionContext) fieldContext_Card_hasActionsBoosterIcon(ctx context.
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasPointsProviderIcon(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_hasPointsProviderIcon(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_hasPointsProviderIcon(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1891,7 +2735,7 @@ func (ec *executionContext) fieldContext_Card_hasPointsProviderIcon(ctx context.
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasGoodsProviderIcon(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_hasGoodsProviderIcon(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_hasGoodsProviderIcon(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1935,7 +2779,7 @@ func (ec *executionContext) fieldContext_Card_hasGoodsProviderIcon(ctx context.C
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasFoodProviderIcon(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_hasFoodProviderIcon(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_hasFoodProviderIcon(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1979,7 +2823,7 @@ func (ec *executionContext) fieldContext_Card_hasFoodProviderIcon(ctx context.Co
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasCropProviderIcon(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_hasCropProviderIcon(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_hasCropProviderIcon(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -2023,7 +2867,7 @@ func (ec *executionContext) fieldContext_Card_hasCropProviderIcon(ctx context.Co
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasBuildingResourceProviderIcon(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_hasBuildingResourceProviderIcon(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_hasBuildingResourceProviderIcon(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -2067,7 +2911,7 @@ func (ec *executionContext) fieldContext_Card_hasBuildingResourceProviderIcon(ct
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasLivestockProviderIcon(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_hasLivestockProviderIcon(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_hasLivestockProviderIcon(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -2111,7 +2955,7 @@ func (ec *executionContext) fieldContext_Card_hasLivestockProviderIcon(ctx conte
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasCutPeatIcon(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_hasCutPeatIcon(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_hasCutPeatIcon(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -2155,7 +2999,7 @@ func (ec *executionContext) fieldContext_Card_hasCutPeatIcon(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasFellTreesIcon(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_hasFellTreesIcon(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_hasFellTreesIcon(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -2199,7 +3043,7 @@ func (ec *executionContext) fieldContext_Card_hasFellTreesIcon(ctx context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasSlashAndBurnIcon(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_hasSlashAndBurnIcon(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_hasSlashAndBurnIcon(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -2243,7 +3087,7 @@ func (ec *executionContext) fieldContext_Card_hasSlashAndBurnIcon(ctx context.Co
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasHiringFareIcon(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
+func (ec *executionContext) _Card_hasHiringFareIcon(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_hasHiringFareIcon(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -2287,8 +3131,8 @@ func (ec *executionContext) fieldContext_Card_hasHiringFareIcon(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_specialColor(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Card_specialColor(ctx, field)
+func (ec *executionContext) _Card_revision(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_revision(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2301,45 +3145,54 @@ func (ec *executionContext) _Card_specialColor(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.SpecialColor, nil
+		return obj.Revision(ctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.SpecialColor)
+	res := resTmp.(*ent.Revision)
 	fc.Result = res
-	return ec.marshalOSpecialColor2ᚖagricoladbᚋgraphᚋmodelᚐSpecialColor(ctx, field.Selections, res)
+	return ec.marshalNRevision2ᚖagricoladbᚋentᚐRevision(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Card_specialColor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Card_revision(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
-		IsMethod:   false,
+		IsMethod:   true,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
-				return ec.fieldContext_SpecialColor_id(ctx, field)
+				return ec.fieldContext_Revision_id(ctx, field)
 			case "key":
-				return ec.fieldContext_SpecialColor_key(ctx, field)
+				return ec.fieldContext_Revision_key(ctx, field)
 			case "nameJa":
-				return ec.fieldContext_SpecialColor_nameJa(ctx, field)
+				return ec.fieldContext_Revision_nameJa(ctx, field)
 			case "nameEn":
-				return ec.fieldContext_SpecialColor_nameEn(ctx, field)
+				return ec.fieldContext_Revision_nameEn(ctx, field)
+			case "cards":
+				return ec.fieldContext_Revision_cards(ctx, field)
+			case "products":
+				return ec.fieldContext_Revision_products(ctx, field)
+			case "decks":
+				return ec.fieldContext_Revision_decks(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type SpecialColor", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type Revision", field.Name)
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_originCards(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Card_originCards(ctx, field)
+func (ec *executionContext) _Card_products(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_products(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2352,7 +3205,123 @@ func (ec *executionContext) _Card_originCards(ctx context.Context, field graphql
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.OriginCards, nil
+		return obj.Products(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Product)
+	fc.Result = res
+	return ec.marshalOProduct2ᚕᚖagricoladbᚋentᚐProductᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Card_products(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Card",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Product_id(ctx, field)
+			case "key":
+				return ec.fieldContext_Product_key(ctx, field)
+			case "revisionID":
+				return ec.fieldContext_Product_revisionID(ctx, field)
+			case "isOfficialJa":
+				return ec.fieldContext_Product_isOfficialJa(ctx, field)
+			case "nameJa":
+				return ec.fieldContext_Product_nameJa(ctx, field)
+			case "nameEn":
+				return ec.fieldContext_Product_nameEn(ctx, field)
+			case "cards":
+				return ec.fieldContext_Product_cards(ctx, field)
+			case "revision":
+				return ec.fieldContext_Product_revision(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Product", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Card_deck(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_deck(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Deck(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Deck)
+	fc.Result = res
+	return ec.marshalODeck2ᚖagricoladbᚋentᚐDeck(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Card_deck(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Card",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Deck_id(ctx, field)
+			case "key":
+				return ec.fieldContext_Deck_key(ctx, field)
+			case "revisionID":
+				return ec.fieldContext_Deck_revisionID(ctx, field)
+			case "nameJa":
+				return ec.fieldContext_Deck_nameJa(ctx, field)
+			case "nameEn":
+				return ec.fieldContext_Deck_nameEn(ctx, field)
+			case "cards":
+				return ec.fieldContext_Deck_cards(ctx, field)
+			case "revision":
+				return ec.fieldContext_Deck_revision(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Deck", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Card_cardType(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_cardType(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CardType(ctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2364,35 +3333,141 @@ func (ec *executionContext) _Card_originCards(ctx context.Context, field graphql
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Card)
+	res := resTmp.(*ent.CardType)
 	fc.Result = res
-	return ec.marshalNCard2ᚕᚖagricoladbᚋgraphᚋmodelᚐCardᚄ(ctx, field.Selections, res)
+	return ec.marshalNCardType2ᚖagricoladbᚋentᚐCardType(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Card_originCards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Card_cardType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
-		IsMethod:   false,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_CardType_id(ctx, field)
+			case "key":
+				return ec.fieldContext_CardType_key(ctx, field)
+			case "nameJa":
+				return ec.fieldContext_CardType_nameJa(ctx, field)
+			case "nameEn":
+				return ec.fieldContext_CardType_nameEn(ctx, field)
+			case "cards":
+				return ec.fieldContext_CardType_cards(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CardType", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Card_cardSpecialColor(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_cardSpecialColor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CardSpecialColor(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.CardSpecialColor)
+	fc.Result = res
+	return ec.marshalOCardSpecialColor2ᚖagricoladbᚋentᚐCardSpecialColor(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Card_cardSpecialColor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Card",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_CardSpecialColor_id(ctx, field)
+			case "key":
+				return ec.fieldContext_CardSpecialColor_key(ctx, field)
+			case "nameJa":
+				return ec.fieldContext_CardSpecialColor_nameJa(ctx, field)
+			case "nameEn":
+				return ec.fieldContext_CardSpecialColor_nameEn(ctx, field)
+			case "cards":
+				return ec.fieldContext_CardSpecialColor_cards(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CardSpecialColor", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Card_children(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_children(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Children(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Card)
+	fc.Result = res
+	return ec.marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Card_children(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Card",
+		Field:      field,
+		IsMethod:   true,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Card_id(ctx, field)
-			case "literalId":
-				return ec.fieldContext_Card_literalId(ctx, field)
-			case "printedId":
-				return ec.fieldContext_Card_printedId(ctx, field)
-			case "revisionId":
-				return ec.fieldContext_Card_revisionId(ctx, field)
-			case "playAgricolaCardId":
-				return ec.fieldContext_Card_playAgricolaCardId(ctx, field)
-			case "cardType":
-				return ec.fieldContext_Card_cardType(ctx, field)
-			case "product":
-				return ec.fieldContext_Card_product(ctx, field)
-			case "deck":
-				return ec.fieldContext_Card_deck(ctx, field)
+			case "literalID":
+				return ec.fieldContext_Card_literalID(ctx, field)
+			case "revisionID":
+				return ec.fieldContext_Card_revisionID(ctx, field)
+			case "printedID":
+				return ec.fieldContext_Card_printedID(ctx, field)
+			case "playAgricolaCardID":
+				return ec.fieldContext_Card_playAgricolaCardID(ctx, field)
+			case "deckID":
+				return ec.fieldContext_Card_deckID(ctx, field)
+			case "cardTypeID":
+				return ec.fieldContext_Card_cardTypeID(ctx, field)
+			case "cardSpecialColorID":
+				return ec.fieldContext_Card_cardSpecialColorID(ctx, field)
 			case "nameJa":
 				return ec.fieldContext_Card_nameJa(ctx, field)
 			case "nameEn":
@@ -2403,20 +3478,20 @@ func (ec *executionContext) fieldContext_Card_originCards(ctx context.Context, f
 				return ec.fieldContext_Card_prerequisite(ctx, field)
 			case "cost":
 				return ec.fieldContext_Card_cost(ctx, field)
-			case "description":
-				return ec.fieldContext_Card_description(ctx, field)
+			case "functionText":
+				return ec.fieldContext_Card_functionText(ctx, field)
 			case "isOfficialJa":
 				return ec.fieldContext_Card_isOfficialJa(ctx, field)
 			case "victoryPoint":
 				return ec.fieldContext_Card_victoryPoint(ctx, field)
-			case "isMutableVictoryPoint":
-				return ec.fieldContext_Card_isMutableVictoryPoint(ctx, field)
-			case "hasArrow":
-				return ec.fieldContext_Card_hasArrow(ctx, field)
-			case "hasBonus":
-				return ec.fieldContext_Card_hasBonus(ctx, field)
-			case "hasNegativeBonus":
-				return ec.fieldContext_Card_hasNegativeBonus(ctx, field)
+			case "isVariableVictoryPoint":
+				return ec.fieldContext_Card_isVariableVictoryPoint(ctx, field)
+			case "hasArrrow":
+				return ec.fieldContext_Card_hasArrrow(ctx, field)
+			case "hasBonusPointIcon":
+				return ec.fieldContext_Card_hasBonusPointIcon(ctx, field)
+			case "hasNegativeBonusPointIcon":
+				return ec.fieldContext_Card_hasNegativeBonusPointIcon(ctx, field)
 			case "hasPanIcon":
 				return ec.fieldContext_Card_hasPanIcon(ctx, field)
 			case "hasBreadIcon":
@@ -2445,12 +3520,20 @@ func (ec *executionContext) fieldContext_Card_originCards(ctx context.Context, f
 				return ec.fieldContext_Card_hasSlashAndBurnIcon(ctx, field)
 			case "hasHiringFareIcon":
 				return ec.fieldContext_Card_hasHiringFareIcon(ctx, field)
-			case "specialColor":
-				return ec.fieldContext_Card_specialColor(ctx, field)
-			case "originCards":
-				return ec.fieldContext_Card_originCards(ctx, field)
-			case "republishedCards":
-				return ec.fieldContext_Card_republishedCards(ctx, field)
+			case "revision":
+				return ec.fieldContext_Card_revision(ctx, field)
+			case "products":
+				return ec.fieldContext_Card_products(ctx, field)
+			case "deck":
+				return ec.fieldContext_Card_deck(ctx, field)
+			case "cardType":
+				return ec.fieldContext_Card_cardType(ctx, field)
+			case "cardSpecialColor":
+				return ec.fieldContext_Card_cardSpecialColor(ctx, field)
+			case "children":
+				return ec.fieldContext_Card_children(ctx, field)
+			case "ancestors":
+				return ec.fieldContext_Card_ancestors(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Card", field.Name)
 		},
@@ -2458,8 +3541,8 @@ func (ec *executionContext) fieldContext_Card_originCards(ctx context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_republishedCards(ctx context.Context, field graphql.CollectedField, obj *model.Card) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Card_republishedCards(ctx, field)
+func (ec *executionContext) _Card_ancestors(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_ancestors(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2472,47 +3555,44 @@ func (ec *executionContext) _Card_republishedCards(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.RepublishedCards, nil
+		return obj.Ancestors(ctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Card)
+	res := resTmp.([]*ent.Card)
 	fc.Result = res
-	return ec.marshalNCard2ᚕᚖagricoladbᚋgraphᚋmodelᚐCardᚄ(ctx, field.Selections, res)
+	return ec.marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Card_republishedCards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Card_ancestors(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
-		IsMethod:   false,
+		IsMethod:   true,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Card_id(ctx, field)
-			case "literalId":
-				return ec.fieldContext_Card_literalId(ctx, field)
-			case "printedId":
-				return ec.fieldContext_Card_printedId(ctx, field)
-			case "revisionId":
-				return ec.fieldContext_Card_revisionId(ctx, field)
-			case "playAgricolaCardId":
-				return ec.fieldContext_Card_playAgricolaCardId(ctx, field)
-			case "cardType":
-				return ec.fieldContext_Card_cardType(ctx, field)
-			case "product":
-				return ec.fieldContext_Card_product(ctx, field)
-			case "deck":
-				return ec.fieldContext_Card_deck(ctx, field)
+			case "literalID":
+				return ec.fieldContext_Card_literalID(ctx, field)
+			case "revisionID":
+				return ec.fieldContext_Card_revisionID(ctx, field)
+			case "printedID":
+				return ec.fieldContext_Card_printedID(ctx, field)
+			case "playAgricolaCardID":
+				return ec.fieldContext_Card_playAgricolaCardID(ctx, field)
+			case "deckID":
+				return ec.fieldContext_Card_deckID(ctx, field)
+			case "cardTypeID":
+				return ec.fieldContext_Card_cardTypeID(ctx, field)
+			case "cardSpecialColorID":
+				return ec.fieldContext_Card_cardSpecialColorID(ctx, field)
 			case "nameJa":
 				return ec.fieldContext_Card_nameJa(ctx, field)
 			case "nameEn":
@@ -2523,20 +3603,20 @@ func (ec *executionContext) fieldContext_Card_republishedCards(ctx context.Conte
 				return ec.fieldContext_Card_prerequisite(ctx, field)
 			case "cost":
 				return ec.fieldContext_Card_cost(ctx, field)
-			case "description":
-				return ec.fieldContext_Card_description(ctx, field)
+			case "functionText":
+				return ec.fieldContext_Card_functionText(ctx, field)
 			case "isOfficialJa":
 				return ec.fieldContext_Card_isOfficialJa(ctx, field)
 			case "victoryPoint":
 				return ec.fieldContext_Card_victoryPoint(ctx, field)
-			case "isMutableVictoryPoint":
-				return ec.fieldContext_Card_isMutableVictoryPoint(ctx, field)
-			case "hasArrow":
-				return ec.fieldContext_Card_hasArrow(ctx, field)
-			case "hasBonus":
-				return ec.fieldContext_Card_hasBonus(ctx, field)
-			case "hasNegativeBonus":
-				return ec.fieldContext_Card_hasNegativeBonus(ctx, field)
+			case "isVariableVictoryPoint":
+				return ec.fieldContext_Card_isVariableVictoryPoint(ctx, field)
+			case "hasArrrow":
+				return ec.fieldContext_Card_hasArrrow(ctx, field)
+			case "hasBonusPointIcon":
+				return ec.fieldContext_Card_hasBonusPointIcon(ctx, field)
+			case "hasNegativeBonusPointIcon":
+				return ec.fieldContext_Card_hasNegativeBonusPointIcon(ctx, field)
 			case "hasPanIcon":
 				return ec.fieldContext_Card_hasPanIcon(ctx, field)
 			case "hasBreadIcon":
@@ -2565,12 +3645,20 @@ func (ec *executionContext) fieldContext_Card_republishedCards(ctx context.Conte
 				return ec.fieldContext_Card_hasSlashAndBurnIcon(ctx, field)
 			case "hasHiringFareIcon":
 				return ec.fieldContext_Card_hasHiringFareIcon(ctx, field)
-			case "specialColor":
-				return ec.fieldContext_Card_specialColor(ctx, field)
-			case "originCards":
-				return ec.fieldContext_Card_originCards(ctx, field)
-			case "republishedCards":
-				return ec.fieldContext_Card_republishedCards(ctx, field)
+			case "revision":
+				return ec.fieldContext_Card_revision(ctx, field)
+			case "products":
+				return ec.fieldContext_Card_products(ctx, field)
+			case "deck":
+				return ec.fieldContext_Card_deck(ctx, field)
+			case "cardType":
+				return ec.fieldContext_Card_cardType(ctx, field)
+			case "cardSpecialColor":
+				return ec.fieldContext_Card_cardSpecialColor(ctx, field)
+			case "children":
+				return ec.fieldContext_Card_children(ctx, field)
+			case "ancestors":
+				return ec.fieldContext_Card_ancestors(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Card", field.Name)
 		},
@@ -2578,7 +3666,302 @@ func (ec *executionContext) fieldContext_Card_republishedCards(ctx context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _CardType_id(ctx context.Context, field graphql.CollectedField, obj *model.CardType) (ret graphql.Marshaler) {
+func (ec *executionContext) _CardSpecialColor_id(ctx context.Context, field graphql.CollectedField, obj *ent.CardSpecialColor) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CardSpecialColor_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNID2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CardSpecialColor_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CardSpecialColor",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CardSpecialColor_key(ctx context.Context, field graphql.CollectedField, obj *ent.CardSpecialColor) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CardSpecialColor_key(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Key, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CardSpecialColor_key(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CardSpecialColor",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CardSpecialColor_nameJa(ctx context.Context, field graphql.CollectedField, obj *ent.CardSpecialColor) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CardSpecialColor_nameJa(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NameJa, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CardSpecialColor_nameJa(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CardSpecialColor",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CardSpecialColor_nameEn(ctx context.Context, field graphql.CollectedField, obj *ent.CardSpecialColor) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CardSpecialColor_nameEn(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NameEn, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CardSpecialColor_nameEn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CardSpecialColor",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CardSpecialColor_cards(ctx context.Context, field graphql.CollectedField, obj *ent.CardSpecialColor) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CardSpecialColor_cards(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cards(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Card)
+	fc.Result = res
+	return ec.marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CardSpecialColor_cards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CardSpecialColor",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Card_id(ctx, field)
+			case "literalID":
+				return ec.fieldContext_Card_literalID(ctx, field)
+			case "revisionID":
+				return ec.fieldContext_Card_revisionID(ctx, field)
+			case "printedID":
+				return ec.fieldContext_Card_printedID(ctx, field)
+			case "playAgricolaCardID":
+				return ec.fieldContext_Card_playAgricolaCardID(ctx, field)
+			case "deckID":
+				return ec.fieldContext_Card_deckID(ctx, field)
+			case "cardTypeID":
+				return ec.fieldContext_Card_cardTypeID(ctx, field)
+			case "cardSpecialColorID":
+				return ec.fieldContext_Card_cardSpecialColorID(ctx, field)
+			case "nameJa":
+				return ec.fieldContext_Card_nameJa(ctx, field)
+			case "nameEn":
+				return ec.fieldContext_Card_nameEn(ctx, field)
+			case "minPlayersNumber":
+				return ec.fieldContext_Card_minPlayersNumber(ctx, field)
+			case "prerequisite":
+				return ec.fieldContext_Card_prerequisite(ctx, field)
+			case "cost":
+				return ec.fieldContext_Card_cost(ctx, field)
+			case "functionText":
+				return ec.fieldContext_Card_functionText(ctx, field)
+			case "isOfficialJa":
+				return ec.fieldContext_Card_isOfficialJa(ctx, field)
+			case "victoryPoint":
+				return ec.fieldContext_Card_victoryPoint(ctx, field)
+			case "isVariableVictoryPoint":
+				return ec.fieldContext_Card_isVariableVictoryPoint(ctx, field)
+			case "hasArrrow":
+				return ec.fieldContext_Card_hasArrrow(ctx, field)
+			case "hasBonusPointIcon":
+				return ec.fieldContext_Card_hasBonusPointIcon(ctx, field)
+			case "hasNegativeBonusPointIcon":
+				return ec.fieldContext_Card_hasNegativeBonusPointIcon(ctx, field)
+			case "hasPanIcon":
+				return ec.fieldContext_Card_hasPanIcon(ctx, field)
+			case "hasBreadIcon":
+				return ec.fieldContext_Card_hasBreadIcon(ctx, field)
+			case "hasFarmPlannerIcon":
+				return ec.fieldContext_Card_hasFarmPlannerIcon(ctx, field)
+			case "hasActionsBoosterIcon":
+				return ec.fieldContext_Card_hasActionsBoosterIcon(ctx, field)
+			case "hasPointsProviderIcon":
+				return ec.fieldContext_Card_hasPointsProviderIcon(ctx, field)
+			case "hasGoodsProviderIcon":
+				return ec.fieldContext_Card_hasGoodsProviderIcon(ctx, field)
+			case "hasFoodProviderIcon":
+				return ec.fieldContext_Card_hasFoodProviderIcon(ctx, field)
+			case "hasCropProviderIcon":
+				return ec.fieldContext_Card_hasCropProviderIcon(ctx, field)
+			case "hasBuildingResourceProviderIcon":
+				return ec.fieldContext_Card_hasBuildingResourceProviderIcon(ctx, field)
+			case "hasLivestockProviderIcon":
+				return ec.fieldContext_Card_hasLivestockProviderIcon(ctx, field)
+			case "hasCutPeatIcon":
+				return ec.fieldContext_Card_hasCutPeatIcon(ctx, field)
+			case "hasFellTreesIcon":
+				return ec.fieldContext_Card_hasFellTreesIcon(ctx, field)
+			case "hasSlashAndBurnIcon":
+				return ec.fieldContext_Card_hasSlashAndBurnIcon(ctx, field)
+			case "hasHiringFareIcon":
+				return ec.fieldContext_Card_hasHiringFareIcon(ctx, field)
+			case "revision":
+				return ec.fieldContext_Card_revision(ctx, field)
+			case "products":
+				return ec.fieldContext_Card_products(ctx, field)
+			case "deck":
+				return ec.fieldContext_Card_deck(ctx, field)
+			case "cardType":
+				return ec.fieldContext_Card_cardType(ctx, field)
+			case "cardSpecialColor":
+				return ec.fieldContext_Card_cardSpecialColor(ctx, field)
+			case "children":
+				return ec.fieldContext_Card_children(ctx, field)
+			case "ancestors":
+				return ec.fieldContext_Card_ancestors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Card", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CardType_id(ctx context.Context, field graphql.CollectedField, obj *ent.CardType) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_CardType_id(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -2604,9 +3987,9 @@ func (ec *executionContext) _CardType_id(ctx context.Context, field graphql.Coll
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNID2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CardType_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2622,7 +4005,7 @@ func (ec *executionContext) fieldContext_CardType_id(ctx context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _CardType_key(ctx context.Context, field graphql.CollectedField, obj *model.CardType) (ret graphql.Marshaler) {
+func (ec *executionContext) _CardType_key(ctx context.Context, field graphql.CollectedField, obj *ent.CardType) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_CardType_key(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -2666,7 +4049,7 @@ func (ec *executionContext) fieldContext_CardType_key(ctx context.Context, field
 	return fc, nil
 }
 
-func (ec *executionContext) _CardType_nameJa(ctx context.Context, field graphql.CollectedField, obj *model.CardType) (ret graphql.Marshaler) {
+func (ec *executionContext) _CardType_nameJa(ctx context.Context, field graphql.CollectedField, obj *ent.CardType) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_CardType_nameJa(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -2687,14 +4070,11 @@ func (ec *executionContext) _CardType_nameJa(ctx context.Context, field graphql.
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CardType_nameJa(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2710,7 +4090,7 @@ func (ec *executionContext) fieldContext_CardType_nameJa(ctx context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _CardType_nameEn(ctx context.Context, field graphql.CollectedField, obj *model.CardType) (ret graphql.Marshaler) {
+func (ec *executionContext) _CardType_nameEn(ctx context.Context, field graphql.CollectedField, obj *ent.CardType) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_CardType_nameEn(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -2731,14 +4111,11 @@ func (ec *executionContext) _CardType_nameEn(ctx context.Context, field graphql.
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CardType_nameEn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2754,7 +4131,132 @@ func (ec *executionContext) fieldContext_CardType_nameEn(ctx context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _Deck_id(ctx context.Context, field graphql.CollectedField, obj *model.Deck) (ret graphql.Marshaler) {
+func (ec *executionContext) _CardType_cards(ctx context.Context, field graphql.CollectedField, obj *ent.CardType) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CardType_cards(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cards(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Card)
+	fc.Result = res
+	return ec.marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CardType_cards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CardType",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Card_id(ctx, field)
+			case "literalID":
+				return ec.fieldContext_Card_literalID(ctx, field)
+			case "revisionID":
+				return ec.fieldContext_Card_revisionID(ctx, field)
+			case "printedID":
+				return ec.fieldContext_Card_printedID(ctx, field)
+			case "playAgricolaCardID":
+				return ec.fieldContext_Card_playAgricolaCardID(ctx, field)
+			case "deckID":
+				return ec.fieldContext_Card_deckID(ctx, field)
+			case "cardTypeID":
+				return ec.fieldContext_Card_cardTypeID(ctx, field)
+			case "cardSpecialColorID":
+				return ec.fieldContext_Card_cardSpecialColorID(ctx, field)
+			case "nameJa":
+				return ec.fieldContext_Card_nameJa(ctx, field)
+			case "nameEn":
+				return ec.fieldContext_Card_nameEn(ctx, field)
+			case "minPlayersNumber":
+				return ec.fieldContext_Card_minPlayersNumber(ctx, field)
+			case "prerequisite":
+				return ec.fieldContext_Card_prerequisite(ctx, field)
+			case "cost":
+				return ec.fieldContext_Card_cost(ctx, field)
+			case "functionText":
+				return ec.fieldContext_Card_functionText(ctx, field)
+			case "isOfficialJa":
+				return ec.fieldContext_Card_isOfficialJa(ctx, field)
+			case "victoryPoint":
+				return ec.fieldContext_Card_victoryPoint(ctx, field)
+			case "isVariableVictoryPoint":
+				return ec.fieldContext_Card_isVariableVictoryPoint(ctx, field)
+			case "hasArrrow":
+				return ec.fieldContext_Card_hasArrrow(ctx, field)
+			case "hasBonusPointIcon":
+				return ec.fieldContext_Card_hasBonusPointIcon(ctx, field)
+			case "hasNegativeBonusPointIcon":
+				return ec.fieldContext_Card_hasNegativeBonusPointIcon(ctx, field)
+			case "hasPanIcon":
+				return ec.fieldContext_Card_hasPanIcon(ctx, field)
+			case "hasBreadIcon":
+				return ec.fieldContext_Card_hasBreadIcon(ctx, field)
+			case "hasFarmPlannerIcon":
+				return ec.fieldContext_Card_hasFarmPlannerIcon(ctx, field)
+			case "hasActionsBoosterIcon":
+				return ec.fieldContext_Card_hasActionsBoosterIcon(ctx, field)
+			case "hasPointsProviderIcon":
+				return ec.fieldContext_Card_hasPointsProviderIcon(ctx, field)
+			case "hasGoodsProviderIcon":
+				return ec.fieldContext_Card_hasGoodsProviderIcon(ctx, field)
+			case "hasFoodProviderIcon":
+				return ec.fieldContext_Card_hasFoodProviderIcon(ctx, field)
+			case "hasCropProviderIcon":
+				return ec.fieldContext_Card_hasCropProviderIcon(ctx, field)
+			case "hasBuildingResourceProviderIcon":
+				return ec.fieldContext_Card_hasBuildingResourceProviderIcon(ctx, field)
+			case "hasLivestockProviderIcon":
+				return ec.fieldContext_Card_hasLivestockProviderIcon(ctx, field)
+			case "hasCutPeatIcon":
+				return ec.fieldContext_Card_hasCutPeatIcon(ctx, field)
+			case "hasFellTreesIcon":
+				return ec.fieldContext_Card_hasFellTreesIcon(ctx, field)
+			case "hasSlashAndBurnIcon":
+				return ec.fieldContext_Card_hasSlashAndBurnIcon(ctx, field)
+			case "hasHiringFareIcon":
+				return ec.fieldContext_Card_hasHiringFareIcon(ctx, field)
+			case "revision":
+				return ec.fieldContext_Card_revision(ctx, field)
+			case "products":
+				return ec.fieldContext_Card_products(ctx, field)
+			case "deck":
+				return ec.fieldContext_Card_deck(ctx, field)
+			case "cardType":
+				return ec.fieldContext_Card_cardType(ctx, field)
+			case "cardSpecialColor":
+				return ec.fieldContext_Card_cardSpecialColor(ctx, field)
+			case "children":
+				return ec.fieldContext_Card_children(ctx, field)
+			case "ancestors":
+				return ec.fieldContext_Card_ancestors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Card", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Deck_id(ctx context.Context, field graphql.CollectedField, obj *ent.Deck) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Deck_id(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -2780,9 +4282,9 @@ func (ec *executionContext) _Deck_id(ctx context.Context, field graphql.Collecte
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNID2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Deck_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2798,51 +4300,7 @@ func (ec *executionContext) fieldContext_Deck_id(ctx context.Context, field grap
 	return fc, nil
 }
 
-func (ec *executionContext) _Deck_revisionId(ctx context.Context, field graphql.CollectedField, obj *model.Deck) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Deck_revisionId(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.RevisionID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Deck_revisionId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Deck",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Deck_key(ctx context.Context, field graphql.CollectedField, obj *model.Deck) (ret graphql.Marshaler) {
+func (ec *executionContext) _Deck_key(ctx context.Context, field graphql.CollectedField, obj *ent.Deck) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Deck_key(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -2886,140 +4344,8 @@ func (ec *executionContext) fieldContext_Deck_key(ctx context.Context, field gra
 	return fc, nil
 }
 
-func (ec *executionContext) _Deck_nameJa(ctx context.Context, field graphql.CollectedField, obj *model.Deck) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Deck_nameJa(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.NameJa, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Deck_nameJa(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Deck",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Deck_nameEn(ctx context.Context, field graphql.CollectedField, obj *model.Deck) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Deck_nameEn(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.NameEn, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Deck_nameEn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Deck",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Product_id(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Product_id(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Product_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Product",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Product_revisionId(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Product_revisionId(ctx, field)
+func (ec *executionContext) _Deck_revisionID(ctx context.Context, field graphql.CollectedField, obj *ent.Deck) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Deck_revisionID(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3046,23 +4372,504 @@ func (ec *executionContext) _Product_revisionId(ctx context.Context, field graph
 	}
 	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return ec.marshalNID2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Product_revisionId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Deck_revisionID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Deck",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Deck_nameJa(ctx context.Context, field graphql.CollectedField, obj *ent.Deck) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Deck_nameJa(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NameJa, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Deck_nameJa(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Deck",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Deck_nameEn(ctx context.Context, field graphql.CollectedField, obj *ent.Deck) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Deck_nameEn(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NameEn, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Deck_nameEn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Deck",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Deck_cards(ctx context.Context, field graphql.CollectedField, obj *ent.Deck) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Deck_cards(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cards(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Card)
+	fc.Result = res
+	return ec.marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Deck_cards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Deck",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Card_id(ctx, field)
+			case "literalID":
+				return ec.fieldContext_Card_literalID(ctx, field)
+			case "revisionID":
+				return ec.fieldContext_Card_revisionID(ctx, field)
+			case "printedID":
+				return ec.fieldContext_Card_printedID(ctx, field)
+			case "playAgricolaCardID":
+				return ec.fieldContext_Card_playAgricolaCardID(ctx, field)
+			case "deckID":
+				return ec.fieldContext_Card_deckID(ctx, field)
+			case "cardTypeID":
+				return ec.fieldContext_Card_cardTypeID(ctx, field)
+			case "cardSpecialColorID":
+				return ec.fieldContext_Card_cardSpecialColorID(ctx, field)
+			case "nameJa":
+				return ec.fieldContext_Card_nameJa(ctx, field)
+			case "nameEn":
+				return ec.fieldContext_Card_nameEn(ctx, field)
+			case "minPlayersNumber":
+				return ec.fieldContext_Card_minPlayersNumber(ctx, field)
+			case "prerequisite":
+				return ec.fieldContext_Card_prerequisite(ctx, field)
+			case "cost":
+				return ec.fieldContext_Card_cost(ctx, field)
+			case "functionText":
+				return ec.fieldContext_Card_functionText(ctx, field)
+			case "isOfficialJa":
+				return ec.fieldContext_Card_isOfficialJa(ctx, field)
+			case "victoryPoint":
+				return ec.fieldContext_Card_victoryPoint(ctx, field)
+			case "isVariableVictoryPoint":
+				return ec.fieldContext_Card_isVariableVictoryPoint(ctx, field)
+			case "hasArrrow":
+				return ec.fieldContext_Card_hasArrrow(ctx, field)
+			case "hasBonusPointIcon":
+				return ec.fieldContext_Card_hasBonusPointIcon(ctx, field)
+			case "hasNegativeBonusPointIcon":
+				return ec.fieldContext_Card_hasNegativeBonusPointIcon(ctx, field)
+			case "hasPanIcon":
+				return ec.fieldContext_Card_hasPanIcon(ctx, field)
+			case "hasBreadIcon":
+				return ec.fieldContext_Card_hasBreadIcon(ctx, field)
+			case "hasFarmPlannerIcon":
+				return ec.fieldContext_Card_hasFarmPlannerIcon(ctx, field)
+			case "hasActionsBoosterIcon":
+				return ec.fieldContext_Card_hasActionsBoosterIcon(ctx, field)
+			case "hasPointsProviderIcon":
+				return ec.fieldContext_Card_hasPointsProviderIcon(ctx, field)
+			case "hasGoodsProviderIcon":
+				return ec.fieldContext_Card_hasGoodsProviderIcon(ctx, field)
+			case "hasFoodProviderIcon":
+				return ec.fieldContext_Card_hasFoodProviderIcon(ctx, field)
+			case "hasCropProviderIcon":
+				return ec.fieldContext_Card_hasCropProviderIcon(ctx, field)
+			case "hasBuildingResourceProviderIcon":
+				return ec.fieldContext_Card_hasBuildingResourceProviderIcon(ctx, field)
+			case "hasLivestockProviderIcon":
+				return ec.fieldContext_Card_hasLivestockProviderIcon(ctx, field)
+			case "hasCutPeatIcon":
+				return ec.fieldContext_Card_hasCutPeatIcon(ctx, field)
+			case "hasFellTreesIcon":
+				return ec.fieldContext_Card_hasFellTreesIcon(ctx, field)
+			case "hasSlashAndBurnIcon":
+				return ec.fieldContext_Card_hasSlashAndBurnIcon(ctx, field)
+			case "hasHiringFareIcon":
+				return ec.fieldContext_Card_hasHiringFareIcon(ctx, field)
+			case "revision":
+				return ec.fieldContext_Card_revision(ctx, field)
+			case "products":
+				return ec.fieldContext_Card_products(ctx, field)
+			case "deck":
+				return ec.fieldContext_Card_deck(ctx, field)
+			case "cardType":
+				return ec.fieldContext_Card_cardType(ctx, field)
+			case "cardSpecialColor":
+				return ec.fieldContext_Card_cardSpecialColor(ctx, field)
+			case "children":
+				return ec.fieldContext_Card_children(ctx, field)
+			case "ancestors":
+				return ec.fieldContext_Card_ancestors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Card", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Deck_revision(ctx context.Context, field graphql.CollectedField, obj *ent.Deck) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Deck_revision(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Revision(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Revision)
+	fc.Result = res
+	return ec.marshalNRevision2ᚖagricoladbᚋentᚐRevision(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Deck_revision(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Deck",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Revision_id(ctx, field)
+			case "key":
+				return ec.fieldContext_Revision_key(ctx, field)
+			case "nameJa":
+				return ec.fieldContext_Revision_nameJa(ctx, field)
+			case "nameEn":
+				return ec.fieldContext_Revision_nameEn(ctx, field)
+			case "cards":
+				return ec.fieldContext_Revision_cards(ctx, field)
+			case "products":
+				return ec.fieldContext_Revision_products(ctx, field)
+			case "decks":
+				return ec.fieldContext_Revision_decks(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Revision", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PageInfo_hasNextPage(ctx context.Context, field graphql.CollectedField, obj *ent.PageInfo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PageInfo_hasNextPage(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.HasNextPage, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PageInfo_hasNextPage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PageInfo",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PageInfo_hasPreviousPage(ctx context.Context, field graphql.CollectedField, obj *ent.PageInfo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.HasPreviousPage, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PageInfo_hasPreviousPage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PageInfo",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PageInfo_startCursor(ctx context.Context, field graphql.CollectedField, obj *ent.PageInfo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PageInfo_startCursor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.StartCursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Cursor)
+	fc.Result = res
+	return ec.marshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PageInfo_startCursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PageInfo",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Cursor does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PageInfo_endCursor(ctx context.Context, field graphql.CollectedField, obj *ent.PageInfo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PageInfo_endCursor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EndCursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Cursor)
+	fc.Result = res
+	return ec.marshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PageInfo_endCursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PageInfo",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Cursor does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Product_id(ctx context.Context, field graphql.CollectedField, obj *ent.Product) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Product_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNID2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Product_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Product",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
+			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Product_key(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+func (ec *executionContext) _Product_key(ctx context.Context, field graphql.CollectedField, obj *ent.Product) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Product_key(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -3106,8 +4913,8 @@ func (ec *executionContext) fieldContext_Product_key(ctx context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _Product_nameJa(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Product_nameJa(ctx, field)
+func (ec *executionContext) _Product_revisionID(ctx context.Context, field graphql.CollectedField, obj *ent.Product) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Product_revisionID(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3120,7 +4927,7 @@ func (ec *executionContext) _Product_nameJa(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.NameJa, nil
+		return obj.RevisionID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3132,110 +4939,25 @@ func (ec *executionContext) _Product_nameJa(ctx context.Context, field graphql.C
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNID2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Product_nameJa(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Product_revisionID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Product",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Product_nameEn(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Product_nameEn(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.NameEn, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Product_nameEn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Product",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Product_publishedYear(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Product_publishedYear(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PublishedYear, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*int)
-	fc.Result = res
-	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Product_publishedYear(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Product",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Product_isOfficialJa(ctx context.Context, field graphql.CollectedField, obj *model.Product) (ret graphql.Marshaler) {
+func (ec *executionContext) _Product_isOfficialJa(ctx context.Context, field graphql.CollectedField, obj *ent.Product) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Product_isOfficialJa(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -3279,8 +5001,8 @@ func (ec *executionContext) fieldContext_Product_isOfficialJa(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_cards(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_cards(ctx, field)
+func (ec *executionContext) _Product_nameJa(ctx context.Context, field graphql.CollectedField, obj *ent.Product) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Product_nameJa(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3293,47 +5015,126 @@ func (ec *executionContext) _Query_cards(ctx context.Context, field graphql.Coll
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Cards(rctx)
+		return obj.NameJa, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Card)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNCard2ᚕᚖagricoladbᚋgraphᚋmodelᚐCardᚄ(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_cards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Product_nameJa(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Query",
+		Object:     "Product",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Product_nameEn(ctx context.Context, field graphql.CollectedField, obj *ent.Product) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Product_nameEn(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NameEn, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Product_nameEn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Product",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Product_cards(ctx context.Context, field graphql.CollectedField, obj *ent.Product) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Product_cards(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cards(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Card)
+	fc.Result = res
+	return ec.marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Product_cards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Product",
 		Field:      field,
 		IsMethod:   true,
-		IsResolver: true,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
 				return ec.fieldContext_Card_id(ctx, field)
-			case "literalId":
-				return ec.fieldContext_Card_literalId(ctx, field)
-			case "printedId":
-				return ec.fieldContext_Card_printedId(ctx, field)
-			case "revisionId":
-				return ec.fieldContext_Card_revisionId(ctx, field)
-			case "playAgricolaCardId":
-				return ec.fieldContext_Card_playAgricolaCardId(ctx, field)
-			case "cardType":
-				return ec.fieldContext_Card_cardType(ctx, field)
-			case "product":
-				return ec.fieldContext_Card_product(ctx, field)
-			case "deck":
-				return ec.fieldContext_Card_deck(ctx, field)
+			case "literalID":
+				return ec.fieldContext_Card_literalID(ctx, field)
+			case "revisionID":
+				return ec.fieldContext_Card_revisionID(ctx, field)
+			case "printedID":
+				return ec.fieldContext_Card_printedID(ctx, field)
+			case "playAgricolaCardID":
+				return ec.fieldContext_Card_playAgricolaCardID(ctx, field)
+			case "deckID":
+				return ec.fieldContext_Card_deckID(ctx, field)
+			case "cardTypeID":
+				return ec.fieldContext_Card_cardTypeID(ctx, field)
+			case "cardSpecialColorID":
+				return ec.fieldContext_Card_cardSpecialColorID(ctx, field)
 			case "nameJa":
 				return ec.fieldContext_Card_nameJa(ctx, field)
 			case "nameEn":
@@ -3344,20 +5145,20 @@ func (ec *executionContext) fieldContext_Query_cards(ctx context.Context, field 
 				return ec.fieldContext_Card_prerequisite(ctx, field)
 			case "cost":
 				return ec.fieldContext_Card_cost(ctx, field)
-			case "description":
-				return ec.fieldContext_Card_description(ctx, field)
+			case "functionText":
+				return ec.fieldContext_Card_functionText(ctx, field)
 			case "isOfficialJa":
 				return ec.fieldContext_Card_isOfficialJa(ctx, field)
 			case "victoryPoint":
 				return ec.fieldContext_Card_victoryPoint(ctx, field)
-			case "isMutableVictoryPoint":
-				return ec.fieldContext_Card_isMutableVictoryPoint(ctx, field)
-			case "hasArrow":
-				return ec.fieldContext_Card_hasArrow(ctx, field)
-			case "hasBonus":
-				return ec.fieldContext_Card_hasBonus(ctx, field)
-			case "hasNegativeBonus":
-				return ec.fieldContext_Card_hasNegativeBonus(ctx, field)
+			case "isVariableVictoryPoint":
+				return ec.fieldContext_Card_isVariableVictoryPoint(ctx, field)
+			case "hasArrrow":
+				return ec.fieldContext_Card_hasArrrow(ctx, field)
+			case "hasBonusPointIcon":
+				return ec.fieldContext_Card_hasBonusPointIcon(ctx, field)
+			case "hasNegativeBonusPointIcon":
+				return ec.fieldContext_Card_hasNegativeBonusPointIcon(ctx, field)
 			case "hasPanIcon":
 				return ec.fieldContext_Card_hasPanIcon(ctx, field)
 			case "hasBreadIcon":
@@ -3386,12 +5187,20 @@ func (ec *executionContext) fieldContext_Query_cards(ctx context.Context, field 
 				return ec.fieldContext_Card_hasSlashAndBurnIcon(ctx, field)
 			case "hasHiringFareIcon":
 				return ec.fieldContext_Card_hasHiringFareIcon(ctx, field)
-			case "specialColor":
-				return ec.fieldContext_Card_specialColor(ctx, field)
-			case "originCards":
-				return ec.fieldContext_Card_originCards(ctx, field)
-			case "republishedCards":
-				return ec.fieldContext_Card_republishedCards(ctx, field)
+			case "revision":
+				return ec.fieldContext_Card_revision(ctx, field)
+			case "products":
+				return ec.fieldContext_Card_products(ctx, field)
+			case "deck":
+				return ec.fieldContext_Card_deck(ctx, field)
+			case "cardType":
+				return ec.fieldContext_Card_cardType(ctx, field)
+			case "cardSpecialColor":
+				return ec.fieldContext_Card_cardSpecialColor(ctx, field)
+			case "children":
+				return ec.fieldContext_Card_children(ctx, field)
+			case "ancestors":
+				return ec.fieldContext_Card_ancestors(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Card", field.Name)
 		},
@@ -3399,8 +5208,8 @@ func (ec *executionContext) fieldContext_Query_cards(ctx context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_findCardByRevisionAndLiteralId(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_findCardByRevisionAndLiteralId(ctx, field)
+func (ec *executionContext) _Product_revision(ctx context.Context, field graphql.CollectedField, obj *ent.Product) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Product_revision(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3413,7 +5222,7 @@ func (ec *executionContext) _Query_findCardByRevisionAndLiteralId(ctx context.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().FindCardByRevisionAndLiteralID(rctx, fc.Args["input"].(model.RevisionAndLiteralID))
+		return obj.Revision(ctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3425,95 +5234,76 @@ func (ec *executionContext) _Query_findCardByRevisionAndLiteralId(ctx context.Co
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.Card)
+	res := resTmp.(*ent.Revision)
 	fc.Result = res
-	return ec.marshalNCard2ᚖagricoladbᚋgraphᚋmodelᚐCard(ctx, field.Selections, res)
+	return ec.marshalNRevision2ᚖagricoladbᚋentᚐRevision(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_findCardByRevisionAndLiteralId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Product_revision(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Product",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Revision_id(ctx, field)
+			case "key":
+				return ec.fieldContext_Revision_key(ctx, field)
+			case "nameJa":
+				return ec.fieldContext_Revision_nameJa(ctx, field)
+			case "nameEn":
+				return ec.fieldContext_Revision_nameEn(ctx, field)
+			case "cards":
+				return ec.fieldContext_Revision_cards(ctx, field)
+			case "products":
+				return ec.fieldContext_Revision_products(ctx, field)
+			case "decks":
+				return ec.fieldContext_Revision_decks(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Revision", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_node(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_node(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Node(rctx, fc.Args["id"].(int))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(ent.Noder)
+	fc.Result = res
+	return ec.marshalONode2agricoladbᚋentᚐNoder(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_node(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
 		IsMethod:   true,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Card_id(ctx, field)
-			case "literalId":
-				return ec.fieldContext_Card_literalId(ctx, field)
-			case "printedId":
-				return ec.fieldContext_Card_printedId(ctx, field)
-			case "revisionId":
-				return ec.fieldContext_Card_revisionId(ctx, field)
-			case "playAgricolaCardId":
-				return ec.fieldContext_Card_playAgricolaCardId(ctx, field)
-			case "cardType":
-				return ec.fieldContext_Card_cardType(ctx, field)
-			case "product":
-				return ec.fieldContext_Card_product(ctx, field)
-			case "deck":
-				return ec.fieldContext_Card_deck(ctx, field)
-			case "nameJa":
-				return ec.fieldContext_Card_nameJa(ctx, field)
-			case "nameEn":
-				return ec.fieldContext_Card_nameEn(ctx, field)
-			case "minPlayersNumber":
-				return ec.fieldContext_Card_minPlayersNumber(ctx, field)
-			case "prerequisite":
-				return ec.fieldContext_Card_prerequisite(ctx, field)
-			case "cost":
-				return ec.fieldContext_Card_cost(ctx, field)
-			case "description":
-				return ec.fieldContext_Card_description(ctx, field)
-			case "isOfficialJa":
-				return ec.fieldContext_Card_isOfficialJa(ctx, field)
-			case "victoryPoint":
-				return ec.fieldContext_Card_victoryPoint(ctx, field)
-			case "isMutableVictoryPoint":
-				return ec.fieldContext_Card_isMutableVictoryPoint(ctx, field)
-			case "hasArrow":
-				return ec.fieldContext_Card_hasArrow(ctx, field)
-			case "hasBonus":
-				return ec.fieldContext_Card_hasBonus(ctx, field)
-			case "hasNegativeBonus":
-				return ec.fieldContext_Card_hasNegativeBonus(ctx, field)
-			case "hasPanIcon":
-				return ec.fieldContext_Card_hasPanIcon(ctx, field)
-			case "hasBreadIcon":
-				return ec.fieldContext_Card_hasBreadIcon(ctx, field)
-			case "hasFarmPlannerIcon":
-				return ec.fieldContext_Card_hasFarmPlannerIcon(ctx, field)
-			case "hasActionsBoosterIcon":
-				return ec.fieldContext_Card_hasActionsBoosterIcon(ctx, field)
-			case "hasPointsProviderIcon":
-				return ec.fieldContext_Card_hasPointsProviderIcon(ctx, field)
-			case "hasGoodsProviderIcon":
-				return ec.fieldContext_Card_hasGoodsProviderIcon(ctx, field)
-			case "hasFoodProviderIcon":
-				return ec.fieldContext_Card_hasFoodProviderIcon(ctx, field)
-			case "hasCropProviderIcon":
-				return ec.fieldContext_Card_hasCropProviderIcon(ctx, field)
-			case "hasBuildingResourceProviderIcon":
-				return ec.fieldContext_Card_hasBuildingResourceProviderIcon(ctx, field)
-			case "hasLivestockProviderIcon":
-				return ec.fieldContext_Card_hasLivestockProviderIcon(ctx, field)
-			case "hasCutPeatIcon":
-				return ec.fieldContext_Card_hasCutPeatIcon(ctx, field)
-			case "hasFellTreesIcon":
-				return ec.fieldContext_Card_hasFellTreesIcon(ctx, field)
-			case "hasSlashAndBurnIcon":
-				return ec.fieldContext_Card_hasSlashAndBurnIcon(ctx, field)
-			case "hasHiringFareIcon":
-				return ec.fieldContext_Card_hasHiringFareIcon(ctx, field)
-			case "specialColor":
-				return ec.fieldContext_Card_specialColor(ctx, field)
-			case "originCards":
-				return ec.fieldContext_Card_originCards(ctx, field)
-			case "republishedCards":
-				return ec.fieldContext_Card_republishedCards(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Card", field.Name)
+			return nil, errors.New("FieldContext.Child cannot be called on type INTERFACE")
 		},
 	}
 	defer func() {
@@ -3523,7 +5313,62 @@ func (ec *executionContext) fieldContext_Query_findCardByRevisionAndLiteralId(ct
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_findCardByRevisionAndLiteralId_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Query_node_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_nodes(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_nodes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Nodes(rctx, fc.Args["ids"].([]int))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]ent.Noder)
+	fc.Result = res
+	return ec.marshalNNode2ᚕagricoladbᚋentᚐNoder(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_nodes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("FieldContext.Child cannot be called on type INTERFACE")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_nodes_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -3659,8 +5504,8 @@ func (ec *executionContext) fieldContext_Query___schema(ctx context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _SpecialColor_id(ctx context.Context, field graphql.CollectedField, obj *model.SpecialColor) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SpecialColor_id(ctx, field)
+func (ec *executionContext) _Revision_id(ctx context.Context, field graphql.CollectedField, obj *ent.Revision) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Revision_id(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3685,14 +5530,14 @@ func (ec *executionContext) _SpecialColor_id(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNID2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_SpecialColor_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Revision_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "SpecialColor",
+		Object:     "Revision",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -3703,8 +5548,8 @@ func (ec *executionContext) fieldContext_SpecialColor_id(ctx context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _SpecialColor_key(ctx context.Context, field graphql.CollectedField, obj *model.SpecialColor) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SpecialColor_key(ctx, field)
+func (ec *executionContext) _Revision_key(ctx context.Context, field graphql.CollectedField, obj *ent.Revision) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Revision_key(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3734,9 +5579,9 @@ func (ec *executionContext) _SpecialColor_key(ctx context.Context, field graphql
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_SpecialColor_key(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Revision_key(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "SpecialColor",
+		Object:     "Revision",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -3747,8 +5592,8 @@ func (ec *executionContext) fieldContext_SpecialColor_key(ctx context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _SpecialColor_nameJa(ctx context.Context, field graphql.CollectedField, obj *model.SpecialColor) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SpecialColor_nameJa(ctx, field)
+func (ec *executionContext) _Revision_nameJa(ctx context.Context, field graphql.CollectedField, obj *ent.Revision) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Revision_nameJa(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3768,19 +5613,16 @@ func (ec *executionContext) _SpecialColor_nameJa(ctx context.Context, field grap
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_SpecialColor_nameJa(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Revision_nameJa(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "SpecialColor",
+		Object:     "Revision",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -3791,8 +5633,8 @@ func (ec *executionContext) fieldContext_SpecialColor_nameJa(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _SpecialColor_nameEn(ctx context.Context, field graphql.CollectedField, obj *model.SpecialColor) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SpecialColor_nameEn(ctx, field)
+func (ec *executionContext) _Revision_nameEn(ctx context.Context, field graphql.CollectedField, obj *ent.Revision) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Revision_nameEn(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -3812,24 +5654,262 @@ func (ec *executionContext) _SpecialColor_nameEn(ctx context.Context, field grap
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
 	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_SpecialColor_nameEn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Revision_nameEn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "SpecialColor",
+		Object:     "Revision",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Revision_cards(ctx context.Context, field graphql.CollectedField, obj *ent.Revision) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Revision_cards(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cards(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Card)
+	fc.Result = res
+	return ec.marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Revision_cards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Revision",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Card_id(ctx, field)
+			case "literalID":
+				return ec.fieldContext_Card_literalID(ctx, field)
+			case "revisionID":
+				return ec.fieldContext_Card_revisionID(ctx, field)
+			case "printedID":
+				return ec.fieldContext_Card_printedID(ctx, field)
+			case "playAgricolaCardID":
+				return ec.fieldContext_Card_playAgricolaCardID(ctx, field)
+			case "deckID":
+				return ec.fieldContext_Card_deckID(ctx, field)
+			case "cardTypeID":
+				return ec.fieldContext_Card_cardTypeID(ctx, field)
+			case "cardSpecialColorID":
+				return ec.fieldContext_Card_cardSpecialColorID(ctx, field)
+			case "nameJa":
+				return ec.fieldContext_Card_nameJa(ctx, field)
+			case "nameEn":
+				return ec.fieldContext_Card_nameEn(ctx, field)
+			case "minPlayersNumber":
+				return ec.fieldContext_Card_minPlayersNumber(ctx, field)
+			case "prerequisite":
+				return ec.fieldContext_Card_prerequisite(ctx, field)
+			case "cost":
+				return ec.fieldContext_Card_cost(ctx, field)
+			case "functionText":
+				return ec.fieldContext_Card_functionText(ctx, field)
+			case "isOfficialJa":
+				return ec.fieldContext_Card_isOfficialJa(ctx, field)
+			case "victoryPoint":
+				return ec.fieldContext_Card_victoryPoint(ctx, field)
+			case "isVariableVictoryPoint":
+				return ec.fieldContext_Card_isVariableVictoryPoint(ctx, field)
+			case "hasArrrow":
+				return ec.fieldContext_Card_hasArrrow(ctx, field)
+			case "hasBonusPointIcon":
+				return ec.fieldContext_Card_hasBonusPointIcon(ctx, field)
+			case "hasNegativeBonusPointIcon":
+				return ec.fieldContext_Card_hasNegativeBonusPointIcon(ctx, field)
+			case "hasPanIcon":
+				return ec.fieldContext_Card_hasPanIcon(ctx, field)
+			case "hasBreadIcon":
+				return ec.fieldContext_Card_hasBreadIcon(ctx, field)
+			case "hasFarmPlannerIcon":
+				return ec.fieldContext_Card_hasFarmPlannerIcon(ctx, field)
+			case "hasActionsBoosterIcon":
+				return ec.fieldContext_Card_hasActionsBoosterIcon(ctx, field)
+			case "hasPointsProviderIcon":
+				return ec.fieldContext_Card_hasPointsProviderIcon(ctx, field)
+			case "hasGoodsProviderIcon":
+				return ec.fieldContext_Card_hasGoodsProviderIcon(ctx, field)
+			case "hasFoodProviderIcon":
+				return ec.fieldContext_Card_hasFoodProviderIcon(ctx, field)
+			case "hasCropProviderIcon":
+				return ec.fieldContext_Card_hasCropProviderIcon(ctx, field)
+			case "hasBuildingResourceProviderIcon":
+				return ec.fieldContext_Card_hasBuildingResourceProviderIcon(ctx, field)
+			case "hasLivestockProviderIcon":
+				return ec.fieldContext_Card_hasLivestockProviderIcon(ctx, field)
+			case "hasCutPeatIcon":
+				return ec.fieldContext_Card_hasCutPeatIcon(ctx, field)
+			case "hasFellTreesIcon":
+				return ec.fieldContext_Card_hasFellTreesIcon(ctx, field)
+			case "hasSlashAndBurnIcon":
+				return ec.fieldContext_Card_hasSlashAndBurnIcon(ctx, field)
+			case "hasHiringFareIcon":
+				return ec.fieldContext_Card_hasHiringFareIcon(ctx, field)
+			case "revision":
+				return ec.fieldContext_Card_revision(ctx, field)
+			case "products":
+				return ec.fieldContext_Card_products(ctx, field)
+			case "deck":
+				return ec.fieldContext_Card_deck(ctx, field)
+			case "cardType":
+				return ec.fieldContext_Card_cardType(ctx, field)
+			case "cardSpecialColor":
+				return ec.fieldContext_Card_cardSpecialColor(ctx, field)
+			case "children":
+				return ec.fieldContext_Card_children(ctx, field)
+			case "ancestors":
+				return ec.fieldContext_Card_ancestors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Card", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Revision_products(ctx context.Context, field graphql.CollectedField, obj *ent.Revision) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Revision_products(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Products(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Product)
+	fc.Result = res
+	return ec.marshalOProduct2ᚕᚖagricoladbᚋentᚐProductᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Revision_products(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Revision",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Product_id(ctx, field)
+			case "key":
+				return ec.fieldContext_Product_key(ctx, field)
+			case "revisionID":
+				return ec.fieldContext_Product_revisionID(ctx, field)
+			case "isOfficialJa":
+				return ec.fieldContext_Product_isOfficialJa(ctx, field)
+			case "nameJa":
+				return ec.fieldContext_Product_nameJa(ctx, field)
+			case "nameEn":
+				return ec.fieldContext_Product_nameEn(ctx, field)
+			case "cards":
+				return ec.fieldContext_Product_cards(ctx, field)
+			case "revision":
+				return ec.fieldContext_Product_revision(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Product", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Revision_decks(ctx context.Context, field graphql.CollectedField, obj *ent.Revision) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Revision_decks(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Decks(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Deck)
+	fc.Result = res
+	return ec.marshalODeck2ᚕᚖagricoladbᚋentᚐDeckᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Revision_decks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Revision",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Deck_id(ctx, field)
+			case "key":
+				return ec.fieldContext_Deck_key(ctx, field)
+			case "revisionID":
+				return ec.fieldContext_Deck_revisionID(ctx, field)
+			case "nameJa":
+				return ec.fieldContext_Deck_nameJa(ctx, field)
+			case "nameEn":
+				return ec.fieldContext_Deck_nameEn(ctx, field)
+			case "cards":
+				return ec.fieldContext_Deck_cards(ctx, field)
+			case "revision":
+				return ec.fieldContext_Deck_revision(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Deck", field.Name)
 		},
 	}
 	return fc, nil
@@ -5608,33 +7688,4317 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputRevisionAndLiteralId(ctx context.Context, obj interface{}) (model.RevisionAndLiteralID, error) {
-	var it model.RevisionAndLiteralID
+func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context.Context, obj interface{}) (ent.CardSpecialColorWhereInput, error) {
+	var it ent.CardSpecialColorWhereInput
 	asMap := map[string]interface{}{}
 	for k, v := range obj.(map[string]interface{}) {
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"revisionId", "literalId"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "key", "keyNEQ", "keyIn", "keyNotIn", "keyGT", "keyGTE", "keyLT", "keyLTE", "keyContains", "keyHasPrefix", "keyHasSuffix", "keyEqualFold", "keyContainsFold", "nameJa", "nameJaNEQ", "nameJaIn", "nameJaNotIn", "nameJaGT", "nameJaGTE", "nameJaLT", "nameJaLTE", "nameJaContains", "nameJaHasPrefix", "nameJaHasSuffix", "nameJaIsNil", "nameJaNotNil", "nameJaEqualFold", "nameJaContainsFold", "nameEn", "nameEnNEQ", "nameEnIn", "nameEnNotIn", "nameEnGT", "nameEnGTE", "nameEnLT", "nameEnLTE", "nameEnContains", "nameEnHasPrefix", "nameEnHasSuffix", "nameEnIsNil", "nameEnNotNil", "nameEnEqualFold", "nameEnContainsFold", "hasCards", "hasCardsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "revisionId":
+		case "not":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionId"))
-			it.RevisionID, err = ec.unmarshalNInt2int(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			it.Not, err = ec.unmarshalOCardSpecialColorWhereInput2ᚖagricoladbᚋentᚐCardSpecialColorWhereInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
-		case "literalId":
+		case "and":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalId"))
-			it.LiteralID, err = ec.unmarshalNString2string(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			it.And, err = ec.unmarshalOCardSpecialColorWhereInput2ᚕᚖagricoladbᚋentᚐCardSpecialColorWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "or":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			it.Or, err = ec.unmarshalOCardSpecialColorWhereInput2ᚕᚖagricoladbᚋentᚐCardSpecialColorWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			it.IDNEQ, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			it.IDIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			it.IDNotIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
+			it.IDGT, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
+			it.IDGTE, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
+			it.IDLT, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
+			it.IDLTE, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "key":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("key"))
+			it.Key, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNEQ"))
+			it.KeyNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyIn"))
+			it.KeyIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNotIn"))
+			it.KeyNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGT"))
+			it.KeyGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGTE"))
+			it.KeyGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLT"))
+			it.KeyLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLTE"))
+			it.KeyLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContains"))
+			it.KeyContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasPrefix"))
+			it.KeyHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasSuffix"))
+			it.KeyHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyEqualFold"))
+			it.KeyEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContainsFold"))
+			it.KeyContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJa":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJa"))
+			it.NameJa, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNEQ"))
+			it.NameJaNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIn"))
+			it.NameJaIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotIn"))
+			it.NameJaNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGT"))
+			it.NameJaGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGTE"))
+			it.NameJaGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLT"))
+			it.NameJaLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLTE"))
+			it.NameJaLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContains"))
+			it.NameJaContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasPrefix"))
+			it.NameJaHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasSuffix"))
+			it.NameJaHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIsNil"))
+			it.NameJaIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotNil"))
+			it.NameJaNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaEqualFold"))
+			it.NameJaEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContainsFold"))
+			it.NameJaContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEn"))
+			it.NameEn, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNEQ"))
+			it.NameEnNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIn"))
+			it.NameEnIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotIn"))
+			it.NameEnNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGT"))
+			it.NameEnGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGTE"))
+			it.NameEnGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLT"))
+			it.NameEnLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLTE"))
+			it.NameEnLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContains"))
+			it.NameEnContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasPrefix"))
+			it.NameEnHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasSuffix"))
+			it.NameEnHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIsNil"))
+			it.NameEnIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotNil"))
+			it.NameEnNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnEqualFold"))
+			it.NameEnEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContainsFold"))
+			it.NameEnContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCards":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCards"))
+			it.HasCards, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCardsWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardsWith"))
+			it.HasCardsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context, obj interface{}) (ent.CardTypeWhereInput, error) {
+	var it ent.CardTypeWhereInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "key", "keyNEQ", "keyIn", "keyNotIn", "keyGT", "keyGTE", "keyLT", "keyLTE", "keyContains", "keyHasPrefix", "keyHasSuffix", "keyEqualFold", "keyContainsFold", "nameJa", "nameJaNEQ", "nameJaIn", "nameJaNotIn", "nameJaGT", "nameJaGTE", "nameJaLT", "nameJaLTE", "nameJaContains", "nameJaHasPrefix", "nameJaHasSuffix", "nameJaIsNil", "nameJaNotNil", "nameJaEqualFold", "nameJaContainsFold", "nameEn", "nameEnNEQ", "nameEnIn", "nameEnNotIn", "nameEnGT", "nameEnGTE", "nameEnLT", "nameEnLTE", "nameEnContains", "nameEnHasPrefix", "nameEnHasSuffix", "nameEnIsNil", "nameEnNotNil", "nameEnEqualFold", "nameEnContainsFold", "hasCards", "hasCardsWith"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			it.Not, err = ec.unmarshalOCardTypeWhereInput2ᚖagricoladbᚋentᚐCardTypeWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "and":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			it.And, err = ec.unmarshalOCardTypeWhereInput2ᚕᚖagricoladbᚋentᚐCardTypeWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "or":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			it.Or, err = ec.unmarshalOCardTypeWhereInput2ᚕᚖagricoladbᚋentᚐCardTypeWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			it.IDNEQ, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			it.IDIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			it.IDNotIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
+			it.IDGT, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
+			it.IDGTE, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
+			it.IDLT, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
+			it.IDLTE, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "key":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("key"))
+			it.Key, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNEQ"))
+			it.KeyNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyIn"))
+			it.KeyIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNotIn"))
+			it.KeyNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGT"))
+			it.KeyGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGTE"))
+			it.KeyGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLT"))
+			it.KeyLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLTE"))
+			it.KeyLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContains"))
+			it.KeyContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasPrefix"))
+			it.KeyHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasSuffix"))
+			it.KeyHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyEqualFold"))
+			it.KeyEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContainsFold"))
+			it.KeyContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJa":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJa"))
+			it.NameJa, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNEQ"))
+			it.NameJaNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIn"))
+			it.NameJaIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotIn"))
+			it.NameJaNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGT"))
+			it.NameJaGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGTE"))
+			it.NameJaGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLT"))
+			it.NameJaLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLTE"))
+			it.NameJaLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContains"))
+			it.NameJaContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasPrefix"))
+			it.NameJaHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasSuffix"))
+			it.NameJaHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIsNil"))
+			it.NameJaIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotNil"))
+			it.NameJaNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaEqualFold"))
+			it.NameJaEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContainsFold"))
+			it.NameJaContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEn"))
+			it.NameEn, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNEQ"))
+			it.NameEnNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIn"))
+			it.NameEnIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotIn"))
+			it.NameEnNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGT"))
+			it.NameEnGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGTE"))
+			it.NameEnGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLT"))
+			it.NameEnLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLTE"))
+			it.NameEnLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContains"))
+			it.NameEnContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasPrefix"))
+			it.NameEnHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasSuffix"))
+			it.NameEnHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIsNil"))
+			it.NameEnIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotNil"))
+			it.NameEnNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnEqualFold"))
+			it.NameEnEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContainsFold"))
+			it.NameEnContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCards":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCards"))
+			it.HasCards, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCardsWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardsWith"))
+			it.HasCardsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, obj interface{}) (ent.CardWhereInput, error) {
+	var it ent.CardWhereInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "literalID", "literalIDNEQ", "literalIDIn", "literalIDNotIn", "literalIDGT", "literalIDGTE", "literalIDLT", "literalIDLTE", "literalIDContains", "literalIDHasPrefix", "literalIDHasSuffix", "literalIDEqualFold", "literalIDContainsFold", "revisionID", "revisionIDNEQ", "revisionIDIn", "revisionIDNotIn", "printedID", "printedIDNEQ", "printedIDIn", "printedIDNotIn", "printedIDGT", "printedIDGTE", "printedIDLT", "printedIDLTE", "printedIDContains", "printedIDHasPrefix", "printedIDHasSuffix", "printedIDIsNil", "printedIDNotNil", "printedIDEqualFold", "printedIDContainsFold", "playAgricolaCardID", "playAgricolaCardIDNEQ", "playAgricolaCardIDIn", "playAgricolaCardIDNotIn", "playAgricolaCardIDGT", "playAgricolaCardIDGTE", "playAgricolaCardIDLT", "playAgricolaCardIDLTE", "playAgricolaCardIDContains", "playAgricolaCardIDHasPrefix", "playAgricolaCardIDHasSuffix", "playAgricolaCardIDIsNil", "playAgricolaCardIDNotNil", "playAgricolaCardIDEqualFold", "playAgricolaCardIDContainsFold", "deckID", "deckIDNEQ", "deckIDIn", "deckIDNotIn", "deckIDIsNil", "deckIDNotNil", "cardTypeID", "cardTypeIDNEQ", "cardTypeIDIn", "cardTypeIDNotIn", "cardSpecialColorID", "cardSpecialColorIDNEQ", "cardSpecialColorIDIn", "cardSpecialColorIDNotIn", "cardSpecialColorIDIsNil", "cardSpecialColorIDNotNil", "nameJa", "nameJaNEQ", "nameJaIn", "nameJaNotIn", "nameJaGT", "nameJaGTE", "nameJaLT", "nameJaLTE", "nameJaContains", "nameJaHasPrefix", "nameJaHasSuffix", "nameJaIsNil", "nameJaNotNil", "nameJaEqualFold", "nameJaContainsFold", "nameEn", "nameEnNEQ", "nameEnIn", "nameEnNotIn", "nameEnGT", "nameEnGTE", "nameEnLT", "nameEnLTE", "nameEnContains", "nameEnHasPrefix", "nameEnHasSuffix", "nameEnIsNil", "nameEnNotNil", "nameEnEqualFold", "nameEnContainsFold", "minPlayersNumber", "minPlayersNumberNEQ", "minPlayersNumberIn", "minPlayersNumberNotIn", "minPlayersNumberGT", "minPlayersNumberGTE", "minPlayersNumberLT", "minPlayersNumberLTE", "minPlayersNumberIsNil", "minPlayersNumberNotNil", "prerequisite", "prerequisiteNEQ", "prerequisiteIn", "prerequisiteNotIn", "prerequisiteGT", "prerequisiteGTE", "prerequisiteLT", "prerequisiteLTE", "prerequisiteContains", "prerequisiteHasPrefix", "prerequisiteHasSuffix", "prerequisiteIsNil", "prerequisiteNotNil", "prerequisiteEqualFold", "prerequisiteContainsFold", "cost", "costNEQ", "costIn", "costNotIn", "costGT", "costGTE", "costLT", "costLTE", "costContains", "costHasPrefix", "costHasSuffix", "costIsNil", "costNotNil", "costEqualFold", "costContainsFold", "functionText", "functionTextNEQ", "functionTextIn", "functionTextNotIn", "functionTextGT", "functionTextGTE", "functionTextLT", "functionTextLTE", "functionTextContains", "functionTextHasPrefix", "functionTextHasSuffix", "functionTextIsNil", "functionTextNotNil", "functionTextEqualFold", "functionTextContainsFold", "isOfficialJa", "isOfficialJaNEQ", "victoryPoint", "victoryPointNEQ", "victoryPointIn", "victoryPointNotIn", "victoryPointGT", "victoryPointGTE", "victoryPointLT", "victoryPointLTE", "victoryPointIsNil", "victoryPointNotNil", "isVariableVictoryPoint", "isVariableVictoryPointNEQ", "hasArrrow", "hasArrrowNEQ", "hasBonusPointIcon", "hasBonusPointIconNEQ", "hasNegativeBonusPointIcon", "hasNegativeBonusPointIconNEQ", "hasPanIcon", "hasPanIconNEQ", "hasBreadIcon", "hasBreadIconNEQ", "hasFarmPlannerIcon", "hasFarmPlannerIconNEQ", "hasActionsBoosterIcon", "hasActionsBoosterIconNEQ", "hasPointsProviderIcon", "hasPointsProviderIconNEQ", "hasGoodsProviderIcon", "hasGoodsProviderIconNEQ", "hasFoodProviderIcon", "hasFoodProviderIconNEQ", "hasCropProviderIcon", "hasCropProviderIconNEQ", "hasBuildingResourceProviderIcon", "hasBuildingResourceProviderIconNEQ", "hasLivestockProviderIcon", "hasLivestockProviderIconNEQ", "hasCutPeatIcon", "hasCutPeatIconNEQ", "hasFellTreesIcon", "hasFellTreesIconNEQ", "hasSlashAndBurnIcon", "hasSlashAndBurnIconNEQ", "hasHiringFareIcon", "hasHiringFareIconNEQ", "hasRevision", "hasRevisionWith", "hasProducts", "hasProductsWith", "hasDeck", "hasDeckWith", "hasCardType", "hasCardTypeWith", "hasCardSpecialColor", "hasCardSpecialColorWith", "hasChildren", "hasChildrenWith", "hasAncestors", "hasAncestorsWith"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			it.Not, err = ec.unmarshalOCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "and":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			it.And, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "or":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			it.Or, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			it.IDNEQ, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			it.IDIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			it.IDNotIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
+			it.IDGT, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
+			it.IDGTE, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
+			it.IDLT, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
+			it.IDLTE, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "literalID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalID"))
+			it.LiteralID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "literalIDNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDNEQ"))
+			it.LiteralIDNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "literalIDIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDIn"))
+			it.LiteralIDIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "literalIDNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDNotIn"))
+			it.LiteralIDNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "literalIDGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDGT"))
+			it.LiteralIDGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "literalIDGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDGTE"))
+			it.LiteralIDGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "literalIDLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDLT"))
+			it.LiteralIDLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "literalIDLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDLTE"))
+			it.LiteralIDLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "literalIDContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDContains"))
+			it.LiteralIDContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "literalIDHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDHasPrefix"))
+			it.LiteralIDHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "literalIDHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDHasSuffix"))
+			it.LiteralIDHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "literalIDEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDEqualFold"))
+			it.LiteralIDEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "literalIDContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDContainsFold"))
+			it.LiteralIDContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "revisionID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionID"))
+			it.RevisionID, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "revisionIDNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDNEQ"))
+			it.RevisionIDNEQ, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "revisionIDIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDIn"))
+			it.RevisionIDIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "revisionIDNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDNotIn"))
+			it.RevisionIDNotIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "printedID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedID"))
+			it.PrintedID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "printedIDNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDNEQ"))
+			it.PrintedIDNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "printedIDIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDIn"))
+			it.PrintedIDIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "printedIDNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDNotIn"))
+			it.PrintedIDNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "printedIDGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDGT"))
+			it.PrintedIDGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "printedIDGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDGTE"))
+			it.PrintedIDGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "printedIDLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDLT"))
+			it.PrintedIDLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "printedIDLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDLTE"))
+			it.PrintedIDLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "printedIDContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDContains"))
+			it.PrintedIDContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "printedIDHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDHasPrefix"))
+			it.PrintedIDHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "printedIDHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDHasSuffix"))
+			it.PrintedIDHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "printedIDIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDIsNil"))
+			it.PrintedIDIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "printedIDNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDNotNil"))
+			it.PrintedIDNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "printedIDEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDEqualFold"))
+			it.PrintedIDEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "printedIDContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDContainsFold"))
+			it.PrintedIDContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "playAgricolaCardID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardID"))
+			it.PlayAgricolaCardID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "playAgricolaCardIDNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDNEQ"))
+			it.PlayAgricolaCardIDNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "playAgricolaCardIDIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDIn"))
+			it.PlayAgricolaCardIDIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "playAgricolaCardIDNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDNotIn"))
+			it.PlayAgricolaCardIDNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "playAgricolaCardIDGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDGT"))
+			it.PlayAgricolaCardIDGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "playAgricolaCardIDGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDGTE"))
+			it.PlayAgricolaCardIDGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "playAgricolaCardIDLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDLT"))
+			it.PlayAgricolaCardIDLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "playAgricolaCardIDLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDLTE"))
+			it.PlayAgricolaCardIDLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "playAgricolaCardIDContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDContains"))
+			it.PlayAgricolaCardIDContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "playAgricolaCardIDHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDHasPrefix"))
+			it.PlayAgricolaCardIDHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "playAgricolaCardIDHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDHasSuffix"))
+			it.PlayAgricolaCardIDHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "playAgricolaCardIDIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDIsNil"))
+			it.PlayAgricolaCardIDIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "playAgricolaCardIDNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDNotNil"))
+			it.PlayAgricolaCardIDNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "playAgricolaCardIDEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDEqualFold"))
+			it.PlayAgricolaCardIDEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "playAgricolaCardIDContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDContainsFold"))
+			it.PlayAgricolaCardIDContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "deckID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deckID"))
+			it.DeckID, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "deckIDNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deckIDNEQ"))
+			it.DeckIDNEQ, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "deckIDIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deckIDIn"))
+			it.DeckIDIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "deckIDNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deckIDNotIn"))
+			it.DeckIDNotIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "deckIDIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deckIDIsNil"))
+			it.DeckIDIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "deckIDNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deckIDNotNil"))
+			it.DeckIDNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "cardTypeID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardTypeID"))
+			it.CardTypeID, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "cardTypeIDNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardTypeIDNEQ"))
+			it.CardTypeIDNEQ, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "cardTypeIDIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardTypeIDIn"))
+			it.CardTypeIDIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "cardTypeIDNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardTypeIDNotIn"))
+			it.CardTypeIDNotIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "cardSpecialColorID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardSpecialColorID"))
+			it.CardSpecialColorID, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "cardSpecialColorIDNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardSpecialColorIDNEQ"))
+			it.CardSpecialColorIDNEQ, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "cardSpecialColorIDIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardSpecialColorIDIn"))
+			it.CardSpecialColorIDIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "cardSpecialColorIDNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardSpecialColorIDNotIn"))
+			it.CardSpecialColorIDNotIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "cardSpecialColorIDIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardSpecialColorIDIsNil"))
+			it.CardSpecialColorIDIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "cardSpecialColorIDNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardSpecialColorIDNotNil"))
+			it.CardSpecialColorIDNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJa":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJa"))
+			it.NameJa, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNEQ"))
+			it.NameJaNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIn"))
+			it.NameJaIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotIn"))
+			it.NameJaNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGT"))
+			it.NameJaGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGTE"))
+			it.NameJaGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLT"))
+			it.NameJaLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLTE"))
+			it.NameJaLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContains"))
+			it.NameJaContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasPrefix"))
+			it.NameJaHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasSuffix"))
+			it.NameJaHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIsNil"))
+			it.NameJaIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotNil"))
+			it.NameJaNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaEqualFold"))
+			it.NameJaEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContainsFold"))
+			it.NameJaContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEn"))
+			it.NameEn, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNEQ"))
+			it.NameEnNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIn"))
+			it.NameEnIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotIn"))
+			it.NameEnNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGT"))
+			it.NameEnGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGTE"))
+			it.NameEnGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLT"))
+			it.NameEnLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLTE"))
+			it.NameEnLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContains"))
+			it.NameEnContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasPrefix"))
+			it.NameEnHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasSuffix"))
+			it.NameEnHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIsNil"))
+			it.NameEnIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotNil"))
+			it.NameEnNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnEqualFold"))
+			it.NameEnEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContainsFold"))
+			it.NameEnContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "minPlayersNumber":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumber"))
+			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.CardWhereInput().MinPlayersNumber(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "minPlayersNumberNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberNEQ"))
+			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.CardWhereInput().MinPlayersNumberNeq(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "minPlayersNumberIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberIn"))
+			data, err := ec.unmarshalOInt2ᚕagricoladbᚋentᚐNoderᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.CardWhereInput().MinPlayersNumberIn(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "minPlayersNumberNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberNotIn"))
+			data, err := ec.unmarshalOInt2ᚕagricoladbᚋentᚐNoderᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.CardWhereInput().MinPlayersNumberNotIn(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "minPlayersNumberGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberGT"))
+			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.CardWhereInput().MinPlayersNumberGt(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "minPlayersNumberGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberGTE"))
+			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.CardWhereInput().MinPlayersNumberGte(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "minPlayersNumberLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberLT"))
+			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.CardWhereInput().MinPlayersNumberLt(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "minPlayersNumberLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberLTE"))
+			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.CardWhereInput().MinPlayersNumberLte(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "minPlayersNumberIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberIsNil"))
+			it.MinPlayersNumberIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "minPlayersNumberNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberNotNil"))
+			it.MinPlayersNumberNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "prerequisite":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisite"))
+			it.Prerequisite, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "prerequisiteNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteNEQ"))
+			it.PrerequisiteNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "prerequisiteIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteIn"))
+			it.PrerequisiteIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "prerequisiteNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteNotIn"))
+			it.PrerequisiteNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "prerequisiteGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteGT"))
+			it.PrerequisiteGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "prerequisiteGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteGTE"))
+			it.PrerequisiteGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "prerequisiteLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteLT"))
+			it.PrerequisiteLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "prerequisiteLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteLTE"))
+			it.PrerequisiteLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "prerequisiteContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteContains"))
+			it.PrerequisiteContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "prerequisiteHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteHasPrefix"))
+			it.PrerequisiteHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "prerequisiteHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteHasSuffix"))
+			it.PrerequisiteHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "prerequisiteIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteIsNil"))
+			it.PrerequisiteIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "prerequisiteNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteNotNil"))
+			it.PrerequisiteNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "prerequisiteEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteEqualFold"))
+			it.PrerequisiteEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "prerequisiteContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteContainsFold"))
+			it.PrerequisiteContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "cost":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cost"))
+			it.Cost, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "costNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costNEQ"))
+			it.CostNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "costIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costIn"))
+			it.CostIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "costNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costNotIn"))
+			it.CostNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "costGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costGT"))
+			it.CostGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "costGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costGTE"))
+			it.CostGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "costLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costLT"))
+			it.CostLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "costLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costLTE"))
+			it.CostLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "costContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costContains"))
+			it.CostContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "costHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costHasPrefix"))
+			it.CostHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "costHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costHasSuffix"))
+			it.CostHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "costIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costIsNil"))
+			it.CostIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "costNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costNotNil"))
+			it.CostNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "costEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costEqualFold"))
+			it.CostEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "costContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costContainsFold"))
+			it.CostContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "functionText":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("functionText"))
+			it.FunctionText, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "functionTextNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("functionTextNEQ"))
+			it.FunctionTextNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "functionTextIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("functionTextIn"))
+			it.FunctionTextIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "functionTextNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("functionTextNotIn"))
+			it.FunctionTextNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "functionTextGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("functionTextGT"))
+			it.FunctionTextGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "functionTextGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("functionTextGTE"))
+			it.FunctionTextGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "functionTextLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("functionTextLT"))
+			it.FunctionTextLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "functionTextLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("functionTextLTE"))
+			it.FunctionTextLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "functionTextContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("functionTextContains"))
+			it.FunctionTextContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "functionTextHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("functionTextHasPrefix"))
+			it.FunctionTextHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "functionTextHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("functionTextHasSuffix"))
+			it.FunctionTextHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "functionTextIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("functionTextIsNil"))
+			it.FunctionTextIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "functionTextNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("functionTextNotNil"))
+			it.FunctionTextNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "functionTextEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("functionTextEqualFold"))
+			it.FunctionTextEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "functionTextContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("functionTextContainsFold"))
+			it.FunctionTextContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "isOfficialJa":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isOfficialJa"))
+			it.IsOfficialJa, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "isOfficialJaNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isOfficialJaNEQ"))
+			it.IsOfficialJaNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "victoryPoint":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPoint"))
+			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.CardWhereInput().VictoryPoint(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "victoryPointNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointNEQ"))
+			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.CardWhereInput().VictoryPointNeq(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "victoryPointIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointIn"))
+			data, err := ec.unmarshalOInt2ᚕagricoladbᚋentᚐNoderᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.CardWhereInput().VictoryPointIn(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "victoryPointNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointNotIn"))
+			data, err := ec.unmarshalOInt2ᚕagricoladbᚋentᚐNoderᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.CardWhereInput().VictoryPointNotIn(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "victoryPointGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointGT"))
+			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.CardWhereInput().VictoryPointGt(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "victoryPointGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointGTE"))
+			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.CardWhereInput().VictoryPointGte(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "victoryPointLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointLT"))
+			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.CardWhereInput().VictoryPointLt(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "victoryPointLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointLTE"))
+			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.resolvers.CardWhereInput().VictoryPointLte(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "victoryPointIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointIsNil"))
+			it.VictoryPointIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "victoryPointNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointNotNil"))
+			it.VictoryPointNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "isVariableVictoryPoint":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isVariableVictoryPoint"))
+			it.IsVariableVictoryPoint, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "isVariableVictoryPointNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isVariableVictoryPointNEQ"))
+			it.IsVariableVictoryPointNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasArrrow":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasArrrow"))
+			it.HasArrrow, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasArrrowNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasArrrowNEQ"))
+			it.HasArrrowNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasBonusPointIcon":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBonusPointIcon"))
+			it.HasBonusPointIcon, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasBonusPointIconNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBonusPointIconNEQ"))
+			it.HasBonusPointIconNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasNegativeBonusPointIcon":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasNegativeBonusPointIcon"))
+			it.HasNegativeBonusPointIcon, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasNegativeBonusPointIconNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasNegativeBonusPointIconNEQ"))
+			it.HasNegativeBonusPointIconNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasPanIcon":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPanIcon"))
+			it.HasPanIcon, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasPanIconNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPanIconNEQ"))
+			it.HasPanIconNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasBreadIcon":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBreadIcon"))
+			it.HasBreadIcon, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasBreadIconNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBreadIconNEQ"))
+			it.HasBreadIconNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasFarmPlannerIcon":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFarmPlannerIcon"))
+			it.HasFarmPlannerIcon, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasFarmPlannerIconNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFarmPlannerIconNEQ"))
+			it.HasFarmPlannerIconNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasActionsBoosterIcon":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasActionsBoosterIcon"))
+			it.HasActionsBoosterIcon, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasActionsBoosterIconNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasActionsBoosterIconNEQ"))
+			it.HasActionsBoosterIconNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasPointsProviderIcon":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPointsProviderIcon"))
+			it.HasPointsProviderIcon, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasPointsProviderIconNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPointsProviderIconNEQ"))
+			it.HasPointsProviderIconNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasGoodsProviderIcon":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasGoodsProviderIcon"))
+			it.HasGoodsProviderIcon, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasGoodsProviderIconNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasGoodsProviderIconNEQ"))
+			it.HasGoodsProviderIconNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasFoodProviderIcon":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFoodProviderIcon"))
+			it.HasFoodProviderIcon, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasFoodProviderIconNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFoodProviderIconNEQ"))
+			it.HasFoodProviderIconNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCropProviderIcon":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCropProviderIcon"))
+			it.HasCropProviderIcon, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCropProviderIconNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCropProviderIconNEQ"))
+			it.HasCropProviderIconNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasBuildingResourceProviderIcon":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBuildingResourceProviderIcon"))
+			it.HasBuildingResourceProviderIcon, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasBuildingResourceProviderIconNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBuildingResourceProviderIconNEQ"))
+			it.HasBuildingResourceProviderIconNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasLivestockProviderIcon":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLivestockProviderIcon"))
+			it.HasLivestockProviderIcon, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasLivestockProviderIconNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLivestockProviderIconNEQ"))
+			it.HasLivestockProviderIconNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCutPeatIcon":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCutPeatIcon"))
+			it.HasCutPeatIcon, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCutPeatIconNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCutPeatIconNEQ"))
+			it.HasCutPeatIconNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasFellTreesIcon":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFellTreesIcon"))
+			it.HasFellTreesIcon, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasFellTreesIconNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFellTreesIconNEQ"))
+			it.HasFellTreesIconNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasSlashAndBurnIcon":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSlashAndBurnIcon"))
+			it.HasSlashAndBurnIcon, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasSlashAndBurnIconNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSlashAndBurnIconNEQ"))
+			it.HasSlashAndBurnIconNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasHiringFareIcon":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasHiringFareIcon"))
+			it.HasHiringFareIcon, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasHiringFareIconNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasHiringFareIconNEQ"))
+			it.HasHiringFareIconNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasRevision":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRevision"))
+			it.HasRevision, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasRevisionWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRevisionWith"))
+			it.HasRevisionWith, err = ec.unmarshalORevisionWhereInput2ᚕᚖagricoladbᚋentᚐRevisionWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasProducts":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProducts"))
+			it.HasProducts, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasProductsWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProductsWith"))
+			it.HasProductsWith, err = ec.unmarshalOProductWhereInput2ᚕᚖagricoladbᚋentᚐProductWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasDeck":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDeck"))
+			it.HasDeck, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasDeckWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDeckWith"))
+			it.HasDeckWith, err = ec.unmarshalODeckWhereInput2ᚕᚖagricoladbᚋentᚐDeckWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCardType":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardType"))
+			it.HasCardType, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCardTypeWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardTypeWith"))
+			it.HasCardTypeWith, err = ec.unmarshalOCardTypeWhereInput2ᚕᚖagricoladbᚋentᚐCardTypeWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCardSpecialColor":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardSpecialColor"))
+			it.HasCardSpecialColor, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCardSpecialColorWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardSpecialColorWith"))
+			it.HasCardSpecialColorWith, err = ec.unmarshalOCardSpecialColorWhereInput2ᚕᚖagricoladbᚋentᚐCardSpecialColorWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasChildren":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasChildren"))
+			it.HasChildren, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasChildrenWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasChildrenWith"))
+			it.HasChildrenWith, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasAncestors":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAncestors"))
+			it.HasAncestors, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasAncestorsWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAncestorsWith"))
+			it.HasAncestorsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, obj interface{}) (ent.DeckWhereInput, error) {
+	var it ent.DeckWhereInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "key", "keyNEQ", "keyIn", "keyNotIn", "keyGT", "keyGTE", "keyLT", "keyLTE", "keyContains", "keyHasPrefix", "keyHasSuffix", "keyEqualFold", "keyContainsFold", "revisionID", "revisionIDNEQ", "revisionIDIn", "revisionIDNotIn", "nameJa", "nameJaNEQ", "nameJaIn", "nameJaNotIn", "nameJaGT", "nameJaGTE", "nameJaLT", "nameJaLTE", "nameJaContains", "nameJaHasPrefix", "nameJaHasSuffix", "nameJaIsNil", "nameJaNotNil", "nameJaEqualFold", "nameJaContainsFold", "nameEn", "nameEnNEQ", "nameEnIn", "nameEnNotIn", "nameEnGT", "nameEnGTE", "nameEnLT", "nameEnLTE", "nameEnContains", "nameEnHasPrefix", "nameEnHasSuffix", "nameEnIsNil", "nameEnNotNil", "nameEnEqualFold", "nameEnContainsFold", "hasCards", "hasCardsWith", "hasRevision", "hasRevisionWith"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			it.Not, err = ec.unmarshalODeckWhereInput2ᚖagricoladbᚋentᚐDeckWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "and":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			it.And, err = ec.unmarshalODeckWhereInput2ᚕᚖagricoladbᚋentᚐDeckWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "or":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			it.Or, err = ec.unmarshalODeckWhereInput2ᚕᚖagricoladbᚋentᚐDeckWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			it.IDNEQ, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			it.IDIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			it.IDNotIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
+			it.IDGT, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
+			it.IDGTE, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
+			it.IDLT, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
+			it.IDLTE, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "key":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("key"))
+			it.Key, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNEQ"))
+			it.KeyNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyIn"))
+			it.KeyIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNotIn"))
+			it.KeyNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGT"))
+			it.KeyGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGTE"))
+			it.KeyGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLT"))
+			it.KeyLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLTE"))
+			it.KeyLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContains"))
+			it.KeyContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasPrefix"))
+			it.KeyHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasSuffix"))
+			it.KeyHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyEqualFold"))
+			it.KeyEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContainsFold"))
+			it.KeyContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "revisionID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionID"))
+			it.RevisionID, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "revisionIDNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDNEQ"))
+			it.RevisionIDNEQ, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "revisionIDIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDIn"))
+			it.RevisionIDIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "revisionIDNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDNotIn"))
+			it.RevisionIDNotIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJa":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJa"))
+			it.NameJa, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNEQ"))
+			it.NameJaNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIn"))
+			it.NameJaIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotIn"))
+			it.NameJaNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGT"))
+			it.NameJaGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGTE"))
+			it.NameJaGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLT"))
+			it.NameJaLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLTE"))
+			it.NameJaLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContains"))
+			it.NameJaContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasPrefix"))
+			it.NameJaHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasSuffix"))
+			it.NameJaHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIsNil"))
+			it.NameJaIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotNil"))
+			it.NameJaNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaEqualFold"))
+			it.NameJaEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContainsFold"))
+			it.NameJaContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEn"))
+			it.NameEn, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNEQ"))
+			it.NameEnNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIn"))
+			it.NameEnIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotIn"))
+			it.NameEnNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGT"))
+			it.NameEnGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGTE"))
+			it.NameEnGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLT"))
+			it.NameEnLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLTE"))
+			it.NameEnLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContains"))
+			it.NameEnContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasPrefix"))
+			it.NameEnHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasSuffix"))
+			it.NameEnHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIsNil"))
+			it.NameEnIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotNil"))
+			it.NameEnNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnEqualFold"))
+			it.NameEnEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContainsFold"))
+			it.NameEnContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCards":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCards"))
+			it.HasCards, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCardsWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardsWith"))
+			it.HasCardsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasRevision":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRevision"))
+			it.HasRevision, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasRevisionWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRevisionWith"))
+			it.HasRevisionWith, err = ec.unmarshalORevisionWhereInput2ᚕᚖagricoladbᚋentᚐRevisionWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context, obj interface{}) (ent.ProductWhereInput, error) {
+	var it ent.ProductWhereInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "key", "keyNEQ", "keyIn", "keyNotIn", "keyGT", "keyGTE", "keyLT", "keyLTE", "keyContains", "keyHasPrefix", "keyHasSuffix", "keyEqualFold", "keyContainsFold", "revisionID", "revisionIDNEQ", "revisionIDIn", "revisionIDNotIn", "isOfficialJa", "isOfficialJaNEQ", "nameJa", "nameJaNEQ", "nameJaIn", "nameJaNotIn", "nameJaGT", "nameJaGTE", "nameJaLT", "nameJaLTE", "nameJaContains", "nameJaHasPrefix", "nameJaHasSuffix", "nameJaIsNil", "nameJaNotNil", "nameJaEqualFold", "nameJaContainsFold", "nameEn", "nameEnNEQ", "nameEnIn", "nameEnNotIn", "nameEnGT", "nameEnGTE", "nameEnLT", "nameEnLTE", "nameEnContains", "nameEnHasPrefix", "nameEnHasSuffix", "nameEnIsNil", "nameEnNotNil", "nameEnEqualFold", "nameEnContainsFold", "hasCards", "hasCardsWith", "hasRevision", "hasRevisionWith"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			it.Not, err = ec.unmarshalOProductWhereInput2ᚖagricoladbᚋentᚐProductWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "and":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			it.And, err = ec.unmarshalOProductWhereInput2ᚕᚖagricoladbᚋentᚐProductWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "or":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			it.Or, err = ec.unmarshalOProductWhereInput2ᚕᚖagricoladbᚋentᚐProductWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			it.IDNEQ, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			it.IDIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			it.IDNotIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
+			it.IDGT, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
+			it.IDGTE, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
+			it.IDLT, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
+			it.IDLTE, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "key":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("key"))
+			it.Key, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNEQ"))
+			it.KeyNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyIn"))
+			it.KeyIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNotIn"))
+			it.KeyNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGT"))
+			it.KeyGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGTE"))
+			it.KeyGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLT"))
+			it.KeyLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLTE"))
+			it.KeyLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContains"))
+			it.KeyContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasPrefix"))
+			it.KeyHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasSuffix"))
+			it.KeyHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyEqualFold"))
+			it.KeyEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContainsFold"))
+			it.KeyContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "revisionID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionID"))
+			it.RevisionID, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "revisionIDNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDNEQ"))
+			it.RevisionIDNEQ, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "revisionIDIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDIn"))
+			it.RevisionIDIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "revisionIDNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDNotIn"))
+			it.RevisionIDNotIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "isOfficialJa":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isOfficialJa"))
+			it.IsOfficialJa, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "isOfficialJaNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isOfficialJaNEQ"))
+			it.IsOfficialJaNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJa":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJa"))
+			it.NameJa, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNEQ"))
+			it.NameJaNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIn"))
+			it.NameJaIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotIn"))
+			it.NameJaNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGT"))
+			it.NameJaGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGTE"))
+			it.NameJaGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLT"))
+			it.NameJaLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLTE"))
+			it.NameJaLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContains"))
+			it.NameJaContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasPrefix"))
+			it.NameJaHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasSuffix"))
+			it.NameJaHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIsNil"))
+			it.NameJaIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotNil"))
+			it.NameJaNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaEqualFold"))
+			it.NameJaEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContainsFold"))
+			it.NameJaContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEn"))
+			it.NameEn, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNEQ"))
+			it.NameEnNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIn"))
+			it.NameEnIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotIn"))
+			it.NameEnNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGT"))
+			it.NameEnGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGTE"))
+			it.NameEnGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLT"))
+			it.NameEnLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLTE"))
+			it.NameEnLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContains"))
+			it.NameEnContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasPrefix"))
+			it.NameEnHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasSuffix"))
+			it.NameEnHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIsNil"))
+			it.NameEnIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotNil"))
+			it.NameEnNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnEqualFold"))
+			it.NameEnEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContainsFold"))
+			it.NameEnContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCards":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCards"))
+			it.HasCards, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCardsWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardsWith"))
+			it.HasCardsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasRevision":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRevision"))
+			it.HasRevision, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasRevisionWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRevisionWith"))
+			it.HasRevisionWith, err = ec.unmarshalORevisionWhereInput2ᚕᚖagricoladbᚋentᚐRevisionWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context, obj interface{}) (ent.RevisionWhereInput, error) {
+	var it ent.RevisionWhereInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "key", "keyNEQ", "keyIn", "keyNotIn", "keyGT", "keyGTE", "keyLT", "keyLTE", "keyContains", "keyHasPrefix", "keyHasSuffix", "keyEqualFold", "keyContainsFold", "nameJa", "nameJaNEQ", "nameJaIn", "nameJaNotIn", "nameJaGT", "nameJaGTE", "nameJaLT", "nameJaLTE", "nameJaContains", "nameJaHasPrefix", "nameJaHasSuffix", "nameJaIsNil", "nameJaNotNil", "nameJaEqualFold", "nameJaContainsFold", "nameEn", "nameEnNEQ", "nameEnIn", "nameEnNotIn", "nameEnGT", "nameEnGTE", "nameEnLT", "nameEnLTE", "nameEnContains", "nameEnHasPrefix", "nameEnHasSuffix", "nameEnIsNil", "nameEnNotNil", "nameEnEqualFold", "nameEnContainsFold", "hasCards", "hasCardsWith", "hasProducts", "hasProductsWith", "hasDecks", "hasDecksWith"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			it.Not, err = ec.unmarshalORevisionWhereInput2ᚖagricoladbᚋentᚐRevisionWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "and":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			it.And, err = ec.unmarshalORevisionWhereInput2ᚕᚖagricoladbᚋentᚐRevisionWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "or":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			it.Or, err = ec.unmarshalORevisionWhereInput2ᚕᚖagricoladbᚋentᚐRevisionWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			it.IDNEQ, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			it.IDIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			it.IDNotIn, err = ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
+			it.IDGT, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
+			it.IDGTE, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
+			it.IDLT, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
+			it.IDLTE, err = ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "key":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("key"))
+			it.Key, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNEQ"))
+			it.KeyNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyIn"))
+			it.KeyIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNotIn"))
+			it.KeyNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGT"))
+			it.KeyGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGTE"))
+			it.KeyGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLT"))
+			it.KeyLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLTE"))
+			it.KeyLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContains"))
+			it.KeyContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasPrefix"))
+			it.KeyHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasSuffix"))
+			it.KeyHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyEqualFold"))
+			it.KeyEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "keyContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContainsFold"))
+			it.KeyContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJa":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJa"))
+			it.NameJa, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNEQ"))
+			it.NameJaNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIn"))
+			it.NameJaIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotIn"))
+			it.NameJaNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGT"))
+			it.NameJaGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGTE"))
+			it.NameJaGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLT"))
+			it.NameJaLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLTE"))
+			it.NameJaLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContains"))
+			it.NameJaContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasPrefix"))
+			it.NameJaHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasSuffix"))
+			it.NameJaHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIsNil"))
+			it.NameJaIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotNil"))
+			it.NameJaNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaEqualFold"))
+			it.NameJaEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameJaContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContainsFold"))
+			it.NameJaContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEn"))
+			it.NameEn, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNEQ"))
+			it.NameEnNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIn"))
+			it.NameEnIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotIn"))
+			it.NameEnNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGT"))
+			it.NameEnGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGTE"))
+			it.NameEnGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLT"))
+			it.NameEnLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLTE"))
+			it.NameEnLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContains"))
+			it.NameEnContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasPrefix"))
+			it.NameEnHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasSuffix"))
+			it.NameEnHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIsNil"))
+			it.NameEnIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotNil"))
+			it.NameEnNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnEqualFold"))
+			it.NameEnEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nameEnContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContainsFold"))
+			it.NameEnContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCards":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCards"))
+			it.HasCards, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasCardsWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardsWith"))
+			it.HasCardsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasProducts":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProducts"))
+			it.HasProducts, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasProductsWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProductsWith"))
+			it.HasProductsWith, err = ec.unmarshalOProductWhereInput2ᚕᚖagricoladbᚋentᚐProductWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasDecks":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDecks"))
+			it.HasDecks, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "hasDecksWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDecksWith"))
+			it.HasDecksWith, err = ec.unmarshalODeckWhereInput2ᚕᚖagricoladbᚋentᚐDeckWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -5648,13 +12012,52 @@ func (ec *executionContext) unmarshalInputRevisionAndLiteralId(ctx context.Conte
 
 // region    ************************** interface.gotpl ***************************
 
+func (ec *executionContext) _Node(ctx context.Context, sel ast.SelectionSet, obj ent.Noder) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case *ent.Card:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Card(ctx, sel, obj)
+	case *ent.CardSpecialColor:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._CardSpecialColor(ctx, sel, obj)
+	case *ent.CardType:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._CardType(ctx, sel, obj)
+	case *ent.Deck:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Deck(ctx, sel, obj)
+	case *ent.Product:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Product(ctx, sel, obj)
+	case *ent.Revision:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Revision(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
 
-var cardImplementors = []string{"Card"}
+var cardImplementors = []string{"Card", "Node"}
 
-func (ec *executionContext) _Card(ctx context.Context, sel ast.SelectionSet, obj *model.Card) graphql.Marshaler {
+func (ec *executionContext) _Card(ctx context.Context, sel ast.SelectionSet, obj *ent.Card) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, cardImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
@@ -5667,66 +12070,70 @@ func (ec *executionContext) _Card(ctx context.Context, sel ast.SelectionSet, obj
 			out.Values[i] = ec._Card_id(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
-		case "literalId":
+		case "literalID":
 
-			out.Values[i] = ec._Card_literalId(ctx, field, obj)
+			out.Values[i] = ec._Card_literalID(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
-		case "printedId":
+		case "revisionID":
 
-			out.Values[i] = ec._Card_printedId(ctx, field, obj)
-
-		case "revisionId":
-
-			out.Values[i] = ec._Card_revisionId(ctx, field, obj)
+			out.Values[i] = ec._Card_revisionID(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
-		case "playAgricolaCardId":
+		case "printedID":
 
-			out.Values[i] = ec._Card_playAgricolaCardId(ctx, field, obj)
+			out.Values[i] = ec._Card_printedID(ctx, field, obj)
 
-		case "cardType":
+		case "playAgricolaCardID":
 
-			out.Values[i] = ec._Card_cardType(ctx, field, obj)
+			out.Values[i] = ec._Card_playAgricolaCardID(ctx, field, obj)
+
+		case "deckID":
+
+			out.Values[i] = ec._Card_deckID(ctx, field, obj)
+
+		case "cardTypeID":
+
+			out.Values[i] = ec._Card_cardTypeID(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
-		case "product":
+		case "cardSpecialColorID":
 
-			out.Values[i] = ec._Card_product(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "deck":
-
-			out.Values[i] = ec._Card_deck(ctx, field, obj)
+			out.Values[i] = ec._Card_cardSpecialColorID(ctx, field, obj)
 
 		case "nameJa":
 
 			out.Values[i] = ec._Card_nameJa(ctx, field, obj)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "nameEn":
 
 			out.Values[i] = ec._Card_nameEn(ctx, field, obj)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "minPlayersNumber":
+			field := field
 
-			out.Values[i] = ec._Card_minPlayersNumber(ctx, field, obj)
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Card_minPlayersNumber(ctx, field, obj)
+				return res
+			}
 
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		case "prerequisite":
 
 			out.Values[i] = ec._Card_prerequisite(ctx, field, obj)
@@ -5735,168 +12142,285 @@ func (ec *executionContext) _Card(ctx context.Context, sel ast.SelectionSet, obj
 
 			out.Values[i] = ec._Card_cost(ctx, field, obj)
 
-		case "description":
+		case "functionText":
 
-			out.Values[i] = ec._Card_description(ctx, field, obj)
+			out.Values[i] = ec._Card_functionText(ctx, field, obj)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "isOfficialJa":
 
 			out.Values[i] = ec._Card_isOfficialJa(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "victoryPoint":
+			field := field
 
-			out.Values[i] = ec._Card_victoryPoint(ctx, field, obj)
-
-		case "isMutableVictoryPoint":
-
-			out.Values[i] = ec._Card_isMutableVictoryPoint(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Card_victoryPoint(ctx, field, obj)
+				return res
 			}
-		case "hasArrow":
 
-			out.Values[i] = ec._Card_hasArrow(ctx, field, obj)
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "isVariableVictoryPoint":
+
+			out.Values[i] = ec._Card_isVariableVictoryPoint(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
-		case "hasBonus":
+		case "hasArrrow":
 
-			out.Values[i] = ec._Card_hasBonus(ctx, field, obj)
+			out.Values[i] = ec._Card_hasArrrow(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
-		case "hasNegativeBonus":
+		case "hasBonusPointIcon":
 
-			out.Values[i] = ec._Card_hasNegativeBonus(ctx, field, obj)
+			out.Values[i] = ec._Card_hasBonusPointIcon(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "hasNegativeBonusPointIcon":
+
+			out.Values[i] = ec._Card_hasNegativeBonusPointIcon(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "hasPanIcon":
 
 			out.Values[i] = ec._Card_hasPanIcon(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "hasBreadIcon":
 
 			out.Values[i] = ec._Card_hasBreadIcon(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "hasFarmPlannerIcon":
 
 			out.Values[i] = ec._Card_hasFarmPlannerIcon(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "hasActionsBoosterIcon":
 
 			out.Values[i] = ec._Card_hasActionsBoosterIcon(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "hasPointsProviderIcon":
 
 			out.Values[i] = ec._Card_hasPointsProviderIcon(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "hasGoodsProviderIcon":
 
 			out.Values[i] = ec._Card_hasGoodsProviderIcon(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "hasFoodProviderIcon":
 
 			out.Values[i] = ec._Card_hasFoodProviderIcon(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "hasCropProviderIcon":
 
 			out.Values[i] = ec._Card_hasCropProviderIcon(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "hasBuildingResourceProviderIcon":
 
 			out.Values[i] = ec._Card_hasBuildingResourceProviderIcon(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "hasLivestockProviderIcon":
 
 			out.Values[i] = ec._Card_hasLivestockProviderIcon(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "hasCutPeatIcon":
 
 			out.Values[i] = ec._Card_hasCutPeatIcon(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "hasFellTreesIcon":
 
 			out.Values[i] = ec._Card_hasFellTreesIcon(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "hasSlashAndBurnIcon":
 
 			out.Values[i] = ec._Card_hasSlashAndBurnIcon(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "hasHiringFareIcon":
 
 			out.Values[i] = ec._Card_hasHiringFareIcon(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
-		case "specialColor":
+		case "revision":
+			field := field
 
-			out.Values[i] = ec._Card_specialColor(ctx, field, obj)
-
-		case "originCards":
-
-			out.Values[i] = ec._Card_originCards(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Card_revision(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
 			}
-		case "republishedCards":
 
-			out.Values[i] = ec._Card_republishedCards(ctx, field, obj)
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
+			})
+		case "products":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Card_products(ctx, field, obj)
+				return res
 			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "deck":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Card_deck(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "cardType":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Card_cardType(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "cardSpecialColor":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Card_cardSpecialColor(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "children":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Card_children(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "ancestors":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Card_ancestors(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5908,9 +12432,69 @@ func (ec *executionContext) _Card(ctx context.Context, sel ast.SelectionSet, obj
 	return out
 }
 
-var cardTypeImplementors = []string{"CardType"}
+var cardSpecialColorImplementors = []string{"CardSpecialColor", "Node"}
 
-func (ec *executionContext) _CardType(ctx context.Context, sel ast.SelectionSet, obj *model.CardType) graphql.Marshaler {
+func (ec *executionContext) _CardSpecialColor(ctx context.Context, sel ast.SelectionSet, obj *ent.CardSpecialColor) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, cardSpecialColorImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CardSpecialColor")
+		case "id":
+
+			out.Values[i] = ec._CardSpecialColor_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "key":
+
+			out.Values[i] = ec._CardSpecialColor_key(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "nameJa":
+
+			out.Values[i] = ec._CardSpecialColor_nameJa(ctx, field, obj)
+
+		case "nameEn":
+
+			out.Values[i] = ec._CardSpecialColor_nameEn(ctx, field, obj)
+
+		case "cards":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._CardSpecialColor_cards(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var cardTypeImplementors = []string{"CardType", "Node"}
+
+func (ec *executionContext) _CardType(ctx context.Context, sel ast.SelectionSet, obj *ent.CardType) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, cardTypeImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
@@ -5923,29 +12507,40 @@ func (ec *executionContext) _CardType(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._CardType_id(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "key":
 
 			out.Values[i] = ec._CardType_key(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "nameJa":
 
 			out.Values[i] = ec._CardType_nameJa(ctx, field, obj)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "nameEn":
 
 			out.Values[i] = ec._CardType_nameEn(ctx, field, obj)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
+		case "cards":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._CardType_cards(ctx, field, obj)
+				return res
 			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5957,9 +12552,9 @@ func (ec *executionContext) _CardType(ctx context.Context, sel ast.SelectionSet,
 	return out
 }
 
-var deckImplementors = []string{"Deck"}
+var deckImplementors = []string{"Deck", "Node"}
 
-func (ec *executionContext) _Deck(ctx context.Context, sel ast.SelectionSet, obj *model.Deck) graphql.Marshaler {
+func (ec *executionContext) _Deck(ctx context.Context, sel ast.SelectionSet, obj *ent.Deck) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, deckImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
@@ -5972,36 +12567,67 @@ func (ec *executionContext) _Deck(ctx context.Context, sel ast.SelectionSet, obj
 			out.Values[i] = ec._Deck_id(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "revisionId":
-
-			out.Values[i] = ec._Deck_revisionId(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "key":
 
 			out.Values[i] = ec._Deck_key(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "revisionID":
+
+			out.Values[i] = ec._Deck_revisionID(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "nameJa":
 
 			out.Values[i] = ec._Deck_nameJa(ctx, field, obj)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "nameEn":
 
 			out.Values[i] = ec._Deck_nameEn(ctx, field, obj)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
+		case "cards":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Deck_cards(ctx, field, obj)
+				return res
 			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "revision":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Deck_revision(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6013,9 +12639,52 @@ func (ec *executionContext) _Deck(ctx context.Context, sel ast.SelectionSet, obj
 	return out
 }
 
-var productImplementors = []string{"Product"}
+var pageInfoImplementors = []string{"PageInfo"}
 
-func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, obj *model.Product) graphql.Marshaler {
+func (ec *executionContext) _PageInfo(ctx context.Context, sel ast.SelectionSet, obj *ent.PageInfo) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, pageInfoImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PageInfo")
+		case "hasNextPage":
+
+			out.Values[i] = ec._PageInfo_hasNextPage(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "hasPreviousPage":
+
+			out.Values[i] = ec._PageInfo_hasPreviousPage(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "startCursor":
+
+			out.Values[i] = ec._PageInfo_startCursor(ctx, field, obj)
+
+		case "endCursor":
+
+			out.Values[i] = ec._PageInfo_endCursor(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var productImplementors = []string{"Product", "Node"}
+
+func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, obj *ent.Product) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, productImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
@@ -6028,47 +12697,74 @@ func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Product_id(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "revisionId":
-
-			out.Values[i] = ec._Product_revisionId(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "key":
 
 			out.Values[i] = ec._Product_key(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
-		case "nameJa":
+		case "revisionID":
 
-			out.Values[i] = ec._Product_nameJa(ctx, field, obj)
+			out.Values[i] = ec._Product_revisionID(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
-		case "nameEn":
-
-			out.Values[i] = ec._Product_nameEn(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "publishedYear":
-
-			out.Values[i] = ec._Product_publishedYear(ctx, field, obj)
-
 		case "isOfficialJa":
 
 			out.Values[i] = ec._Product_isOfficialJa(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
+		case "nameJa":
+
+			out.Values[i] = ec._Product_nameJa(ctx, field, obj)
+
+		case "nameEn":
+
+			out.Values[i] = ec._Product_nameEn(ctx, field, obj)
+
+		case "cards":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Product_cards(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "revision":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Product_revision(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6099,7 +12795,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
-		case "cards":
+		case "node":
 			field := field
 
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -6108,10 +12804,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_cards(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
+				res = ec._Query_node(ctx, field)
 				return res
 			}
 
@@ -6122,7 +12815,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
-		case "findCardByRevisionAndLiteralId":
+		case "nodes":
 			field := field
 
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -6131,7 +12824,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_findCardByRevisionAndLiteralId(ctx, field)
+				res = ec._Query_nodes(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
@@ -6168,44 +12861,89 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 	return out
 }
 
-var specialColorImplementors = []string{"SpecialColor"}
+var revisionImplementors = []string{"Revision", "Node"}
 
-func (ec *executionContext) _SpecialColor(ctx context.Context, sel ast.SelectionSet, obj *model.SpecialColor) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, specialColorImplementors)
+func (ec *executionContext) _Revision(ctx context.Context, sel ast.SelectionSet, obj *ent.Revision) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, revisionImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("SpecialColor")
+			out.Values[i] = graphql.MarshalString("Revision")
 		case "id":
 
-			out.Values[i] = ec._SpecialColor_id(ctx, field, obj)
+			out.Values[i] = ec._Revision_id(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "key":
 
-			out.Values[i] = ec._SpecialColor_key(ctx, field, obj)
+			out.Values[i] = ec._Revision_key(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "nameJa":
 
-			out.Values[i] = ec._SpecialColor_nameJa(ctx, field, obj)
+			out.Values[i] = ec._Revision_nameJa(ctx, field, obj)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "nameEn":
 
-			out.Values[i] = ec._SpecialColor_nameEn(ctx, field, obj)
+			out.Values[i] = ec._Revision_nameEn(ctx, field, obj)
 
-			if out.Values[i] == graphql.Null {
-				invalids++
+		case "cards":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Revision_cards(ctx, field, obj)
+				return res
 			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "products":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Revision_products(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
+		case "decks":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Revision_decks(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6550,55 +13288,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNCard2agricoladbᚋgraphᚋmodelᚐCard(ctx context.Context, sel ast.SelectionSet, v model.Card) graphql.Marshaler {
-	return ec._Card(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNCard2ᚕᚖagricoladbᚋgraphᚋmodelᚐCardᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Card) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalNCard2ᚖagricoladbᚋgraphᚋmodelᚐCard(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
-}
-
-func (ec *executionContext) marshalNCard2ᚖagricoladbᚋgraphᚋmodelᚐCard(ctx context.Context, sel ast.SelectionSet, v *model.Card) graphql.Marshaler {
+func (ec *executionContext) marshalNCard2ᚖagricoladbᚋentᚐCard(ctx context.Context, sel ast.SelectionSet, v *ent.Card) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -6608,7 +13298,12 @@ func (ec *executionContext) marshalNCard2ᚖagricoladbᚋgraphᚋmodelᚐCard(ct
 	return ec._Card(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCardType2ᚖagricoladbᚋgraphᚋmodelᚐCardType(ctx context.Context, sel ast.SelectionSet, v *model.CardType) graphql.Marshaler {
+func (ec *executionContext) unmarshalNCardSpecialColorWhereInput2ᚖagricoladbᚋentᚐCardSpecialColorWhereInput(ctx context.Context, v interface{}) (*ent.CardSpecialColorWhereInput, error) {
+	res, err := ec.unmarshalInputCardSpecialColorWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCardType2ᚖagricoladbᚋentᚐCardType(ctx context.Context, sel ast.SelectionSet, v *ent.CardType) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -6618,13 +13313,38 @@ func (ec *executionContext) marshalNCardType2ᚖagricoladbᚋgraphᚋmodelᚐCar
 	return ec._CardType(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
-	res, err := graphql.UnmarshalID(v)
+func (ec *executionContext) unmarshalNCardTypeWhereInput2ᚖagricoladbᚋentᚐCardTypeWhereInput(ctx context.Context, v interface{}) (*ent.CardTypeWhereInput, error) {
+	res, err := ec.unmarshalInputCardTypeWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx context.Context, v interface{}) (*ent.CardWhereInput, error) {
+	res, err := ec.unmarshalInputCardWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNDeck2ᚖagricoladbᚋentᚐDeck(ctx context.Context, sel ast.SelectionSet, v *ent.Deck) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Deck(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNDeckWhereInput2ᚖagricoladbᚋentᚐDeckWhereInput(ctx context.Context, v interface{}) (*ent.DeckWhereInput, error) {
+	res, err := ec.unmarshalInputDeckWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNID2int(ctx context.Context, v interface{}) (int, error) {
+	res, err := graphql.UnmarshalIntID(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
-	res := graphql.MarshalID(v)
+func (ec *executionContext) marshalNID2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	res := graphql.MarshalIntID(v)
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -6633,22 +13353,54 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {
-	res, err := graphql.UnmarshalInt(v)
-	return res, graphql.ErrorOnPath(ctx, err)
+func (ec *executionContext) unmarshalNID2ᚕintᚄ(ctx context.Context, v interface{}) ([]int, error) {
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]int, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNID2int(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
 }
 
-func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
-	res := graphql.MarshalInt(v)
-	if res == graphql.Null {
+func (ec *executionContext) marshalNID2ᚕintᚄ(ctx context.Context, sel ast.SelectionSet, v []int) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNID2int(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalNInt2agricoladbᚋentᚐNoder(ctx context.Context, v interface{}) (ent.Noder, error) {
+	res, err := ec.unmarshalInputInt(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNInt2agricoladbᚋentᚐNoder(ctx context.Context, sel ast.SelectionSet, v ent.Noder) graphql.Marshaler {
+	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
 		}
+		return graphql.Null
 	}
-	return res
+	return ec._Int(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProduct2ᚕᚖagricoladbᚋgraphᚋmodelᚐProductᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Product) graphql.Marshaler {
+func (ec *executionContext) marshalNNode2ᚕagricoladbᚋentᚐNoder(ctx context.Context, sel ast.SelectionSet, v []ent.Noder) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -6672,7 +13424,7 @@ func (ec *executionContext) marshalNProduct2ᚕᚖagricoladbᚋgraphᚋmodelᚐP
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNProduct2ᚖagricoladbᚋgraphᚋmodelᚐProduct(ctx, sel, v[i])
+			ret[i] = ec.marshalONode2agricoladbᚋentᚐNoder(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -6683,16 +13435,10 @@ func (ec *executionContext) marshalNProduct2ᚕᚖagricoladbᚋgraphᚋmodelᚐP
 	}
 	wg.Wait()
 
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
 	return ret
 }
 
-func (ec *executionContext) marshalNProduct2ᚖagricoladbᚋgraphᚋmodelᚐProduct(ctx context.Context, sel ast.SelectionSet, v *model.Product) graphql.Marshaler {
+func (ec *executionContext) marshalNProduct2ᚖagricoladbᚋentᚐProduct(ctx context.Context, sel ast.SelectionSet, v *ent.Product) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -6702,9 +13448,24 @@ func (ec *executionContext) marshalNProduct2ᚖagricoladbᚋgraphᚋmodelᚐProd
 	return ec._Product(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNRevisionAndLiteralId2agricoladbᚋgraphᚋmodelᚐRevisionAndLiteralID(ctx context.Context, v interface{}) (model.RevisionAndLiteralID, error) {
-	res, err := ec.unmarshalInputRevisionAndLiteralId(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
+func (ec *executionContext) unmarshalNProductWhereInput2ᚖagricoladbᚋentᚐProductWhereInput(ctx context.Context, v interface{}) (*ent.ProductWhereInput, error) {
+	res, err := ec.unmarshalInputProductWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNRevision2ᚖagricoladbᚋentᚐRevision(ctx context.Context, sel ast.SelectionSet, v *ent.Revision) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Revision(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNRevisionWhereInput2ᚖagricoladbᚋentᚐRevisionWhereInput(ctx context.Context, v interface{}) (*ent.RevisionWhereInput, error) {
+	res, err := ec.unmarshalInputRevisionWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
@@ -7001,34 +13762,515 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalODeck2ᚖagricoladbᚋgraphᚋmodelᚐDeck(ctx context.Context, sel ast.SelectionSet, v *model.Deck) graphql.Marshaler {
+func (ec *executionContext) marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Card) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNCard2ᚖagricoladbᚋentᚐCard(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalOCardSpecialColor2ᚖagricoladbᚋentᚐCardSpecialColor(ctx context.Context, sel ast.SelectionSet, v *ent.CardSpecialColor) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._CardSpecialColor(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOCardSpecialColorWhereInput2ᚕᚖagricoladbᚋentᚐCardSpecialColorWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.CardSpecialColorWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*ent.CardSpecialColorWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNCardSpecialColorWhereInput2ᚖagricoladbᚋentᚐCardSpecialColorWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOCardSpecialColorWhereInput2ᚖagricoladbᚋentᚐCardSpecialColorWhereInput(ctx context.Context, v interface{}) (*ent.CardSpecialColorWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputCardSpecialColorWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOCardTypeWhereInput2ᚕᚖagricoladbᚋentᚐCardTypeWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.CardTypeWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*ent.CardTypeWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNCardTypeWhereInput2ᚖagricoladbᚋentᚐCardTypeWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOCardTypeWhereInput2ᚖagricoladbᚋentᚐCardTypeWhereInput(ctx context.Context, v interface{}) (*ent.CardTypeWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputCardTypeWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.CardWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*ent.CardWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx context.Context, v interface{}) (*ent.CardWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputCardWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx context.Context, v interface{}) (*ent.Cursor, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(ent.Cursor)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx context.Context, sel ast.SelectionSet, v *ent.Cursor) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) marshalODeck2ᚕᚖagricoladbᚋentᚐDeckᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Deck) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNDeck2ᚖagricoladbᚋentᚐDeck(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalODeck2ᚖagricoladbᚋentᚐDeck(ctx context.Context, sel ast.SelectionSet, v *ent.Deck) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Deck(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
+func (ec *executionContext) unmarshalODeckWhereInput2ᚕᚖagricoladbᚋentᚐDeckWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.DeckWhereInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := graphql.UnmarshalInt(v)
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*ent.DeckWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNDeckWhereInput2ᚖagricoladbᚋentᚐDeckWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalODeckWhereInput2ᚖagricoladbᚋentᚐDeckWhereInput(ctx context.Context, v interface{}) (*ent.DeckWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputDeckWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	res := graphql.MarshalInt(*v)
+func (ec *executionContext) unmarshalOID2int(ctx context.Context, v interface{}) (int, error) {
+	res, err := graphql.UnmarshalIntID(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOID2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	res := graphql.MarshalIntID(v)
 	return res
 }
 
-func (ec *executionContext) marshalOSpecialColor2ᚖagricoladbᚋgraphᚋmodelᚐSpecialColor(ctx context.Context, sel ast.SelectionSet, v *model.SpecialColor) graphql.Marshaler {
+func (ec *executionContext) unmarshalOID2ᚕintᚄ(ctx context.Context, v interface{}) ([]int, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]int, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNID2int(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOID2ᚕintᚄ(ctx context.Context, sel ast.SelectionSet, v []int) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._SpecialColor(ctx, sel, v)
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNID2int(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOID2ᚖint(ctx context.Context, v interface{}) (*int, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalIntID(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOID2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalIntID(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOInt2agricoladbᚋentᚐNoder(ctx context.Context, v interface{}) (ent.Noder, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputInt(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2agricoladbᚋentᚐNoder(ctx context.Context, sel ast.SelectionSet, v ent.Noder) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Int(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOInt2ᚕagricoladbᚋentᚐNoderᚄ(ctx context.Context, v interface{}) ([]ent.Noder, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]ent.Noder, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNInt2agricoladbᚋentᚐNoder(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOInt2ᚕagricoladbᚋentᚐNoderᚄ(ctx context.Context, sel ast.SelectionSet, v []ent.Noder) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNInt2agricoladbᚋentᚐNoder(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalONode2agricoladbᚋentᚐNoder(ctx context.Context, sel ast.SelectionSet, v ent.Noder) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Node(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOProduct2ᚕᚖagricoladbᚋentᚐProductᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Product) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNProduct2ᚖagricoladbᚋentᚐProduct(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOProductWhereInput2ᚕᚖagricoladbᚋentᚐProductWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.ProductWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*ent.ProductWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNProductWhereInput2ᚖagricoladbᚋentᚐProductWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOProductWhereInput2ᚖagricoladbᚋentᚐProductWhereInput(ctx context.Context, v interface{}) (*ent.ProductWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputProductWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalORevisionWhereInput2ᚕᚖagricoladbᚋentᚐRevisionWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.RevisionWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*ent.RevisionWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNRevisionWhereInput2ᚖagricoladbᚋentᚐRevisionWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalORevisionWhereInput2ᚖagricoladbᚋentᚐRevisionWhereInput(ctx context.Context, v interface{}) (*ent.RevisionWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputRevisionWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOString2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	res := graphql.MarshalString(v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOString2ᚕstringᚄ(ctx context.Context, v interface{}) ([]string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNString2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOString2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNString2string(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {

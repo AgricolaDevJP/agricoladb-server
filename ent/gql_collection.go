@@ -129,6 +129,9 @@ func newCardPaginateArgs(rv map[string]interface{}) *cardPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[whereField].(*CardWhereInput); ok {
+		args.opts = append(args.opts, WithCardFilter(v.Filter))
+	}
 	return args
 }
 
@@ -188,6 +191,9 @@ func newCardSpecialColorPaginateArgs(rv map[string]interface{}) *cardspecialcolo
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[whereField].(*CardSpecialColorWhereInput); ok {
+		args.opts = append(args.opts, WithCardSpecialColorFilter(v.Filter))
+	}
 	return args
 }
 
@@ -246,6 +252,9 @@ func newCardTypePaginateArgs(rv map[string]interface{}) *cardtypePaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*CardTypeWhereInput); ok {
+		args.opts = append(args.opts, WithCardTypeFilter(v.Filter))
 	}
 	return args
 }
@@ -316,6 +325,9 @@ func newDeckPaginateArgs(rv map[string]interface{}) *deckPaginateArgs {
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
 	}
+	if v, ok := rv[whereField].(*DeckWhereInput); ok {
+		args.opts = append(args.opts, WithDeckFilter(v.Filter))
+	}
 	return args
 }
 
@@ -384,6 +396,9 @@ func newProductPaginateArgs(rv map[string]interface{}) *productPaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ProductWhereInput); ok {
+		args.opts = append(args.opts, WithProductFilter(v.Filter))
 	}
 	return args
 }
@@ -467,6 +482,9 @@ func newRevisionPaginateArgs(rv map[string]interface{}) *revisionPaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*RevisionWhereInput); ok {
+		args.opts = append(args.opts, WithRevisionFilter(v.Filter))
 	}
 	return args
 }
