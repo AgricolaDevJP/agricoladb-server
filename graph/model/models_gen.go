@@ -18,7 +18,7 @@ type Card struct {
 	Cost                            *string       `json:"cost"`
 	Description                     string        `json:"description"`
 	IsOfficialJa                    bool          `json:"isOfficialJa"`
-	VictoryPoint                    int           `json:"victoryPoint"`
+	VictoryPoint                    *int          `json:"victoryPoint"`
 	IsMutableVictoryPoint           bool          `json:"isMutableVictoryPoint"`
 	HasArrow                        bool          `json:"hasArrow"`
 	HasBonus                        bool          `json:"hasBonus"`

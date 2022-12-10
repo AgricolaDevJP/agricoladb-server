@@ -18,7 +18,7 @@ type Card {
   cost: String
   description: String!
   isOfficialJa: Boolean!
-  victoryPoint: Int!
+  victoryPoint: Int
   isMutableVictoryPoint: Boolean!
   hasArrow: Boolean!
   hasBonus: Boolean!
