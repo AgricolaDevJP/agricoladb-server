@@ -2,19 +2,79 @@
 
 package model
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+type Card struct {
+	ID                              string        `json:"id"`
+	LiteralID                       string        `json:"literalId"`
+	PrintedID                       *string       `json:"printedId"`
+	RevisionID                      int           `json:"revisionId"`
+	PlayAgricolaCardID              *int          `json:"playAgricolaCardId"`
+	CardType                        *CardType     `json:"cardType"`
+	Product                         []*Product    `json:"product"`
+	Deck                            *Deck         `json:"deck"`
+	NameJa                          string        `json:"nameJa"`
+	NameEn                          string        `json:"nameEn"`
+	MinPlayersNumber                *int          `json:"minPlayersNumber"`
+	Prerequisite                    *string       `json:"prerequisite"`
+	Cost                            *string       `json:"cost"`
+	Description                     string        `json:"description"`
+	IsOfficialJa                    bool          `json:"isOfficialJa"`
+	VictoryPoint                    int           `json:"victoryPoint"`
+	IsMutableVictoryPoint           bool          `json:"isMutableVictoryPoint"`
+	HasArrow                        bool          `json:"hasArrow"`
+	HasBonus                        bool          `json:"hasBonus"`
+	HasNegativeBonus                bool          `json:"hasNegativeBonus"`
+	HasPanIcon                      bool          `json:"hasPanIcon"`
+	HasBreadIcon                    bool          `json:"hasBreadIcon"`
+	HasFarmPlannerIcon              bool          `json:"hasFarmPlannerIcon"`
+	HasActionsBoosterIcon           bool          `json:"hasActionsBoosterIcon"`
+	HasPointsProviderIcon           bool          `json:"hasPointsProviderIcon"`
+	HasGoodsProviderIcon            bool          `json:"hasGoodsProviderIcon"`
+	HasFoodProviderIcon             bool          `json:"hasFoodProviderIcon"`
+	HasCropProviderIcon             bool          `json:"hasCropProviderIcon"`
+	HasBuildingResourceProviderIcon bool          `json:"hasBuildingResourceProviderIcon"`
+	HasLivestockProviderIcon        bool          `json:"hasLivestockProviderIcon"`
+	HasCutPeatIcon                  bool          `json:"hasCutPeatIcon"`
+	HasFellTreesIcon                bool          `json:"hasFellTreesIcon"`
+	HasSlashAndBurnIcon             bool          `json:"hasSlashAndBurnIcon"`
+	HasHiringFareIcon               bool          `json:"hasHiringFareIcon"`
+	SpecialColor                    *SpecialColor `json:"specialColor"`
+	OriginCards                     []*Card       `json:"originCards"`
+	RepublishedCards                []*Card       `json:"republishedCards"`
 }
 
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
+type CardType struct {
+	ID     string `json:"id"`
+	Key    string `json:"key"`
+	NameJa string `json:"nameJa"`
+	NameEn string `json:"nameEn"`
 }
 
-type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+type Deck struct {
+	ID         string `json:"id"`
+	RevisionID int    `json:"revisionId"`
+	Key        string `json:"key"`
+	NameJa     string `json:"nameJa"`
+	NameEn     string `json:"nameEn"`
+}
+
+type Product struct {
+	ID            string `json:"id"`
+	RevisionID    int    `json:"revisionId"`
+	Key           string `json:"key"`
+	NameJa        string `json:"nameJa"`
+	NameEn        string `json:"nameEn"`
+	PublishedYear *int   `json:"publishedYear"`
+	IsOfficialJa  bool   `json:"isOfficialJa"`
+}
+
+type RevisionAndLiteralID struct {
+	RevisionID int    `json:"revisionId"`
+	LiteralID  string `json:"literalId"`
+}
+
+type SpecialColor struct {
+	ID     string `json:"id"`
+	Key    string `json:"key"`
+	NameJa string `json:"nameJa"`
+	NameEn string `json:"nameEn"`
 }

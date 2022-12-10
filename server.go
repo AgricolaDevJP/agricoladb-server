@@ -1,8 +1,8 @@
 package main
 
 import (
-	"agricola-db-graphql/graph"
-	"agricola-db-graphql/graph/generated"
+	"agricoladb/graph"
+	"agricoladb/graph/generated"
 	"log"
 	"net/http"
 	"os"

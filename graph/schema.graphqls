@@ -2,27 +2,84 @@
 #
 # https://gqlgen.com/getting-started/
 
-type Todo {
+type Card {
   id: ID!
-  text: String!
-  done: Boolean!
-  user: User!
+  literalId: String!
+  printedId: String
+  revisionId: Int!
+  playAgricolaCardId: Int
+  cardType: CardType!
+  product: [Product!]!
+  deck: Deck
+  nameJa: String!
+  nameEn: String!
+  minPlayersNumber: Int
+  prerequisite: String
+  cost: String
+  description: String!
+  isOfficialJa: Boolean!
+  victoryPoint: Int!
+  isMutableVictoryPoint: Boolean!
+  hasArrow: Boolean!
+  hasBonus: Boolean!
+  hasNegativeBonus: Boolean!
+  hasPanIcon: Boolean!
+  hasBreadIcon: Boolean!
+  hasFarmPlannerIcon: Boolean!
+  hasActionsBoosterIcon: Boolean!
+  hasPointsProviderIcon: Boolean!
+  hasGoodsProviderIcon: Boolean!
+  hasFoodProviderIcon: Boolean!
+  hasCropProviderIcon: Boolean!
+  hasBuildingResourceProviderIcon: Boolean!
+  hasLivestockProviderIcon: Boolean!
+  hasCutPeatIcon: Boolean!
+  hasFellTreesIcon: Boolean!
+  hasSlashAndBurnIcon: Boolean!
+  hasHiringFareIcon: Boolean!
+  specialColor: SpecialColor
+  originCards: [Card!]!
+  republishedCards: [Card!]!
 }
 
-type User {
+type Product {
   id: ID!
-  name: String!
+  revisionId: Int!
+  key: String!
+  nameJa: String!
+  nameEn: String!
+  publishedYear: Int
+  isOfficialJa: Boolean!
+}
+
+type Deck {
+  id: ID!
+  revisionId: Int!
+  key: String!
+  nameJa: String!
+  nameEn: String!
+}
+
+type CardType {
+  id: ID!
+  key: String!
+  nameJa: String!
+  nameEn: String!
+}
+
+type SpecialColor {
+  id: ID!
+  key: String!
+  nameJa: String!
+  nameEn: String!
+}
+
+input RevisionAndLiteralId {
+  revisionId: Int!
+  literalId: String!
 }
 
 type Query {
-  todos: [Todo!]!
-}
-
-input NewTodo {
-  text: String!
-  userId: String!
-}
-
-type Mutation {
-  createTodo(input: NewTodo!): Todo!
+  cards: [Card!]!
+  findCardByRevisionAndLiteralId(input: RevisionAndLiteralId!): Card!
 }
