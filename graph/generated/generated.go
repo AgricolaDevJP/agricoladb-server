@@ -36,15 +36,7 @@ type Config struct {
 }
 
 type ResolverRoot interface {
-	Card() CardResolver
-	CardConnection() CardConnectionResolver
-	CardSpecialColorConnection() CardSpecialColorConnectionResolver
-	CardTypeConnection() CardTypeConnectionResolver
-	DeckConnection() DeckConnectionResolver
-	ProductConnection() ProductConnectionResolver
 	Query() QueryResolver
-	RevisionConnection() RevisionConnectionResolver
-	CardWhereInput() CardWhereInputResolver
 }
 
 type DirectiveRoot struct {
@@ -114,34 +106,12 @@ type ComplexityRoot struct {
 		NameJa func(childComplexity int) int
 	}
 
-	CardSpecialColorConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	CardSpecialColorEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
 	CardType struct {
 		Cards  func(childComplexity int) int
 		ID     func(childComplexity int) int
 		Key    func(childComplexity int) int
 		NameEn func(childComplexity int) int
 		NameJa func(childComplexity int) int
-	}
-
-	CardTypeConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	CardTypeEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
 	}
 
 	Deck struct {
@@ -152,17 +122,6 @@ type ComplexityRoot struct {
 		NameJa     func(childComplexity int) int
 		Revision   func(childComplexity int) int
 		RevisionID func(childComplexity int) int
-	}
-
-	DeckConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	DeckEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
 	}
 
 	PageInfo struct {
@@ -183,26 +142,10 @@ type ComplexityRoot struct {
 		RevisionID   func(childComplexity int) int
 	}
 
-	ProductConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	ProductEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
 	Query struct {
-		CardSpecialColors func(childComplexity int, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.CardSpecialColorWhereInput) int
-		CardTypes         func(childComplexity int, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.CardTypeWhereInput) int
-		Cards             func(childComplexity int, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.CardWhereInput) int
-		Decks             func(childComplexity int, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.DeckWhereInput) int
-		Node              func(childComplexity int, id int) int
-		Nodes             func(childComplexity int, ids []int) int
-		Products          func(childComplexity int, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.ProductWhereInput) int
-		Revisions         func(childComplexity int, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.RevisionWhereInput) int
+		Cards func(childComplexity int, after *ent.Cursor, first *int, before *ent.Cursor, last *int, where *ent.CardWhereInput) int
+		Node  func(childComplexity int, id int) int
+		Nodes func(childComplexity int, ids []int) int
 	}
 
 	Revision struct {
@@ -214,71 +157,12 @@ type ComplexityRoot struct {
 		NameJa   func(childComplexity int) int
 		Products func(childComplexity int) int
 	}
-
-	RevisionConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	RevisionEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
 }
 
-type CardResolver interface {
-	MinPlayersNumber(ctx context.Context, obj *ent.Card) (ent.Noder, error)
-
-	VictoryPoint(ctx context.Context, obj *ent.Card) (ent.Noder, error)
-}
-type CardConnectionResolver interface {
-	TotalCount(ctx context.Context, obj *ent.CardConnection) (ent.Noder, error)
-}
-type CardSpecialColorConnectionResolver interface {
-	TotalCount(ctx context.Context, obj *ent.CardSpecialColorConnection) (ent.Noder, error)
-}
-type CardTypeConnectionResolver interface {
-	TotalCount(ctx context.Context, obj *ent.CardTypeConnection) (ent.Noder, error)
-}
-type DeckConnectionResolver interface {
-	TotalCount(ctx context.Context, obj *ent.DeckConnection) (ent.Noder, error)
-}
-type ProductConnectionResolver interface {
-	TotalCount(ctx context.Context, obj *ent.ProductConnection) (ent.Noder, error)
-}
 type QueryResolver interface {
 	Node(ctx context.Context, id int) (ent.Noder, error)
 	Nodes(ctx context.Context, ids []int) ([]ent.Noder, error)
-	Cards(ctx context.Context, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.CardWhereInput) (*ent.CardConnection, error)
-	CardSpecialColors(ctx context.Context, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.CardSpecialColorWhereInput) (*ent.CardSpecialColorConnection, error)
-	CardTypes(ctx context.Context, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.CardTypeWhereInput) (*ent.CardTypeConnection, error)
-	Decks(ctx context.Context, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.DeckWhereInput) (*ent.DeckConnection, error)
-	Products(ctx context.Context, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.ProductWhereInput) (*ent.ProductConnection, error)
-	Revisions(ctx context.Context, after *ent.Cursor, first ent.Noder, before *ent.Cursor, last ent.Noder, where *ent.RevisionWhereInput) (*ent.RevisionConnection, error)
-}
-type RevisionConnectionResolver interface {
-	TotalCount(ctx context.Context, obj *ent.RevisionConnection) (ent.Noder, error)
-}
-
-type CardWhereInputResolver interface {
-	MinPlayersNumber(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
-	MinPlayersNumberNeq(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
-	MinPlayersNumberIn(ctx context.Context, obj *ent.CardWhereInput, data []ent.Noder) error
-	MinPlayersNumberNotIn(ctx context.Context, obj *ent.CardWhereInput, data []ent.Noder) error
-	MinPlayersNumberGt(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
-	MinPlayersNumberGte(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
-	MinPlayersNumberLt(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
-	MinPlayersNumberLte(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
-
-	VictoryPoint(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
-	VictoryPointNeq(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
-	VictoryPointIn(ctx context.Context, obj *ent.CardWhereInput, data []ent.Noder) error
-	VictoryPointNotIn(ctx context.Context, obj *ent.CardWhereInput, data []ent.Noder) error
-	VictoryPointGt(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
-	VictoryPointGte(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
-	VictoryPointLt(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
-	VictoryPointLte(ctx context.Context, obj *ent.CardWhereInput, data ent.Noder) error
+	Cards(ctx context.Context, after *ent.Cursor, first *int, before *ent.Cursor, last *int, where *ent.CardWhereInput) (*ent.CardConnection, error)
 }
 
 type executableSchema struct {
@@ -653,41 +537,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.CardSpecialColor.NameJa(childComplexity), true
 
-	case "CardSpecialColorConnection.edges":
-		if e.complexity.CardSpecialColorConnection.Edges == nil {
-			break
-		}
-
-		return e.complexity.CardSpecialColorConnection.Edges(childComplexity), true
-
-	case "CardSpecialColorConnection.pageInfo":
-		if e.complexity.CardSpecialColorConnection.PageInfo == nil {
-			break
-		}
-
-		return e.complexity.CardSpecialColorConnection.PageInfo(childComplexity), true
-
-	case "CardSpecialColorConnection.totalCount":
-		if e.complexity.CardSpecialColorConnection.TotalCount == nil {
-			break
-		}
-
-		return e.complexity.CardSpecialColorConnection.TotalCount(childComplexity), true
-
-	case "CardSpecialColorEdge.cursor":
-		if e.complexity.CardSpecialColorEdge.Cursor == nil {
-			break
-		}
-
-		return e.complexity.CardSpecialColorEdge.Cursor(childComplexity), true
-
-	case "CardSpecialColorEdge.node":
-		if e.complexity.CardSpecialColorEdge.Node == nil {
-			break
-		}
-
-		return e.complexity.CardSpecialColorEdge.Node(childComplexity), true
-
 	case "CardType.cards":
 		if e.complexity.CardType.Cards == nil {
 			break
@@ -722,41 +571,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.CardType.NameJa(childComplexity), true
-
-	case "CardTypeConnection.edges":
-		if e.complexity.CardTypeConnection.Edges == nil {
-			break
-		}
-
-		return e.complexity.CardTypeConnection.Edges(childComplexity), true
-
-	case "CardTypeConnection.pageInfo":
-		if e.complexity.CardTypeConnection.PageInfo == nil {
-			break
-		}
-
-		return e.complexity.CardTypeConnection.PageInfo(childComplexity), true
-
-	case "CardTypeConnection.totalCount":
-		if e.complexity.CardTypeConnection.TotalCount == nil {
-			break
-		}
-
-		return e.complexity.CardTypeConnection.TotalCount(childComplexity), true
-
-	case "CardTypeEdge.cursor":
-		if e.complexity.CardTypeEdge.Cursor == nil {
-			break
-		}
-
-		return e.complexity.CardTypeEdge.Cursor(childComplexity), true
-
-	case "CardTypeEdge.node":
-		if e.complexity.CardTypeEdge.Node == nil {
-			break
-		}
-
-		return e.complexity.CardTypeEdge.Node(childComplexity), true
 
 	case "Deck.cards":
 		if e.complexity.Deck.Cards == nil {
@@ -806,41 +620,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Deck.RevisionID(childComplexity), true
-
-	case "DeckConnection.edges":
-		if e.complexity.DeckConnection.Edges == nil {
-			break
-		}
-
-		return e.complexity.DeckConnection.Edges(childComplexity), true
-
-	case "DeckConnection.pageInfo":
-		if e.complexity.DeckConnection.PageInfo == nil {
-			break
-		}
-
-		return e.complexity.DeckConnection.PageInfo(childComplexity), true
-
-	case "DeckConnection.totalCount":
-		if e.complexity.DeckConnection.TotalCount == nil {
-			break
-		}
-
-		return e.complexity.DeckConnection.TotalCount(childComplexity), true
-
-	case "DeckEdge.cursor":
-		if e.complexity.DeckEdge.Cursor == nil {
-			break
-		}
-
-		return e.complexity.DeckEdge.Cursor(childComplexity), true
-
-	case "DeckEdge.node":
-		if e.complexity.DeckEdge.Node == nil {
-			break
-		}
-
-		return e.complexity.DeckEdge.Node(childComplexity), true
 
 	case "PageInfo.endCursor":
 		if e.complexity.PageInfo.EndCursor == nil {
@@ -926,65 +705,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Product.RevisionID(childComplexity), true
 
-	case "ProductConnection.edges":
-		if e.complexity.ProductConnection.Edges == nil {
-			break
-		}
-
-		return e.complexity.ProductConnection.Edges(childComplexity), true
-
-	case "ProductConnection.pageInfo":
-		if e.complexity.ProductConnection.PageInfo == nil {
-			break
-		}
-
-		return e.complexity.ProductConnection.PageInfo(childComplexity), true
-
-	case "ProductConnection.totalCount":
-		if e.complexity.ProductConnection.TotalCount == nil {
-			break
-		}
-
-		return e.complexity.ProductConnection.TotalCount(childComplexity), true
-
-	case "ProductEdge.cursor":
-		if e.complexity.ProductEdge.Cursor == nil {
-			break
-		}
-
-		return e.complexity.ProductEdge.Cursor(childComplexity), true
-
-	case "ProductEdge.node":
-		if e.complexity.ProductEdge.Node == nil {
-			break
-		}
-
-		return e.complexity.ProductEdge.Node(childComplexity), true
-
-	case "Query.cardSpecialColors":
-		if e.complexity.Query.CardSpecialColors == nil {
-			break
-		}
-
-		args, err := ec.field_Query_cardSpecialColors_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.CardSpecialColors(childComplexity, args["after"].(*ent.Cursor), args["first"].(ent.Noder), args["before"].(*ent.Cursor), args["last"].(ent.Noder), args["where"].(*ent.CardSpecialColorWhereInput)), true
-
-	case "Query.cardTypes":
-		if e.complexity.Query.CardTypes == nil {
-			break
-		}
-
-		args, err := ec.field_Query_cardTypes_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.CardTypes(childComplexity, args["after"].(*ent.Cursor), args["first"].(ent.Noder), args["before"].(*ent.Cursor), args["last"].(ent.Noder), args["where"].(*ent.CardTypeWhereInput)), true
-
 	case "Query.cards":
 		if e.complexity.Query.Cards == nil {
 			break
@@ -995,19 +715,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Cards(childComplexity, args["after"].(*ent.Cursor), args["first"].(ent.Noder), args["before"].(*ent.Cursor), args["last"].(ent.Noder), args["where"].(*ent.CardWhereInput)), true
-
-	case "Query.decks":
-		if e.complexity.Query.Decks == nil {
-			break
-		}
-
-		args, err := ec.field_Query_decks_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.Decks(childComplexity, args["after"].(*ent.Cursor), args["first"].(ent.Noder), args["before"].(*ent.Cursor), args["last"].(ent.Noder), args["where"].(*ent.DeckWhereInput)), true
+		return e.complexity.Query.Cards(childComplexity, args["after"].(*ent.Cursor), args["first"].(*int), args["before"].(*ent.Cursor), args["last"].(*int), args["where"].(*ent.CardWhereInput)), true
 
 	case "Query.node":
 		if e.complexity.Query.Node == nil {
@@ -1032,30 +740,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Nodes(childComplexity, args["ids"].([]int)), true
-
-	case "Query.products":
-		if e.complexity.Query.Products == nil {
-			break
-		}
-
-		args, err := ec.field_Query_products_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.Products(childComplexity, args["after"].(*ent.Cursor), args["first"].(ent.Noder), args["before"].(*ent.Cursor), args["last"].(ent.Noder), args["where"].(*ent.ProductWhereInput)), true
-
-	case "Query.revisions":
-		if e.complexity.Query.Revisions == nil {
-			break
-		}
-
-		args, err := ec.field_Query_revisions_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.Revisions(childComplexity, args["after"].(*ent.Cursor), args["first"].(ent.Noder), args["before"].(*ent.Cursor), args["last"].(ent.Noder), args["where"].(*ent.RevisionWhereInput)), true
 
 	case "Revision.cards":
 		if e.complexity.Revision.Cards == nil {
@@ -1105,41 +789,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Revision.Products(childComplexity), true
-
-	case "RevisionConnection.edges":
-		if e.complexity.RevisionConnection.Edges == nil {
-			break
-		}
-
-		return e.complexity.RevisionConnection.Edges(childComplexity), true
-
-	case "RevisionConnection.pageInfo":
-		if e.complexity.RevisionConnection.PageInfo == nil {
-			break
-		}
-
-		return e.complexity.RevisionConnection.PageInfo(childComplexity), true
-
-	case "RevisionConnection.totalCount":
-		if e.complexity.RevisionConnection.TotalCount == nil {
-			break
-		}
-
-		return e.complexity.RevisionConnection.TotalCount(childComplexity), true
-
-	case "RevisionEdge.cursor":
-		if e.complexity.RevisionEdge.Cursor == nil {
-			break
-		}
-
-		return e.complexity.RevisionEdge.Cursor(childComplexity), true
-
-	case "RevisionEdge.node":
-		if e.complexity.RevisionEdge.Node == nil {
-			break
-		}
-
-		return e.complexity.RevisionEdge.Node(childComplexity), true
 
 	}
 	return 0, false
@@ -1268,22 +917,6 @@ type CardSpecialColor implements Node {
   nameEn: String
   cards: [Card!]
 }
-"""A connection to a list of items."""
-type CardSpecialColorConnection {
-  """A list of edges."""
-  edges: [CardSpecialColorEdge]
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-  """Identifies the total count of items in the connection."""
-  totalCount: Int!
-}
-"""An edge in a connection."""
-type CardSpecialColorEdge {
-  """The item at the end of the edge."""
-  node: CardSpecialColor
-  """A cursor for use in pagination."""
-  cursor: Cursor!
-}
 """
 CardSpecialColorWhereInput is used for filtering CardSpecialColor objects.
 Input was generated by ent.
@@ -1357,22 +990,6 @@ type CardType implements Node {
   nameJa: String
   nameEn: String
   cards: [Card!]
-}
-"""A connection to a list of items."""
-type CardTypeConnection {
-  """A list of edges."""
-  edges: [CardTypeEdge]
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-  """Identifies the total count of items in the connection."""
-  totalCount: Int!
-}
-"""An edge in a connection."""
-type CardTypeEdge {
-  """The item at the end of the edge."""
-  node: CardType
-  """A cursor for use in pagination."""
-  cursor: Cursor!
 }
 """
 CardTypeWhereInput is used for filtering CardType objects.
@@ -1723,22 +1340,6 @@ type Deck implements Node {
   cards: [Card!]
   revision: Revision!
 }
-"""A connection to a list of items."""
-type DeckConnection {
-  """A list of edges."""
-  edges: [DeckEdge]
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-  """Identifies the total count of items in the connection."""
-  totalCount: Int!
-}
-"""An edge in a connection."""
-type DeckEdge {
-  """The item at the end of the edge."""
-  node: Deck
-  """A cursor for use in pagination."""
-  cursor: Cursor!
-}
 """
 DeckWhereInput is used for filtering Deck objects.
 Input was generated by ent.
@@ -1853,22 +1454,6 @@ type Product implements Node {
   cards: [Card!]
   revision: Revision!
 }
-"""A connection to a list of items."""
-type ProductConnection {
-  """A list of edges."""
-  edges: [ProductEdge]
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-  """Identifies the total count of items in the connection."""
-  totalCount: Int!
-}
-"""An edge in a connection."""
-type ProductEdge {
-  """The item at the end of the edge."""
-  node: Product
-  """A cursor for use in pagination."""
-  cursor: Cursor!
-}
 """
 ProductWhereInput is used for filtering Product objects.
 Input was generated by ent.
@@ -1974,86 +1559,6 @@ type Query {
     """Filtering options for Cards returned from the connection."""
     where: CardWhereInput
   ): CardConnection!
-  cardSpecialColors(
-    """Returns the elements in the list that come after the specified cursor."""
-    after: Cursor
-
-    """Returns the first _n_ elements from the list."""
-    first: Int
-
-    """Returns the elements in the list that come before the specified cursor."""
-    before: Cursor
-
-    """Returns the last _n_ elements from the list."""
-    last: Int
-
-    """Filtering options for CardSpecialColors returned from the connection."""
-    where: CardSpecialColorWhereInput
-  ): CardSpecialColorConnection!
-  cardTypes(
-    """Returns the elements in the list that come after the specified cursor."""
-    after: Cursor
-
-    """Returns the first _n_ elements from the list."""
-    first: Int
-
-    """Returns the elements in the list that come before the specified cursor."""
-    before: Cursor
-
-    """Returns the last _n_ elements from the list."""
-    last: Int
-
-    """Filtering options for CardTypes returned from the connection."""
-    where: CardTypeWhereInput
-  ): CardTypeConnection!
-  decks(
-    """Returns the elements in the list that come after the specified cursor."""
-    after: Cursor
-
-    """Returns the first _n_ elements from the list."""
-    first: Int
-
-    """Returns the elements in the list that come before the specified cursor."""
-    before: Cursor
-
-    """Returns the last _n_ elements from the list."""
-    last: Int
-
-    """Filtering options for Decks returned from the connection."""
-    where: DeckWhereInput
-  ): DeckConnection!
-  products(
-    """Returns the elements in the list that come after the specified cursor."""
-    after: Cursor
-
-    """Returns the first _n_ elements from the list."""
-    first: Int
-
-    """Returns the elements in the list that come before the specified cursor."""
-    before: Cursor
-
-    """Returns the last _n_ elements from the list."""
-    last: Int
-
-    """Filtering options for Products returned from the connection."""
-    where: ProductWhereInput
-  ): ProductConnection!
-  revisions(
-    """Returns the elements in the list that come after the specified cursor."""
-    after: Cursor
-
-    """Returns the first _n_ elements from the list."""
-    first: Int
-
-    """Returns the elements in the list that come before the specified cursor."""
-    before: Cursor
-
-    """Returns the last _n_ elements from the list."""
-    last: Int
-
-    """Filtering options for Revisions returned from the connection."""
-    where: RevisionWhereInput
-  ): RevisionConnection!
 }
 type Revision implements Node {
   id: ID!
@@ -2063,22 +1568,6 @@ type Revision implements Node {
   cards: [Card!]
   products: [Product!]
   decks: [Deck!]
-}
-"""A connection to a list of items."""
-type RevisionConnection {
-  """A list of edges."""
-  edges: [RevisionEdge]
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-  """Identifies the total count of items in the connection."""
-  totalCount: Int!
-}
-"""An edge in a connection."""
-type RevisionEdge {
-  """The item at the end of the edge."""
-  node: Revision
-  """A cursor for use in pagination."""
-  cursor: Cursor!
 }
 """
 RevisionWhereInput is used for filtering Revision objects.
@@ -2176,108 +1665,6 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_cardSpecialColors_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 *ent.Cursor
-	if tmp, ok := rawArgs["after"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
-		arg0, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["after"] = arg0
-	var arg1 ent.Noder
-	if tmp, ok := rawArgs["first"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
-		arg1, err = ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["first"] = arg1
-	var arg2 *ent.Cursor
-	if tmp, ok := rawArgs["before"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
-		arg2, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["before"] = arg2
-	var arg3 ent.Noder
-	if tmp, ok := rawArgs["last"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
-		arg3, err = ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["last"] = arg3
-	var arg4 *ent.CardSpecialColorWhereInput
-	if tmp, ok := rawArgs["where"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg4, err = ec.unmarshalOCardSpecialColorWhereInput2ᚖagricoladbᚋentᚐCardSpecialColorWhereInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["where"] = arg4
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_cardTypes_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 *ent.Cursor
-	if tmp, ok := rawArgs["after"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
-		arg0, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["after"] = arg0
-	var arg1 ent.Noder
-	if tmp, ok := rawArgs["first"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
-		arg1, err = ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["first"] = arg1
-	var arg2 *ent.Cursor
-	if tmp, ok := rawArgs["before"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
-		arg2, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["before"] = arg2
-	var arg3 ent.Noder
-	if tmp, ok := rawArgs["last"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
-		arg3, err = ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["last"] = arg3
-	var arg4 *ent.CardTypeWhereInput
-	if tmp, ok := rawArgs["where"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg4, err = ec.unmarshalOCardTypeWhereInput2ᚖagricoladbᚋentᚐCardTypeWhereInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["where"] = arg4
-	return args, nil
-}
-
 func (ec *executionContext) field_Query_cards_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2290,10 +1677,10 @@ func (ec *executionContext) field_Query_cards_args(ctx context.Context, rawArgs 
 		}
 	}
 	args["after"] = arg0
-	var arg1 ent.Noder
+	var arg1 *int
 	if tmp, ok := rawArgs["first"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
-		arg1, err = ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, tmp)
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2308,10 +1695,10 @@ func (ec *executionContext) field_Query_cards_args(ctx context.Context, rawArgs 
 		}
 	}
 	args["before"] = arg2
-	var arg3 ent.Noder
+	var arg3 *int
 	if tmp, ok := rawArgs["last"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
-		arg3, err = ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, tmp)
+		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2321,57 +1708,6 @@ func (ec *executionContext) field_Query_cards_args(ctx context.Context, rawArgs 
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
 		arg4, err = ec.unmarshalOCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["where"] = arg4
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_decks_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 *ent.Cursor
-	if tmp, ok := rawArgs["after"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
-		arg0, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["after"] = arg0
-	var arg1 ent.Noder
-	if tmp, ok := rawArgs["first"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
-		arg1, err = ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["first"] = arg1
-	var arg2 *ent.Cursor
-	if tmp, ok := rawArgs["before"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
-		arg2, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["before"] = arg2
-	var arg3 ent.Noder
-	if tmp, ok := rawArgs["last"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
-		arg3, err = ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["last"] = arg3
-	var arg4 *ent.DeckWhereInput
-	if tmp, ok := rawArgs["where"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg4, err = ec.unmarshalODeckWhereInput2ᚖagricoladbᚋentᚐDeckWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2407,108 +1743,6 @@ func (ec *executionContext) field_Query_nodes_args(ctx context.Context, rawArgs 
 		}
 	}
 	args["ids"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_products_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 *ent.Cursor
-	if tmp, ok := rawArgs["after"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
-		arg0, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["after"] = arg0
-	var arg1 ent.Noder
-	if tmp, ok := rawArgs["first"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
-		arg1, err = ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["first"] = arg1
-	var arg2 *ent.Cursor
-	if tmp, ok := rawArgs["before"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
-		arg2, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["before"] = arg2
-	var arg3 ent.Noder
-	if tmp, ok := rawArgs["last"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
-		arg3, err = ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["last"] = arg3
-	var arg4 *ent.ProductWhereInput
-	if tmp, ok := rawArgs["where"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg4, err = ec.unmarshalOProductWhereInput2ᚖagricoladbᚋentᚐProductWhereInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["where"] = arg4
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_revisions_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 *ent.Cursor
-	if tmp, ok := rawArgs["after"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
-		arg0, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["after"] = arg0
-	var arg1 ent.Noder
-	if tmp, ok := rawArgs["first"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
-		arg1, err = ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["first"] = arg1
-	var arg2 *ent.Cursor
-	if tmp, ok := rawArgs["before"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
-		arg2, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["before"] = arg2
-	var arg3 ent.Noder
-	if tmp, ok := rawArgs["last"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
-		arg3, err = ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["last"] = arg3
-	var arg4 *ent.RevisionWhereInput
-	if tmp, ok := rawArgs["where"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg4, err = ec.unmarshalORevisionWhereInput2ᚖagricoladbᚋentᚐRevisionWhereInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["where"] = arg4
 	return args, nil
 }
 
@@ -2986,7 +2220,7 @@ func (ec *executionContext) _Card_minPlayersNumber(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Card().MinPlayersNumber(rctx, obj)
+		return obj.MinPlayersNumber, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2995,17 +2229,17 @@ func (ec *executionContext) _Card_minPlayersNumber(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(ent.Noder)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOInt2agricoladbᚋentᚐNoder(ctx, field.Selections, res)
+	return ec.marshalOInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_minPlayersNumber(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Int does not have child fields")
 		},
@@ -3194,7 +2428,7 @@ func (ec *executionContext) _Card_victoryPoint(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Card().VictoryPoint(rctx, obj)
+		return obj.VictoryPoint, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3203,17 +2437,17 @@ func (ec *executionContext) _Card_victoryPoint(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(ent.Noder)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalOInt2agricoladbᚋentᚐNoder(ctx, field.Selections, res)
+	return ec.marshalOInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_victoryPoint(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Int does not have child fields")
 		},
@@ -4663,7 +3897,7 @@ func (ec *executionContext) _CardConnection_totalCount(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.CardConnection().TotalCount(rctx, obj)
+		return obj.TotalCount, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4675,17 +3909,17 @@ func (ec *executionContext) _CardConnection_totalCount(ctx context.Context, fiel
 		}
 		return graphql.Null
 	}
-	res := resTmp.(ent.Noder)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNInt2agricoladbᚋentᚐNoder(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CardConnection_totalCount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "CardConnection",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Int does not have child fields")
 		},
@@ -5157,248 +4391,6 @@ func (ec *executionContext) fieldContext_CardSpecialColor_cards(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _CardSpecialColorConnection_edges(ctx context.Context, field graphql.CollectedField, obj *ent.CardSpecialColorConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_CardSpecialColorConnection_edges(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Edges, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*ent.CardSpecialColorEdge)
-	fc.Result = res
-	return ec.marshalOCardSpecialColorEdge2ᚕᚖagricoladbᚋentᚐCardSpecialColorEdge(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_CardSpecialColorConnection_edges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "CardSpecialColorConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "node":
-				return ec.fieldContext_CardSpecialColorEdge_node(ctx, field)
-			case "cursor":
-				return ec.fieldContext_CardSpecialColorEdge_cursor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type CardSpecialColorEdge", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _CardSpecialColorConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *ent.CardSpecialColorConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_CardSpecialColorConnection_pageInfo(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PageInfo, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(ent.PageInfo)
-	fc.Result = res
-	return ec.marshalNPageInfo2agricoladbᚋentᚐPageInfo(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_CardSpecialColorConnection_pageInfo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "CardSpecialColorConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "hasNextPage":
-				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
-			case "hasPreviousPage":
-				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
-			case "startCursor":
-				return ec.fieldContext_PageInfo_startCursor(ctx, field)
-			case "endCursor":
-				return ec.fieldContext_PageInfo_endCursor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _CardSpecialColorConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *ent.CardSpecialColorConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_CardSpecialColorConnection_totalCount(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.CardSpecialColorConnection().TotalCount(rctx, obj)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(ent.Noder)
-	fc.Result = res
-	return ec.marshalNInt2agricoladbᚋentᚐNoder(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_CardSpecialColorConnection_totalCount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "CardSpecialColorConnection",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _CardSpecialColorEdge_node(ctx context.Context, field graphql.CollectedField, obj *ent.CardSpecialColorEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_CardSpecialColorEdge_node(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Node, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*ent.CardSpecialColor)
-	fc.Result = res
-	return ec.marshalOCardSpecialColor2ᚖagricoladbᚋentᚐCardSpecialColor(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_CardSpecialColorEdge_node(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "CardSpecialColorEdge",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_CardSpecialColor_id(ctx, field)
-			case "key":
-				return ec.fieldContext_CardSpecialColor_key(ctx, field)
-			case "nameJa":
-				return ec.fieldContext_CardSpecialColor_nameJa(ctx, field)
-			case "nameEn":
-				return ec.fieldContext_CardSpecialColor_nameEn(ctx, field)
-			case "cards":
-				return ec.fieldContext_CardSpecialColor_cards(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type CardSpecialColor", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _CardSpecialColorEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *ent.CardSpecialColorEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_CardSpecialColorEdge_cursor(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Cursor, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(ent.Cursor)
-	fc.Result = res
-	return ec.marshalNCursor2agricoladbᚋentᚐCursor(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_CardSpecialColorEdge_cursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "CardSpecialColorEdge",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Cursor does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _CardType_id(ctx context.Context, field graphql.CollectedField, obj *ent.CardType) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_CardType_id(ctx, field)
 	if err != nil {
@@ -5689,248 +4681,6 @@ func (ec *executionContext) fieldContext_CardType_cards(ctx context.Context, fie
 				return ec.fieldContext_Card_ancestors(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Card", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _CardTypeConnection_edges(ctx context.Context, field graphql.CollectedField, obj *ent.CardTypeConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_CardTypeConnection_edges(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Edges, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*ent.CardTypeEdge)
-	fc.Result = res
-	return ec.marshalOCardTypeEdge2ᚕᚖagricoladbᚋentᚐCardTypeEdge(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_CardTypeConnection_edges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "CardTypeConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "node":
-				return ec.fieldContext_CardTypeEdge_node(ctx, field)
-			case "cursor":
-				return ec.fieldContext_CardTypeEdge_cursor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type CardTypeEdge", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _CardTypeConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *ent.CardTypeConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_CardTypeConnection_pageInfo(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PageInfo, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(ent.PageInfo)
-	fc.Result = res
-	return ec.marshalNPageInfo2agricoladbᚋentᚐPageInfo(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_CardTypeConnection_pageInfo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "CardTypeConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "hasNextPage":
-				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
-			case "hasPreviousPage":
-				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
-			case "startCursor":
-				return ec.fieldContext_PageInfo_startCursor(ctx, field)
-			case "endCursor":
-				return ec.fieldContext_PageInfo_endCursor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _CardTypeConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *ent.CardTypeConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_CardTypeConnection_totalCount(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.CardTypeConnection().TotalCount(rctx, obj)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(ent.Noder)
-	fc.Result = res
-	return ec.marshalNInt2agricoladbᚋentᚐNoder(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_CardTypeConnection_totalCount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "CardTypeConnection",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _CardTypeEdge_node(ctx context.Context, field graphql.CollectedField, obj *ent.CardTypeEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_CardTypeEdge_node(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Node, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*ent.CardType)
-	fc.Result = res
-	return ec.marshalOCardType2ᚖagricoladbᚋentᚐCardType(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_CardTypeEdge_node(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "CardTypeEdge",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_CardType_id(ctx, field)
-			case "key":
-				return ec.fieldContext_CardType_key(ctx, field)
-			case "nameJa":
-				return ec.fieldContext_CardType_nameJa(ctx, field)
-			case "nameEn":
-				return ec.fieldContext_CardType_nameEn(ctx, field)
-			case "cards":
-				return ec.fieldContext_CardType_cards(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type CardType", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _CardTypeEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *ent.CardTypeEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_CardTypeEdge_cursor(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Cursor, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(ent.Cursor)
-	fc.Result = res
-	return ec.marshalNCursor2agricoladbᚋentᚐCursor(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_CardTypeEdge_cursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "CardTypeEdge",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Cursor does not have child fields")
 		},
 	}
 	return fc, nil
@@ -6330,252 +5080,6 @@ func (ec *executionContext) fieldContext_Deck_revision(ctx context.Context, fiel
 				return ec.fieldContext_Revision_decks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Revision", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _DeckConnection_edges(ctx context.Context, field graphql.CollectedField, obj *ent.DeckConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DeckConnection_edges(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Edges, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*ent.DeckEdge)
-	fc.Result = res
-	return ec.marshalODeckEdge2ᚕᚖagricoladbᚋentᚐDeckEdge(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_DeckConnection_edges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DeckConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "node":
-				return ec.fieldContext_DeckEdge_node(ctx, field)
-			case "cursor":
-				return ec.fieldContext_DeckEdge_cursor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DeckEdge", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _DeckConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *ent.DeckConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DeckConnection_pageInfo(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PageInfo, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(ent.PageInfo)
-	fc.Result = res
-	return ec.marshalNPageInfo2agricoladbᚋentᚐPageInfo(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_DeckConnection_pageInfo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DeckConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "hasNextPage":
-				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
-			case "hasPreviousPage":
-				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
-			case "startCursor":
-				return ec.fieldContext_PageInfo_startCursor(ctx, field)
-			case "endCursor":
-				return ec.fieldContext_PageInfo_endCursor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _DeckConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *ent.DeckConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DeckConnection_totalCount(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.DeckConnection().TotalCount(rctx, obj)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(ent.Noder)
-	fc.Result = res
-	return ec.marshalNInt2agricoladbᚋentᚐNoder(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_DeckConnection_totalCount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DeckConnection",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _DeckEdge_node(ctx context.Context, field graphql.CollectedField, obj *ent.DeckEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DeckEdge_node(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Node, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*ent.Deck)
-	fc.Result = res
-	return ec.marshalODeck2ᚖagricoladbᚋentᚐDeck(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_DeckEdge_node(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DeckEdge",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Deck_id(ctx, field)
-			case "key":
-				return ec.fieldContext_Deck_key(ctx, field)
-			case "revisionID":
-				return ec.fieldContext_Deck_revisionID(ctx, field)
-			case "nameJa":
-				return ec.fieldContext_Deck_nameJa(ctx, field)
-			case "nameEn":
-				return ec.fieldContext_Deck_nameEn(ctx, field)
-			case "cards":
-				return ec.fieldContext_Deck_cards(ctx, field)
-			case "revision":
-				return ec.fieldContext_Deck_revision(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Deck", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _DeckEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *ent.DeckEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_DeckEdge_cursor(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Cursor, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(ent.Cursor)
-	fc.Result = res
-	return ec.marshalNCursor2agricoladbᚋentᚐCursor(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_DeckEdge_cursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DeckEdge",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Cursor does not have child fields")
 		},
 	}
 	return fc, nil
@@ -7194,254 +5698,6 @@ func (ec *executionContext) fieldContext_Product_revision(ctx context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _ProductConnection_edges(ctx context.Context, field graphql.CollectedField, obj *ent.ProductConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProductConnection_edges(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Edges, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*ent.ProductEdge)
-	fc.Result = res
-	return ec.marshalOProductEdge2ᚕᚖagricoladbᚋentᚐProductEdge(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ProductConnection_edges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProductConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "node":
-				return ec.fieldContext_ProductEdge_node(ctx, field)
-			case "cursor":
-				return ec.fieldContext_ProductEdge_cursor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ProductEdge", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ProductConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *ent.ProductConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProductConnection_pageInfo(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PageInfo, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(ent.PageInfo)
-	fc.Result = res
-	return ec.marshalNPageInfo2agricoladbᚋentᚐPageInfo(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ProductConnection_pageInfo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProductConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "hasNextPage":
-				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
-			case "hasPreviousPage":
-				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
-			case "startCursor":
-				return ec.fieldContext_PageInfo_startCursor(ctx, field)
-			case "endCursor":
-				return ec.fieldContext_PageInfo_endCursor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ProductConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *ent.ProductConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProductConnection_totalCount(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.ProductConnection().TotalCount(rctx, obj)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(ent.Noder)
-	fc.Result = res
-	return ec.marshalNInt2agricoladbᚋentᚐNoder(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ProductConnection_totalCount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProductConnection",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ProductEdge_node(ctx context.Context, field graphql.CollectedField, obj *ent.ProductEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProductEdge_node(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Node, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*ent.Product)
-	fc.Result = res
-	return ec.marshalOProduct2ᚖagricoladbᚋentᚐProduct(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ProductEdge_node(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProductEdge",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Product_id(ctx, field)
-			case "key":
-				return ec.fieldContext_Product_key(ctx, field)
-			case "revisionID":
-				return ec.fieldContext_Product_revisionID(ctx, field)
-			case "isOfficialJa":
-				return ec.fieldContext_Product_isOfficialJa(ctx, field)
-			case "nameJa":
-				return ec.fieldContext_Product_nameJa(ctx, field)
-			case "nameEn":
-				return ec.fieldContext_Product_nameEn(ctx, field)
-			case "cards":
-				return ec.fieldContext_Product_cards(ctx, field)
-			case "revision":
-				return ec.fieldContext_Product_revision(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Product", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ProductEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *ent.ProductEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ProductEdge_cursor(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Cursor, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(ent.Cursor)
-	fc.Result = res
-	return ec.marshalNCursor2agricoladbᚋentᚐCursor(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ProductEdge_cursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProductEdge",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Cursor does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Query_node(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_node(ctx, field)
 	if err != nil {
@@ -7563,7 +5819,7 @@ func (ec *executionContext) _Query_cards(ctx context.Context, field graphql.Coll
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Cards(rctx, fc.Args["after"].(*ent.Cursor), fc.Args["first"].(ent.Noder), fc.Args["before"].(*ent.Cursor), fc.Args["last"].(ent.Noder), fc.Args["where"].(*ent.CardWhereInput))
+		return ec.resolvers.Query().Cards(rctx, fc.Args["after"].(*ent.Cursor), fc.Args["first"].(*int), fc.Args["before"].(*ent.Cursor), fc.Args["last"].(*int), fc.Args["where"].(*ent.CardWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7606,321 +5862,6 @@ func (ec *executionContext) fieldContext_Query_cards(ctx context.Context, field 
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_cards_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_cardSpecialColors(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_cardSpecialColors(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().CardSpecialColors(rctx, fc.Args["after"].(*ent.Cursor), fc.Args["first"].(ent.Noder), fc.Args["before"].(*ent.Cursor), fc.Args["last"].(ent.Noder), fc.Args["where"].(*ent.CardSpecialColorWhereInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*ent.CardSpecialColorConnection)
-	fc.Result = res
-	return ec.marshalNCardSpecialColorConnection2ᚖagricoladbᚋentᚐCardSpecialColorConnection(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_cardSpecialColors(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_CardSpecialColorConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_CardSpecialColorConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_CardSpecialColorConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type CardSpecialColorConnection", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_cardSpecialColors_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_cardTypes(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_cardTypes(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().CardTypes(rctx, fc.Args["after"].(*ent.Cursor), fc.Args["first"].(ent.Noder), fc.Args["before"].(*ent.Cursor), fc.Args["last"].(ent.Noder), fc.Args["where"].(*ent.CardTypeWhereInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*ent.CardTypeConnection)
-	fc.Result = res
-	return ec.marshalNCardTypeConnection2ᚖagricoladbᚋentᚐCardTypeConnection(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_cardTypes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_CardTypeConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_CardTypeConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_CardTypeConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type CardTypeConnection", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_cardTypes_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_decks(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_decks(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Decks(rctx, fc.Args["after"].(*ent.Cursor), fc.Args["first"].(ent.Noder), fc.Args["before"].(*ent.Cursor), fc.Args["last"].(ent.Noder), fc.Args["where"].(*ent.DeckWhereInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*ent.DeckConnection)
-	fc.Result = res
-	return ec.marshalNDeckConnection2ᚖagricoladbᚋentᚐDeckConnection(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_decks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_DeckConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_DeckConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_DeckConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DeckConnection", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_decks_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_products(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_products(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Products(rctx, fc.Args["after"].(*ent.Cursor), fc.Args["first"].(ent.Noder), fc.Args["before"].(*ent.Cursor), fc.Args["last"].(ent.Noder), fc.Args["where"].(*ent.ProductWhereInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*ent.ProductConnection)
-	fc.Result = res
-	return ec.marshalNProductConnection2ᚖagricoladbᚋentᚐProductConnection(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_products(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_ProductConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_ProductConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_ProductConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ProductConnection", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_products_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_revisions(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_revisions(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Revisions(rctx, fc.Args["after"].(*ent.Cursor), fc.Args["first"].(ent.Noder), fc.Args["before"].(*ent.Cursor), fc.Args["last"].(ent.Noder), fc.Args["where"].(*ent.RevisionWhereInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*ent.RevisionConnection)
-	fc.Result = res
-	return ec.marshalNRevisionConnection2ᚖagricoladbᚋentᚐRevisionConnection(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_revisions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_RevisionConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_RevisionConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_RevisionConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type RevisionConnection", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_revisions_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -8462,252 +6403,6 @@ func (ec *executionContext) fieldContext_Revision_decks(ctx context.Context, fie
 				return ec.fieldContext_Deck_revision(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Deck", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _RevisionConnection_edges(ctx context.Context, field graphql.CollectedField, obj *ent.RevisionConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_RevisionConnection_edges(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Edges, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*ent.RevisionEdge)
-	fc.Result = res
-	return ec.marshalORevisionEdge2ᚕᚖagricoladbᚋentᚐRevisionEdge(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_RevisionConnection_edges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "RevisionConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "node":
-				return ec.fieldContext_RevisionEdge_node(ctx, field)
-			case "cursor":
-				return ec.fieldContext_RevisionEdge_cursor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type RevisionEdge", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _RevisionConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *ent.RevisionConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_RevisionConnection_pageInfo(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.PageInfo, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(ent.PageInfo)
-	fc.Result = res
-	return ec.marshalNPageInfo2agricoladbᚋentᚐPageInfo(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_RevisionConnection_pageInfo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "RevisionConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "hasNextPage":
-				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
-			case "hasPreviousPage":
-				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
-			case "startCursor":
-				return ec.fieldContext_PageInfo_startCursor(ctx, field)
-			case "endCursor":
-				return ec.fieldContext_PageInfo_endCursor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _RevisionConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *ent.RevisionConnection) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_RevisionConnection_totalCount(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.RevisionConnection().TotalCount(rctx, obj)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(ent.Noder)
-	fc.Result = res
-	return ec.marshalNInt2agricoladbᚋentᚐNoder(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_RevisionConnection_totalCount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "RevisionConnection",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _RevisionEdge_node(ctx context.Context, field graphql.CollectedField, obj *ent.RevisionEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_RevisionEdge_node(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Node, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*ent.Revision)
-	fc.Result = res
-	return ec.marshalORevision2ᚖagricoladbᚋentᚐRevision(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_RevisionEdge_node(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "RevisionEdge",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Revision_id(ctx, field)
-			case "key":
-				return ec.fieldContext_Revision_key(ctx, field)
-			case "nameJa":
-				return ec.fieldContext_Revision_nameJa(ctx, field)
-			case "nameEn":
-				return ec.fieldContext_Revision_nameEn(ctx, field)
-			case "cards":
-				return ec.fieldContext_Revision_cards(ctx, field)
-			case "products":
-				return ec.fieldContext_Revision_products(ctx, field)
-			case "decks":
-				return ec.fieldContext_Revision_decks(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Revision", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _RevisionEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *ent.RevisionEdge) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_RevisionEdge_cursor(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Cursor, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(ent.Cursor)
-	fc.Result = res
-	return ec.marshalNCursor2agricoladbᚋentᚐCursor(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_RevisionEdge_cursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "RevisionEdge",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Cursor does not have child fields")
 		},
 	}
 	return fc, nil
@@ -12272,88 +9967,64 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumber"))
-			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			it.MinPlayersNumber, err = ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
-				return it, err
-			}
-			if err = ec.resolvers.CardWhereInput().MinPlayersNumber(ctx, &it, data); err != nil {
 				return it, err
 			}
 		case "minPlayersNumberNEQ":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberNEQ"))
-			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			it.MinPlayersNumberNEQ, err = ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
-				return it, err
-			}
-			if err = ec.resolvers.CardWhereInput().MinPlayersNumberNeq(ctx, &it, data); err != nil {
 				return it, err
 			}
 		case "minPlayersNumberIn":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberIn"))
-			data, err := ec.unmarshalOInt2ᚕagricoladbᚋentᚐNoderᚄ(ctx, v)
+			it.MinPlayersNumberIn, err = ec.unmarshalOInt2ᚕintᚄ(ctx, v)
 			if err != nil {
-				return it, err
-			}
-			if err = ec.resolvers.CardWhereInput().MinPlayersNumberIn(ctx, &it, data); err != nil {
 				return it, err
 			}
 		case "minPlayersNumberNotIn":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberNotIn"))
-			data, err := ec.unmarshalOInt2ᚕagricoladbᚋentᚐNoderᚄ(ctx, v)
+			it.MinPlayersNumberNotIn, err = ec.unmarshalOInt2ᚕintᚄ(ctx, v)
 			if err != nil {
-				return it, err
-			}
-			if err = ec.resolvers.CardWhereInput().MinPlayersNumberNotIn(ctx, &it, data); err != nil {
 				return it, err
 			}
 		case "minPlayersNumberGT":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberGT"))
-			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			it.MinPlayersNumberGT, err = ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
-				return it, err
-			}
-			if err = ec.resolvers.CardWhereInput().MinPlayersNumberGt(ctx, &it, data); err != nil {
 				return it, err
 			}
 		case "minPlayersNumberGTE":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberGTE"))
-			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			it.MinPlayersNumberGTE, err = ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
-				return it, err
-			}
-			if err = ec.resolvers.CardWhereInput().MinPlayersNumberGte(ctx, &it, data); err != nil {
 				return it, err
 			}
 		case "minPlayersNumberLT":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberLT"))
-			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			it.MinPlayersNumberLT, err = ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
-				return it, err
-			}
-			if err = ec.resolvers.CardWhereInput().MinPlayersNumberLt(ctx, &it, data); err != nil {
 				return it, err
 			}
 		case "minPlayersNumberLTE":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberLTE"))
-			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			it.MinPlayersNumberLTE, err = ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
-				return it, err
-			}
-			if err = ec.resolvers.CardWhereInput().MinPlayersNumberLte(ctx, &it, data); err != nil {
 				return it, err
 			}
 		case "minPlayersNumberIsNil":
@@ -12752,88 +10423,64 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPoint"))
-			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			it.VictoryPoint, err = ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
-				return it, err
-			}
-			if err = ec.resolvers.CardWhereInput().VictoryPoint(ctx, &it, data); err != nil {
 				return it, err
 			}
 		case "victoryPointNEQ":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointNEQ"))
-			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			it.VictoryPointNEQ, err = ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
-				return it, err
-			}
-			if err = ec.resolvers.CardWhereInput().VictoryPointNeq(ctx, &it, data); err != nil {
 				return it, err
 			}
 		case "victoryPointIn":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointIn"))
-			data, err := ec.unmarshalOInt2ᚕagricoladbᚋentᚐNoderᚄ(ctx, v)
+			it.VictoryPointIn, err = ec.unmarshalOInt2ᚕintᚄ(ctx, v)
 			if err != nil {
-				return it, err
-			}
-			if err = ec.resolvers.CardWhereInput().VictoryPointIn(ctx, &it, data); err != nil {
 				return it, err
 			}
 		case "victoryPointNotIn":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointNotIn"))
-			data, err := ec.unmarshalOInt2ᚕagricoladbᚋentᚐNoderᚄ(ctx, v)
+			it.VictoryPointNotIn, err = ec.unmarshalOInt2ᚕintᚄ(ctx, v)
 			if err != nil {
-				return it, err
-			}
-			if err = ec.resolvers.CardWhereInput().VictoryPointNotIn(ctx, &it, data); err != nil {
 				return it, err
 			}
 		case "victoryPointGT":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointGT"))
-			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			it.VictoryPointGT, err = ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
-				return it, err
-			}
-			if err = ec.resolvers.CardWhereInput().VictoryPointGt(ctx, &it, data); err != nil {
 				return it, err
 			}
 		case "victoryPointGTE":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointGTE"))
-			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			it.VictoryPointGTE, err = ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
-				return it, err
-			}
-			if err = ec.resolvers.CardWhereInput().VictoryPointGte(ctx, &it, data); err != nil {
 				return it, err
 			}
 		case "victoryPointLT":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointLT"))
-			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			it.VictoryPointLT, err = ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
-				return it, err
-			}
-			if err = ec.resolvers.CardWhereInput().VictoryPointLt(ctx, &it, data); err != nil {
 				return it, err
 			}
 		case "victoryPointLTE":
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointLTE"))
-			data, err := ec.unmarshalOInt2agricoladbᚋentᚐNoder(ctx, v)
+			it.VictoryPointLTE, err = ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
-				return it, err
-			}
-			if err = ec.resolvers.CardWhereInput().VictoryPointLte(ctx, &it, data); err != nil {
 				return it, err
 			}
 		case "victoryPointIsNil":
@@ -14916,22 +12563,9 @@ func (ec *executionContext) _Card(ctx context.Context, sel ast.SelectionSet, obj
 			out.Values[i] = ec._Card_nameEn(ctx, field, obj)
 
 		case "minPlayersNumber":
-			field := field
 
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Card_minPlayersNumber(ctx, field, obj)
-				return res
-			}
+			out.Values[i] = ec._Card_minPlayersNumber(ctx, field, obj)
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
 		case "prerequisite":
 
 			out.Values[i] = ec._Card_prerequisite(ctx, field, obj)
@@ -14952,22 +12586,9 @@ func (ec *executionContext) _Card(ctx context.Context, sel ast.SelectionSet, obj
 				atomic.AddUint32(&invalids, 1)
 			}
 		case "victoryPoint":
-			field := field
 
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Card_victoryPoint(ctx, field, obj)
-				return res
-			}
+			out.Values[i] = ec._Card_victoryPoint(ctx, field, obj)
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
 		case "isVariableVictoryPoint":
 
 			out.Values[i] = ec._Card_isVariableVictoryPoint(ctx, field, obj)
@@ -15249,28 +12870,15 @@ func (ec *executionContext) _CardConnection(ctx context.Context, sel ast.Selecti
 			out.Values[i] = ec._CardConnection_pageInfo(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
+				invalids++
 			}
 		case "totalCount":
-			field := field
 
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._CardConnection_totalCount(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
+			out.Values[i] = ec._CardConnection_totalCount(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
 			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -15374,90 +12982,6 @@ func (ec *executionContext) _CardSpecialColor(ctx context.Context, sel ast.Selec
 	return out
 }
 
-var cardSpecialColorConnectionImplementors = []string{"CardSpecialColorConnection"}
-
-func (ec *executionContext) _CardSpecialColorConnection(ctx context.Context, sel ast.SelectionSet, obj *ent.CardSpecialColorConnection) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, cardSpecialColorConnectionImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("CardSpecialColorConnection")
-		case "edges":
-
-			out.Values[i] = ec._CardSpecialColorConnection_edges(ctx, field, obj)
-
-		case "pageInfo":
-
-			out.Values[i] = ec._CardSpecialColorConnection_pageInfo(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
-			}
-		case "totalCount":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._CardSpecialColorConnection_totalCount(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var cardSpecialColorEdgeImplementors = []string{"CardSpecialColorEdge"}
-
-func (ec *executionContext) _CardSpecialColorEdge(ctx context.Context, sel ast.SelectionSet, obj *ent.CardSpecialColorEdge) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, cardSpecialColorEdgeImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("CardSpecialColorEdge")
-		case "node":
-
-			out.Values[i] = ec._CardSpecialColorEdge_node(ctx, field, obj)
-
-		case "cursor":
-
-			out.Values[i] = ec._CardSpecialColorEdge_cursor(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var cardTypeImplementors = []string{"CardType", "Node"}
 
 func (ec *executionContext) _CardType(ctx context.Context, sel ast.SelectionSet, obj *ent.CardType) graphql.Marshaler {
@@ -15507,90 +13031,6 @@ func (ec *executionContext) _CardType(ctx context.Context, sel ast.SelectionSet,
 				return innerFunc(ctx)
 
 			})
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var cardTypeConnectionImplementors = []string{"CardTypeConnection"}
-
-func (ec *executionContext) _CardTypeConnection(ctx context.Context, sel ast.SelectionSet, obj *ent.CardTypeConnection) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, cardTypeConnectionImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("CardTypeConnection")
-		case "edges":
-
-			out.Values[i] = ec._CardTypeConnection_edges(ctx, field, obj)
-
-		case "pageInfo":
-
-			out.Values[i] = ec._CardTypeConnection_pageInfo(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
-			}
-		case "totalCount":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._CardTypeConnection_totalCount(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var cardTypeEdgeImplementors = []string{"CardTypeEdge"}
-
-func (ec *executionContext) _CardTypeEdge(ctx context.Context, sel ast.SelectionSet, obj *ent.CardTypeEdge) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, cardTypeEdgeImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("CardTypeEdge")
-		case "node":
-
-			out.Values[i] = ec._CardTypeEdge_node(ctx, field, obj)
-
-		case "cursor":
-
-			out.Values[i] = ec._CardTypeEdge_cursor(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -15678,90 +13118,6 @@ func (ec *executionContext) _Deck(ctx context.Context, sel ast.SelectionSet, obj
 				return innerFunc(ctx)
 
 			})
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var deckConnectionImplementors = []string{"DeckConnection"}
-
-func (ec *executionContext) _DeckConnection(ctx context.Context, sel ast.SelectionSet, obj *ent.DeckConnection) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, deckConnectionImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("DeckConnection")
-		case "edges":
-
-			out.Values[i] = ec._DeckConnection_edges(ctx, field, obj)
-
-		case "pageInfo":
-
-			out.Values[i] = ec._DeckConnection_pageInfo(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
-			}
-		case "totalCount":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._DeckConnection_totalCount(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var deckEdgeImplementors = []string{"DeckEdge"}
-
-func (ec *executionContext) _DeckEdge(ctx context.Context, sel ast.SelectionSet, obj *ent.DeckEdge) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, deckEdgeImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("DeckEdge")
-		case "node":
-
-			out.Values[i] = ec._DeckEdge_node(ctx, field, obj)
-
-		case "cursor":
-
-			out.Values[i] = ec._DeckEdge_cursor(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -15910,90 +13266,6 @@ func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, 
 	return out
 }
 
-var productConnectionImplementors = []string{"ProductConnection"}
-
-func (ec *executionContext) _ProductConnection(ctx context.Context, sel ast.SelectionSet, obj *ent.ProductConnection) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, productConnectionImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("ProductConnection")
-		case "edges":
-
-			out.Values[i] = ec._ProductConnection_edges(ctx, field, obj)
-
-		case "pageInfo":
-
-			out.Values[i] = ec._ProductConnection_pageInfo(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
-			}
-		case "totalCount":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._ProductConnection_totalCount(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var productEdgeImplementors = []string{"ProductEdge"}
-
-func (ec *executionContext) _ProductEdge(ctx context.Context, sel ast.SelectionSet, obj *ent.ProductEdge) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, productEdgeImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("ProductEdge")
-		case "node":
-
-			out.Values[i] = ec._ProductEdge_node(ctx, field, obj)
-
-		case "cursor":
-
-			out.Values[i] = ec._ProductEdge_cursor(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var queryImplementors = []string{"Query"}
 
 func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
@@ -16066,121 +13338,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_cards(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
-		case "cardSpecialColors":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_cardSpecialColors(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
-		case "cardTypes":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_cardTypes(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
-		case "decks":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_decks(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
-		case "products":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_products(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
-		case "revisions":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_revisions(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
@@ -16300,90 +13457,6 @@ func (ec *executionContext) _Revision(ctx context.Context, sel ast.SelectionSet,
 				return innerFunc(ctx)
 
 			})
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var revisionConnectionImplementors = []string{"RevisionConnection"}
-
-func (ec *executionContext) _RevisionConnection(ctx context.Context, sel ast.SelectionSet, obj *ent.RevisionConnection) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, revisionConnectionImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("RevisionConnection")
-		case "edges":
-
-			out.Values[i] = ec._RevisionConnection_edges(ctx, field, obj)
-
-		case "pageInfo":
-
-			out.Values[i] = ec._RevisionConnection_pageInfo(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
-			}
-		case "totalCount":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._RevisionConnection_totalCount(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var revisionEdgeImplementors = []string{"RevisionEdge"}
-
-func (ec *executionContext) _RevisionEdge(ctx context.Context, sel ast.SelectionSet, obj *ent.RevisionEdge) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, revisionEdgeImplementors)
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("RevisionEdge")
-		case "node":
-
-			out.Values[i] = ec._RevisionEdge_node(ctx, field, obj)
-
-		case "cursor":
-
-			out.Values[i] = ec._RevisionEdge_cursor(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -16752,20 +13825,6 @@ func (ec *executionContext) marshalNCardConnection2ᚖagricoladbᚋentᚐCardCon
 	return ec._CardConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCardSpecialColorConnection2agricoladbᚋentᚐCardSpecialColorConnection(ctx context.Context, sel ast.SelectionSet, v ent.CardSpecialColorConnection) graphql.Marshaler {
-	return ec._CardSpecialColorConnection(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNCardSpecialColorConnection2ᚖagricoladbᚋentᚐCardSpecialColorConnection(ctx context.Context, sel ast.SelectionSet, v *ent.CardSpecialColorConnection) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._CardSpecialColorConnection(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalNCardSpecialColorWhereInput2ᚖagricoladbᚋentᚐCardSpecialColorWhereInput(ctx context.Context, v interface{}) (*ent.CardSpecialColorWhereInput, error) {
 	res, err := ec.unmarshalInputCardSpecialColorWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
@@ -16779,20 +13838,6 @@ func (ec *executionContext) marshalNCardType2ᚖagricoladbᚋentᚐCardType(ctx 
 		return graphql.Null
 	}
 	return ec._CardType(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNCardTypeConnection2agricoladbᚋentᚐCardTypeConnection(ctx context.Context, sel ast.SelectionSet, v ent.CardTypeConnection) graphql.Marshaler {
-	return ec._CardTypeConnection(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNCardTypeConnection2ᚖagricoladbᚋentᚐCardTypeConnection(ctx context.Context, sel ast.SelectionSet, v *ent.CardTypeConnection) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._CardTypeConnection(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNCardTypeWhereInput2ᚖagricoladbᚋentᚐCardTypeWhereInput(ctx context.Context, v interface{}) (*ent.CardTypeWhereInput, error) {
@@ -16823,20 +13868,6 @@ func (ec *executionContext) marshalNDeck2ᚖagricoladbᚋentᚐDeck(ctx context.
 		return graphql.Null
 	}
 	return ec._Deck(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDeckConnection2agricoladbᚋentᚐDeckConnection(ctx context.Context, sel ast.SelectionSet, v ent.DeckConnection) graphql.Marshaler {
-	return ec._DeckConnection(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNDeckConnection2ᚖagricoladbᚋentᚐDeckConnection(ctx context.Context, sel ast.SelectionSet, v *ent.DeckConnection) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._DeckConnection(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNDeckWhereInput2ᚖagricoladbᚋentᚐDeckWhereInput(ctx context.Context, v interface{}) (*ent.DeckWhereInput, error) {
@@ -16891,19 +13922,19 @@ func (ec *executionContext) marshalNID2ᚕintᚄ(ctx context.Context, sel ast.Se
 	return ret
 }
 
-func (ec *executionContext) unmarshalNInt2agricoladbᚋentᚐNoder(ctx context.Context, v interface{}) (ent.Noder, error) {
-	res, err := ec.unmarshalInputInt(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
+func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {
+	res, err := graphql.UnmarshalInt(v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNInt2agricoladbᚋentᚐNoder(ctx context.Context, sel ast.SelectionSet, v ent.Noder) graphql.Marshaler {
-	if v == nil {
+func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	res := graphql.MarshalInt(v)
+	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
 		}
-		return graphql.Null
 	}
-	return ec._Int(ctx, sel, v)
+	return res
 }
 
 func (ec *executionContext) marshalNNode2ᚕagricoladbᚋentᚐNoder(ctx context.Context, sel ast.SelectionSet, v []ent.Noder) graphql.Marshaler {
@@ -16958,20 +13989,6 @@ func (ec *executionContext) marshalNProduct2ᚖagricoladbᚋentᚐProduct(ctx co
 	return ec._Product(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProductConnection2agricoladbᚋentᚐProductConnection(ctx context.Context, sel ast.SelectionSet, v ent.ProductConnection) graphql.Marshaler {
-	return ec._ProductConnection(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNProductConnection2ᚖagricoladbᚋentᚐProductConnection(ctx context.Context, sel ast.SelectionSet, v *ent.ProductConnection) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._ProductConnection(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalNProductWhereInput2ᚖagricoladbᚋentᚐProductWhereInput(ctx context.Context, v interface{}) (*ent.ProductWhereInput, error) {
 	res, err := ec.unmarshalInputProductWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
@@ -16985,20 +14002,6 @@ func (ec *executionContext) marshalNRevision2ᚖagricoladbᚋentᚐRevision(ctx 
 		return graphql.Null
 	}
 	return ec._Revision(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNRevisionConnection2agricoladbᚋentᚐRevisionConnection(ctx context.Context, sel ast.SelectionSet, v ent.RevisionConnection) graphql.Marshaler {
-	return ec._RevisionConnection(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNRevisionConnection2ᚖagricoladbᚋentᚐRevisionConnection(ctx context.Context, sel ast.SelectionSet, v *ent.RevisionConnection) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._RevisionConnection(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNRevisionWhereInput2ᚖagricoladbᚋentᚐRevisionWhereInput(ctx context.Context, v interface{}) (*ent.RevisionWhereInput, error) {
@@ -17409,54 +14412,6 @@ func (ec *executionContext) marshalOCardSpecialColor2ᚖagricoladbᚋentᚐCardS
 	return ec._CardSpecialColor(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOCardSpecialColorEdge2ᚕᚖagricoladbᚋentᚐCardSpecialColorEdge(ctx context.Context, sel ast.SelectionSet, v []*ent.CardSpecialColorEdge) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOCardSpecialColorEdge2ᚖagricoladbᚋentᚐCardSpecialColorEdge(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalOCardSpecialColorEdge2ᚖagricoladbᚋentᚐCardSpecialColorEdge(ctx context.Context, sel ast.SelectionSet, v *ent.CardSpecialColorEdge) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._CardSpecialColorEdge(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalOCardSpecialColorWhereInput2ᚕᚖagricoladbᚋentᚐCardSpecialColorWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.CardSpecialColorWhereInput, error) {
 	if v == nil {
 		return nil, nil
@@ -17483,61 +14438,6 @@ func (ec *executionContext) unmarshalOCardSpecialColorWhereInput2ᚖagricoladb�
 	}
 	res, err := ec.unmarshalInputCardSpecialColorWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOCardType2ᚖagricoladbᚋentᚐCardType(ctx context.Context, sel ast.SelectionSet, v *ent.CardType) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._CardType(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOCardTypeEdge2ᚕᚖagricoladbᚋentᚐCardTypeEdge(ctx context.Context, sel ast.SelectionSet, v []*ent.CardTypeEdge) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOCardTypeEdge2ᚖagricoladbᚋentᚐCardTypeEdge(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalOCardTypeEdge2ᚖagricoladbᚋentᚐCardTypeEdge(ctx context.Context, sel ast.SelectionSet, v *ent.CardTypeEdge) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._CardTypeEdge(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOCardTypeWhereInput2ᚕᚖagricoladbᚋentᚐCardTypeWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.CardTypeWhereInput, error) {
@@ -17666,54 +14566,6 @@ func (ec *executionContext) marshalODeck2ᚖagricoladbᚋentᚐDeck(ctx context.
 	return ec._Deck(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalODeckEdge2ᚕᚖagricoladbᚋentᚐDeckEdge(ctx context.Context, sel ast.SelectionSet, v []*ent.DeckEdge) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalODeckEdge2ᚖagricoladbᚋentᚐDeckEdge(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalODeckEdge2ᚖagricoladbᚋentᚐDeckEdge(ctx context.Context, sel ast.SelectionSet, v *ent.DeckEdge) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._DeckEdge(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalODeckWhereInput2ᚕᚖagricoladbᚋentᚐDeckWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.DeckWhereInput, error) {
 	if v == nil {
 		return nil, nil
@@ -17806,22 +14658,17 @@ func (ec *executionContext) marshalOID2ᚖint(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) unmarshalOInt2agricoladbᚋentᚐNoder(ctx context.Context, v interface{}) (ent.Noder, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalInputInt(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
+func (ec *executionContext) unmarshalOInt2int(ctx context.Context, v interface{}) (int, error) {
+	res, err := graphql.UnmarshalInt(v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOInt2agricoladbᚋentᚐNoder(ctx context.Context, sel ast.SelectionSet, v ent.Noder) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Int(ctx, sel, v)
+func (ec *executionContext) marshalOInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	res := graphql.MarshalInt(v)
+	return res
 }
 
-func (ec *executionContext) unmarshalOInt2ᚕagricoladbᚋentᚐNoderᚄ(ctx context.Context, v interface{}) ([]ent.Noder, error) {
+func (ec *executionContext) unmarshalOInt2ᚕintᚄ(ctx context.Context, v interface{}) ([]int, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -17830,10 +14677,10 @@ func (ec *executionContext) unmarshalOInt2ᚕagricoladbᚋentᚐNoderᚄ(ctx con
 		vSlice = graphql.CoerceList(v)
 	}
 	var err error
-	res := make([]ent.Noder, len(vSlice))
+	res := make([]int, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNInt2agricoladbᚋentᚐNoder(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNInt2int(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -17841,13 +14688,13 @@ func (ec *executionContext) unmarshalOInt2ᚕagricoladbᚋentᚐNoderᚄ(ctx con
 	return res, nil
 }
 
-func (ec *executionContext) marshalOInt2ᚕagricoladbᚋentᚐNoderᚄ(ctx context.Context, sel ast.SelectionSet, v []ent.Noder) graphql.Marshaler {
+func (ec *executionContext) marshalOInt2ᚕintᚄ(ctx context.Context, sel ast.SelectionSet, v []int) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := make(graphql.Array, len(v))
 	for i := range v {
-		ret[i] = ec.marshalNInt2agricoladbᚋentᚐNoder(ctx, sel, v[i])
+		ret[i] = ec.marshalNInt2int(ctx, sel, v[i])
 	}
 
 	for _, e := range ret {
@@ -17857,6 +14704,22 @@ func (ec *executionContext) marshalOInt2ᚕagricoladbᚋentᚐNoderᚄ(ctx conte
 	}
 
 	return ret
+}
+
+func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalInt(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalInt(*v)
+	return res
 }
 
 func (ec *executionContext) marshalONode2agricoladbᚋentᚐNoder(ctx context.Context, sel ast.SelectionSet, v ent.Noder) graphql.Marshaler {
@@ -17913,61 +14776,6 @@ func (ec *executionContext) marshalOProduct2ᚕᚖagricoladbᚋentᚐProductᚄ(
 	return ret
 }
 
-func (ec *executionContext) marshalOProduct2ᚖagricoladbᚋentᚐProduct(ctx context.Context, sel ast.SelectionSet, v *ent.Product) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Product(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOProductEdge2ᚕᚖagricoladbᚋentᚐProductEdge(ctx context.Context, sel ast.SelectionSet, v []*ent.ProductEdge) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOProductEdge2ᚖagricoladbᚋentᚐProductEdge(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalOProductEdge2ᚖagricoladbᚋentᚐProductEdge(ctx context.Context, sel ast.SelectionSet, v *ent.ProductEdge) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._ProductEdge(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalOProductWhereInput2ᚕᚖagricoladbᚋentᚐProductWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.ProductWhereInput, error) {
 	if v == nil {
 		return nil, nil
@@ -17994,61 +14802,6 @@ func (ec *executionContext) unmarshalOProductWhereInput2ᚖagricoladbᚋentᚐPr
 	}
 	res, err := ec.unmarshalInputProductWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalORevision2ᚖagricoladbᚋentᚐRevision(ctx context.Context, sel ast.SelectionSet, v *ent.Revision) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Revision(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalORevisionEdge2ᚕᚖagricoladbᚋentᚐRevisionEdge(ctx context.Context, sel ast.SelectionSet, v []*ent.RevisionEdge) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalORevisionEdge2ᚖagricoladbᚋentᚐRevisionEdge(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
-}
-
-func (ec *executionContext) marshalORevisionEdge2ᚖagricoladbᚋentᚐRevisionEdge(ctx context.Context, sel ast.SelectionSet, v *ent.RevisionEdge) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._RevisionEdge(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalORevisionWhereInput2ᚕᚖagricoladbᚋentᚐRevisionWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.RevisionWhereInput, error) {

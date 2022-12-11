@@ -53,6 +53,6 @@ models:
   ID:
     model:
       - github.com/99designs/gqlgen/graphql.IntID
-  Int:
+  Node:
     model:
       - agricoladb/ent.Noder
