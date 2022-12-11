@@ -18,7 +18,7 @@ services:
       context: .
       dockerfile: ./docker/db/Dockerfile
     environment:
-      MYSQL_DATABASE: agricola-db
+      MYSQL_DATABASE: agricoladb
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_HOST: localhost
