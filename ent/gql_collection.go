@@ -3,7 +3,15 @@
 package ent
 
 import (
+	"agricoladb/ent/card"
+	"agricoladb/ent/cardspecialcolor"
+	"agricoladb/ent/cardtype"
+	"agricoladb/ent/deck"
+	"agricoladb/ent/product"
+	"agricoladb/ent/revision"
 	"context"
+	"database/sql/driver"
+	"fmt"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
@@ -157,8 +165,79 @@ func (csc *CardSpecialColorQuery) collectField(ctx context.Context, op *graphql.
 				path  = append(path, alias)
 				query = &CardQuery{config: csc.config}
 			)
-			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
+			args := newCardPaginateArgs(fieldArgs(ctx, new(CardWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newCardPager(args.opts)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
 				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					csc.loadTotal = append(csc.loadTotal, func(ctx context.Context, nodes []*CardSpecialColor) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID int `sql:"card_special_color_id"`
+							Count  int `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(cardspecialcolor.CardsColumn, ids...))
+						})
+						if err := query.GroupBy(cardspecialcolor.CardsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[int]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[0] == nil {
+								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[0][alias] = n
+						}
+						return nil
+					})
+				} else {
+					csc.loadTotal = append(csc.loadTotal, func(_ context.Context, nodes []*CardSpecialColor) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Cards)
+							if nodes[i].Edges.totalCount[0] == nil {
+								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[0][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+
+			query = pager.applyCursors(query, args.after, args.before)
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				modify := limitRows(cardspecialcolor.CardsColumn, limit, pager.orderExpr(args.last != nil))
+				query.modifiers = append(query.modifiers, modify)
+			} else {
+				query = pager.applyOrder(query, args.last != nil)
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, op, *field, path, satisfies...); err != nil {
+					return err
+				}
 			}
 			csc.WithNamedCards(alias, func(wq *CardQuery) {
 				*wq = *query
@@ -219,8 +298,79 @@ func (ct *CardTypeQuery) collectField(ctx context.Context, op *graphql.Operation
 				path  = append(path, alias)
 				query = &CardQuery{config: ct.config}
 			)
-			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
+			args := newCardPaginateArgs(fieldArgs(ctx, new(CardWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newCardPager(args.opts)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
 				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					ct.loadTotal = append(ct.loadTotal, func(ctx context.Context, nodes []*CardType) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID int `sql:"card_type_id"`
+							Count  int `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(cardtype.CardsColumn, ids...))
+						})
+						if err := query.GroupBy(cardtype.CardsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[int]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[0] == nil {
+								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[0][alias] = n
+						}
+						return nil
+					})
+				} else {
+					ct.loadTotal = append(ct.loadTotal, func(_ context.Context, nodes []*CardType) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Cards)
+							if nodes[i].Edges.totalCount[0] == nil {
+								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[0][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+
+			query = pager.applyCursors(query, args.after, args.before)
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				modify := limitRows(cardtype.CardsColumn, limit, pager.orderExpr(args.last != nil))
+				query.modifiers = append(query.modifiers, modify)
+			} else {
+				query = pager.applyOrder(query, args.last != nil)
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, op, *field, path, satisfies...); err != nil {
+					return err
+				}
 			}
 			ct.WithNamedCards(alias, func(wq *CardQuery) {
 				*wq = *query
@@ -281,8 +431,79 @@ func (d *DeckQuery) collectField(ctx context.Context, op *graphql.OperationConte
 				path  = append(path, alias)
 				query = &CardQuery{config: d.config}
 			)
-			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
+			args := newCardPaginateArgs(fieldArgs(ctx, new(CardWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newCardPager(args.opts)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
 				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					d.loadTotal = append(d.loadTotal, func(ctx context.Context, nodes []*Deck) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID int `sql:"deck_id"`
+							Count  int `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(deck.CardsColumn, ids...))
+						})
+						if err := query.GroupBy(deck.CardsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[int]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[0] == nil {
+								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[0][alias] = n
+						}
+						return nil
+					})
+				} else {
+					d.loadTotal = append(d.loadTotal, func(_ context.Context, nodes []*Deck) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Cards)
+							if nodes[i].Edges.totalCount[0] == nil {
+								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[0][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+
+			query = pager.applyCursors(query, args.after, args.before)
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				modify := limitRows(deck.CardsColumn, limit, pager.orderExpr(args.last != nil))
+				query.modifiers = append(query.modifiers, modify)
+			} else {
+				query = pager.applyOrder(query, args.last != nil)
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, op, *field, path, satisfies...); err != nil {
+					return err
+				}
 			}
 			d.WithNamedCards(alias, func(wq *CardQuery) {
 				*wq = *query
@@ -353,8 +574,83 @@ func (pr *ProductQuery) collectField(ctx context.Context, op *graphql.OperationC
 				path  = append(path, alias)
 				query = &CardQuery{config: pr.config}
 			)
-			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
+			args := newCardPaginateArgs(fieldArgs(ctx, new(CardWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newCardPager(args.opts)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
 				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					pr.loadTotal = append(pr.loadTotal, func(ctx context.Context, nodes []*Product) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID int `sql:"product_id"`
+							Count  int `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							joinT := sql.Table(product.CardsTable)
+							s.Join(joinT).On(s.C(card.FieldID), joinT.C(product.CardsPrimaryKey[1]))
+							s.Where(sql.InValues(joinT.C(product.CardsPrimaryKey[0]), ids...))
+							s.Select(joinT.C(product.CardsPrimaryKey[0]), sql.Count("*"))
+							s.GroupBy(joinT.C(product.CardsPrimaryKey[0]))
+						})
+						if err := query.Select().Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[int]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[0] == nil {
+								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[0][alias] = n
+						}
+						return nil
+					})
+				} else {
+					pr.loadTotal = append(pr.loadTotal, func(_ context.Context, nodes []*Product) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Cards)
+							if nodes[i].Edges.totalCount[0] == nil {
+								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[0][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+
+			query = pager.applyCursors(query, args.after, args.before)
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				modify := limitRows(product.CardsPrimaryKey[0], limit, pager.orderExpr(args.last != nil))
+				query.modifiers = append(query.modifiers, modify)
+			} else {
+				query = pager.applyOrder(query, args.last != nil)
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, op, *field, path, satisfies...); err != nil {
+					return err
+				}
 			}
 			pr.WithNamedCards(alias, func(wq *CardQuery) {
 				*wq = *query
@@ -425,8 +721,79 @@ func (r *RevisionQuery) collectField(ctx context.Context, op *graphql.OperationC
 				path  = append(path, alias)
 				query = &CardQuery{config: r.config}
 			)
-			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
+			args := newCardPaginateArgs(fieldArgs(ctx, new(CardWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newCardPager(args.opts)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
 				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					r.loadTotal = append(r.loadTotal, func(ctx context.Context, nodes []*Revision) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID int `sql:"revision_id"`
+							Count  int `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(revision.CardsColumn, ids...))
+						})
+						if err := query.GroupBy(revision.CardsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[int]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[0] == nil {
+								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[0][alias] = n
+						}
+						return nil
+					})
+				} else {
+					r.loadTotal = append(r.loadTotal, func(_ context.Context, nodes []*Revision) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Cards)
+							if nodes[i].Edges.totalCount[0] == nil {
+								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[0][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+
+			query = pager.applyCursors(query, args.after, args.before)
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				modify := limitRows(revision.CardsColumn, limit, pager.orderExpr(args.last != nil))
+				query.modifiers = append(query.modifiers, modify)
+			} else {
+				query = pager.applyOrder(query, args.last != nil)
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, op, *field, path, satisfies...); err != nil {
+					return err
+				}
 			}
 			r.WithNamedCards(alias, func(wq *CardQuery) {
 				*wq = *query

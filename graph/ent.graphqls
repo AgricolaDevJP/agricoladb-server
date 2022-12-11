@@ -64,7 +64,22 @@ type CardSpecialColor implements Node {
   key: String!
   nameJa: String
   nameEn: String
-  cards: [Card!]
+  cards(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Filtering options for Cards returned from the connection."""
+    where: CardWhereInput
+  ): CardConnection!
 }
 """
 CardSpecialColorWhereInput is used for filtering CardSpecialColor objects.
@@ -138,7 +153,22 @@ type CardType implements Node {
   key: String!
   nameJa: String
   nameEn: String
-  cards: [Card!]
+  cards(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Filtering options for Cards returned from the connection."""
+    where: CardWhereInput
+  ): CardConnection!
 }
 """
 CardTypeWhereInput is used for filtering CardType objects.
@@ -486,7 +516,22 @@ type Deck implements Node {
   revisionID: ID!
   nameJa: String
   nameEn: String
-  cards: [Card!]
+  cards(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Filtering options for Cards returned from the connection."""
+    where: CardWhereInput
+  ): CardConnection!
   revision: Revision!
 }
 """
@@ -600,7 +645,22 @@ type Product implements Node {
   isOfficialJa: Boolean!
   nameJa: String
   nameEn: String
-  cards: [Card!]
+  cards(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Filtering options for Cards returned from the connection."""
+    where: CardWhereInput
+  ): CardConnection!
   revision: Revision!
 }
 """
@@ -708,13 +768,33 @@ type Query {
     """Filtering options for Cards returned from the connection."""
     where: CardWhereInput
   ): CardConnection!
+  cardSpecialColors: [CardSpecialColor!]!
+  cardTypes: [CardType!]!
+  decks: [Deck!]!
+  products: [Product!]!
+  revisions: [Revision!]!
 }
 type Revision implements Node {
   id: ID!
   key: String!
   nameJa: String
   nameEn: String
-  cards: [Card!]
+  cards(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Filtering options for Cards returned from the connection."""
+    where: CardWhereInput
+  ): CardConnection!
   products: [Product!]
   decks: [Deck!]
 }

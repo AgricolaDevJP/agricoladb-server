@@ -76,40 +76,64 @@ func (c *Card) Ancestors(ctx context.Context) (result []*Card, err error) {
 	return result, err
 }
 
-func (csc *CardSpecialColor) Cards(ctx context.Context) (result []*Card, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = csc.NamedCards(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = csc.Edges.CardsOrErr()
+func (csc *CardSpecialColor) Cards(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, where *CardWhereInput,
+) (*CardConnection, error) {
+	opts := []CardPaginateOption{
+		WithCardFilter(where.Filter),
 	}
-	if IsNotLoaded(err) {
-		result, err = csc.QueryCards().All(ctx)
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := csc.Edges.totalCount[0][alias]
+	if nodes, err := csc.NamedCards(alias); err == nil || hasTotalCount {
+		pager, err := newCardPager(opts)
+		if err != nil {
+			return nil, err
+		}
+		conn := &CardConnection{Edges: []*CardEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
 	}
-	return result, err
+	return csc.QueryCards().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (ct *CardType) Cards(ctx context.Context) (result []*Card, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = ct.NamedCards(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = ct.Edges.CardsOrErr()
+func (ct *CardType) Cards(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, where *CardWhereInput,
+) (*CardConnection, error) {
+	opts := []CardPaginateOption{
+		WithCardFilter(where.Filter),
 	}
-	if IsNotLoaded(err) {
-		result, err = ct.QueryCards().All(ctx)
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := ct.Edges.totalCount[0][alias]
+	if nodes, err := ct.NamedCards(alias); err == nil || hasTotalCount {
+		pager, err := newCardPager(opts)
+		if err != nil {
+			return nil, err
+		}
+		conn := &CardConnection{Edges: []*CardEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
 	}
-	return result, err
+	return ct.QueryCards().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (d *Deck) Cards(ctx context.Context) (result []*Card, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = d.NamedCards(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = d.Edges.CardsOrErr()
+func (d *Deck) Cards(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, where *CardWhereInput,
+) (*CardConnection, error) {
+	opts := []CardPaginateOption{
+		WithCardFilter(where.Filter),
 	}
-	if IsNotLoaded(err) {
-		result, err = d.QueryCards().All(ctx)
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := d.Edges.totalCount[0][alias]
+	if nodes, err := d.NamedCards(alias); err == nil || hasTotalCount {
+		pager, err := newCardPager(opts)
+		if err != nil {
+			return nil, err
+		}
+		conn := &CardConnection{Edges: []*CardEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
 	}
-	return result, err
+	return d.QueryCards().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (d *Deck) Revision(ctx context.Context) (*Revision, error) {
@@ -120,16 +144,24 @@ func (d *Deck) Revision(ctx context.Context) (*Revision, error) {
 	return result, err
 }
 
-func (pr *Product) Cards(ctx context.Context) (result []*Card, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = pr.NamedCards(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = pr.Edges.CardsOrErr()
+func (pr *Product) Cards(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, where *CardWhereInput,
+) (*CardConnection, error) {
+	opts := []CardPaginateOption{
+		WithCardFilter(where.Filter),
 	}
-	if IsNotLoaded(err) {
-		result, err = pr.QueryCards().All(ctx)
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := pr.Edges.totalCount[0][alias]
+	if nodes, err := pr.NamedCards(alias); err == nil || hasTotalCount {
+		pager, err := newCardPager(opts)
+		if err != nil {
+			return nil, err
+		}
+		conn := &CardConnection{Edges: []*CardEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
 	}
-	return result, err
+	return pr.QueryCards().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (pr *Product) Revision(ctx context.Context) (*Revision, error) {
@@ -140,16 +172,24 @@ func (pr *Product) Revision(ctx context.Context) (*Revision, error) {
 	return result, err
 }
 
-func (r *Revision) Cards(ctx context.Context) (result []*Card, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = r.NamedCards(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = r.Edges.CardsOrErr()
+func (r *Revision) Cards(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, where *CardWhereInput,
+) (*CardConnection, error) {
+	opts := []CardPaginateOption{
+		WithCardFilter(where.Filter),
 	}
-	if IsNotLoaded(err) {
-		result, err = r.QueryCards().All(ctx)
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := r.Edges.totalCount[0][alias]
+	if nodes, err := r.NamedCards(alias); err == nil || hasTotalCount {
+		pager, err := newCardPager(opts)
+		if err != nil {
+			return nil, err
+		}
+		conn := &CardConnection{Edges: []*CardEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
 	}
-	return result, err
+	return r.QueryCards().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (r *Revision) Products(ctx context.Context) (result []*Product, err error) {

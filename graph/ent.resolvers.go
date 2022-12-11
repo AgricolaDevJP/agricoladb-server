@@ -26,6 +26,31 @@ func (r *queryResolver) Cards(ctx context.Context, after *ent.Cursor, first *int
 	panic(fmt.Errorf("not implemented: Cards - cards"))
 }
 
+// CardSpecialColors is the resolver for the cardSpecialColors field.
+func (r *queryResolver) CardSpecialColors(ctx context.Context) ([]*ent.CardSpecialColor, error) {
+	panic(fmt.Errorf("not implemented: CardSpecialColors - cardSpecialColors"))
+}
+
+// CardTypes is the resolver for the cardTypes field.
+func (r *queryResolver) CardTypes(ctx context.Context) ([]*ent.CardType, error) {
+	panic(fmt.Errorf("not implemented: CardTypes - cardTypes"))
+}
+
+// Decks is the resolver for the decks field.
+func (r *queryResolver) Decks(ctx context.Context) ([]*ent.Deck, error) {
+	panic(fmt.Errorf("not implemented: Decks - decks"))
+}
+
+// Products is the resolver for the products field.
+func (r *queryResolver) Products(ctx context.Context) ([]*ent.Product, error) {
+	panic(fmt.Errorf("not implemented: Products - products"))
+}
+
+// Revisions is the resolver for the revisions field.
+func (r *queryResolver) Revisions(ctx context.Context) ([]*ent.Revision, error) {
+	panic(fmt.Errorf("not implemented: Revisions - revisions"))
+}
+
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 

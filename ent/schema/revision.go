@@ -1,7 +1,9 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
@@ -20,8 +22,14 @@ func (Revision) Fields() []ent.Field {
 
 func (Revision) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("cards", Card.Type),
+		edge.To("cards", Card.Type).Annotations(entgql.RelayConnection()),
 		edge.To("products", Product.Type),
 		edge.To("decks", Deck.Type),
+	}
+}
+
+func (Revision) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entgql.QueryField(),
 	}
 }

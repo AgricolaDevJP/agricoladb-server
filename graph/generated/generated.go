@@ -99,7 +99,7 @@ type ComplexityRoot struct {
 	}
 
 	CardSpecialColor struct {
-		Cards  func(childComplexity int) int
+		Cards  func(childComplexity int, after *ent.Cursor, first *int, before *ent.Cursor, last *int, where *ent.CardWhereInput) int
 		ID     func(childComplexity int) int
 		Key    func(childComplexity int) int
 		NameEn func(childComplexity int) int
@@ -107,7 +107,7 @@ type ComplexityRoot struct {
 	}
 
 	CardType struct {
-		Cards  func(childComplexity int) int
+		Cards  func(childComplexity int, after *ent.Cursor, first *int, before *ent.Cursor, last *int, where *ent.CardWhereInput) int
 		ID     func(childComplexity int) int
 		Key    func(childComplexity int) int
 		NameEn func(childComplexity int) int
@@ -115,7 +115,7 @@ type ComplexityRoot struct {
 	}
 
 	Deck struct {
-		Cards      func(childComplexity int) int
+		Cards      func(childComplexity int, after *ent.Cursor, first *int, before *ent.Cursor, last *int, where *ent.CardWhereInput) int
 		ID         func(childComplexity int) int
 		Key        func(childComplexity int) int
 		NameEn     func(childComplexity int) int
@@ -132,7 +132,7 @@ type ComplexityRoot struct {
 	}
 
 	Product struct {
-		Cards        func(childComplexity int) int
+		Cards        func(childComplexity int, after *ent.Cursor, first *int, before *ent.Cursor, last *int, where *ent.CardWhereInput) int
 		ID           func(childComplexity int) int
 		IsOfficialJa func(childComplexity int) int
 		Key          func(childComplexity int) int
@@ -143,13 +143,18 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Cards func(childComplexity int, after *ent.Cursor, first *int, before *ent.Cursor, last *int, where *ent.CardWhereInput) int
-		Node  func(childComplexity int, id int) int
-		Nodes func(childComplexity int, ids []int) int
+		CardSpecialColors func(childComplexity int) int
+		CardTypes         func(childComplexity int) int
+		Cards             func(childComplexity int, after *ent.Cursor, first *int, before *ent.Cursor, last *int, where *ent.CardWhereInput) int
+		Decks             func(childComplexity int) int
+		Node              func(childComplexity int, id int) int
+		Nodes             func(childComplexity int, ids []int) int
+		Products          func(childComplexity int) int
+		Revisions         func(childComplexity int) int
 	}
 
 	Revision struct {
-		Cards    func(childComplexity int) int
+		Cards    func(childComplexity int, after *ent.Cursor, first *int, before *ent.Cursor, last *int, where *ent.CardWhereInput) int
 		Decks    func(childComplexity int) int
 		ID       func(childComplexity int) int
 		Key      func(childComplexity int) int
@@ -163,6 +168,11 @@ type QueryResolver interface {
 	Node(ctx context.Context, id int) (ent.Noder, error)
 	Nodes(ctx context.Context, ids []int) ([]ent.Noder, error)
 	Cards(ctx context.Context, after *ent.Cursor, first *int, before *ent.Cursor, last *int, where *ent.CardWhereInput) (*ent.CardConnection, error)
+	CardSpecialColors(ctx context.Context) ([]*ent.CardSpecialColor, error)
+	CardTypes(ctx context.Context) ([]*ent.CardType, error)
+	Decks(ctx context.Context) ([]*ent.Deck, error)
+	Products(ctx context.Context) ([]*ent.Product, error)
+	Revisions(ctx context.Context) ([]*ent.Revision, error)
 }
 
 type executableSchema struct {
@@ -507,7 +517,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.CardSpecialColor.Cards(childComplexity), true
+		args, err := ec.field_CardSpecialColor_cards_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.CardSpecialColor.Cards(childComplexity, args["after"].(*ent.Cursor), args["first"].(*int), args["before"].(*ent.Cursor), args["last"].(*int), args["where"].(*ent.CardWhereInput)), true
 
 	case "CardSpecialColor.id":
 		if e.complexity.CardSpecialColor.ID == nil {
@@ -542,7 +557,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.CardType.Cards(childComplexity), true
+		args, err := ec.field_CardType_cards_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.CardType.Cards(childComplexity, args["after"].(*ent.Cursor), args["first"].(*int), args["before"].(*ent.Cursor), args["last"].(*int), args["where"].(*ent.CardWhereInput)), true
 
 	case "CardType.id":
 		if e.complexity.CardType.ID == nil {
@@ -577,7 +597,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Deck.Cards(childComplexity), true
+		args, err := ec.field_Deck_cards_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Deck.Cards(childComplexity, args["after"].(*ent.Cursor), args["first"].(*int), args["before"].(*ent.Cursor), args["last"].(*int), args["where"].(*ent.CardWhereInput)), true
 
 	case "Deck.id":
 		if e.complexity.Deck.ID == nil {
@@ -654,7 +679,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Product.Cards(childComplexity), true
+		args, err := ec.field_Product_cards_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Product.Cards(childComplexity, args["after"].(*ent.Cursor), args["first"].(*int), args["before"].(*ent.Cursor), args["last"].(*int), args["where"].(*ent.CardWhereInput)), true
 
 	case "Product.id":
 		if e.complexity.Product.ID == nil {
@@ -705,6 +735,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Product.RevisionID(childComplexity), true
 
+	case "Query.cardSpecialColors":
+		if e.complexity.Query.CardSpecialColors == nil {
+			break
+		}
+
+		return e.complexity.Query.CardSpecialColors(childComplexity), true
+
+	case "Query.cardTypes":
+		if e.complexity.Query.CardTypes == nil {
+			break
+		}
+
+		return e.complexity.Query.CardTypes(childComplexity), true
+
 	case "Query.cards":
 		if e.complexity.Query.Cards == nil {
 			break
@@ -716,6 +760,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Cards(childComplexity, args["after"].(*ent.Cursor), args["first"].(*int), args["before"].(*ent.Cursor), args["last"].(*int), args["where"].(*ent.CardWhereInput)), true
+
+	case "Query.decks":
+		if e.complexity.Query.Decks == nil {
+			break
+		}
+
+		return e.complexity.Query.Decks(childComplexity), true
 
 	case "Query.node":
 		if e.complexity.Query.Node == nil {
@@ -741,12 +792,31 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Nodes(childComplexity, args["ids"].([]int)), true
 
+	case "Query.products":
+		if e.complexity.Query.Products == nil {
+			break
+		}
+
+		return e.complexity.Query.Products(childComplexity), true
+
+	case "Query.revisions":
+		if e.complexity.Query.Revisions == nil {
+			break
+		}
+
+		return e.complexity.Query.Revisions(childComplexity), true
+
 	case "Revision.cards":
 		if e.complexity.Revision.Cards == nil {
 			break
 		}
 
-		return e.complexity.Revision.Cards(childComplexity), true
+		args, err := ec.field_Revision_cards_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Revision.Cards(childComplexity, args["after"].(*ent.Cursor), args["first"].(*int), args["before"].(*ent.Cursor), args["last"].(*int), args["where"].(*ent.CardWhereInput)), true
 
 	case "Revision.decks":
 		if e.complexity.Revision.Decks == nil {
@@ -915,7 +985,22 @@ type CardSpecialColor implements Node {
   key: String!
   nameJa: String
   nameEn: String
-  cards: [Card!]
+  cards(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Filtering options for Cards returned from the connection."""
+    where: CardWhereInput
+  ): CardConnection!
 }
 """
 CardSpecialColorWhereInput is used for filtering CardSpecialColor objects.
@@ -989,7 +1074,22 @@ type CardType implements Node {
   key: String!
   nameJa: String
   nameEn: String
-  cards: [Card!]
+  cards(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Filtering options for Cards returned from the connection."""
+    where: CardWhereInput
+  ): CardConnection!
 }
 """
 CardTypeWhereInput is used for filtering CardType objects.
@@ -1337,7 +1437,22 @@ type Deck implements Node {
   revisionID: ID!
   nameJa: String
   nameEn: String
-  cards: [Card!]
+  cards(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Filtering options for Cards returned from the connection."""
+    where: CardWhereInput
+  ): CardConnection!
   revision: Revision!
 }
 """
@@ -1451,7 +1566,22 @@ type Product implements Node {
   isOfficialJa: Boolean!
   nameJa: String
   nameEn: String
-  cards: [Card!]
+  cards(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Filtering options for Cards returned from the connection."""
+    where: CardWhereInput
+  ): CardConnection!
   revision: Revision!
 }
 """
@@ -1559,13 +1689,33 @@ type Query {
     """Filtering options for Cards returned from the connection."""
     where: CardWhereInput
   ): CardConnection!
+  cardSpecialColors: [CardSpecialColor!]!
+  cardTypes: [CardType!]!
+  decks: [Deck!]!
+  products: [Product!]!
+  revisions: [Revision!]!
 }
 type Revision implements Node {
   id: ID!
   key: String!
   nameJa: String
   nameEn: String
-  cards: [Card!]
+  cards(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Filtering options for Cards returned from the connection."""
+    where: CardWhereInput
+  ): CardConnection!
   products: [Product!]
   decks: [Deck!]
 }
@@ -1649,6 +1799,210 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
+
+func (ec *executionContext) field_CardSpecialColor_cards_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *ent.Cursor
+	if tmp, ok := rawArgs["after"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
+		arg0, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["after"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["first"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["first"] = arg1
+	var arg2 *ent.Cursor
+	if tmp, ok := rawArgs["before"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
+		arg2, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["before"] = arg2
+	var arg3 *int
+	if tmp, ok := rawArgs["last"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
+		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["last"] = arg3
+	var arg4 *ent.CardWhereInput
+	if tmp, ok := rawArgs["where"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
+		arg4, err = ec.unmarshalOCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["where"] = arg4
+	return args, nil
+}
+
+func (ec *executionContext) field_CardType_cards_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *ent.Cursor
+	if tmp, ok := rawArgs["after"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
+		arg0, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["after"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["first"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["first"] = arg1
+	var arg2 *ent.Cursor
+	if tmp, ok := rawArgs["before"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
+		arg2, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["before"] = arg2
+	var arg3 *int
+	if tmp, ok := rawArgs["last"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
+		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["last"] = arg3
+	var arg4 *ent.CardWhereInput
+	if tmp, ok := rawArgs["where"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
+		arg4, err = ec.unmarshalOCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["where"] = arg4
+	return args, nil
+}
+
+func (ec *executionContext) field_Deck_cards_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *ent.Cursor
+	if tmp, ok := rawArgs["after"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
+		arg0, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["after"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["first"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["first"] = arg1
+	var arg2 *ent.Cursor
+	if tmp, ok := rawArgs["before"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
+		arg2, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["before"] = arg2
+	var arg3 *int
+	if tmp, ok := rawArgs["last"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
+		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["last"] = arg3
+	var arg4 *ent.CardWhereInput
+	if tmp, ok := rawArgs["where"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
+		arg4, err = ec.unmarshalOCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["where"] = arg4
+	return args, nil
+}
+
+func (ec *executionContext) field_Product_cards_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *ent.Cursor
+	if tmp, ok := rawArgs["after"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
+		arg0, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["after"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["first"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["first"] = arg1
+	var arg2 *ent.Cursor
+	if tmp, ok := rawArgs["before"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
+		arg2, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["before"] = arg2
+	var arg3 *int
+	if tmp, ok := rawArgs["last"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
+		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["last"] = arg3
+	var arg4 *ent.CardWhereInput
+	if tmp, ok := rawArgs["where"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
+		arg4, err = ec.unmarshalOCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["where"] = arg4
+	return args, nil
+}
 
 func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
@@ -1743,6 +2097,57 @@ func (ec *executionContext) field_Query_nodes_args(ctx context.Context, rawArgs 
 		}
 	}
 	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Revision_cards_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *ent.Cursor
+	if tmp, ok := rawArgs["after"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
+		arg0, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["after"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["first"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["first"] = arg1
+	var arg2 *ent.Cursor
+	if tmp, ok := rawArgs["before"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
+		arg2, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["before"] = arg2
+	var arg3 *int
+	if tmp, ok := rawArgs["last"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
+		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["last"] = arg3
+	var arg4 *ent.CardWhereInput
+	if tmp, ok := rawArgs["where"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
+		arg4, err = ec.unmarshalOCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["where"] = arg4
 	return args, nil
 }
 
@@ -4280,18 +4685,21 @@ func (ec *executionContext) _CardSpecialColor_cards(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Cards(ctx)
+		return obj.Cards(ctx, fc.Args["after"].(*ent.Cursor), fc.Args["first"].(*int), fc.Args["before"].(*ent.Cursor), fc.Args["last"].(*int), fc.Args["where"].(*ent.CardWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.([]*ent.Card)
+	res := resTmp.(*ent.CardConnection)
 	fc.Result = res
-	return ec.marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx, field.Selections, res)
+	return ec.marshalNCardConnection2ᚖagricoladbᚋentᚐCardConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CardSpecialColor_cards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4302,91 +4710,26 @@ func (ec *executionContext) fieldContext_CardSpecialColor_cards(ctx context.Cont
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_Card_id(ctx, field)
-			case "literalID":
-				return ec.fieldContext_Card_literalID(ctx, field)
-			case "revisionID":
-				return ec.fieldContext_Card_revisionID(ctx, field)
-			case "printedID":
-				return ec.fieldContext_Card_printedID(ctx, field)
-			case "playAgricolaCardID":
-				return ec.fieldContext_Card_playAgricolaCardID(ctx, field)
-			case "deckID":
-				return ec.fieldContext_Card_deckID(ctx, field)
-			case "cardTypeID":
-				return ec.fieldContext_Card_cardTypeID(ctx, field)
-			case "cardSpecialColorID":
-				return ec.fieldContext_Card_cardSpecialColorID(ctx, field)
-			case "nameJa":
-				return ec.fieldContext_Card_nameJa(ctx, field)
-			case "nameEn":
-				return ec.fieldContext_Card_nameEn(ctx, field)
-			case "minPlayersNumber":
-				return ec.fieldContext_Card_minPlayersNumber(ctx, field)
-			case "prerequisite":
-				return ec.fieldContext_Card_prerequisite(ctx, field)
-			case "cost":
-				return ec.fieldContext_Card_cost(ctx, field)
-			case "functionText":
-				return ec.fieldContext_Card_functionText(ctx, field)
-			case "isOfficialJa":
-				return ec.fieldContext_Card_isOfficialJa(ctx, field)
-			case "victoryPoint":
-				return ec.fieldContext_Card_victoryPoint(ctx, field)
-			case "isVariableVictoryPoint":
-				return ec.fieldContext_Card_isVariableVictoryPoint(ctx, field)
-			case "hasArrrow":
-				return ec.fieldContext_Card_hasArrrow(ctx, field)
-			case "hasBonusPointIcon":
-				return ec.fieldContext_Card_hasBonusPointIcon(ctx, field)
-			case "hasNegativeBonusPointIcon":
-				return ec.fieldContext_Card_hasNegativeBonusPointIcon(ctx, field)
-			case "hasPanIcon":
-				return ec.fieldContext_Card_hasPanIcon(ctx, field)
-			case "hasBreadIcon":
-				return ec.fieldContext_Card_hasBreadIcon(ctx, field)
-			case "hasFarmPlannerIcon":
-				return ec.fieldContext_Card_hasFarmPlannerIcon(ctx, field)
-			case "hasActionsBoosterIcon":
-				return ec.fieldContext_Card_hasActionsBoosterIcon(ctx, field)
-			case "hasPointsProviderIcon":
-				return ec.fieldContext_Card_hasPointsProviderIcon(ctx, field)
-			case "hasGoodsProviderIcon":
-				return ec.fieldContext_Card_hasGoodsProviderIcon(ctx, field)
-			case "hasFoodProviderIcon":
-				return ec.fieldContext_Card_hasFoodProviderIcon(ctx, field)
-			case "hasCropProviderIcon":
-				return ec.fieldContext_Card_hasCropProviderIcon(ctx, field)
-			case "hasBuildingResourceProviderIcon":
-				return ec.fieldContext_Card_hasBuildingResourceProviderIcon(ctx, field)
-			case "hasLivestockProviderIcon":
-				return ec.fieldContext_Card_hasLivestockProviderIcon(ctx, field)
-			case "hasCutPeatIcon":
-				return ec.fieldContext_Card_hasCutPeatIcon(ctx, field)
-			case "hasFellTreesIcon":
-				return ec.fieldContext_Card_hasFellTreesIcon(ctx, field)
-			case "hasSlashAndBurnIcon":
-				return ec.fieldContext_Card_hasSlashAndBurnIcon(ctx, field)
-			case "hasHiringFareIcon":
-				return ec.fieldContext_Card_hasHiringFareIcon(ctx, field)
-			case "revision":
-				return ec.fieldContext_Card_revision(ctx, field)
-			case "products":
-				return ec.fieldContext_Card_products(ctx, field)
-			case "deck":
-				return ec.fieldContext_Card_deck(ctx, field)
-			case "cardType":
-				return ec.fieldContext_Card_cardType(ctx, field)
-			case "cardSpecialColor":
-				return ec.fieldContext_Card_cardSpecialColor(ctx, field)
-			case "children":
-				return ec.fieldContext_Card_children(ctx, field)
-			case "ancestors":
-				return ec.fieldContext_Card_ancestors(ctx, field)
+			case "edges":
+				return ec.fieldContext_CardConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_CardConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_CardConnection_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Card", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type CardConnection", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_CardSpecialColor_cards_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
 	}
 	return fc, nil
 }
@@ -4575,18 +4918,21 @@ func (ec *executionContext) _CardType_cards(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Cards(ctx)
+		return obj.Cards(ctx, fc.Args["after"].(*ent.Cursor), fc.Args["first"].(*int), fc.Args["before"].(*ent.Cursor), fc.Args["last"].(*int), fc.Args["where"].(*ent.CardWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.([]*ent.Card)
+	res := resTmp.(*ent.CardConnection)
 	fc.Result = res
-	return ec.marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx, field.Selections, res)
+	return ec.marshalNCardConnection2ᚖagricoladbᚋentᚐCardConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CardType_cards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4597,91 +4943,26 @@ func (ec *executionContext) fieldContext_CardType_cards(ctx context.Context, fie
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_Card_id(ctx, field)
-			case "literalID":
-				return ec.fieldContext_Card_literalID(ctx, field)
-			case "revisionID":
-				return ec.fieldContext_Card_revisionID(ctx, field)
-			case "printedID":
-				return ec.fieldContext_Card_printedID(ctx, field)
-			case "playAgricolaCardID":
-				return ec.fieldContext_Card_playAgricolaCardID(ctx, field)
-			case "deckID":
-				return ec.fieldContext_Card_deckID(ctx, field)
-			case "cardTypeID":
-				return ec.fieldContext_Card_cardTypeID(ctx, field)
-			case "cardSpecialColorID":
-				return ec.fieldContext_Card_cardSpecialColorID(ctx, field)
-			case "nameJa":
-				return ec.fieldContext_Card_nameJa(ctx, field)
-			case "nameEn":
-				return ec.fieldContext_Card_nameEn(ctx, field)
-			case "minPlayersNumber":
-				return ec.fieldContext_Card_minPlayersNumber(ctx, field)
-			case "prerequisite":
-				return ec.fieldContext_Card_prerequisite(ctx, field)
-			case "cost":
-				return ec.fieldContext_Card_cost(ctx, field)
-			case "functionText":
-				return ec.fieldContext_Card_functionText(ctx, field)
-			case "isOfficialJa":
-				return ec.fieldContext_Card_isOfficialJa(ctx, field)
-			case "victoryPoint":
-				return ec.fieldContext_Card_victoryPoint(ctx, field)
-			case "isVariableVictoryPoint":
-				return ec.fieldContext_Card_isVariableVictoryPoint(ctx, field)
-			case "hasArrrow":
-				return ec.fieldContext_Card_hasArrrow(ctx, field)
-			case "hasBonusPointIcon":
-				return ec.fieldContext_Card_hasBonusPointIcon(ctx, field)
-			case "hasNegativeBonusPointIcon":
-				return ec.fieldContext_Card_hasNegativeBonusPointIcon(ctx, field)
-			case "hasPanIcon":
-				return ec.fieldContext_Card_hasPanIcon(ctx, field)
-			case "hasBreadIcon":
-				return ec.fieldContext_Card_hasBreadIcon(ctx, field)
-			case "hasFarmPlannerIcon":
-				return ec.fieldContext_Card_hasFarmPlannerIcon(ctx, field)
-			case "hasActionsBoosterIcon":
-				return ec.fieldContext_Card_hasActionsBoosterIcon(ctx, field)
-			case "hasPointsProviderIcon":
-				return ec.fieldContext_Card_hasPointsProviderIcon(ctx, field)
-			case "hasGoodsProviderIcon":
-				return ec.fieldContext_Card_hasGoodsProviderIcon(ctx, field)
-			case "hasFoodProviderIcon":
-				return ec.fieldContext_Card_hasFoodProviderIcon(ctx, field)
-			case "hasCropProviderIcon":
-				return ec.fieldContext_Card_hasCropProviderIcon(ctx, field)
-			case "hasBuildingResourceProviderIcon":
-				return ec.fieldContext_Card_hasBuildingResourceProviderIcon(ctx, field)
-			case "hasLivestockProviderIcon":
-				return ec.fieldContext_Card_hasLivestockProviderIcon(ctx, field)
-			case "hasCutPeatIcon":
-				return ec.fieldContext_Card_hasCutPeatIcon(ctx, field)
-			case "hasFellTreesIcon":
-				return ec.fieldContext_Card_hasFellTreesIcon(ctx, field)
-			case "hasSlashAndBurnIcon":
-				return ec.fieldContext_Card_hasSlashAndBurnIcon(ctx, field)
-			case "hasHiringFareIcon":
-				return ec.fieldContext_Card_hasHiringFareIcon(ctx, field)
-			case "revision":
-				return ec.fieldContext_Card_revision(ctx, field)
-			case "products":
-				return ec.fieldContext_Card_products(ctx, field)
-			case "deck":
-				return ec.fieldContext_Card_deck(ctx, field)
-			case "cardType":
-				return ec.fieldContext_Card_cardType(ctx, field)
-			case "cardSpecialColor":
-				return ec.fieldContext_Card_cardSpecialColor(ctx, field)
-			case "children":
-				return ec.fieldContext_Card_children(ctx, field)
-			case "ancestors":
-				return ec.fieldContext_Card_ancestors(ctx, field)
+			case "edges":
+				return ec.fieldContext_CardConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_CardConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_CardConnection_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Card", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type CardConnection", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_CardType_cards_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
 	}
 	return fc, nil
 }
@@ -4914,18 +5195,21 @@ func (ec *executionContext) _Deck_cards(ctx context.Context, field graphql.Colle
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Cards(ctx)
+		return obj.Cards(ctx, fc.Args["after"].(*ent.Cursor), fc.Args["first"].(*int), fc.Args["before"].(*ent.Cursor), fc.Args["last"].(*int), fc.Args["where"].(*ent.CardWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.([]*ent.Card)
+	res := resTmp.(*ent.CardConnection)
 	fc.Result = res
-	return ec.marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx, field.Selections, res)
+	return ec.marshalNCardConnection2ᚖagricoladbᚋentᚐCardConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Deck_cards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4936,91 +5220,26 @@ func (ec *executionContext) fieldContext_Deck_cards(ctx context.Context, field g
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_Card_id(ctx, field)
-			case "literalID":
-				return ec.fieldContext_Card_literalID(ctx, field)
-			case "revisionID":
-				return ec.fieldContext_Card_revisionID(ctx, field)
-			case "printedID":
-				return ec.fieldContext_Card_printedID(ctx, field)
-			case "playAgricolaCardID":
-				return ec.fieldContext_Card_playAgricolaCardID(ctx, field)
-			case "deckID":
-				return ec.fieldContext_Card_deckID(ctx, field)
-			case "cardTypeID":
-				return ec.fieldContext_Card_cardTypeID(ctx, field)
-			case "cardSpecialColorID":
-				return ec.fieldContext_Card_cardSpecialColorID(ctx, field)
-			case "nameJa":
-				return ec.fieldContext_Card_nameJa(ctx, field)
-			case "nameEn":
-				return ec.fieldContext_Card_nameEn(ctx, field)
-			case "minPlayersNumber":
-				return ec.fieldContext_Card_minPlayersNumber(ctx, field)
-			case "prerequisite":
-				return ec.fieldContext_Card_prerequisite(ctx, field)
-			case "cost":
-				return ec.fieldContext_Card_cost(ctx, field)
-			case "functionText":
-				return ec.fieldContext_Card_functionText(ctx, field)
-			case "isOfficialJa":
-				return ec.fieldContext_Card_isOfficialJa(ctx, field)
-			case "victoryPoint":
-				return ec.fieldContext_Card_victoryPoint(ctx, field)
-			case "isVariableVictoryPoint":
-				return ec.fieldContext_Card_isVariableVictoryPoint(ctx, field)
-			case "hasArrrow":
-				return ec.fieldContext_Card_hasArrrow(ctx, field)
-			case "hasBonusPointIcon":
-				return ec.fieldContext_Card_hasBonusPointIcon(ctx, field)
-			case "hasNegativeBonusPointIcon":
-				return ec.fieldContext_Card_hasNegativeBonusPointIcon(ctx, field)
-			case "hasPanIcon":
-				return ec.fieldContext_Card_hasPanIcon(ctx, field)
-			case "hasBreadIcon":
-				return ec.fieldContext_Card_hasBreadIcon(ctx, field)
-			case "hasFarmPlannerIcon":
-				return ec.fieldContext_Card_hasFarmPlannerIcon(ctx, field)
-			case "hasActionsBoosterIcon":
-				return ec.fieldContext_Card_hasActionsBoosterIcon(ctx, field)
-			case "hasPointsProviderIcon":
-				return ec.fieldContext_Card_hasPointsProviderIcon(ctx, field)
-			case "hasGoodsProviderIcon":
-				return ec.fieldContext_Card_hasGoodsProviderIcon(ctx, field)
-			case "hasFoodProviderIcon":
-				return ec.fieldContext_Card_hasFoodProviderIcon(ctx, field)
-			case "hasCropProviderIcon":
-				return ec.fieldContext_Card_hasCropProviderIcon(ctx, field)
-			case "hasBuildingResourceProviderIcon":
-				return ec.fieldContext_Card_hasBuildingResourceProviderIcon(ctx, field)
-			case "hasLivestockProviderIcon":
-				return ec.fieldContext_Card_hasLivestockProviderIcon(ctx, field)
-			case "hasCutPeatIcon":
-				return ec.fieldContext_Card_hasCutPeatIcon(ctx, field)
-			case "hasFellTreesIcon":
-				return ec.fieldContext_Card_hasFellTreesIcon(ctx, field)
-			case "hasSlashAndBurnIcon":
-				return ec.fieldContext_Card_hasSlashAndBurnIcon(ctx, field)
-			case "hasHiringFareIcon":
-				return ec.fieldContext_Card_hasHiringFareIcon(ctx, field)
-			case "revision":
-				return ec.fieldContext_Card_revision(ctx, field)
-			case "products":
-				return ec.fieldContext_Card_products(ctx, field)
-			case "deck":
-				return ec.fieldContext_Card_deck(ctx, field)
-			case "cardType":
-				return ec.fieldContext_Card_cardType(ctx, field)
-			case "cardSpecialColor":
-				return ec.fieldContext_Card_cardSpecialColor(ctx, field)
-			case "children":
-				return ec.fieldContext_Card_children(ctx, field)
-			case "ancestors":
-				return ec.fieldContext_Card_ancestors(ctx, field)
+			case "edges":
+				return ec.fieldContext_CardConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_CardConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_CardConnection_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Card", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type CardConnection", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Deck_cards_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
 	}
 	return fc, nil
 }
@@ -5527,18 +5746,21 @@ func (ec *executionContext) _Product_cards(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Cards(ctx)
+		return obj.Cards(ctx, fc.Args["after"].(*ent.Cursor), fc.Args["first"].(*int), fc.Args["before"].(*ent.Cursor), fc.Args["last"].(*int), fc.Args["where"].(*ent.CardWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.([]*ent.Card)
+	res := resTmp.(*ent.CardConnection)
 	fc.Result = res
-	return ec.marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx, field.Selections, res)
+	return ec.marshalNCardConnection2ᚖagricoladbᚋentᚐCardConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Product_cards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5549,91 +5771,26 @@ func (ec *executionContext) fieldContext_Product_cards(ctx context.Context, fiel
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_Card_id(ctx, field)
-			case "literalID":
-				return ec.fieldContext_Card_literalID(ctx, field)
-			case "revisionID":
-				return ec.fieldContext_Card_revisionID(ctx, field)
-			case "printedID":
-				return ec.fieldContext_Card_printedID(ctx, field)
-			case "playAgricolaCardID":
-				return ec.fieldContext_Card_playAgricolaCardID(ctx, field)
-			case "deckID":
-				return ec.fieldContext_Card_deckID(ctx, field)
-			case "cardTypeID":
-				return ec.fieldContext_Card_cardTypeID(ctx, field)
-			case "cardSpecialColorID":
-				return ec.fieldContext_Card_cardSpecialColorID(ctx, field)
-			case "nameJa":
-				return ec.fieldContext_Card_nameJa(ctx, field)
-			case "nameEn":
-				return ec.fieldContext_Card_nameEn(ctx, field)
-			case "minPlayersNumber":
-				return ec.fieldContext_Card_minPlayersNumber(ctx, field)
-			case "prerequisite":
-				return ec.fieldContext_Card_prerequisite(ctx, field)
-			case "cost":
-				return ec.fieldContext_Card_cost(ctx, field)
-			case "functionText":
-				return ec.fieldContext_Card_functionText(ctx, field)
-			case "isOfficialJa":
-				return ec.fieldContext_Card_isOfficialJa(ctx, field)
-			case "victoryPoint":
-				return ec.fieldContext_Card_victoryPoint(ctx, field)
-			case "isVariableVictoryPoint":
-				return ec.fieldContext_Card_isVariableVictoryPoint(ctx, field)
-			case "hasArrrow":
-				return ec.fieldContext_Card_hasArrrow(ctx, field)
-			case "hasBonusPointIcon":
-				return ec.fieldContext_Card_hasBonusPointIcon(ctx, field)
-			case "hasNegativeBonusPointIcon":
-				return ec.fieldContext_Card_hasNegativeBonusPointIcon(ctx, field)
-			case "hasPanIcon":
-				return ec.fieldContext_Card_hasPanIcon(ctx, field)
-			case "hasBreadIcon":
-				return ec.fieldContext_Card_hasBreadIcon(ctx, field)
-			case "hasFarmPlannerIcon":
-				return ec.fieldContext_Card_hasFarmPlannerIcon(ctx, field)
-			case "hasActionsBoosterIcon":
-				return ec.fieldContext_Card_hasActionsBoosterIcon(ctx, field)
-			case "hasPointsProviderIcon":
-				return ec.fieldContext_Card_hasPointsProviderIcon(ctx, field)
-			case "hasGoodsProviderIcon":
-				return ec.fieldContext_Card_hasGoodsProviderIcon(ctx, field)
-			case "hasFoodProviderIcon":
-				return ec.fieldContext_Card_hasFoodProviderIcon(ctx, field)
-			case "hasCropProviderIcon":
-				return ec.fieldContext_Card_hasCropProviderIcon(ctx, field)
-			case "hasBuildingResourceProviderIcon":
-				return ec.fieldContext_Card_hasBuildingResourceProviderIcon(ctx, field)
-			case "hasLivestockProviderIcon":
-				return ec.fieldContext_Card_hasLivestockProviderIcon(ctx, field)
-			case "hasCutPeatIcon":
-				return ec.fieldContext_Card_hasCutPeatIcon(ctx, field)
-			case "hasFellTreesIcon":
-				return ec.fieldContext_Card_hasFellTreesIcon(ctx, field)
-			case "hasSlashAndBurnIcon":
-				return ec.fieldContext_Card_hasSlashAndBurnIcon(ctx, field)
-			case "hasHiringFareIcon":
-				return ec.fieldContext_Card_hasHiringFareIcon(ctx, field)
-			case "revision":
-				return ec.fieldContext_Card_revision(ctx, field)
-			case "products":
-				return ec.fieldContext_Card_products(ctx, field)
-			case "deck":
-				return ec.fieldContext_Card_deck(ctx, field)
-			case "cardType":
-				return ec.fieldContext_Card_cardType(ctx, field)
-			case "cardSpecialColor":
-				return ec.fieldContext_Card_cardSpecialColor(ctx, field)
-			case "children":
-				return ec.fieldContext_Card_children(ctx, field)
-			case "ancestors":
-				return ec.fieldContext_Card_ancestors(ctx, field)
+			case "edges":
+				return ec.fieldContext_CardConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_CardConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_CardConnection_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Card", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type CardConnection", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Product_cards_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
 	}
 	return fc, nil
 }
@@ -5864,6 +6021,300 @@ func (ec *executionContext) fieldContext_Query_cards(ctx context.Context, field 
 	if fc.Args, err = ec.field_Query_cards_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_cardSpecialColors(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_cardSpecialColors(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().CardSpecialColors(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.CardSpecialColor)
+	fc.Result = res
+	return ec.marshalNCardSpecialColor2ᚕᚖagricoladbᚋentᚐCardSpecialColorᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_cardSpecialColors(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_CardSpecialColor_id(ctx, field)
+			case "key":
+				return ec.fieldContext_CardSpecialColor_key(ctx, field)
+			case "nameJa":
+				return ec.fieldContext_CardSpecialColor_nameJa(ctx, field)
+			case "nameEn":
+				return ec.fieldContext_CardSpecialColor_nameEn(ctx, field)
+			case "cards":
+				return ec.fieldContext_CardSpecialColor_cards(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CardSpecialColor", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_cardTypes(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_cardTypes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().CardTypes(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.CardType)
+	fc.Result = res
+	return ec.marshalNCardType2ᚕᚖagricoladbᚋentᚐCardTypeᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_cardTypes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_CardType_id(ctx, field)
+			case "key":
+				return ec.fieldContext_CardType_key(ctx, field)
+			case "nameJa":
+				return ec.fieldContext_CardType_nameJa(ctx, field)
+			case "nameEn":
+				return ec.fieldContext_CardType_nameEn(ctx, field)
+			case "cards":
+				return ec.fieldContext_CardType_cards(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CardType", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_decks(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_decks(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Decks(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Deck)
+	fc.Result = res
+	return ec.marshalNDeck2ᚕᚖagricoladbᚋentᚐDeckᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_decks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Deck_id(ctx, field)
+			case "key":
+				return ec.fieldContext_Deck_key(ctx, field)
+			case "revisionID":
+				return ec.fieldContext_Deck_revisionID(ctx, field)
+			case "nameJa":
+				return ec.fieldContext_Deck_nameJa(ctx, field)
+			case "nameEn":
+				return ec.fieldContext_Deck_nameEn(ctx, field)
+			case "cards":
+				return ec.fieldContext_Deck_cards(ctx, field)
+			case "revision":
+				return ec.fieldContext_Deck_revision(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Deck", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_products(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_products(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Products(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Product)
+	fc.Result = res
+	return ec.marshalNProduct2ᚕᚖagricoladbᚋentᚐProductᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_products(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Product_id(ctx, field)
+			case "key":
+				return ec.fieldContext_Product_key(ctx, field)
+			case "revisionID":
+				return ec.fieldContext_Product_revisionID(ctx, field)
+			case "isOfficialJa":
+				return ec.fieldContext_Product_isOfficialJa(ctx, field)
+			case "nameJa":
+				return ec.fieldContext_Product_nameJa(ctx, field)
+			case "nameEn":
+				return ec.fieldContext_Product_nameEn(ctx, field)
+			case "cards":
+				return ec.fieldContext_Product_cards(ctx, field)
+			case "revision":
+				return ec.fieldContext_Product_revision(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Product", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_revisions(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_revisions(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Revisions(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Revision)
+	fc.Result = res
+	return ec.marshalNRevision2ᚕᚖagricoladbᚋentᚐRevisionᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_revisions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Revision_id(ctx, field)
+			case "key":
+				return ec.fieldContext_Revision_key(ctx, field)
+			case "nameJa":
+				return ec.fieldContext_Revision_nameJa(ctx, field)
+			case "nameEn":
+				return ec.fieldContext_Revision_nameEn(ctx, field)
+			case "cards":
+				return ec.fieldContext_Revision_cards(ctx, field)
+			case "products":
+				return ec.fieldContext_Revision_products(ctx, field)
+			case "decks":
+				return ec.fieldContext_Revision_decks(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Revision", field.Name)
+		},
 	}
 	return fc, nil
 }
@@ -6181,18 +6632,21 @@ func (ec *executionContext) _Revision_cards(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Cards(ctx)
+		return obj.Cards(ctx, fc.Args["after"].(*ent.Cursor), fc.Args["first"].(*int), fc.Args["before"].(*ent.Cursor), fc.Args["last"].(*int), fc.Args["where"].(*ent.CardWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.([]*ent.Card)
+	res := resTmp.(*ent.CardConnection)
 	fc.Result = res
-	return ec.marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx, field.Selections, res)
+	return ec.marshalNCardConnection2ᚖagricoladbᚋentᚐCardConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Revision_cards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6203,91 +6657,26 @@ func (ec *executionContext) fieldContext_Revision_cards(ctx context.Context, fie
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_Card_id(ctx, field)
-			case "literalID":
-				return ec.fieldContext_Card_literalID(ctx, field)
-			case "revisionID":
-				return ec.fieldContext_Card_revisionID(ctx, field)
-			case "printedID":
-				return ec.fieldContext_Card_printedID(ctx, field)
-			case "playAgricolaCardID":
-				return ec.fieldContext_Card_playAgricolaCardID(ctx, field)
-			case "deckID":
-				return ec.fieldContext_Card_deckID(ctx, field)
-			case "cardTypeID":
-				return ec.fieldContext_Card_cardTypeID(ctx, field)
-			case "cardSpecialColorID":
-				return ec.fieldContext_Card_cardSpecialColorID(ctx, field)
-			case "nameJa":
-				return ec.fieldContext_Card_nameJa(ctx, field)
-			case "nameEn":
-				return ec.fieldContext_Card_nameEn(ctx, field)
-			case "minPlayersNumber":
-				return ec.fieldContext_Card_minPlayersNumber(ctx, field)
-			case "prerequisite":
-				return ec.fieldContext_Card_prerequisite(ctx, field)
-			case "cost":
-				return ec.fieldContext_Card_cost(ctx, field)
-			case "functionText":
-				return ec.fieldContext_Card_functionText(ctx, field)
-			case "isOfficialJa":
-				return ec.fieldContext_Card_isOfficialJa(ctx, field)
-			case "victoryPoint":
-				return ec.fieldContext_Card_victoryPoint(ctx, field)
-			case "isVariableVictoryPoint":
-				return ec.fieldContext_Card_isVariableVictoryPoint(ctx, field)
-			case "hasArrrow":
-				return ec.fieldContext_Card_hasArrrow(ctx, field)
-			case "hasBonusPointIcon":
-				return ec.fieldContext_Card_hasBonusPointIcon(ctx, field)
-			case "hasNegativeBonusPointIcon":
-				return ec.fieldContext_Card_hasNegativeBonusPointIcon(ctx, field)
-			case "hasPanIcon":
-				return ec.fieldContext_Card_hasPanIcon(ctx, field)
-			case "hasBreadIcon":
-				return ec.fieldContext_Card_hasBreadIcon(ctx, field)
-			case "hasFarmPlannerIcon":
-				return ec.fieldContext_Card_hasFarmPlannerIcon(ctx, field)
-			case "hasActionsBoosterIcon":
-				return ec.fieldContext_Card_hasActionsBoosterIcon(ctx, field)
-			case "hasPointsProviderIcon":
-				return ec.fieldContext_Card_hasPointsProviderIcon(ctx, field)
-			case "hasGoodsProviderIcon":
-				return ec.fieldContext_Card_hasGoodsProviderIcon(ctx, field)
-			case "hasFoodProviderIcon":
-				return ec.fieldContext_Card_hasFoodProviderIcon(ctx, field)
-			case "hasCropProviderIcon":
-				return ec.fieldContext_Card_hasCropProviderIcon(ctx, field)
-			case "hasBuildingResourceProviderIcon":
-				return ec.fieldContext_Card_hasBuildingResourceProviderIcon(ctx, field)
-			case "hasLivestockProviderIcon":
-				return ec.fieldContext_Card_hasLivestockProviderIcon(ctx, field)
-			case "hasCutPeatIcon":
-				return ec.fieldContext_Card_hasCutPeatIcon(ctx, field)
-			case "hasFellTreesIcon":
-				return ec.fieldContext_Card_hasFellTreesIcon(ctx, field)
-			case "hasSlashAndBurnIcon":
-				return ec.fieldContext_Card_hasSlashAndBurnIcon(ctx, field)
-			case "hasHiringFareIcon":
-				return ec.fieldContext_Card_hasHiringFareIcon(ctx, field)
-			case "revision":
-				return ec.fieldContext_Card_revision(ctx, field)
-			case "products":
-				return ec.fieldContext_Card_products(ctx, field)
-			case "deck":
-				return ec.fieldContext_Card_deck(ctx, field)
-			case "cardType":
-				return ec.fieldContext_Card_cardType(ctx, field)
-			case "cardSpecialColor":
-				return ec.fieldContext_Card_cardSpecialColor(ctx, field)
-			case "children":
-				return ec.fieldContext_Card_children(ctx, field)
-			case "ancestors":
-				return ec.fieldContext_Card_ancestors(ctx, field)
+			case "edges":
+				return ec.fieldContext_CardConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_CardConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_CardConnection_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Card", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type CardConnection", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Revision_cards_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
 	}
 	return fc, nil
 }
@@ -12964,6 +13353,9 @@ func (ec *executionContext) _CardSpecialColor(ctx context.Context, sel ast.Selec
 					}
 				}()
 				res = ec._CardSpecialColor_cards(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
 				return res
 			}
 
@@ -13024,6 +13416,9 @@ func (ec *executionContext) _CardType(ctx context.Context, sel ast.SelectionSet,
 					}
 				}()
 				res = ec._CardType_cards(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
 				return res
 			}
 
@@ -13091,6 +13486,9 @@ func (ec *executionContext) _Deck(ctx context.Context, sel ast.SelectionSet, obj
 					}
 				}()
 				res = ec._Deck_cards(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
 				return res
 			}
 
@@ -13228,6 +13626,9 @@ func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, 
 					}
 				}()
 				res = ec._Product_cards(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
 				return res
 			}
 
@@ -13351,6 +13752,121 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
+		case "cardSpecialColors":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_cardSpecialColors(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "cardTypes":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_cardTypes(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "decks":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_decks(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "products":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_products(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "revisions":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_revisions(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
 		case "__type":
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
@@ -13416,6 +13932,9 @@ func (ec *executionContext) _Revision(ctx context.Context, sel ast.SelectionSet,
 					}
 				}()
 				res = ec._Revision_cards(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
 				return res
 			}
 
@@ -13825,9 +14344,107 @@ func (ec *executionContext) marshalNCardConnection2ᚖagricoladbᚋentᚐCardCon
 	return ec._CardConnection(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNCardSpecialColor2ᚕᚖagricoladbᚋentᚐCardSpecialColorᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.CardSpecialColor) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNCardSpecialColor2ᚖagricoladbᚋentᚐCardSpecialColor(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNCardSpecialColor2ᚖagricoladbᚋentᚐCardSpecialColor(ctx context.Context, sel ast.SelectionSet, v *ent.CardSpecialColor) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._CardSpecialColor(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNCardSpecialColorWhereInput2ᚖagricoladbᚋentᚐCardSpecialColorWhereInput(ctx context.Context, v interface{}) (*ent.CardSpecialColorWhereInput, error) {
 	res, err := ec.unmarshalInputCardSpecialColorWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCardType2ᚕᚖagricoladbᚋentᚐCardTypeᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.CardType) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNCardType2ᚖagricoladbᚋentᚐCardType(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) marshalNCardType2ᚖagricoladbᚋentᚐCardType(ctx context.Context, sel ast.SelectionSet, v *ent.CardType) graphql.Marshaler {
@@ -13858,6 +14475,50 @@ func (ec *executionContext) unmarshalNCursor2agricoladbᚋentᚐCursor(ctx conte
 
 func (ec *executionContext) marshalNCursor2agricoladbᚋentᚐCursor(ctx context.Context, sel ast.SelectionSet, v ent.Cursor) graphql.Marshaler {
 	return v
+}
+
+func (ec *executionContext) marshalNDeck2ᚕᚖagricoladbᚋentᚐDeckᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Deck) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNDeck2ᚖagricoladbᚋentᚐDeck(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) marshalNDeck2ᚖagricoladbᚋentᚐDeck(ctx context.Context, sel ast.SelectionSet, v *ent.Deck) graphql.Marshaler {
@@ -13979,6 +14640,50 @@ func (ec *executionContext) marshalNPageInfo2agricoladbᚋentᚐPageInfo(ctx con
 	return ec._PageInfo(ctx, sel, &v)
 }
 
+func (ec *executionContext) marshalNProduct2ᚕᚖagricoladbᚋentᚐProductᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Product) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNProduct2ᚖagricoladbᚋentᚐProduct(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
 func (ec *executionContext) marshalNProduct2ᚖagricoladbᚋentᚐProduct(ctx context.Context, sel ast.SelectionSet, v *ent.Product) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -13992,6 +14697,50 @@ func (ec *executionContext) marshalNProduct2ᚖagricoladbᚋentᚐProduct(ctx co
 func (ec *executionContext) unmarshalNProductWhereInput2ᚖagricoladbᚋentᚐProductWhereInput(ctx context.Context, v interface{}) (*ent.ProductWhereInput, error) {
 	res, err := ec.unmarshalInputProductWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNRevision2ᚕᚖagricoladbᚋentᚐRevisionᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Revision) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNRevision2ᚖagricoladbᚋentᚐRevision(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) marshalNRevision2ᚖagricoladbᚋentᚐRevision(ctx context.Context, sel ast.SelectionSet, v *ent.Revision) graphql.Marshaler {
