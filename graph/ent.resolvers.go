@@ -8,47 +8,46 @@ import (
 	"agricoladb/ent"
 	"agricoladb/graph/generated"
 	"context"
-	"fmt"
 )
 
 // Node is the resolver for the node field.
 func (r *queryResolver) Node(ctx context.Context, id int) (ent.Noder, error) {
-	panic(fmt.Errorf("not implemented: Node - node"))
+	return r.Client.Noder(ctx, id)
 }
 
 // Nodes is the resolver for the nodes field.
 func (r *queryResolver) Nodes(ctx context.Context, ids []int) ([]ent.Noder, error) {
-	panic(fmt.Errorf("not implemented: Nodes - nodes"))
+	return r.Client.Noders(ctx, ids)
 }
 
 // Cards is the resolver for the cards field.
 func (r *queryResolver) Cards(ctx context.Context, after *ent.Cursor, first *int, before *ent.Cursor, last *int, where *ent.CardWhereInput) (*ent.CardConnection, error) {
-	panic(fmt.Errorf("not implemented: Cards - cards"))
+	return r.Client.Card.Query().Paginate(ctx, after, first, before, last, ent.WithCardFilter(where.Filter))
 }
 
 // CardSpecialColors is the resolver for the cardSpecialColors field.
 func (r *queryResolver) CardSpecialColors(ctx context.Context) ([]*ent.CardSpecialColor, error) {
-	panic(fmt.Errorf("not implemented: CardSpecialColors - cardSpecialColors"))
+	return r.Client.CardSpecialColor.Query().All(ctx)
 }
 
 // CardTypes is the resolver for the cardTypes field.
 func (r *queryResolver) CardTypes(ctx context.Context) ([]*ent.CardType, error) {
-	panic(fmt.Errorf("not implemented: CardTypes - cardTypes"))
+	return r.Client.CardType.Query().All(ctx)
 }
 
 // Decks is the resolver for the decks field.
 func (r *queryResolver) Decks(ctx context.Context) ([]*ent.Deck, error) {
-	panic(fmt.Errorf("not implemented: Decks - decks"))
+	return r.Client.Deck.Query().All(ctx)
 }
 
 // Products is the resolver for the products field.
 func (r *queryResolver) Products(ctx context.Context) ([]*ent.Product, error) {
-	panic(fmt.Errorf("not implemented: Products - products"))
+	return r.Client.Product.Query().All(ctx)
 }
 
 // Revisions is the resolver for the revisions field.
 func (r *queryResolver) Revisions(ctx context.Context) ([]*ent.Revision, error) {
-	panic(fmt.Errorf("not implemented: Revisions - revisions"))
+	return r.Client.Revision.Query().All(ctx)
 }
 
 // Query returns generated.QueryResolver implementation.
