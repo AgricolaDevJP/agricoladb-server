@@ -5,7 +5,7 @@ clean:
 
 .PHONY: generate
 generate:
-	go generate ./
+	CGO_ENABLED=0 go generate ./
 
 .PHONY: run
 run:
