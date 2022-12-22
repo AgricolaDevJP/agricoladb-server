@@ -31,14 +31,14 @@ const (
 	FieldPrerequisite = "prerequisite"
 	// FieldCost holds the string denoting the cost field in the database.
 	FieldCost = "cost"
-	// FieldFunctionText holds the string denoting the function_text field in the database.
-	FieldFunctionText = "function_text"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
 	// FieldIsOfficialJa holds the string denoting the is_official_ja field in the database.
 	FieldIsOfficialJa = "is_official_ja"
 	// FieldVictoryPoint holds the string denoting the victory_point field in the database.
 	FieldVictoryPoint = "victory_point"
-	// FieldIsVariableVictoryPoint holds the string denoting the is_variable_victory_point field in the database.
-	FieldIsVariableVictoryPoint = "is_variable_victory_point"
+	// FieldSpecialVictoryPoint holds the string denoting the special_victory_point field in the database.
+	FieldSpecialVictoryPoint = "special_victory_point"
 	// FieldHasArrrow holds the string denoting the has_arrrow field in the database.
 	FieldHasArrrow = "has_arrrow"
 	// FieldHasBonusPointIcon holds the string denoting the has_bonus_point_icon field in the database.
@@ -143,10 +143,10 @@ var Columns = []string{
 	FieldMinPlayersNumber,
 	FieldPrerequisite,
 	FieldCost,
-	FieldFunctionText,
+	FieldDescription,
 	FieldIsOfficialJa,
 	FieldVictoryPoint,
-	FieldIsVariableVictoryPoint,
+	FieldSpecialVictoryPoint,
 	FieldHasArrrow,
 	FieldHasBonusPointIcon,
 	FieldHasNegativeBonusPointIcon,

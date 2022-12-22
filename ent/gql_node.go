@@ -155,12 +155,12 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "cost",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(c.FunctionText); err != nil {
+	if buf, err = json.Marshal(c.Description); err != nil {
 		return nil, err
 	}
 	node.Fields[12] = &Field{
 		Type:  "string",
-		Name:  "function_text",
+		Name:  "description",
 		Value: string(buf),
 	}
 	if buf, err = json.Marshal(c.IsOfficialJa); err != nil {
@@ -179,12 +179,12 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "victory_point",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(c.IsVariableVictoryPoint); err != nil {
+	if buf, err = json.Marshal(c.SpecialVictoryPoint); err != nil {
 		return nil, err
 	}
 	node.Fields[15] = &Field{
-		Type:  "bool",
-		Name:  "is_variable_victory_point",
+		Type:  "string",
+		Name:  "special_victory_point",
 		Value: string(buf),
 	}
 	if buf, err = json.Marshal(c.HasArrrow); err != nil {

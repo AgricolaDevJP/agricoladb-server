@@ -188,22 +188,22 @@ type CardWhereInput struct {
 	CostEqualFold    *string  `json:"costEqualFold,omitempty"`
 	CostContainsFold *string  `json:"costContainsFold,omitempty"`
 
-	// "function_text" field predicates.
-	FunctionText             *string  `json:"functionText,omitempty"`
-	FunctionTextNEQ          *string  `json:"functionTextNEQ,omitempty"`
-	FunctionTextIn           []string `json:"functionTextIn,omitempty"`
-	FunctionTextNotIn        []string `json:"functionTextNotIn,omitempty"`
-	FunctionTextGT           *string  `json:"functionTextGT,omitempty"`
-	FunctionTextGTE          *string  `json:"functionTextGTE,omitempty"`
-	FunctionTextLT           *string  `json:"functionTextLT,omitempty"`
-	FunctionTextLTE          *string  `json:"functionTextLTE,omitempty"`
-	FunctionTextContains     *string  `json:"functionTextContains,omitempty"`
-	FunctionTextHasPrefix    *string  `json:"functionTextHasPrefix,omitempty"`
-	FunctionTextHasSuffix    *string  `json:"functionTextHasSuffix,omitempty"`
-	FunctionTextIsNil        bool     `json:"functionTextIsNil,omitempty"`
-	FunctionTextNotNil       bool     `json:"functionTextNotNil,omitempty"`
-	FunctionTextEqualFold    *string  `json:"functionTextEqualFold,omitempty"`
-	FunctionTextContainsFold *string  `json:"functionTextContainsFold,omitempty"`
+	// "description" field predicates.
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
 	// "is_official_ja" field predicates.
 	IsOfficialJa    *bool `json:"isOfficialJa,omitempty"`
@@ -221,9 +221,22 @@ type CardWhereInput struct {
 	VictoryPointIsNil  bool  `json:"victoryPointIsNil,omitempty"`
 	VictoryPointNotNil bool  `json:"victoryPointNotNil,omitempty"`
 
-	// "is_variable_victory_point" field predicates.
-	IsVariableVictoryPoint    *bool `json:"isVariableVictoryPoint,omitempty"`
-	IsVariableVictoryPointNEQ *bool `json:"isVariableVictoryPointNEQ,omitempty"`
+	// "special_victory_point" field predicates.
+	SpecialVictoryPoint             *string  `json:"specialVictoryPoint,omitempty"`
+	SpecialVictoryPointNEQ          *string  `json:"specialVictoryPointNEQ,omitempty"`
+	SpecialVictoryPointIn           []string `json:"specialVictoryPointIn,omitempty"`
+	SpecialVictoryPointNotIn        []string `json:"specialVictoryPointNotIn,omitempty"`
+	SpecialVictoryPointGT           *string  `json:"specialVictoryPointGT,omitempty"`
+	SpecialVictoryPointGTE          *string  `json:"specialVictoryPointGTE,omitempty"`
+	SpecialVictoryPointLT           *string  `json:"specialVictoryPointLT,omitempty"`
+	SpecialVictoryPointLTE          *string  `json:"specialVictoryPointLTE,omitempty"`
+	SpecialVictoryPointContains     *string  `json:"specialVictoryPointContains,omitempty"`
+	SpecialVictoryPointHasPrefix    *string  `json:"specialVictoryPointHasPrefix,omitempty"`
+	SpecialVictoryPointHasSuffix    *string  `json:"specialVictoryPointHasSuffix,omitempty"`
+	SpecialVictoryPointIsNil        bool     `json:"specialVictoryPointIsNil,omitempty"`
+	SpecialVictoryPointNotNil       bool     `json:"specialVictoryPointNotNil,omitempty"`
+	SpecialVictoryPointEqualFold    *string  `json:"specialVictoryPointEqualFold,omitempty"`
+	SpecialVictoryPointContainsFold *string  `json:"specialVictoryPointContainsFold,omitempty"`
 
 	// "has_arrrow" field predicates.
 	HasArrrow    *bool `json:"hasArrrow,omitempty"`
@@ -816,50 +829,50 @@ func (i *CardWhereInput) P() (predicate.Card, error) {
 	if i.CostContainsFold != nil {
 		predicates = append(predicates, card.CostContainsFold(*i.CostContainsFold))
 	}
-	if i.FunctionText != nil {
-		predicates = append(predicates, card.FunctionTextEQ(*i.FunctionText))
+	if i.Description != nil {
+		predicates = append(predicates, card.DescriptionEQ(*i.Description))
 	}
-	if i.FunctionTextNEQ != nil {
-		predicates = append(predicates, card.FunctionTextNEQ(*i.FunctionTextNEQ))
+	if i.DescriptionNEQ != nil {
+		predicates = append(predicates, card.DescriptionNEQ(*i.DescriptionNEQ))
 	}
-	if len(i.FunctionTextIn) > 0 {
-		predicates = append(predicates, card.FunctionTextIn(i.FunctionTextIn...))
+	if len(i.DescriptionIn) > 0 {
+		predicates = append(predicates, card.DescriptionIn(i.DescriptionIn...))
 	}
-	if len(i.FunctionTextNotIn) > 0 {
-		predicates = append(predicates, card.FunctionTextNotIn(i.FunctionTextNotIn...))
+	if len(i.DescriptionNotIn) > 0 {
+		predicates = append(predicates, card.DescriptionNotIn(i.DescriptionNotIn...))
 	}
-	if i.FunctionTextGT != nil {
-		predicates = append(predicates, card.FunctionTextGT(*i.FunctionTextGT))
+	if i.DescriptionGT != nil {
+		predicates = append(predicates, card.DescriptionGT(*i.DescriptionGT))
 	}
-	if i.FunctionTextGTE != nil {
-		predicates = append(predicates, card.FunctionTextGTE(*i.FunctionTextGTE))
+	if i.DescriptionGTE != nil {
+		predicates = append(predicates, card.DescriptionGTE(*i.DescriptionGTE))
 	}
-	if i.FunctionTextLT != nil {
-		predicates = append(predicates, card.FunctionTextLT(*i.FunctionTextLT))
+	if i.DescriptionLT != nil {
+		predicates = append(predicates, card.DescriptionLT(*i.DescriptionLT))
 	}
-	if i.FunctionTextLTE != nil {
-		predicates = append(predicates, card.FunctionTextLTE(*i.FunctionTextLTE))
+	if i.DescriptionLTE != nil {
+		predicates = append(predicates, card.DescriptionLTE(*i.DescriptionLTE))
 	}
-	if i.FunctionTextContains != nil {
-		predicates = append(predicates, card.FunctionTextContains(*i.FunctionTextContains))
+	if i.DescriptionContains != nil {
+		predicates = append(predicates, card.DescriptionContains(*i.DescriptionContains))
 	}
-	if i.FunctionTextHasPrefix != nil {
-		predicates = append(predicates, card.FunctionTextHasPrefix(*i.FunctionTextHasPrefix))
+	if i.DescriptionHasPrefix != nil {
+		predicates = append(predicates, card.DescriptionHasPrefix(*i.DescriptionHasPrefix))
 	}
-	if i.FunctionTextHasSuffix != nil {
-		predicates = append(predicates, card.FunctionTextHasSuffix(*i.FunctionTextHasSuffix))
+	if i.DescriptionHasSuffix != nil {
+		predicates = append(predicates, card.DescriptionHasSuffix(*i.DescriptionHasSuffix))
 	}
-	if i.FunctionTextIsNil {
-		predicates = append(predicates, card.FunctionTextIsNil())
+	if i.DescriptionIsNil {
+		predicates = append(predicates, card.DescriptionIsNil())
 	}
-	if i.FunctionTextNotNil {
-		predicates = append(predicates, card.FunctionTextNotNil())
+	if i.DescriptionNotNil {
+		predicates = append(predicates, card.DescriptionNotNil())
 	}
-	if i.FunctionTextEqualFold != nil {
-		predicates = append(predicates, card.FunctionTextEqualFold(*i.FunctionTextEqualFold))
+	if i.DescriptionEqualFold != nil {
+		predicates = append(predicates, card.DescriptionEqualFold(*i.DescriptionEqualFold))
 	}
-	if i.FunctionTextContainsFold != nil {
-		predicates = append(predicates, card.FunctionTextContainsFold(*i.FunctionTextContainsFold))
+	if i.DescriptionContainsFold != nil {
+		predicates = append(predicates, card.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
 	if i.IsOfficialJa != nil {
 		predicates = append(predicates, card.IsOfficialJaEQ(*i.IsOfficialJa))
@@ -897,11 +910,50 @@ func (i *CardWhereInput) P() (predicate.Card, error) {
 	if i.VictoryPointNotNil {
 		predicates = append(predicates, card.VictoryPointNotNil())
 	}
-	if i.IsVariableVictoryPoint != nil {
-		predicates = append(predicates, card.IsVariableVictoryPointEQ(*i.IsVariableVictoryPoint))
+	if i.SpecialVictoryPoint != nil {
+		predicates = append(predicates, card.SpecialVictoryPointEQ(*i.SpecialVictoryPoint))
 	}
-	if i.IsVariableVictoryPointNEQ != nil {
-		predicates = append(predicates, card.IsVariableVictoryPointNEQ(*i.IsVariableVictoryPointNEQ))
+	if i.SpecialVictoryPointNEQ != nil {
+		predicates = append(predicates, card.SpecialVictoryPointNEQ(*i.SpecialVictoryPointNEQ))
+	}
+	if len(i.SpecialVictoryPointIn) > 0 {
+		predicates = append(predicates, card.SpecialVictoryPointIn(i.SpecialVictoryPointIn...))
+	}
+	if len(i.SpecialVictoryPointNotIn) > 0 {
+		predicates = append(predicates, card.SpecialVictoryPointNotIn(i.SpecialVictoryPointNotIn...))
+	}
+	if i.SpecialVictoryPointGT != nil {
+		predicates = append(predicates, card.SpecialVictoryPointGT(*i.SpecialVictoryPointGT))
+	}
+	if i.SpecialVictoryPointGTE != nil {
+		predicates = append(predicates, card.SpecialVictoryPointGTE(*i.SpecialVictoryPointGTE))
+	}
+	if i.SpecialVictoryPointLT != nil {
+		predicates = append(predicates, card.SpecialVictoryPointLT(*i.SpecialVictoryPointLT))
+	}
+	if i.SpecialVictoryPointLTE != nil {
+		predicates = append(predicates, card.SpecialVictoryPointLTE(*i.SpecialVictoryPointLTE))
+	}
+	if i.SpecialVictoryPointContains != nil {
+		predicates = append(predicates, card.SpecialVictoryPointContains(*i.SpecialVictoryPointContains))
+	}
+	if i.SpecialVictoryPointHasPrefix != nil {
+		predicates = append(predicates, card.SpecialVictoryPointHasPrefix(*i.SpecialVictoryPointHasPrefix))
+	}
+	if i.SpecialVictoryPointHasSuffix != nil {
+		predicates = append(predicates, card.SpecialVictoryPointHasSuffix(*i.SpecialVictoryPointHasSuffix))
+	}
+	if i.SpecialVictoryPointIsNil {
+		predicates = append(predicates, card.SpecialVictoryPointIsNil())
+	}
+	if i.SpecialVictoryPointNotNil {
+		predicates = append(predicates, card.SpecialVictoryPointNotNil())
+	}
+	if i.SpecialVictoryPointEqualFold != nil {
+		predicates = append(predicates, card.SpecialVictoryPointEqualFold(*i.SpecialVictoryPointEqualFold))
+	}
+	if i.SpecialVictoryPointContainsFold != nil {
+		predicates = append(predicates, card.SpecialVictoryPointContainsFold(*i.SpecialVictoryPointContainsFold))
 	}
 	if i.HasArrrow != nil {
 		predicates = append(predicates, card.HasArrrowEQ(*i.HasArrrow))

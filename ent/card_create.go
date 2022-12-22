@@ -168,16 +168,16 @@ func (cc *CardCreate) SetNillableCost(s *string) *CardCreate {
 	return cc
 }
 
-// SetFunctionText sets the "function_text" field.
-func (cc *CardCreate) SetFunctionText(s string) *CardCreate {
-	cc.mutation.SetFunctionText(s)
+// SetDescription sets the "description" field.
+func (cc *CardCreate) SetDescription(s string) *CardCreate {
+	cc.mutation.SetDescription(s)
 	return cc
 }
 
-// SetNillableFunctionText sets the "function_text" field if the given value is not nil.
-func (cc *CardCreate) SetNillableFunctionText(s *string) *CardCreate {
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (cc *CardCreate) SetNillableDescription(s *string) *CardCreate {
 	if s != nil {
-		cc.SetFunctionText(*s)
+		cc.SetDescription(*s)
 	}
 	return cc
 }
@@ -202,9 +202,17 @@ func (cc *CardCreate) SetNillableVictoryPoint(i *int) *CardCreate {
 	return cc
 }
 
-// SetIsVariableVictoryPoint sets the "is_variable_victory_point" field.
-func (cc *CardCreate) SetIsVariableVictoryPoint(b bool) *CardCreate {
-	cc.mutation.SetIsVariableVictoryPoint(b)
+// SetSpecialVictoryPoint sets the "special_victory_point" field.
+func (cc *CardCreate) SetSpecialVictoryPoint(s string) *CardCreate {
+	cc.mutation.SetSpecialVictoryPoint(s)
+	return cc
+}
+
+// SetNillableSpecialVictoryPoint sets the "special_victory_point" field if the given value is not nil.
+func (cc *CardCreate) SetNillableSpecialVictoryPoint(s *string) *CardCreate {
+	if s != nil {
+		cc.SetSpecialVictoryPoint(*s)
+	}
 	return cc
 }
 
@@ -468,9 +476,6 @@ func (cc *CardCreate) check() error {
 	if _, ok := cc.mutation.IsOfficialJa(); !ok {
 		return &ValidationError{Name: "is_official_ja", err: errors.New(`ent: missing required field "Card.is_official_ja"`)}
 	}
-	if _, ok := cc.mutation.IsVariableVictoryPoint(); !ok {
-		return &ValidationError{Name: "is_variable_victory_point", err: errors.New(`ent: missing required field "Card.is_variable_victory_point"`)}
-	}
 	if _, ok := cc.mutation.HasArrrow(); !ok {
 		return &ValidationError{Name: "has_arrrow", err: errors.New(`ent: missing required field "Card.has_arrrow"`)}
 	}
@@ -587,9 +592,9 @@ func (cc *CardCreate) createSpec() (*Card, *sqlgraph.CreateSpec) {
 		_spec.SetField(card.FieldCost, field.TypeString, value)
 		_node.Cost = value
 	}
-	if value, ok := cc.mutation.FunctionText(); ok {
-		_spec.SetField(card.FieldFunctionText, field.TypeString, value)
-		_node.FunctionText = value
+	if value, ok := cc.mutation.Description(); ok {
+		_spec.SetField(card.FieldDescription, field.TypeString, value)
+		_node.Description = value
 	}
 	if value, ok := cc.mutation.IsOfficialJa(); ok {
 		_spec.SetField(card.FieldIsOfficialJa, field.TypeBool, value)
@@ -599,9 +604,9 @@ func (cc *CardCreate) createSpec() (*Card, *sqlgraph.CreateSpec) {
 		_spec.SetField(card.FieldVictoryPoint, field.TypeInt, value)
 		_node.VictoryPoint = value
 	}
-	if value, ok := cc.mutation.IsVariableVictoryPoint(); ok {
-		_spec.SetField(card.FieldIsVariableVictoryPoint, field.TypeBool, value)
-		_node.IsVariableVictoryPoint = value
+	if value, ok := cc.mutation.SpecialVictoryPoint(); ok {
+		_spec.SetField(card.FieldSpecialVictoryPoint, field.TypeString, value)
+		_node.SpecialVictoryPoint = value
 	}
 	if value, ok := cc.mutation.HasArrrow(); ok {
 		_spec.SetField(card.FieldHasArrrow, field.TypeBool, value)

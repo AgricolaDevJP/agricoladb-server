@@ -14,10 +14,10 @@ type Card implements Node {
   minPlayersNumber: Int
   prerequisite: String
   cost: String
-  functionText: String
+  description: String
   isOfficialJa: Boolean!
   victoryPoint: Int
-  isVariableVictoryPoint: Boolean!
+  specialVictoryPoint: String
   hasArrrow: Boolean!
   hasBonusPointIcon: Boolean!
   hasNegativeBonusPointIcon: Boolean!
@@ -399,22 +399,22 @@ input CardWhereInput {
   costNotNil: Boolean
   costEqualFold: String
   costContainsFold: String
-  """function_text field predicates"""
-  functionText: String
-  functionTextNEQ: String
-  functionTextIn: [String!]
-  functionTextNotIn: [String!]
-  functionTextGT: String
-  functionTextGTE: String
-  functionTextLT: String
-  functionTextLTE: String
-  functionTextContains: String
-  functionTextHasPrefix: String
-  functionTextHasSuffix: String
-  functionTextIsNil: Boolean
-  functionTextNotNil: Boolean
-  functionTextEqualFold: String
-  functionTextContainsFold: String
+  """description field predicates"""
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
   """is_official_ja field predicates"""
   isOfficialJa: Boolean
   isOfficialJaNEQ: Boolean
@@ -429,9 +429,22 @@ input CardWhereInput {
   victoryPointLTE: Int
   victoryPointIsNil: Boolean
   victoryPointNotNil: Boolean
-  """is_variable_victory_point field predicates"""
-  isVariableVictoryPoint: Boolean
-  isVariableVictoryPointNEQ: Boolean
+  """special_victory_point field predicates"""
+  specialVictoryPoint: String
+  specialVictoryPointNEQ: String
+  specialVictoryPointIn: [String!]
+  specialVictoryPointNotIn: [String!]
+  specialVictoryPointGT: String
+  specialVictoryPointGTE: String
+  specialVictoryPointLT: String
+  specialVictoryPointLTE: String
+  specialVictoryPointContains: String
+  specialVictoryPointHasPrefix: String
+  specialVictoryPointHasSuffix: String
+  specialVictoryPointIsNil: Boolean
+  specialVictoryPointNotNil: Boolean
+  specialVictoryPointEqualFold: String
+  specialVictoryPointContainsFold: String
   """has_arrrow field predicates"""
   hasArrrow: Boolean
   hasArrrowNEQ: Boolean

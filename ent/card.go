@@ -43,14 +43,14 @@ type Card struct {
 	Prerequisite string `json:"prerequisite,omitempty"`
 	// Cost holds the value of the "cost" field.
 	Cost string `json:"cost,omitempty"`
-	// FunctionText holds the value of the "function_text" field.
-	FunctionText string `json:"function_text,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
 	// IsOfficialJa holds the value of the "is_official_ja" field.
 	IsOfficialJa bool `json:"is_official_ja,omitempty"`
 	// VictoryPoint holds the value of the "victory_point" field.
 	VictoryPoint int `json:"victory_point,omitempty"`
-	// IsVariableVictoryPoint holds the value of the "is_variable_victory_point" field.
-	IsVariableVictoryPoint bool `json:"is_variable_victory_point,omitempty"`
+	// SpecialVictoryPoint holds the value of the "special_victory_point" field.
+	SpecialVictoryPoint string `json:"special_victory_point,omitempty"`
 	// HasArrrow holds the value of the "has_arrrow" field.
 	HasArrrow bool `json:"has_arrrow,omitempty"`
 	// HasBonusPointIcon holds the value of the "has_bonus_point_icon" field.
@@ -201,11 +201,11 @@ func (*Card) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case card.FieldIsOfficialJa, card.FieldIsVariableVictoryPoint, card.FieldHasArrrow, card.FieldHasBonusPointIcon, card.FieldHasNegativeBonusPointIcon, card.FieldHasPanIcon, card.FieldHasBreadIcon, card.FieldHasFarmPlannerIcon, card.FieldHasActionsBoosterIcon, card.FieldHasPointsProviderIcon, card.FieldHasGoodsProviderIcon, card.FieldHasFoodProviderIcon, card.FieldHasCropProviderIcon, card.FieldHasBuildingResourceProviderIcon, card.FieldHasLivestockProviderIcon, card.FieldHasCutPeatIcon, card.FieldHasFellTreesIcon, card.FieldHasSlashAndBurnIcon, card.FieldHasHiringFareIcon:
+		case card.FieldIsOfficialJa, card.FieldHasArrrow, card.FieldHasBonusPointIcon, card.FieldHasNegativeBonusPointIcon, card.FieldHasPanIcon, card.FieldHasBreadIcon, card.FieldHasFarmPlannerIcon, card.FieldHasActionsBoosterIcon, card.FieldHasPointsProviderIcon, card.FieldHasGoodsProviderIcon, card.FieldHasFoodProviderIcon, card.FieldHasCropProviderIcon, card.FieldHasBuildingResourceProviderIcon, card.FieldHasLivestockProviderIcon, card.FieldHasCutPeatIcon, card.FieldHasFellTreesIcon, card.FieldHasSlashAndBurnIcon, card.FieldHasHiringFareIcon:
 			values[i] = new(sql.NullBool)
 		case card.FieldID, card.FieldRevisionID, card.FieldDeckID, card.FieldCardTypeID, card.FieldCardSpecialColorID, card.FieldMinPlayersNumber, card.FieldVictoryPoint:
 			values[i] = new(sql.NullInt64)
-		case card.FieldLiteralID, card.FieldPrintedID, card.FieldPlayAgricolaCardID, card.FieldNameJa, card.FieldNameEn, card.FieldPrerequisite, card.FieldCost, card.FieldFunctionText:
+		case card.FieldLiteralID, card.FieldPrintedID, card.FieldPlayAgricolaCardID, card.FieldNameJa, card.FieldNameEn, card.FieldPrerequisite, card.FieldCost, card.FieldDescription, card.FieldSpecialVictoryPoint:
 			values[i] = new(sql.NullString)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Card", columns[i])
@@ -300,11 +300,11 @@ func (c *Card) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.Cost = value.String
 			}
-		case card.FieldFunctionText:
+		case card.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field function_text", values[i])
+				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				c.FunctionText = value.String
+				c.Description = value.String
 			}
 		case card.FieldIsOfficialJa:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -318,11 +318,11 @@ func (c *Card) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.VictoryPoint = int(value.Int64)
 			}
-		case card.FieldIsVariableVictoryPoint:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field is_variable_victory_point", values[i])
+		case card.FieldSpecialVictoryPoint:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field special_victory_point", values[i])
 			} else if value.Valid {
-				c.IsVariableVictoryPoint = value.Bool
+				c.SpecialVictoryPoint = value.String
 			}
 		case card.FieldHasArrrow:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -525,8 +525,8 @@ func (c *Card) String() string {
 	builder.WriteString("cost=")
 	builder.WriteString(c.Cost)
 	builder.WriteString(", ")
-	builder.WriteString("function_text=")
-	builder.WriteString(c.FunctionText)
+	builder.WriteString("description=")
+	builder.WriteString(c.Description)
 	builder.WriteString(", ")
 	builder.WriteString("is_official_ja=")
 	builder.WriteString(fmt.Sprintf("%v", c.IsOfficialJa))
@@ -534,8 +534,8 @@ func (c *Card) String() string {
 	builder.WriteString("victory_point=")
 	builder.WriteString(fmt.Sprintf("%v", c.VictoryPoint))
 	builder.WriteString(", ")
-	builder.WriteString("is_variable_victory_point=")
-	builder.WriteString(fmt.Sprintf("%v", c.IsVariableVictoryPoint))
+	builder.WriteString("special_victory_point=")
+	builder.WriteString(c.SpecialVictoryPoint)
 	builder.WriteString(", ")
 	builder.WriteString("has_arrrow=")
 	builder.WriteString(fmt.Sprintf("%v", c.HasArrrow))

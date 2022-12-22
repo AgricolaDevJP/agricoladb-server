@@ -224,23 +224,23 @@ func (cu *CardUpdate) ClearCost() *CardUpdate {
 	return cu
 }
 
-// SetFunctionText sets the "function_text" field.
-func (cu *CardUpdate) SetFunctionText(s string) *CardUpdate {
-	cu.mutation.SetFunctionText(s)
+// SetDescription sets the "description" field.
+func (cu *CardUpdate) SetDescription(s string) *CardUpdate {
+	cu.mutation.SetDescription(s)
 	return cu
 }
 
-// SetNillableFunctionText sets the "function_text" field if the given value is not nil.
-func (cu *CardUpdate) SetNillableFunctionText(s *string) *CardUpdate {
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableDescription(s *string) *CardUpdate {
 	if s != nil {
-		cu.SetFunctionText(*s)
+		cu.SetDescription(*s)
 	}
 	return cu
 }
 
-// ClearFunctionText clears the value of the "function_text" field.
-func (cu *CardUpdate) ClearFunctionText() *CardUpdate {
-	cu.mutation.ClearFunctionText()
+// ClearDescription clears the value of the "description" field.
+func (cu *CardUpdate) ClearDescription() *CardUpdate {
+	cu.mutation.ClearDescription()
 	return cu
 }
 
@@ -277,9 +277,23 @@ func (cu *CardUpdate) ClearVictoryPoint() *CardUpdate {
 	return cu
 }
 
-// SetIsVariableVictoryPoint sets the "is_variable_victory_point" field.
-func (cu *CardUpdate) SetIsVariableVictoryPoint(b bool) *CardUpdate {
-	cu.mutation.SetIsVariableVictoryPoint(b)
+// SetSpecialVictoryPoint sets the "special_victory_point" field.
+func (cu *CardUpdate) SetSpecialVictoryPoint(s string) *CardUpdate {
+	cu.mutation.SetSpecialVictoryPoint(s)
+	return cu
+}
+
+// SetNillableSpecialVictoryPoint sets the "special_victory_point" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableSpecialVictoryPoint(s *string) *CardUpdate {
+	if s != nil {
+		cu.SetSpecialVictoryPoint(*s)
+	}
+	return cu
+}
+
+// ClearSpecialVictoryPoint clears the value of the "special_victory_point" field.
+func (cu *CardUpdate) ClearSpecialVictoryPoint() *CardUpdate {
+	cu.mutation.ClearSpecialVictoryPoint()
 	return cu
 }
 
@@ -665,11 +679,11 @@ func (cu *CardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.CostCleared() {
 		_spec.ClearField(card.FieldCost, field.TypeString)
 	}
-	if value, ok := cu.mutation.FunctionText(); ok {
-		_spec.SetField(card.FieldFunctionText, field.TypeString, value)
+	if value, ok := cu.mutation.Description(); ok {
+		_spec.SetField(card.FieldDescription, field.TypeString, value)
 	}
-	if cu.mutation.FunctionTextCleared() {
-		_spec.ClearField(card.FieldFunctionText, field.TypeString)
+	if cu.mutation.DescriptionCleared() {
+		_spec.ClearField(card.FieldDescription, field.TypeString)
 	}
 	if value, ok := cu.mutation.IsOfficialJa(); ok {
 		_spec.SetField(card.FieldIsOfficialJa, field.TypeBool, value)
@@ -683,8 +697,11 @@ func (cu *CardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.VictoryPointCleared() {
 		_spec.ClearField(card.FieldVictoryPoint, field.TypeInt)
 	}
-	if value, ok := cu.mutation.IsVariableVictoryPoint(); ok {
-		_spec.SetField(card.FieldIsVariableVictoryPoint, field.TypeBool, value)
+	if value, ok := cu.mutation.SpecialVictoryPoint(); ok {
+		_spec.SetField(card.FieldSpecialVictoryPoint, field.TypeString, value)
+	}
+	if cu.mutation.SpecialVictoryPointCleared() {
+		_spec.ClearField(card.FieldSpecialVictoryPoint, field.TypeString)
 	}
 	if value, ok := cu.mutation.HasArrrow(); ok {
 		_spec.SetField(card.FieldHasArrrow, field.TypeBool, value)
@@ -1216,23 +1233,23 @@ func (cuo *CardUpdateOne) ClearCost() *CardUpdateOne {
 	return cuo
 }
 
-// SetFunctionText sets the "function_text" field.
-func (cuo *CardUpdateOne) SetFunctionText(s string) *CardUpdateOne {
-	cuo.mutation.SetFunctionText(s)
+// SetDescription sets the "description" field.
+func (cuo *CardUpdateOne) SetDescription(s string) *CardUpdateOne {
+	cuo.mutation.SetDescription(s)
 	return cuo
 }
 
-// SetNillableFunctionText sets the "function_text" field if the given value is not nil.
-func (cuo *CardUpdateOne) SetNillableFunctionText(s *string) *CardUpdateOne {
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableDescription(s *string) *CardUpdateOne {
 	if s != nil {
-		cuo.SetFunctionText(*s)
+		cuo.SetDescription(*s)
 	}
 	return cuo
 }
 
-// ClearFunctionText clears the value of the "function_text" field.
-func (cuo *CardUpdateOne) ClearFunctionText() *CardUpdateOne {
-	cuo.mutation.ClearFunctionText()
+// ClearDescription clears the value of the "description" field.
+func (cuo *CardUpdateOne) ClearDescription() *CardUpdateOne {
+	cuo.mutation.ClearDescription()
 	return cuo
 }
 
@@ -1269,9 +1286,23 @@ func (cuo *CardUpdateOne) ClearVictoryPoint() *CardUpdateOne {
 	return cuo
 }
 
-// SetIsVariableVictoryPoint sets the "is_variable_victory_point" field.
-func (cuo *CardUpdateOne) SetIsVariableVictoryPoint(b bool) *CardUpdateOne {
-	cuo.mutation.SetIsVariableVictoryPoint(b)
+// SetSpecialVictoryPoint sets the "special_victory_point" field.
+func (cuo *CardUpdateOne) SetSpecialVictoryPoint(s string) *CardUpdateOne {
+	cuo.mutation.SetSpecialVictoryPoint(s)
+	return cuo
+}
+
+// SetNillableSpecialVictoryPoint sets the "special_victory_point" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableSpecialVictoryPoint(s *string) *CardUpdateOne {
+	if s != nil {
+		cuo.SetSpecialVictoryPoint(*s)
+	}
+	return cuo
+}
+
+// ClearSpecialVictoryPoint clears the value of the "special_victory_point" field.
+func (cuo *CardUpdateOne) ClearSpecialVictoryPoint() *CardUpdateOne {
+	cuo.mutation.ClearSpecialVictoryPoint()
 	return cuo
 }
 
@@ -1687,11 +1718,11 @@ func (cuo *CardUpdateOne) sqlSave(ctx context.Context) (_node *Card, err error) 
 	if cuo.mutation.CostCleared() {
 		_spec.ClearField(card.FieldCost, field.TypeString)
 	}
-	if value, ok := cuo.mutation.FunctionText(); ok {
-		_spec.SetField(card.FieldFunctionText, field.TypeString, value)
+	if value, ok := cuo.mutation.Description(); ok {
+		_spec.SetField(card.FieldDescription, field.TypeString, value)
 	}
-	if cuo.mutation.FunctionTextCleared() {
-		_spec.ClearField(card.FieldFunctionText, field.TypeString)
+	if cuo.mutation.DescriptionCleared() {
+		_spec.ClearField(card.FieldDescription, field.TypeString)
 	}
 	if value, ok := cuo.mutation.IsOfficialJa(); ok {
 		_spec.SetField(card.FieldIsOfficialJa, field.TypeBool, value)
@@ -1705,8 +1736,11 @@ func (cuo *CardUpdateOne) sqlSave(ctx context.Context) (_node *Card, err error) 
 	if cuo.mutation.VictoryPointCleared() {
 		_spec.ClearField(card.FieldVictoryPoint, field.TypeInt)
 	}
-	if value, ok := cuo.mutation.IsVariableVictoryPoint(); ok {
-		_spec.SetField(card.FieldIsVariableVictoryPoint, field.TypeBool, value)
+	if value, ok := cuo.mutation.SpecialVictoryPoint(); ok {
+		_spec.SetField(card.FieldSpecialVictoryPoint, field.TypeString, value)
+	}
+	if cuo.mutation.SpecialVictoryPointCleared() {
+		_spec.ClearField(card.FieldSpecialVictoryPoint, field.TypeString)
 	}
 	if value, ok := cuo.mutation.HasArrrow(); ok {
 		_spec.SetField(card.FieldHasArrrow, field.TypeBool, value)

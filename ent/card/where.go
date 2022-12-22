@@ -164,10 +164,10 @@ func Cost(v string) predicate.Card {
 	})
 }
 
-// FunctionText applies equality check predicate on the "function_text" field. It's identical to FunctionTextEQ.
-func FunctionText(v string) predicate.Card {
+// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
+func Description(v string) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldFunctionText), v))
+		s.Where(sql.EQ(s.C(FieldDescription), v))
 	})
 }
 
@@ -185,10 +185,10 @@ func VictoryPoint(v int) predicate.Card {
 	})
 }
 
-// IsVariableVictoryPoint applies equality check predicate on the "is_variable_victory_point" field. It's identical to IsVariableVictoryPointEQ.
-func IsVariableVictoryPoint(v bool) predicate.Card {
+// SpecialVictoryPoint applies equality check predicate on the "special_victory_point" field. It's identical to SpecialVictoryPointEQ.
+func SpecialVictoryPoint(v string) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldIsVariableVictoryPoint), v))
+		s.Where(sql.EQ(s.C(FieldSpecialVictoryPoint), v))
 	})
 }
 
@@ -1338,116 +1338,116 @@ func CostContainsFold(v string) predicate.Card {
 	})
 }
 
-// FunctionTextEQ applies the EQ predicate on the "function_text" field.
-func FunctionTextEQ(v string) predicate.Card {
+// DescriptionEQ applies the EQ predicate on the "description" field.
+func DescriptionEQ(v string) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldFunctionText), v))
+		s.Where(sql.EQ(s.C(FieldDescription), v))
 	})
 }
 
-// FunctionTextNEQ applies the NEQ predicate on the "function_text" field.
-func FunctionTextNEQ(v string) predicate.Card {
+// DescriptionNEQ applies the NEQ predicate on the "description" field.
+func DescriptionNEQ(v string) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldFunctionText), v))
+		s.Where(sql.NEQ(s.C(FieldDescription), v))
 	})
 }
 
-// FunctionTextIn applies the In predicate on the "function_text" field.
-func FunctionTextIn(vs ...string) predicate.Card {
+// DescriptionIn applies the In predicate on the "description" field.
+func DescriptionIn(vs ...string) predicate.Card {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldFunctionText), v...))
+		s.Where(sql.In(s.C(FieldDescription), v...))
 	})
 }
 
-// FunctionTextNotIn applies the NotIn predicate on the "function_text" field.
-func FunctionTextNotIn(vs ...string) predicate.Card {
+// DescriptionNotIn applies the NotIn predicate on the "description" field.
+func DescriptionNotIn(vs ...string) predicate.Card {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]
 	}
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldFunctionText), v...))
+		s.Where(sql.NotIn(s.C(FieldDescription), v...))
 	})
 }
 
-// FunctionTextGT applies the GT predicate on the "function_text" field.
-func FunctionTextGT(v string) predicate.Card {
+// DescriptionGT applies the GT predicate on the "description" field.
+func DescriptionGT(v string) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldFunctionText), v))
+		s.Where(sql.GT(s.C(FieldDescription), v))
 	})
 }
 
-// FunctionTextGTE applies the GTE predicate on the "function_text" field.
-func FunctionTextGTE(v string) predicate.Card {
+// DescriptionGTE applies the GTE predicate on the "description" field.
+func DescriptionGTE(v string) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldFunctionText), v))
+		s.Where(sql.GTE(s.C(FieldDescription), v))
 	})
 }
 
-// FunctionTextLT applies the LT predicate on the "function_text" field.
-func FunctionTextLT(v string) predicate.Card {
+// DescriptionLT applies the LT predicate on the "description" field.
+func DescriptionLT(v string) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldFunctionText), v))
+		s.Where(sql.LT(s.C(FieldDescription), v))
 	})
 }
 
-// FunctionTextLTE applies the LTE predicate on the "function_text" field.
-func FunctionTextLTE(v string) predicate.Card {
+// DescriptionLTE applies the LTE predicate on the "description" field.
+func DescriptionLTE(v string) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldFunctionText), v))
+		s.Where(sql.LTE(s.C(FieldDescription), v))
 	})
 }
 
-// FunctionTextContains applies the Contains predicate on the "function_text" field.
-func FunctionTextContains(v string) predicate.Card {
+// DescriptionContains applies the Contains predicate on the "description" field.
+func DescriptionContains(v string) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldFunctionText), v))
+		s.Where(sql.Contains(s.C(FieldDescription), v))
 	})
 }
 
-// FunctionTextHasPrefix applies the HasPrefix predicate on the "function_text" field.
-func FunctionTextHasPrefix(v string) predicate.Card {
+// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
+func DescriptionHasPrefix(v string) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldFunctionText), v))
+		s.Where(sql.HasPrefix(s.C(FieldDescription), v))
 	})
 }
 
-// FunctionTextHasSuffix applies the HasSuffix predicate on the "function_text" field.
-func FunctionTextHasSuffix(v string) predicate.Card {
+// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
+func DescriptionHasSuffix(v string) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldFunctionText), v))
+		s.Where(sql.HasSuffix(s.C(FieldDescription), v))
 	})
 }
 
-// FunctionTextIsNil applies the IsNil predicate on the "function_text" field.
-func FunctionTextIsNil() predicate.Card {
+// DescriptionIsNil applies the IsNil predicate on the "description" field.
+func DescriptionIsNil() predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldFunctionText)))
+		s.Where(sql.IsNull(s.C(FieldDescription)))
 	})
 }
 
-// FunctionTextNotNil applies the NotNil predicate on the "function_text" field.
-func FunctionTextNotNil() predicate.Card {
+// DescriptionNotNil applies the NotNil predicate on the "description" field.
+func DescriptionNotNil() predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldFunctionText)))
+		s.Where(sql.NotNull(s.C(FieldDescription)))
 	})
 }
 
-// FunctionTextEqualFold applies the EqualFold predicate on the "function_text" field.
-func FunctionTextEqualFold(v string) predicate.Card {
+// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
+func DescriptionEqualFold(v string) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldFunctionText), v))
+		s.Where(sql.EqualFold(s.C(FieldDescription), v))
 	})
 }
 
-// FunctionTextContainsFold applies the ContainsFold predicate on the "function_text" field.
-func FunctionTextContainsFold(v string) predicate.Card {
+// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
+func DescriptionContainsFold(v string) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldFunctionText), v))
+		s.Where(sql.ContainsFold(s.C(FieldDescription), v))
 	})
 }
 
@@ -1543,17 +1543,116 @@ func VictoryPointNotNil() predicate.Card {
 	})
 }
 
-// IsVariableVictoryPointEQ applies the EQ predicate on the "is_variable_victory_point" field.
-func IsVariableVictoryPointEQ(v bool) predicate.Card {
+// SpecialVictoryPointEQ applies the EQ predicate on the "special_victory_point" field.
+func SpecialVictoryPointEQ(v string) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldIsVariableVictoryPoint), v))
+		s.Where(sql.EQ(s.C(FieldSpecialVictoryPoint), v))
 	})
 }
 
-// IsVariableVictoryPointNEQ applies the NEQ predicate on the "is_variable_victory_point" field.
-func IsVariableVictoryPointNEQ(v bool) predicate.Card {
+// SpecialVictoryPointNEQ applies the NEQ predicate on the "special_victory_point" field.
+func SpecialVictoryPointNEQ(v string) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldIsVariableVictoryPoint), v))
+		s.Where(sql.NEQ(s.C(FieldSpecialVictoryPoint), v))
+	})
+}
+
+// SpecialVictoryPointIn applies the In predicate on the "special_victory_point" field.
+func SpecialVictoryPointIn(vs ...string) predicate.Card {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldSpecialVictoryPoint), v...))
+	})
+}
+
+// SpecialVictoryPointNotIn applies the NotIn predicate on the "special_victory_point" field.
+func SpecialVictoryPointNotIn(vs ...string) predicate.Card {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldSpecialVictoryPoint), v...))
+	})
+}
+
+// SpecialVictoryPointGT applies the GT predicate on the "special_victory_point" field.
+func SpecialVictoryPointGT(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldSpecialVictoryPoint), v))
+	})
+}
+
+// SpecialVictoryPointGTE applies the GTE predicate on the "special_victory_point" field.
+func SpecialVictoryPointGTE(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldSpecialVictoryPoint), v))
+	})
+}
+
+// SpecialVictoryPointLT applies the LT predicate on the "special_victory_point" field.
+func SpecialVictoryPointLT(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldSpecialVictoryPoint), v))
+	})
+}
+
+// SpecialVictoryPointLTE applies the LTE predicate on the "special_victory_point" field.
+func SpecialVictoryPointLTE(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldSpecialVictoryPoint), v))
+	})
+}
+
+// SpecialVictoryPointContains applies the Contains predicate on the "special_victory_point" field.
+func SpecialVictoryPointContains(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldSpecialVictoryPoint), v))
+	})
+}
+
+// SpecialVictoryPointHasPrefix applies the HasPrefix predicate on the "special_victory_point" field.
+func SpecialVictoryPointHasPrefix(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldSpecialVictoryPoint), v))
+	})
+}
+
+// SpecialVictoryPointHasSuffix applies the HasSuffix predicate on the "special_victory_point" field.
+func SpecialVictoryPointHasSuffix(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldSpecialVictoryPoint), v))
+	})
+}
+
+// SpecialVictoryPointIsNil applies the IsNil predicate on the "special_victory_point" field.
+func SpecialVictoryPointIsNil() predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldSpecialVictoryPoint)))
+	})
+}
+
+// SpecialVictoryPointNotNil applies the NotNil predicate on the "special_victory_point" field.
+func SpecialVictoryPointNotNil() predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldSpecialVictoryPoint)))
+	})
+}
+
+// SpecialVictoryPointEqualFold applies the EqualFold predicate on the "special_victory_point" field.
+func SpecialVictoryPointEqualFold(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldSpecialVictoryPoint), v))
+	})
+}
+
+// SpecialVictoryPointContainsFold applies the ContainsFold predicate on the "special_victory_point" field.
+func SpecialVictoryPointContainsFold(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldSpecialVictoryPoint), v))
 	})
 }
 

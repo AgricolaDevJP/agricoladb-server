@@ -50,11 +50,11 @@ type CardMutation struct {
 	addmin_players_number               *int
 	prerequisite                        *string
 	cost                                *string
-	function_text                       *string
+	description                         *string
 	is_official_ja                      *bool
 	victory_point                       *int
 	addvictory_point                    *int
-	is_variable_victory_point           *bool
+	special_victory_point               *string
 	has_arrrow                          *bool
 	has_bonus_point_icon                *bool
 	has_negative_bonus_point_icon       *bool
@@ -763,53 +763,53 @@ func (m *CardMutation) ResetCost() {
 	delete(m.clearedFields, card.FieldCost)
 }
 
-// SetFunctionText sets the "function_text" field.
-func (m *CardMutation) SetFunctionText(s string) {
-	m.function_text = &s
+// SetDescription sets the "description" field.
+func (m *CardMutation) SetDescription(s string) {
+	m.description = &s
 }
 
-// FunctionText returns the value of the "function_text" field in the mutation.
-func (m *CardMutation) FunctionText() (r string, exists bool) {
-	v := m.function_text
+// Description returns the value of the "description" field in the mutation.
+func (m *CardMutation) Description() (r string, exists bool) {
+	v := m.description
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldFunctionText returns the old "function_text" field's value of the Card entity.
+// OldDescription returns the old "description" field's value of the Card entity.
 // If the Card object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CardMutation) OldFunctionText(ctx context.Context) (v string, err error) {
+func (m *CardMutation) OldDescription(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldFunctionText is only allowed on UpdateOne operations")
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldFunctionText requires an ID field in the mutation")
+		return v, errors.New("OldDescription requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldFunctionText: %w", err)
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
 	}
-	return oldValue.FunctionText, nil
+	return oldValue.Description, nil
 }
 
-// ClearFunctionText clears the value of the "function_text" field.
-func (m *CardMutation) ClearFunctionText() {
-	m.function_text = nil
-	m.clearedFields[card.FieldFunctionText] = struct{}{}
+// ClearDescription clears the value of the "description" field.
+func (m *CardMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[card.FieldDescription] = struct{}{}
 }
 
-// FunctionTextCleared returns if the "function_text" field was cleared in this mutation.
-func (m *CardMutation) FunctionTextCleared() bool {
-	_, ok := m.clearedFields[card.FieldFunctionText]
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *CardMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[card.FieldDescription]
 	return ok
 }
 
-// ResetFunctionText resets all changes to the "function_text" field.
-func (m *CardMutation) ResetFunctionText() {
-	m.function_text = nil
-	delete(m.clearedFields, card.FieldFunctionText)
+// ResetDescription resets all changes to the "description" field.
+func (m *CardMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, card.FieldDescription)
 }
 
 // SetIsOfficialJa sets the "is_official_ja" field.
@@ -918,40 +918,53 @@ func (m *CardMutation) ResetVictoryPoint() {
 	delete(m.clearedFields, card.FieldVictoryPoint)
 }
 
-// SetIsVariableVictoryPoint sets the "is_variable_victory_point" field.
-func (m *CardMutation) SetIsVariableVictoryPoint(b bool) {
-	m.is_variable_victory_point = &b
+// SetSpecialVictoryPoint sets the "special_victory_point" field.
+func (m *CardMutation) SetSpecialVictoryPoint(s string) {
+	m.special_victory_point = &s
 }
 
-// IsVariableVictoryPoint returns the value of the "is_variable_victory_point" field in the mutation.
-func (m *CardMutation) IsVariableVictoryPoint() (r bool, exists bool) {
-	v := m.is_variable_victory_point
+// SpecialVictoryPoint returns the value of the "special_victory_point" field in the mutation.
+func (m *CardMutation) SpecialVictoryPoint() (r string, exists bool) {
+	v := m.special_victory_point
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldIsVariableVictoryPoint returns the old "is_variable_victory_point" field's value of the Card entity.
+// OldSpecialVictoryPoint returns the old "special_victory_point" field's value of the Card entity.
 // If the Card object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CardMutation) OldIsVariableVictoryPoint(ctx context.Context) (v bool, err error) {
+func (m *CardMutation) OldSpecialVictoryPoint(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldIsVariableVictoryPoint is only allowed on UpdateOne operations")
+		return v, errors.New("OldSpecialVictoryPoint is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldIsVariableVictoryPoint requires an ID field in the mutation")
+		return v, errors.New("OldSpecialVictoryPoint requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldIsVariableVictoryPoint: %w", err)
+		return v, fmt.Errorf("querying old value for OldSpecialVictoryPoint: %w", err)
 	}
-	return oldValue.IsVariableVictoryPoint, nil
+	return oldValue.SpecialVictoryPoint, nil
 }
 
-// ResetIsVariableVictoryPoint resets all changes to the "is_variable_victory_point" field.
-func (m *CardMutation) ResetIsVariableVictoryPoint() {
-	m.is_variable_victory_point = nil
+// ClearSpecialVictoryPoint clears the value of the "special_victory_point" field.
+func (m *CardMutation) ClearSpecialVictoryPoint() {
+	m.special_victory_point = nil
+	m.clearedFields[card.FieldSpecialVictoryPoint] = struct{}{}
+}
+
+// SpecialVictoryPointCleared returns if the "special_victory_point" field was cleared in this mutation.
+func (m *CardMutation) SpecialVictoryPointCleared() bool {
+	_, ok := m.clearedFields[card.FieldSpecialVictoryPoint]
+	return ok
+}
+
+// ResetSpecialVictoryPoint resets all changes to the "special_victory_point" field.
+func (m *CardMutation) ResetSpecialVictoryPoint() {
+	m.special_victory_point = nil
+	delete(m.clearedFields, card.FieldSpecialVictoryPoint)
 }
 
 // SetHasArrrow sets the "has_arrrow" field.
@@ -1888,8 +1901,8 @@ func (m *CardMutation) Fields() []string {
 	if m.cost != nil {
 		fields = append(fields, card.FieldCost)
 	}
-	if m.function_text != nil {
-		fields = append(fields, card.FieldFunctionText)
+	if m.description != nil {
+		fields = append(fields, card.FieldDescription)
 	}
 	if m.is_official_ja != nil {
 		fields = append(fields, card.FieldIsOfficialJa)
@@ -1897,8 +1910,8 @@ func (m *CardMutation) Fields() []string {
 	if m.victory_point != nil {
 		fields = append(fields, card.FieldVictoryPoint)
 	}
-	if m.is_variable_victory_point != nil {
-		fields = append(fields, card.FieldIsVariableVictoryPoint)
+	if m.special_victory_point != nil {
+		fields = append(fields, card.FieldSpecialVictoryPoint)
 	}
 	if m.has_arrrow != nil {
 		fields = append(fields, card.FieldHasArrrow)
@@ -1983,14 +1996,14 @@ func (m *CardMutation) Field(name string) (ent.Value, bool) {
 		return m.Prerequisite()
 	case card.FieldCost:
 		return m.Cost()
-	case card.FieldFunctionText:
-		return m.FunctionText()
+	case card.FieldDescription:
+		return m.Description()
 	case card.FieldIsOfficialJa:
 		return m.IsOfficialJa()
 	case card.FieldVictoryPoint:
 		return m.VictoryPoint()
-	case card.FieldIsVariableVictoryPoint:
-		return m.IsVariableVictoryPoint()
+	case card.FieldSpecialVictoryPoint:
+		return m.SpecialVictoryPoint()
 	case card.FieldHasArrrow:
 		return m.HasArrrow()
 	case card.FieldHasBonusPointIcon:
@@ -2058,14 +2071,14 @@ func (m *CardMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldPrerequisite(ctx)
 	case card.FieldCost:
 		return m.OldCost(ctx)
-	case card.FieldFunctionText:
-		return m.OldFunctionText(ctx)
+	case card.FieldDescription:
+		return m.OldDescription(ctx)
 	case card.FieldIsOfficialJa:
 		return m.OldIsOfficialJa(ctx)
 	case card.FieldVictoryPoint:
 		return m.OldVictoryPoint(ctx)
-	case card.FieldIsVariableVictoryPoint:
-		return m.OldIsVariableVictoryPoint(ctx)
+	case card.FieldSpecialVictoryPoint:
+		return m.OldSpecialVictoryPoint(ctx)
 	case card.FieldHasArrrow:
 		return m.OldHasArrrow(ctx)
 	case card.FieldHasBonusPointIcon:
@@ -2193,12 +2206,12 @@ func (m *CardMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetCost(v)
 		return nil
-	case card.FieldFunctionText:
+	case card.FieldDescription:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetFunctionText(v)
+		m.SetDescription(v)
 		return nil
 	case card.FieldIsOfficialJa:
 		v, ok := value.(bool)
@@ -2214,12 +2227,12 @@ func (m *CardMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetVictoryPoint(v)
 		return nil
-	case card.FieldIsVariableVictoryPoint:
-		v, ok := value.(bool)
+	case card.FieldSpecialVictoryPoint:
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetIsVariableVictoryPoint(v)
+		m.SetSpecialVictoryPoint(v)
 		return nil
 	case card.FieldHasArrrow:
 		v, ok := value.(bool)
@@ -2424,11 +2437,14 @@ func (m *CardMutation) ClearedFields() []string {
 	if m.FieldCleared(card.FieldCost) {
 		fields = append(fields, card.FieldCost)
 	}
-	if m.FieldCleared(card.FieldFunctionText) {
-		fields = append(fields, card.FieldFunctionText)
+	if m.FieldCleared(card.FieldDescription) {
+		fields = append(fields, card.FieldDescription)
 	}
 	if m.FieldCleared(card.FieldVictoryPoint) {
 		fields = append(fields, card.FieldVictoryPoint)
+	}
+	if m.FieldCleared(card.FieldSpecialVictoryPoint) {
+		fields = append(fields, card.FieldSpecialVictoryPoint)
 	}
 	return fields
 }
@@ -2471,11 +2487,14 @@ func (m *CardMutation) ClearField(name string) error {
 	case card.FieldCost:
 		m.ClearCost()
 		return nil
-	case card.FieldFunctionText:
-		m.ClearFunctionText()
+	case card.FieldDescription:
+		m.ClearDescription()
 		return nil
 	case card.FieldVictoryPoint:
 		m.ClearVictoryPoint()
+		return nil
+	case card.FieldSpecialVictoryPoint:
+		m.ClearSpecialVictoryPoint()
 		return nil
 	}
 	return fmt.Errorf("unknown Card nullable field %s", name)
@@ -2521,8 +2540,8 @@ func (m *CardMutation) ResetField(name string) error {
 	case card.FieldCost:
 		m.ResetCost()
 		return nil
-	case card.FieldFunctionText:
-		m.ResetFunctionText()
+	case card.FieldDescription:
+		m.ResetDescription()
 		return nil
 	case card.FieldIsOfficialJa:
 		m.ResetIsOfficialJa()
@@ -2530,8 +2549,8 @@ func (m *CardMutation) ResetField(name string) error {
 	case card.FieldVictoryPoint:
 		m.ResetVictoryPoint()
 		return nil
-	case card.FieldIsVariableVictoryPoint:
-		m.ResetIsVariableVictoryPoint()
+	case card.FieldSpecialVictoryPoint:
+		m.ResetSpecialVictoryPoint()
 		return nil
 	case card.FieldHasArrrow:
 		m.ResetHasArrrow()
