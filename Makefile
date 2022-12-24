@@ -9,7 +9,7 @@ generate:
 
 .PHONY: run
 run:
-	go run server.go
+	go run cmd/server/main.go
 
 .PHONY: docker-build
 docker-build:
