@@ -1,0 +1,21 @@
+id,key,name_ja,name_en
+1,occupation,職業,Occupation
+2,minor_improvement,小さい進歩,Minor Improvement
+3,major_improvement,大きい進歩,Major Improvement
+4,begging,物乞い,Begging
+5,occuoation_x,職業 (Xデッキ),Occupation (X-Deck)
+6,minor_improvement_x,小さい進歩 (Xデッキ),Minor Improvement (X-Deck)
+7,action_space_x,アクションスペース (Xデッキ),Action Space (X-Deck)
+8,merchant_x,商人 (Xデッキ),Merchant (X-Deck)
+9,event_x,イベント (Xデッキ),Event (X-Deck)
+10,occupation_f,職業 (🌲デッキ),Occupation (Forest-Deck)
+11,minor_improvement_f,小さい進歩 (🌲デッキ),Minor Improvement (Forest-Deck)
+12,major_improvement_f,大きい進歩 (🌲デッキ),Major Improvement (Forest-Deck)
+13,action_space_f,アクションスペース (🌲デッキ),Action Space (Forest-Deck)
+14,event_f,イベント (🌲デッキ),Event (Forest-Deck)
+15,changeling,取り替え子 (WBデッキ),Changeling (WB-Deck)
+16,character,キャラクター（Newdale）,Character (Newdale)
+17,mother,母親（Consul Dirigens）,Parent (Mother) (Consul Dirigens)
+18,father,父親（Consul Dirigens）,Parent (Father) (Consul Dirigens)
+19,event_l,イベント（Lデッキ）,Event (L-deck)
+9000,misc,その他,Misc
