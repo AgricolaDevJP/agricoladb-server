@@ -13,6 +13,7 @@ import (
 	"errors"
 	"fmt"
 
+	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 )
@@ -22,6 +23,7 @@ type CardCreate struct {
 	config
 	mutation *CardMutation
 	hooks    []Hook
+	conflict []sql.ConflictOption
 }
 
 // SetLiteralID sets the "literal_id" field.
@@ -560,6 +562,7 @@ func (cc *CardCreate) createSpec() (*Card, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
+	_spec.OnConflict = cc.conflict
 	if value, ok := cc.mutation.LiteralID(); ok {
 		_spec.SetField(card.FieldLiteralID, field.TypeString, value)
 		_node.LiteralID = value
@@ -816,10 +819,1129 @@ func (cc *CardCreate) createSpec() (*Card, *sqlgraph.CreateSpec) {
 	return _node, _spec
 }
 
+// OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
+// of the `INSERT` statement. For example:
+//
+//	client.Card.Create().
+//		SetLiteralID(v).
+//		OnConflict(
+//			// Update the row with the new values
+//			// the was proposed for insertion.
+//			sql.ResolveWithNewValues(),
+//		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.CardUpsert) {
+//			SetLiteralID(v+v).
+//		}).
+//		Exec(ctx)
+func (cc *CardCreate) OnConflict(opts ...sql.ConflictOption) *CardUpsertOne {
+	cc.conflict = opts
+	return &CardUpsertOne{
+		create: cc,
+	}
+}
+
+// OnConflictColumns calls `OnConflict` and configures the columns
+// as conflict target. Using this option is equivalent to using:
+//
+//	client.Card.Create().
+//		OnConflict(sql.ConflictColumns(columns...)).
+//		Exec(ctx)
+func (cc *CardCreate) OnConflictColumns(columns ...string) *CardUpsertOne {
+	cc.conflict = append(cc.conflict, sql.ConflictColumns(columns...))
+	return &CardUpsertOne{
+		create: cc,
+	}
+}
+
+type (
+	// CardUpsertOne is the builder for "upsert"-ing
+	//  one Card node.
+	CardUpsertOne struct {
+		create *CardCreate
+	}
+
+	// CardUpsert is the "OnConflict" setter.
+	CardUpsert struct {
+		*sql.UpdateSet
+	}
+)
+
+// SetPrintedID sets the "printed_id" field.
+func (u *CardUpsert) SetPrintedID(v string) *CardUpsert {
+	u.Set(card.FieldPrintedID, v)
+	return u
+}
+
+// UpdatePrintedID sets the "printed_id" field to the value that was provided on create.
+func (u *CardUpsert) UpdatePrintedID() *CardUpsert {
+	u.SetExcluded(card.FieldPrintedID)
+	return u
+}
+
+// ClearPrintedID clears the value of the "printed_id" field.
+func (u *CardUpsert) ClearPrintedID() *CardUpsert {
+	u.SetNull(card.FieldPrintedID)
+	return u
+}
+
+// SetPlayAgricolaCardID sets the "play_agricola_card_id" field.
+func (u *CardUpsert) SetPlayAgricolaCardID(v string) *CardUpsert {
+	u.Set(card.FieldPlayAgricolaCardID, v)
+	return u
+}
+
+// UpdatePlayAgricolaCardID sets the "play_agricola_card_id" field to the value that was provided on create.
+func (u *CardUpsert) UpdatePlayAgricolaCardID() *CardUpsert {
+	u.SetExcluded(card.FieldPlayAgricolaCardID)
+	return u
+}
+
+// ClearPlayAgricolaCardID clears the value of the "play_agricola_card_id" field.
+func (u *CardUpsert) ClearPlayAgricolaCardID() *CardUpsert {
+	u.SetNull(card.FieldPlayAgricolaCardID)
+	return u
+}
+
+// SetDeckID sets the "deck_id" field.
+func (u *CardUpsert) SetDeckID(v int) *CardUpsert {
+	u.Set(card.FieldDeckID, v)
+	return u
+}
+
+// UpdateDeckID sets the "deck_id" field to the value that was provided on create.
+func (u *CardUpsert) UpdateDeckID() *CardUpsert {
+	u.SetExcluded(card.FieldDeckID)
+	return u
+}
+
+// ClearDeckID clears the value of the "deck_id" field.
+func (u *CardUpsert) ClearDeckID() *CardUpsert {
+	u.SetNull(card.FieldDeckID)
+	return u
+}
+
+// SetCardTypeID sets the "card_type_id" field.
+func (u *CardUpsert) SetCardTypeID(v int) *CardUpsert {
+	u.Set(card.FieldCardTypeID, v)
+	return u
+}
+
+// UpdateCardTypeID sets the "card_type_id" field to the value that was provided on create.
+func (u *CardUpsert) UpdateCardTypeID() *CardUpsert {
+	u.SetExcluded(card.FieldCardTypeID)
+	return u
+}
+
+// SetCardSpecialColorID sets the "card_special_color_id" field.
+func (u *CardUpsert) SetCardSpecialColorID(v int) *CardUpsert {
+	u.Set(card.FieldCardSpecialColorID, v)
+	return u
+}
+
+// UpdateCardSpecialColorID sets the "card_special_color_id" field to the value that was provided on create.
+func (u *CardUpsert) UpdateCardSpecialColorID() *CardUpsert {
+	u.SetExcluded(card.FieldCardSpecialColorID)
+	return u
+}
+
+// ClearCardSpecialColorID clears the value of the "card_special_color_id" field.
+func (u *CardUpsert) ClearCardSpecialColorID() *CardUpsert {
+	u.SetNull(card.FieldCardSpecialColorID)
+	return u
+}
+
+// SetNameJa sets the "name_ja" field.
+func (u *CardUpsert) SetNameJa(v string) *CardUpsert {
+	u.Set(card.FieldNameJa, v)
+	return u
+}
+
+// UpdateNameJa sets the "name_ja" field to the value that was provided on create.
+func (u *CardUpsert) UpdateNameJa() *CardUpsert {
+	u.SetExcluded(card.FieldNameJa)
+	return u
+}
+
+// ClearNameJa clears the value of the "name_ja" field.
+func (u *CardUpsert) ClearNameJa() *CardUpsert {
+	u.SetNull(card.FieldNameJa)
+	return u
+}
+
+// SetNameEn sets the "name_en" field.
+func (u *CardUpsert) SetNameEn(v string) *CardUpsert {
+	u.Set(card.FieldNameEn, v)
+	return u
+}
+
+// UpdateNameEn sets the "name_en" field to the value that was provided on create.
+func (u *CardUpsert) UpdateNameEn() *CardUpsert {
+	u.SetExcluded(card.FieldNameEn)
+	return u
+}
+
+// ClearNameEn clears the value of the "name_en" field.
+func (u *CardUpsert) ClearNameEn() *CardUpsert {
+	u.SetNull(card.FieldNameEn)
+	return u
+}
+
+// SetMinPlayersNumber sets the "min_players_number" field.
+func (u *CardUpsert) SetMinPlayersNumber(v int) *CardUpsert {
+	u.Set(card.FieldMinPlayersNumber, v)
+	return u
+}
+
+// UpdateMinPlayersNumber sets the "min_players_number" field to the value that was provided on create.
+func (u *CardUpsert) UpdateMinPlayersNumber() *CardUpsert {
+	u.SetExcluded(card.FieldMinPlayersNumber)
+	return u
+}
+
+// AddMinPlayersNumber adds v to the "min_players_number" field.
+func (u *CardUpsert) AddMinPlayersNumber(v int) *CardUpsert {
+	u.Add(card.FieldMinPlayersNumber, v)
+	return u
+}
+
+// ClearMinPlayersNumber clears the value of the "min_players_number" field.
+func (u *CardUpsert) ClearMinPlayersNumber() *CardUpsert {
+	u.SetNull(card.FieldMinPlayersNumber)
+	return u
+}
+
+// SetPrerequisite sets the "prerequisite" field.
+func (u *CardUpsert) SetPrerequisite(v string) *CardUpsert {
+	u.Set(card.FieldPrerequisite, v)
+	return u
+}
+
+// UpdatePrerequisite sets the "prerequisite" field to the value that was provided on create.
+func (u *CardUpsert) UpdatePrerequisite() *CardUpsert {
+	u.SetExcluded(card.FieldPrerequisite)
+	return u
+}
+
+// ClearPrerequisite clears the value of the "prerequisite" field.
+func (u *CardUpsert) ClearPrerequisite() *CardUpsert {
+	u.SetNull(card.FieldPrerequisite)
+	return u
+}
+
+// SetCost sets the "cost" field.
+func (u *CardUpsert) SetCost(v string) *CardUpsert {
+	u.Set(card.FieldCost, v)
+	return u
+}
+
+// UpdateCost sets the "cost" field to the value that was provided on create.
+func (u *CardUpsert) UpdateCost() *CardUpsert {
+	u.SetExcluded(card.FieldCost)
+	return u
+}
+
+// ClearCost clears the value of the "cost" field.
+func (u *CardUpsert) ClearCost() *CardUpsert {
+	u.SetNull(card.FieldCost)
+	return u
+}
+
+// SetDescription sets the "description" field.
+func (u *CardUpsert) SetDescription(v string) *CardUpsert {
+	u.Set(card.FieldDescription, v)
+	return u
+}
+
+// UpdateDescription sets the "description" field to the value that was provided on create.
+func (u *CardUpsert) UpdateDescription() *CardUpsert {
+	u.SetExcluded(card.FieldDescription)
+	return u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (u *CardUpsert) ClearDescription() *CardUpsert {
+	u.SetNull(card.FieldDescription)
+	return u
+}
+
+// SetIsOfficialJa sets the "is_official_ja" field.
+func (u *CardUpsert) SetIsOfficialJa(v bool) *CardUpsert {
+	u.Set(card.FieldIsOfficialJa, v)
+	return u
+}
+
+// UpdateIsOfficialJa sets the "is_official_ja" field to the value that was provided on create.
+func (u *CardUpsert) UpdateIsOfficialJa() *CardUpsert {
+	u.SetExcluded(card.FieldIsOfficialJa)
+	return u
+}
+
+// SetVictoryPoint sets the "victory_point" field.
+func (u *CardUpsert) SetVictoryPoint(v int) *CardUpsert {
+	u.Set(card.FieldVictoryPoint, v)
+	return u
+}
+
+// UpdateVictoryPoint sets the "victory_point" field to the value that was provided on create.
+func (u *CardUpsert) UpdateVictoryPoint() *CardUpsert {
+	u.SetExcluded(card.FieldVictoryPoint)
+	return u
+}
+
+// AddVictoryPoint adds v to the "victory_point" field.
+func (u *CardUpsert) AddVictoryPoint(v int) *CardUpsert {
+	u.Add(card.FieldVictoryPoint, v)
+	return u
+}
+
+// ClearVictoryPoint clears the value of the "victory_point" field.
+func (u *CardUpsert) ClearVictoryPoint() *CardUpsert {
+	u.SetNull(card.FieldVictoryPoint)
+	return u
+}
+
+// SetSpecialVictoryPoint sets the "special_victory_point" field.
+func (u *CardUpsert) SetSpecialVictoryPoint(v string) *CardUpsert {
+	u.Set(card.FieldSpecialVictoryPoint, v)
+	return u
+}
+
+// UpdateSpecialVictoryPoint sets the "special_victory_point" field to the value that was provided on create.
+func (u *CardUpsert) UpdateSpecialVictoryPoint() *CardUpsert {
+	u.SetExcluded(card.FieldSpecialVictoryPoint)
+	return u
+}
+
+// ClearSpecialVictoryPoint clears the value of the "special_victory_point" field.
+func (u *CardUpsert) ClearSpecialVictoryPoint() *CardUpsert {
+	u.SetNull(card.FieldSpecialVictoryPoint)
+	return u
+}
+
+// SetHasArrrow sets the "has_arrrow" field.
+func (u *CardUpsert) SetHasArrrow(v bool) *CardUpsert {
+	u.Set(card.FieldHasArrrow, v)
+	return u
+}
+
+// UpdateHasArrrow sets the "has_arrrow" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasArrrow() *CardUpsert {
+	u.SetExcluded(card.FieldHasArrrow)
+	return u
+}
+
+// SetHasBonusPointIcon sets the "has_bonus_point_icon" field.
+func (u *CardUpsert) SetHasBonusPointIcon(v bool) *CardUpsert {
+	u.Set(card.FieldHasBonusPointIcon, v)
+	return u
+}
+
+// UpdateHasBonusPointIcon sets the "has_bonus_point_icon" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasBonusPointIcon() *CardUpsert {
+	u.SetExcluded(card.FieldHasBonusPointIcon)
+	return u
+}
+
+// SetHasNegativeBonusPointIcon sets the "has_negative_bonus_point_icon" field.
+func (u *CardUpsert) SetHasNegativeBonusPointIcon(v bool) *CardUpsert {
+	u.Set(card.FieldHasNegativeBonusPointIcon, v)
+	return u
+}
+
+// UpdateHasNegativeBonusPointIcon sets the "has_negative_bonus_point_icon" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasNegativeBonusPointIcon() *CardUpsert {
+	u.SetExcluded(card.FieldHasNegativeBonusPointIcon)
+	return u
+}
+
+// SetHasPanIcon sets the "has_pan_icon" field.
+func (u *CardUpsert) SetHasPanIcon(v bool) *CardUpsert {
+	u.Set(card.FieldHasPanIcon, v)
+	return u
+}
+
+// UpdateHasPanIcon sets the "has_pan_icon" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasPanIcon() *CardUpsert {
+	u.SetExcluded(card.FieldHasPanIcon)
+	return u
+}
+
+// SetHasBreadIcon sets the "has_bread_icon" field.
+func (u *CardUpsert) SetHasBreadIcon(v bool) *CardUpsert {
+	u.Set(card.FieldHasBreadIcon, v)
+	return u
+}
+
+// UpdateHasBreadIcon sets the "has_bread_icon" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasBreadIcon() *CardUpsert {
+	u.SetExcluded(card.FieldHasBreadIcon)
+	return u
+}
+
+// SetHasFarmPlannerIcon sets the "has_farm_planner_icon" field.
+func (u *CardUpsert) SetHasFarmPlannerIcon(v bool) *CardUpsert {
+	u.Set(card.FieldHasFarmPlannerIcon, v)
+	return u
+}
+
+// UpdateHasFarmPlannerIcon sets the "has_farm_planner_icon" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasFarmPlannerIcon() *CardUpsert {
+	u.SetExcluded(card.FieldHasFarmPlannerIcon)
+	return u
+}
+
+// SetHasActionsBoosterIcon sets the "has_actions_booster_icon" field.
+func (u *CardUpsert) SetHasActionsBoosterIcon(v bool) *CardUpsert {
+	u.Set(card.FieldHasActionsBoosterIcon, v)
+	return u
+}
+
+// UpdateHasActionsBoosterIcon sets the "has_actions_booster_icon" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasActionsBoosterIcon() *CardUpsert {
+	u.SetExcluded(card.FieldHasActionsBoosterIcon)
+	return u
+}
+
+// SetHasPointsProviderIcon sets the "has_points_provider_icon" field.
+func (u *CardUpsert) SetHasPointsProviderIcon(v bool) *CardUpsert {
+	u.Set(card.FieldHasPointsProviderIcon, v)
+	return u
+}
+
+// UpdateHasPointsProviderIcon sets the "has_points_provider_icon" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasPointsProviderIcon() *CardUpsert {
+	u.SetExcluded(card.FieldHasPointsProviderIcon)
+	return u
+}
+
+// SetHasGoodsProviderIcon sets the "has_goods_provider_icon" field.
+func (u *CardUpsert) SetHasGoodsProviderIcon(v bool) *CardUpsert {
+	u.Set(card.FieldHasGoodsProviderIcon, v)
+	return u
+}
+
+// UpdateHasGoodsProviderIcon sets the "has_goods_provider_icon" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasGoodsProviderIcon() *CardUpsert {
+	u.SetExcluded(card.FieldHasGoodsProviderIcon)
+	return u
+}
+
+// SetHasFoodProviderIcon sets the "has_food_provider_icon" field.
+func (u *CardUpsert) SetHasFoodProviderIcon(v bool) *CardUpsert {
+	u.Set(card.FieldHasFoodProviderIcon, v)
+	return u
+}
+
+// UpdateHasFoodProviderIcon sets the "has_food_provider_icon" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasFoodProviderIcon() *CardUpsert {
+	u.SetExcluded(card.FieldHasFoodProviderIcon)
+	return u
+}
+
+// SetHasCropProviderIcon sets the "has_crop_provider_icon" field.
+func (u *CardUpsert) SetHasCropProviderIcon(v bool) *CardUpsert {
+	u.Set(card.FieldHasCropProviderIcon, v)
+	return u
+}
+
+// UpdateHasCropProviderIcon sets the "has_crop_provider_icon" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasCropProviderIcon() *CardUpsert {
+	u.SetExcluded(card.FieldHasCropProviderIcon)
+	return u
+}
+
+// SetHasBuildingResourceProviderIcon sets the "has_building_resource_provider_icon" field.
+func (u *CardUpsert) SetHasBuildingResourceProviderIcon(v bool) *CardUpsert {
+	u.Set(card.FieldHasBuildingResourceProviderIcon, v)
+	return u
+}
+
+// UpdateHasBuildingResourceProviderIcon sets the "has_building_resource_provider_icon" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasBuildingResourceProviderIcon() *CardUpsert {
+	u.SetExcluded(card.FieldHasBuildingResourceProviderIcon)
+	return u
+}
+
+// SetHasLivestockProviderIcon sets the "has_livestock_provider_icon" field.
+func (u *CardUpsert) SetHasLivestockProviderIcon(v bool) *CardUpsert {
+	u.Set(card.FieldHasLivestockProviderIcon, v)
+	return u
+}
+
+// UpdateHasLivestockProviderIcon sets the "has_livestock_provider_icon" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasLivestockProviderIcon() *CardUpsert {
+	u.SetExcluded(card.FieldHasLivestockProviderIcon)
+	return u
+}
+
+// SetHasCutPeatIcon sets the "has_cut_peat_icon" field.
+func (u *CardUpsert) SetHasCutPeatIcon(v bool) *CardUpsert {
+	u.Set(card.FieldHasCutPeatIcon, v)
+	return u
+}
+
+// UpdateHasCutPeatIcon sets the "has_cut_peat_icon" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasCutPeatIcon() *CardUpsert {
+	u.SetExcluded(card.FieldHasCutPeatIcon)
+	return u
+}
+
+// SetHasFellTreesIcon sets the "has_fell_trees_icon" field.
+func (u *CardUpsert) SetHasFellTreesIcon(v bool) *CardUpsert {
+	u.Set(card.FieldHasFellTreesIcon, v)
+	return u
+}
+
+// UpdateHasFellTreesIcon sets the "has_fell_trees_icon" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasFellTreesIcon() *CardUpsert {
+	u.SetExcluded(card.FieldHasFellTreesIcon)
+	return u
+}
+
+// SetHasSlashAndBurnIcon sets the "has_slash_and_burn_icon" field.
+func (u *CardUpsert) SetHasSlashAndBurnIcon(v bool) *CardUpsert {
+	u.Set(card.FieldHasSlashAndBurnIcon, v)
+	return u
+}
+
+// UpdateHasSlashAndBurnIcon sets the "has_slash_and_burn_icon" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasSlashAndBurnIcon() *CardUpsert {
+	u.SetExcluded(card.FieldHasSlashAndBurnIcon)
+	return u
+}
+
+// SetHasHiringFareIcon sets the "has_hiring_fare_icon" field.
+func (u *CardUpsert) SetHasHiringFareIcon(v bool) *CardUpsert {
+	u.Set(card.FieldHasHiringFareIcon, v)
+	return u
+}
+
+// UpdateHasHiringFareIcon sets the "has_hiring_fare_icon" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasHiringFareIcon() *CardUpsert {
+	u.SetExcluded(card.FieldHasHiringFareIcon)
+	return u
+}
+
+// UpdateNewValues updates the mutable fields using the new values that were set on create.
+// Using this option is equivalent to using:
+//
+//	client.Card.Create().
+//		OnConflict(
+//			sql.ResolveWithNewValues(),
+//		).
+//		Exec(ctx)
+func (u *CardUpsertOne) UpdateNewValues() *CardUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		if _, exists := u.create.mutation.LiteralID(); exists {
+			s.SetIgnore(card.FieldLiteralID)
+		}
+		if _, exists := u.create.mutation.RevisionID(); exists {
+			s.SetIgnore(card.FieldRevisionID)
+		}
+	}))
+	return u
+}
+
+// Ignore sets each column to itself in case of conflict.
+// Using this option is equivalent to using:
+//
+//	client.Card.Create().
+//	    OnConflict(sql.ResolveWithIgnore()).
+//	    Exec(ctx)
+func (u *CardUpsertOne) Ignore() *CardUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
+	return u
+}
+
+// DoNothing configures the conflict_action to `DO NOTHING`.
+// Supported only by SQLite and PostgreSQL.
+func (u *CardUpsertOne) DoNothing() *CardUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.DoNothing())
+	return u
+}
+
+// Update allows overriding fields `UPDATE` values. See the CardCreate.OnConflict
+// documentation for more info.
+func (u *CardUpsertOne) Update(set func(*CardUpsert)) *CardUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
+		set(&CardUpsert{UpdateSet: update})
+	}))
+	return u
+}
+
+// SetPrintedID sets the "printed_id" field.
+func (u *CardUpsertOne) SetPrintedID(v string) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetPrintedID(v)
+	})
+}
+
+// UpdatePrintedID sets the "printed_id" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdatePrintedID() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdatePrintedID()
+	})
+}
+
+// ClearPrintedID clears the value of the "printed_id" field.
+func (u *CardUpsertOne) ClearPrintedID() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearPrintedID()
+	})
+}
+
+// SetPlayAgricolaCardID sets the "play_agricola_card_id" field.
+func (u *CardUpsertOne) SetPlayAgricolaCardID(v string) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetPlayAgricolaCardID(v)
+	})
+}
+
+// UpdatePlayAgricolaCardID sets the "play_agricola_card_id" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdatePlayAgricolaCardID() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdatePlayAgricolaCardID()
+	})
+}
+
+// ClearPlayAgricolaCardID clears the value of the "play_agricola_card_id" field.
+func (u *CardUpsertOne) ClearPlayAgricolaCardID() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearPlayAgricolaCardID()
+	})
+}
+
+// SetDeckID sets the "deck_id" field.
+func (u *CardUpsertOne) SetDeckID(v int) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetDeckID(v)
+	})
+}
+
+// UpdateDeckID sets the "deck_id" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateDeckID() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateDeckID()
+	})
+}
+
+// ClearDeckID clears the value of the "deck_id" field.
+func (u *CardUpsertOne) ClearDeckID() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearDeckID()
+	})
+}
+
+// SetCardTypeID sets the "card_type_id" field.
+func (u *CardUpsertOne) SetCardTypeID(v int) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetCardTypeID(v)
+	})
+}
+
+// UpdateCardTypeID sets the "card_type_id" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateCardTypeID() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateCardTypeID()
+	})
+}
+
+// SetCardSpecialColorID sets the "card_special_color_id" field.
+func (u *CardUpsertOne) SetCardSpecialColorID(v int) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetCardSpecialColorID(v)
+	})
+}
+
+// UpdateCardSpecialColorID sets the "card_special_color_id" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateCardSpecialColorID() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateCardSpecialColorID()
+	})
+}
+
+// ClearCardSpecialColorID clears the value of the "card_special_color_id" field.
+func (u *CardUpsertOne) ClearCardSpecialColorID() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearCardSpecialColorID()
+	})
+}
+
+// SetNameJa sets the "name_ja" field.
+func (u *CardUpsertOne) SetNameJa(v string) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetNameJa(v)
+	})
+}
+
+// UpdateNameJa sets the "name_ja" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateNameJa() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateNameJa()
+	})
+}
+
+// ClearNameJa clears the value of the "name_ja" field.
+func (u *CardUpsertOne) ClearNameJa() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearNameJa()
+	})
+}
+
+// SetNameEn sets the "name_en" field.
+func (u *CardUpsertOne) SetNameEn(v string) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetNameEn(v)
+	})
+}
+
+// UpdateNameEn sets the "name_en" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateNameEn() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateNameEn()
+	})
+}
+
+// ClearNameEn clears the value of the "name_en" field.
+func (u *CardUpsertOne) ClearNameEn() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearNameEn()
+	})
+}
+
+// SetMinPlayersNumber sets the "min_players_number" field.
+func (u *CardUpsertOne) SetMinPlayersNumber(v int) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetMinPlayersNumber(v)
+	})
+}
+
+// AddMinPlayersNumber adds v to the "min_players_number" field.
+func (u *CardUpsertOne) AddMinPlayersNumber(v int) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.AddMinPlayersNumber(v)
+	})
+}
+
+// UpdateMinPlayersNumber sets the "min_players_number" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateMinPlayersNumber() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateMinPlayersNumber()
+	})
+}
+
+// ClearMinPlayersNumber clears the value of the "min_players_number" field.
+func (u *CardUpsertOne) ClearMinPlayersNumber() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearMinPlayersNumber()
+	})
+}
+
+// SetPrerequisite sets the "prerequisite" field.
+func (u *CardUpsertOne) SetPrerequisite(v string) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetPrerequisite(v)
+	})
+}
+
+// UpdatePrerequisite sets the "prerequisite" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdatePrerequisite() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdatePrerequisite()
+	})
+}
+
+// ClearPrerequisite clears the value of the "prerequisite" field.
+func (u *CardUpsertOne) ClearPrerequisite() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearPrerequisite()
+	})
+}
+
+// SetCost sets the "cost" field.
+func (u *CardUpsertOne) SetCost(v string) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetCost(v)
+	})
+}
+
+// UpdateCost sets the "cost" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateCost() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateCost()
+	})
+}
+
+// ClearCost clears the value of the "cost" field.
+func (u *CardUpsertOne) ClearCost() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearCost()
+	})
+}
+
+// SetDescription sets the "description" field.
+func (u *CardUpsertOne) SetDescription(v string) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetDescription(v)
+	})
+}
+
+// UpdateDescription sets the "description" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateDescription() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateDescription()
+	})
+}
+
+// ClearDescription clears the value of the "description" field.
+func (u *CardUpsertOne) ClearDescription() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearDescription()
+	})
+}
+
+// SetIsOfficialJa sets the "is_official_ja" field.
+func (u *CardUpsertOne) SetIsOfficialJa(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetIsOfficialJa(v)
+	})
+}
+
+// UpdateIsOfficialJa sets the "is_official_ja" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateIsOfficialJa() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateIsOfficialJa()
+	})
+}
+
+// SetVictoryPoint sets the "victory_point" field.
+func (u *CardUpsertOne) SetVictoryPoint(v int) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetVictoryPoint(v)
+	})
+}
+
+// AddVictoryPoint adds v to the "victory_point" field.
+func (u *CardUpsertOne) AddVictoryPoint(v int) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.AddVictoryPoint(v)
+	})
+}
+
+// UpdateVictoryPoint sets the "victory_point" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateVictoryPoint() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateVictoryPoint()
+	})
+}
+
+// ClearVictoryPoint clears the value of the "victory_point" field.
+func (u *CardUpsertOne) ClearVictoryPoint() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearVictoryPoint()
+	})
+}
+
+// SetSpecialVictoryPoint sets the "special_victory_point" field.
+func (u *CardUpsertOne) SetSpecialVictoryPoint(v string) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetSpecialVictoryPoint(v)
+	})
+}
+
+// UpdateSpecialVictoryPoint sets the "special_victory_point" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateSpecialVictoryPoint() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateSpecialVictoryPoint()
+	})
+}
+
+// ClearSpecialVictoryPoint clears the value of the "special_victory_point" field.
+func (u *CardUpsertOne) ClearSpecialVictoryPoint() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearSpecialVictoryPoint()
+	})
+}
+
+// SetHasArrrow sets the "has_arrrow" field.
+func (u *CardUpsertOne) SetHasArrrow(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasArrrow(v)
+	})
+}
+
+// UpdateHasArrrow sets the "has_arrrow" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasArrrow() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasArrrow()
+	})
+}
+
+// SetHasBonusPointIcon sets the "has_bonus_point_icon" field.
+func (u *CardUpsertOne) SetHasBonusPointIcon(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasBonusPointIcon(v)
+	})
+}
+
+// UpdateHasBonusPointIcon sets the "has_bonus_point_icon" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasBonusPointIcon() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasBonusPointIcon()
+	})
+}
+
+// SetHasNegativeBonusPointIcon sets the "has_negative_bonus_point_icon" field.
+func (u *CardUpsertOne) SetHasNegativeBonusPointIcon(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasNegativeBonusPointIcon(v)
+	})
+}
+
+// UpdateHasNegativeBonusPointIcon sets the "has_negative_bonus_point_icon" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasNegativeBonusPointIcon() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasNegativeBonusPointIcon()
+	})
+}
+
+// SetHasPanIcon sets the "has_pan_icon" field.
+func (u *CardUpsertOne) SetHasPanIcon(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasPanIcon(v)
+	})
+}
+
+// UpdateHasPanIcon sets the "has_pan_icon" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasPanIcon() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasPanIcon()
+	})
+}
+
+// SetHasBreadIcon sets the "has_bread_icon" field.
+func (u *CardUpsertOne) SetHasBreadIcon(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasBreadIcon(v)
+	})
+}
+
+// UpdateHasBreadIcon sets the "has_bread_icon" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasBreadIcon() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasBreadIcon()
+	})
+}
+
+// SetHasFarmPlannerIcon sets the "has_farm_planner_icon" field.
+func (u *CardUpsertOne) SetHasFarmPlannerIcon(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasFarmPlannerIcon(v)
+	})
+}
+
+// UpdateHasFarmPlannerIcon sets the "has_farm_planner_icon" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasFarmPlannerIcon() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasFarmPlannerIcon()
+	})
+}
+
+// SetHasActionsBoosterIcon sets the "has_actions_booster_icon" field.
+func (u *CardUpsertOne) SetHasActionsBoosterIcon(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasActionsBoosterIcon(v)
+	})
+}
+
+// UpdateHasActionsBoosterIcon sets the "has_actions_booster_icon" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasActionsBoosterIcon() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasActionsBoosterIcon()
+	})
+}
+
+// SetHasPointsProviderIcon sets the "has_points_provider_icon" field.
+func (u *CardUpsertOne) SetHasPointsProviderIcon(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasPointsProviderIcon(v)
+	})
+}
+
+// UpdateHasPointsProviderIcon sets the "has_points_provider_icon" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasPointsProviderIcon() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasPointsProviderIcon()
+	})
+}
+
+// SetHasGoodsProviderIcon sets the "has_goods_provider_icon" field.
+func (u *CardUpsertOne) SetHasGoodsProviderIcon(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasGoodsProviderIcon(v)
+	})
+}
+
+// UpdateHasGoodsProviderIcon sets the "has_goods_provider_icon" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasGoodsProviderIcon() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasGoodsProviderIcon()
+	})
+}
+
+// SetHasFoodProviderIcon sets the "has_food_provider_icon" field.
+func (u *CardUpsertOne) SetHasFoodProviderIcon(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasFoodProviderIcon(v)
+	})
+}
+
+// UpdateHasFoodProviderIcon sets the "has_food_provider_icon" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasFoodProviderIcon() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasFoodProviderIcon()
+	})
+}
+
+// SetHasCropProviderIcon sets the "has_crop_provider_icon" field.
+func (u *CardUpsertOne) SetHasCropProviderIcon(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasCropProviderIcon(v)
+	})
+}
+
+// UpdateHasCropProviderIcon sets the "has_crop_provider_icon" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasCropProviderIcon() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasCropProviderIcon()
+	})
+}
+
+// SetHasBuildingResourceProviderIcon sets the "has_building_resource_provider_icon" field.
+func (u *CardUpsertOne) SetHasBuildingResourceProviderIcon(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasBuildingResourceProviderIcon(v)
+	})
+}
+
+// UpdateHasBuildingResourceProviderIcon sets the "has_building_resource_provider_icon" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasBuildingResourceProviderIcon() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasBuildingResourceProviderIcon()
+	})
+}
+
+// SetHasLivestockProviderIcon sets the "has_livestock_provider_icon" field.
+func (u *CardUpsertOne) SetHasLivestockProviderIcon(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasLivestockProviderIcon(v)
+	})
+}
+
+// UpdateHasLivestockProviderIcon sets the "has_livestock_provider_icon" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasLivestockProviderIcon() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasLivestockProviderIcon()
+	})
+}
+
+// SetHasCutPeatIcon sets the "has_cut_peat_icon" field.
+func (u *CardUpsertOne) SetHasCutPeatIcon(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasCutPeatIcon(v)
+	})
+}
+
+// UpdateHasCutPeatIcon sets the "has_cut_peat_icon" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasCutPeatIcon() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasCutPeatIcon()
+	})
+}
+
+// SetHasFellTreesIcon sets the "has_fell_trees_icon" field.
+func (u *CardUpsertOne) SetHasFellTreesIcon(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasFellTreesIcon(v)
+	})
+}
+
+// UpdateHasFellTreesIcon sets the "has_fell_trees_icon" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasFellTreesIcon() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasFellTreesIcon()
+	})
+}
+
+// SetHasSlashAndBurnIcon sets the "has_slash_and_burn_icon" field.
+func (u *CardUpsertOne) SetHasSlashAndBurnIcon(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasSlashAndBurnIcon(v)
+	})
+}
+
+// UpdateHasSlashAndBurnIcon sets the "has_slash_and_burn_icon" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasSlashAndBurnIcon() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasSlashAndBurnIcon()
+	})
+}
+
+// SetHasHiringFareIcon sets the "has_hiring_fare_icon" field.
+func (u *CardUpsertOne) SetHasHiringFareIcon(v bool) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasHiringFareIcon(v)
+	})
+}
+
+// UpdateHasHiringFareIcon sets the "has_hiring_fare_icon" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasHiringFareIcon() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasHiringFareIcon()
+	})
+}
+
+// Exec executes the query.
+func (u *CardUpsertOne) Exec(ctx context.Context) error {
+	if len(u.create.conflict) == 0 {
+		return errors.New("ent: missing options for CardCreate.OnConflict")
+	}
+	return u.create.Exec(ctx)
+}
+
+// ExecX is like Exec, but panics if an error occurs.
+func (u *CardUpsertOne) ExecX(ctx context.Context) {
+	if err := u.create.Exec(ctx); err != nil {
+		panic(err)
+	}
+}
+
+// Exec executes the UPSERT query and returns the inserted/updated ID.
+func (u *CardUpsertOne) ID(ctx context.Context) (id int, err error) {
+	node, err := u.create.Save(ctx)
+	if err != nil {
+		return id, err
+	}
+	return node.ID, nil
+}
+
+// IDX is like ID, but panics if an error occurs.
+func (u *CardUpsertOne) IDX(ctx context.Context) int {
+	id, err := u.ID(ctx)
+	if err != nil {
+		panic(err)
+	}
+	return id
+}
+
 // CardCreateBulk is the builder for creating many Card entities in bulk.
 type CardCreateBulk struct {
 	config
 	builders []*CardCreate
+	conflict []sql.ConflictOption
 }
 
 // Save creates the Card entities in the database.
@@ -845,6 +1967,7 @@ func (ccb *CardCreateBulk) Save(ctx context.Context) ([]*Card, error) {
 					_, err = mutators[i+1].Mutate(root, ccb.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
+					spec.OnConflict = ccb.conflict
 					// Invoke the actual operation on the latest mutation in the chain.
 					if err = sqlgraph.BatchCreate(ctx, ccb.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
@@ -895,6 +2018,649 @@ func (ccb *CardCreateBulk) Exec(ctx context.Context) error {
 // ExecX is like Exec, but panics if an error occurs.
 func (ccb *CardCreateBulk) ExecX(ctx context.Context) {
 	if err := ccb.Exec(ctx); err != nil {
+		panic(err)
+	}
+}
+
+// OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
+// of the `INSERT` statement. For example:
+//
+//	client.Card.CreateBulk(builders...).
+//		OnConflict(
+//			// Update the row with the new values
+//			// the was proposed for insertion.
+//			sql.ResolveWithNewValues(),
+//		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.CardUpsert) {
+//			SetLiteralID(v+v).
+//		}).
+//		Exec(ctx)
+func (ccb *CardCreateBulk) OnConflict(opts ...sql.ConflictOption) *CardUpsertBulk {
+	ccb.conflict = opts
+	return &CardUpsertBulk{
+		create: ccb,
+	}
+}
+
+// OnConflictColumns calls `OnConflict` and configures the columns
+// as conflict target. Using this option is equivalent to using:
+//
+//	client.Card.Create().
+//		OnConflict(sql.ConflictColumns(columns...)).
+//		Exec(ctx)
+func (ccb *CardCreateBulk) OnConflictColumns(columns ...string) *CardUpsertBulk {
+	ccb.conflict = append(ccb.conflict, sql.ConflictColumns(columns...))
+	return &CardUpsertBulk{
+		create: ccb,
+	}
+}
+
+// CardUpsertBulk is the builder for "upsert"-ing
+// a bulk of Card nodes.
+type CardUpsertBulk struct {
+	create *CardCreateBulk
+}
+
+// UpdateNewValues updates the mutable fields using the new values that
+// were set on create. Using this option is equivalent to using:
+//
+//	client.Card.Create().
+//		OnConflict(
+//			sql.ResolveWithNewValues(),
+//		).
+//		Exec(ctx)
+func (u *CardUpsertBulk) UpdateNewValues() *CardUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		for _, b := range u.create.builders {
+			if _, exists := b.mutation.LiteralID(); exists {
+				s.SetIgnore(card.FieldLiteralID)
+			}
+			if _, exists := b.mutation.RevisionID(); exists {
+				s.SetIgnore(card.FieldRevisionID)
+			}
+		}
+	}))
+	return u
+}
+
+// Ignore sets each column to itself in case of conflict.
+// Using this option is equivalent to using:
+//
+//	client.Card.Create().
+//		OnConflict(sql.ResolveWithIgnore()).
+//		Exec(ctx)
+func (u *CardUpsertBulk) Ignore() *CardUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
+	return u
+}
+
+// DoNothing configures the conflict_action to `DO NOTHING`.
+// Supported only by SQLite and PostgreSQL.
+func (u *CardUpsertBulk) DoNothing() *CardUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.DoNothing())
+	return u
+}
+
+// Update allows overriding fields `UPDATE` values. See the CardCreateBulk.OnConflict
+// documentation for more info.
+func (u *CardUpsertBulk) Update(set func(*CardUpsert)) *CardUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
+		set(&CardUpsert{UpdateSet: update})
+	}))
+	return u
+}
+
+// SetPrintedID sets the "printed_id" field.
+func (u *CardUpsertBulk) SetPrintedID(v string) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetPrintedID(v)
+	})
+}
+
+// UpdatePrintedID sets the "printed_id" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdatePrintedID() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdatePrintedID()
+	})
+}
+
+// ClearPrintedID clears the value of the "printed_id" field.
+func (u *CardUpsertBulk) ClearPrintedID() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearPrintedID()
+	})
+}
+
+// SetPlayAgricolaCardID sets the "play_agricola_card_id" field.
+func (u *CardUpsertBulk) SetPlayAgricolaCardID(v string) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetPlayAgricolaCardID(v)
+	})
+}
+
+// UpdatePlayAgricolaCardID sets the "play_agricola_card_id" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdatePlayAgricolaCardID() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdatePlayAgricolaCardID()
+	})
+}
+
+// ClearPlayAgricolaCardID clears the value of the "play_agricola_card_id" field.
+func (u *CardUpsertBulk) ClearPlayAgricolaCardID() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearPlayAgricolaCardID()
+	})
+}
+
+// SetDeckID sets the "deck_id" field.
+func (u *CardUpsertBulk) SetDeckID(v int) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetDeckID(v)
+	})
+}
+
+// UpdateDeckID sets the "deck_id" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateDeckID() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateDeckID()
+	})
+}
+
+// ClearDeckID clears the value of the "deck_id" field.
+func (u *CardUpsertBulk) ClearDeckID() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearDeckID()
+	})
+}
+
+// SetCardTypeID sets the "card_type_id" field.
+func (u *CardUpsertBulk) SetCardTypeID(v int) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetCardTypeID(v)
+	})
+}
+
+// UpdateCardTypeID sets the "card_type_id" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateCardTypeID() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateCardTypeID()
+	})
+}
+
+// SetCardSpecialColorID sets the "card_special_color_id" field.
+func (u *CardUpsertBulk) SetCardSpecialColorID(v int) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetCardSpecialColorID(v)
+	})
+}
+
+// UpdateCardSpecialColorID sets the "card_special_color_id" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateCardSpecialColorID() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateCardSpecialColorID()
+	})
+}
+
+// ClearCardSpecialColorID clears the value of the "card_special_color_id" field.
+func (u *CardUpsertBulk) ClearCardSpecialColorID() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearCardSpecialColorID()
+	})
+}
+
+// SetNameJa sets the "name_ja" field.
+func (u *CardUpsertBulk) SetNameJa(v string) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetNameJa(v)
+	})
+}
+
+// UpdateNameJa sets the "name_ja" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateNameJa() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateNameJa()
+	})
+}
+
+// ClearNameJa clears the value of the "name_ja" field.
+func (u *CardUpsertBulk) ClearNameJa() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearNameJa()
+	})
+}
+
+// SetNameEn sets the "name_en" field.
+func (u *CardUpsertBulk) SetNameEn(v string) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetNameEn(v)
+	})
+}
+
+// UpdateNameEn sets the "name_en" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateNameEn() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateNameEn()
+	})
+}
+
+// ClearNameEn clears the value of the "name_en" field.
+func (u *CardUpsertBulk) ClearNameEn() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearNameEn()
+	})
+}
+
+// SetMinPlayersNumber sets the "min_players_number" field.
+func (u *CardUpsertBulk) SetMinPlayersNumber(v int) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetMinPlayersNumber(v)
+	})
+}
+
+// AddMinPlayersNumber adds v to the "min_players_number" field.
+func (u *CardUpsertBulk) AddMinPlayersNumber(v int) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.AddMinPlayersNumber(v)
+	})
+}
+
+// UpdateMinPlayersNumber sets the "min_players_number" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateMinPlayersNumber() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateMinPlayersNumber()
+	})
+}
+
+// ClearMinPlayersNumber clears the value of the "min_players_number" field.
+func (u *CardUpsertBulk) ClearMinPlayersNumber() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearMinPlayersNumber()
+	})
+}
+
+// SetPrerequisite sets the "prerequisite" field.
+func (u *CardUpsertBulk) SetPrerequisite(v string) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetPrerequisite(v)
+	})
+}
+
+// UpdatePrerequisite sets the "prerequisite" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdatePrerequisite() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdatePrerequisite()
+	})
+}
+
+// ClearPrerequisite clears the value of the "prerequisite" field.
+func (u *CardUpsertBulk) ClearPrerequisite() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearPrerequisite()
+	})
+}
+
+// SetCost sets the "cost" field.
+func (u *CardUpsertBulk) SetCost(v string) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetCost(v)
+	})
+}
+
+// UpdateCost sets the "cost" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateCost() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateCost()
+	})
+}
+
+// ClearCost clears the value of the "cost" field.
+func (u *CardUpsertBulk) ClearCost() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearCost()
+	})
+}
+
+// SetDescription sets the "description" field.
+func (u *CardUpsertBulk) SetDescription(v string) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetDescription(v)
+	})
+}
+
+// UpdateDescription sets the "description" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateDescription() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateDescription()
+	})
+}
+
+// ClearDescription clears the value of the "description" field.
+func (u *CardUpsertBulk) ClearDescription() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearDescription()
+	})
+}
+
+// SetIsOfficialJa sets the "is_official_ja" field.
+func (u *CardUpsertBulk) SetIsOfficialJa(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetIsOfficialJa(v)
+	})
+}
+
+// UpdateIsOfficialJa sets the "is_official_ja" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateIsOfficialJa() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateIsOfficialJa()
+	})
+}
+
+// SetVictoryPoint sets the "victory_point" field.
+func (u *CardUpsertBulk) SetVictoryPoint(v int) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetVictoryPoint(v)
+	})
+}
+
+// AddVictoryPoint adds v to the "victory_point" field.
+func (u *CardUpsertBulk) AddVictoryPoint(v int) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.AddVictoryPoint(v)
+	})
+}
+
+// UpdateVictoryPoint sets the "victory_point" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateVictoryPoint() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateVictoryPoint()
+	})
+}
+
+// ClearVictoryPoint clears the value of the "victory_point" field.
+func (u *CardUpsertBulk) ClearVictoryPoint() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearVictoryPoint()
+	})
+}
+
+// SetSpecialVictoryPoint sets the "special_victory_point" field.
+func (u *CardUpsertBulk) SetSpecialVictoryPoint(v string) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetSpecialVictoryPoint(v)
+	})
+}
+
+// UpdateSpecialVictoryPoint sets the "special_victory_point" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateSpecialVictoryPoint() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateSpecialVictoryPoint()
+	})
+}
+
+// ClearSpecialVictoryPoint clears the value of the "special_victory_point" field.
+func (u *CardUpsertBulk) ClearSpecialVictoryPoint() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearSpecialVictoryPoint()
+	})
+}
+
+// SetHasArrrow sets the "has_arrrow" field.
+func (u *CardUpsertBulk) SetHasArrrow(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasArrrow(v)
+	})
+}
+
+// UpdateHasArrrow sets the "has_arrrow" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasArrrow() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasArrrow()
+	})
+}
+
+// SetHasBonusPointIcon sets the "has_bonus_point_icon" field.
+func (u *CardUpsertBulk) SetHasBonusPointIcon(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasBonusPointIcon(v)
+	})
+}
+
+// UpdateHasBonusPointIcon sets the "has_bonus_point_icon" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasBonusPointIcon() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasBonusPointIcon()
+	})
+}
+
+// SetHasNegativeBonusPointIcon sets the "has_negative_bonus_point_icon" field.
+func (u *CardUpsertBulk) SetHasNegativeBonusPointIcon(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasNegativeBonusPointIcon(v)
+	})
+}
+
+// UpdateHasNegativeBonusPointIcon sets the "has_negative_bonus_point_icon" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasNegativeBonusPointIcon() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasNegativeBonusPointIcon()
+	})
+}
+
+// SetHasPanIcon sets the "has_pan_icon" field.
+func (u *CardUpsertBulk) SetHasPanIcon(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasPanIcon(v)
+	})
+}
+
+// UpdateHasPanIcon sets the "has_pan_icon" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasPanIcon() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasPanIcon()
+	})
+}
+
+// SetHasBreadIcon sets the "has_bread_icon" field.
+func (u *CardUpsertBulk) SetHasBreadIcon(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasBreadIcon(v)
+	})
+}
+
+// UpdateHasBreadIcon sets the "has_bread_icon" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasBreadIcon() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasBreadIcon()
+	})
+}
+
+// SetHasFarmPlannerIcon sets the "has_farm_planner_icon" field.
+func (u *CardUpsertBulk) SetHasFarmPlannerIcon(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasFarmPlannerIcon(v)
+	})
+}
+
+// UpdateHasFarmPlannerIcon sets the "has_farm_planner_icon" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasFarmPlannerIcon() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasFarmPlannerIcon()
+	})
+}
+
+// SetHasActionsBoosterIcon sets the "has_actions_booster_icon" field.
+func (u *CardUpsertBulk) SetHasActionsBoosterIcon(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasActionsBoosterIcon(v)
+	})
+}
+
+// UpdateHasActionsBoosterIcon sets the "has_actions_booster_icon" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasActionsBoosterIcon() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasActionsBoosterIcon()
+	})
+}
+
+// SetHasPointsProviderIcon sets the "has_points_provider_icon" field.
+func (u *CardUpsertBulk) SetHasPointsProviderIcon(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasPointsProviderIcon(v)
+	})
+}
+
+// UpdateHasPointsProviderIcon sets the "has_points_provider_icon" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasPointsProviderIcon() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasPointsProviderIcon()
+	})
+}
+
+// SetHasGoodsProviderIcon sets the "has_goods_provider_icon" field.
+func (u *CardUpsertBulk) SetHasGoodsProviderIcon(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasGoodsProviderIcon(v)
+	})
+}
+
+// UpdateHasGoodsProviderIcon sets the "has_goods_provider_icon" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasGoodsProviderIcon() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasGoodsProviderIcon()
+	})
+}
+
+// SetHasFoodProviderIcon sets the "has_food_provider_icon" field.
+func (u *CardUpsertBulk) SetHasFoodProviderIcon(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasFoodProviderIcon(v)
+	})
+}
+
+// UpdateHasFoodProviderIcon sets the "has_food_provider_icon" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasFoodProviderIcon() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasFoodProviderIcon()
+	})
+}
+
+// SetHasCropProviderIcon sets the "has_crop_provider_icon" field.
+func (u *CardUpsertBulk) SetHasCropProviderIcon(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasCropProviderIcon(v)
+	})
+}
+
+// UpdateHasCropProviderIcon sets the "has_crop_provider_icon" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasCropProviderIcon() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasCropProviderIcon()
+	})
+}
+
+// SetHasBuildingResourceProviderIcon sets the "has_building_resource_provider_icon" field.
+func (u *CardUpsertBulk) SetHasBuildingResourceProviderIcon(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasBuildingResourceProviderIcon(v)
+	})
+}
+
+// UpdateHasBuildingResourceProviderIcon sets the "has_building_resource_provider_icon" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasBuildingResourceProviderIcon() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasBuildingResourceProviderIcon()
+	})
+}
+
+// SetHasLivestockProviderIcon sets the "has_livestock_provider_icon" field.
+func (u *CardUpsertBulk) SetHasLivestockProviderIcon(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasLivestockProviderIcon(v)
+	})
+}
+
+// UpdateHasLivestockProviderIcon sets the "has_livestock_provider_icon" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasLivestockProviderIcon() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasLivestockProviderIcon()
+	})
+}
+
+// SetHasCutPeatIcon sets the "has_cut_peat_icon" field.
+func (u *CardUpsertBulk) SetHasCutPeatIcon(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasCutPeatIcon(v)
+	})
+}
+
+// UpdateHasCutPeatIcon sets the "has_cut_peat_icon" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasCutPeatIcon() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasCutPeatIcon()
+	})
+}
+
+// SetHasFellTreesIcon sets the "has_fell_trees_icon" field.
+func (u *CardUpsertBulk) SetHasFellTreesIcon(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasFellTreesIcon(v)
+	})
+}
+
+// UpdateHasFellTreesIcon sets the "has_fell_trees_icon" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasFellTreesIcon() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasFellTreesIcon()
+	})
+}
+
+// SetHasSlashAndBurnIcon sets the "has_slash_and_burn_icon" field.
+func (u *CardUpsertBulk) SetHasSlashAndBurnIcon(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasSlashAndBurnIcon(v)
+	})
+}
+
+// UpdateHasSlashAndBurnIcon sets the "has_slash_and_burn_icon" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasSlashAndBurnIcon() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasSlashAndBurnIcon()
+	})
+}
+
+// SetHasHiringFareIcon sets the "has_hiring_fare_icon" field.
+func (u *CardUpsertBulk) SetHasHiringFareIcon(v bool) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetHasHiringFareIcon(v)
+	})
+}
+
+// UpdateHasHiringFareIcon sets the "has_hiring_fare_icon" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasHiringFareIcon() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateHasHiringFareIcon()
+	})
+}
+
+// Exec executes the query.
+func (u *CardUpsertBulk) Exec(ctx context.Context) error {
+	for i, b := range u.create.builders {
+		if len(b.conflict) != 0 {
+			return fmt.Errorf("ent: OnConflict was set for builder %d. Set it on the CardCreateBulk instead", i)
+		}
+	}
+	if len(u.create.conflict) == 0 {
+		return errors.New("ent: missing options for CardCreateBulk.OnConflict")
+	}
+	return u.create.Exec(ctx)
+}
+
+// ExecX is like Exec, but panics if an error occurs.
+func (u *CardUpsertBulk) ExecX(ctx context.Context) {
+	if err := u.create.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

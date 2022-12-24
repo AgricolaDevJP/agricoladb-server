@@ -10,6 +10,7 @@ import (
 	"errors"
 	"fmt"
 
+	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 )
@@ -19,6 +20,7 @@ type ProductCreate struct {
 	config
 	mutation *ProductMutation
 	hooks    []Hook
+	conflict []sql.ConflictOption
 }
 
 // SetRevisionID sets the "revision_id" field.
@@ -193,6 +195,7 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
+	_spec.OnConflict = pc.conflict
 	if value, ok := pc.mutation.IsOfficialJa(); ok {
 		_spec.SetField(product.FieldIsOfficialJa, field.TypeBool, value)
 		_node.IsOfficialJa = value
@@ -247,10 +250,242 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 	return _node, _spec
 }
 
+// OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
+// of the `INSERT` statement. For example:
+//
+//	client.Product.Create().
+//		SetRevisionID(v).
+//		OnConflict(
+//			// Update the row with the new values
+//			// the was proposed for insertion.
+//			sql.ResolveWithNewValues(),
+//		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.ProductUpsert) {
+//			SetRevisionID(v+v).
+//		}).
+//		Exec(ctx)
+func (pc *ProductCreate) OnConflict(opts ...sql.ConflictOption) *ProductUpsertOne {
+	pc.conflict = opts
+	return &ProductUpsertOne{
+		create: pc,
+	}
+}
+
+// OnConflictColumns calls `OnConflict` and configures the columns
+// as conflict target. Using this option is equivalent to using:
+//
+//	client.Product.Create().
+//		OnConflict(sql.ConflictColumns(columns...)).
+//		Exec(ctx)
+func (pc *ProductCreate) OnConflictColumns(columns ...string) *ProductUpsertOne {
+	pc.conflict = append(pc.conflict, sql.ConflictColumns(columns...))
+	return &ProductUpsertOne{
+		create: pc,
+	}
+}
+
+type (
+	// ProductUpsertOne is the builder for "upsert"-ing
+	//  one Product node.
+	ProductUpsertOne struct {
+		create *ProductCreate
+	}
+
+	// ProductUpsert is the "OnConflict" setter.
+	ProductUpsert struct {
+		*sql.UpdateSet
+	}
+)
+
+// SetIsOfficialJa sets the "is_official_ja" field.
+func (u *ProductUpsert) SetIsOfficialJa(v bool) *ProductUpsert {
+	u.Set(product.FieldIsOfficialJa, v)
+	return u
+}
+
+// UpdateIsOfficialJa sets the "is_official_ja" field to the value that was provided on create.
+func (u *ProductUpsert) UpdateIsOfficialJa() *ProductUpsert {
+	u.SetExcluded(product.FieldIsOfficialJa)
+	return u
+}
+
+// SetNameJa sets the "name_ja" field.
+func (u *ProductUpsert) SetNameJa(v string) *ProductUpsert {
+	u.Set(product.FieldNameJa, v)
+	return u
+}
+
+// UpdateNameJa sets the "name_ja" field to the value that was provided on create.
+func (u *ProductUpsert) UpdateNameJa() *ProductUpsert {
+	u.SetExcluded(product.FieldNameJa)
+	return u
+}
+
+// ClearNameJa clears the value of the "name_ja" field.
+func (u *ProductUpsert) ClearNameJa() *ProductUpsert {
+	u.SetNull(product.FieldNameJa)
+	return u
+}
+
+// SetNameEn sets the "name_en" field.
+func (u *ProductUpsert) SetNameEn(v string) *ProductUpsert {
+	u.Set(product.FieldNameEn, v)
+	return u
+}
+
+// UpdateNameEn sets the "name_en" field to the value that was provided on create.
+func (u *ProductUpsert) UpdateNameEn() *ProductUpsert {
+	u.SetExcluded(product.FieldNameEn)
+	return u
+}
+
+// ClearNameEn clears the value of the "name_en" field.
+func (u *ProductUpsert) ClearNameEn() *ProductUpsert {
+	u.SetNull(product.FieldNameEn)
+	return u
+}
+
+// UpdateNewValues updates the mutable fields using the new values that were set on create.
+// Using this option is equivalent to using:
+//
+//	client.Product.Create().
+//		OnConflict(
+//			sql.ResolveWithNewValues(),
+//		).
+//		Exec(ctx)
+func (u *ProductUpsertOne) UpdateNewValues() *ProductUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		if _, exists := u.create.mutation.RevisionID(); exists {
+			s.SetIgnore(product.FieldRevisionID)
+		}
+	}))
+	return u
+}
+
+// Ignore sets each column to itself in case of conflict.
+// Using this option is equivalent to using:
+//
+//	client.Product.Create().
+//	    OnConflict(sql.ResolveWithIgnore()).
+//	    Exec(ctx)
+func (u *ProductUpsertOne) Ignore() *ProductUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
+	return u
+}
+
+// DoNothing configures the conflict_action to `DO NOTHING`.
+// Supported only by SQLite and PostgreSQL.
+func (u *ProductUpsertOne) DoNothing() *ProductUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.DoNothing())
+	return u
+}
+
+// Update allows overriding fields `UPDATE` values. See the ProductCreate.OnConflict
+// documentation for more info.
+func (u *ProductUpsertOne) Update(set func(*ProductUpsert)) *ProductUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
+		set(&ProductUpsert{UpdateSet: update})
+	}))
+	return u
+}
+
+// SetIsOfficialJa sets the "is_official_ja" field.
+func (u *ProductUpsertOne) SetIsOfficialJa(v bool) *ProductUpsertOne {
+	return u.Update(func(s *ProductUpsert) {
+		s.SetIsOfficialJa(v)
+	})
+}
+
+// UpdateIsOfficialJa sets the "is_official_ja" field to the value that was provided on create.
+func (u *ProductUpsertOne) UpdateIsOfficialJa() *ProductUpsertOne {
+	return u.Update(func(s *ProductUpsert) {
+		s.UpdateIsOfficialJa()
+	})
+}
+
+// SetNameJa sets the "name_ja" field.
+func (u *ProductUpsertOne) SetNameJa(v string) *ProductUpsertOne {
+	return u.Update(func(s *ProductUpsert) {
+		s.SetNameJa(v)
+	})
+}
+
+// UpdateNameJa sets the "name_ja" field to the value that was provided on create.
+func (u *ProductUpsertOne) UpdateNameJa() *ProductUpsertOne {
+	return u.Update(func(s *ProductUpsert) {
+		s.UpdateNameJa()
+	})
+}
+
+// ClearNameJa clears the value of the "name_ja" field.
+func (u *ProductUpsertOne) ClearNameJa() *ProductUpsertOne {
+	return u.Update(func(s *ProductUpsert) {
+		s.ClearNameJa()
+	})
+}
+
+// SetNameEn sets the "name_en" field.
+func (u *ProductUpsertOne) SetNameEn(v string) *ProductUpsertOne {
+	return u.Update(func(s *ProductUpsert) {
+		s.SetNameEn(v)
+	})
+}
+
+// UpdateNameEn sets the "name_en" field to the value that was provided on create.
+func (u *ProductUpsertOne) UpdateNameEn() *ProductUpsertOne {
+	return u.Update(func(s *ProductUpsert) {
+		s.UpdateNameEn()
+	})
+}
+
+// ClearNameEn clears the value of the "name_en" field.
+func (u *ProductUpsertOne) ClearNameEn() *ProductUpsertOne {
+	return u.Update(func(s *ProductUpsert) {
+		s.ClearNameEn()
+	})
+}
+
+// Exec executes the query.
+func (u *ProductUpsertOne) Exec(ctx context.Context) error {
+	if len(u.create.conflict) == 0 {
+		return errors.New("ent: missing options for ProductCreate.OnConflict")
+	}
+	return u.create.Exec(ctx)
+}
+
+// ExecX is like Exec, but panics if an error occurs.
+func (u *ProductUpsertOne) ExecX(ctx context.Context) {
+	if err := u.create.Exec(ctx); err != nil {
+		panic(err)
+	}
+}
+
+// Exec executes the UPSERT query and returns the inserted/updated ID.
+func (u *ProductUpsertOne) ID(ctx context.Context) (id int, err error) {
+	node, err := u.create.Save(ctx)
+	if err != nil {
+		return id, err
+	}
+	return node.ID, nil
+}
+
+// IDX is like ID, but panics if an error occurs.
+func (u *ProductUpsertOne) IDX(ctx context.Context) int {
+	id, err := u.ID(ctx)
+	if err != nil {
+		panic(err)
+	}
+	return id
+}
+
 // ProductCreateBulk is the builder for creating many Product entities in bulk.
 type ProductCreateBulk struct {
 	config
 	builders []*ProductCreate
+	conflict []sql.ConflictOption
 }
 
 // Save creates the Product entities in the database.
@@ -276,6 +511,7 @@ func (pcb *ProductCreateBulk) Save(ctx context.Context) ([]*Product, error) {
 					_, err = mutators[i+1].Mutate(root, pcb.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
+					spec.OnConflict = pcb.conflict
 					// Invoke the actual operation on the latest mutation in the chain.
 					if err = sqlgraph.BatchCreate(ctx, pcb.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
@@ -326,6 +562,170 @@ func (pcb *ProductCreateBulk) Exec(ctx context.Context) error {
 // ExecX is like Exec, but panics if an error occurs.
 func (pcb *ProductCreateBulk) ExecX(ctx context.Context) {
 	if err := pcb.Exec(ctx); err != nil {
+		panic(err)
+	}
+}
+
+// OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
+// of the `INSERT` statement. For example:
+//
+//	client.Product.CreateBulk(builders...).
+//		OnConflict(
+//			// Update the row with the new values
+//			// the was proposed for insertion.
+//			sql.ResolveWithNewValues(),
+//		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.ProductUpsert) {
+//			SetRevisionID(v+v).
+//		}).
+//		Exec(ctx)
+func (pcb *ProductCreateBulk) OnConflict(opts ...sql.ConflictOption) *ProductUpsertBulk {
+	pcb.conflict = opts
+	return &ProductUpsertBulk{
+		create: pcb,
+	}
+}
+
+// OnConflictColumns calls `OnConflict` and configures the columns
+// as conflict target. Using this option is equivalent to using:
+//
+//	client.Product.Create().
+//		OnConflict(sql.ConflictColumns(columns...)).
+//		Exec(ctx)
+func (pcb *ProductCreateBulk) OnConflictColumns(columns ...string) *ProductUpsertBulk {
+	pcb.conflict = append(pcb.conflict, sql.ConflictColumns(columns...))
+	return &ProductUpsertBulk{
+		create: pcb,
+	}
+}
+
+// ProductUpsertBulk is the builder for "upsert"-ing
+// a bulk of Product nodes.
+type ProductUpsertBulk struct {
+	create *ProductCreateBulk
+}
+
+// UpdateNewValues updates the mutable fields using the new values that
+// were set on create. Using this option is equivalent to using:
+//
+//	client.Product.Create().
+//		OnConflict(
+//			sql.ResolveWithNewValues(),
+//		).
+//		Exec(ctx)
+func (u *ProductUpsertBulk) UpdateNewValues() *ProductUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		for _, b := range u.create.builders {
+			if _, exists := b.mutation.RevisionID(); exists {
+				s.SetIgnore(product.FieldRevisionID)
+			}
+		}
+	}))
+	return u
+}
+
+// Ignore sets each column to itself in case of conflict.
+// Using this option is equivalent to using:
+//
+//	client.Product.Create().
+//		OnConflict(sql.ResolveWithIgnore()).
+//		Exec(ctx)
+func (u *ProductUpsertBulk) Ignore() *ProductUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
+	return u
+}
+
+// DoNothing configures the conflict_action to `DO NOTHING`.
+// Supported only by SQLite and PostgreSQL.
+func (u *ProductUpsertBulk) DoNothing() *ProductUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.DoNothing())
+	return u
+}
+
+// Update allows overriding fields `UPDATE` values. See the ProductCreateBulk.OnConflict
+// documentation for more info.
+func (u *ProductUpsertBulk) Update(set func(*ProductUpsert)) *ProductUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
+		set(&ProductUpsert{UpdateSet: update})
+	}))
+	return u
+}
+
+// SetIsOfficialJa sets the "is_official_ja" field.
+func (u *ProductUpsertBulk) SetIsOfficialJa(v bool) *ProductUpsertBulk {
+	return u.Update(func(s *ProductUpsert) {
+		s.SetIsOfficialJa(v)
+	})
+}
+
+// UpdateIsOfficialJa sets the "is_official_ja" field to the value that was provided on create.
+func (u *ProductUpsertBulk) UpdateIsOfficialJa() *ProductUpsertBulk {
+	return u.Update(func(s *ProductUpsert) {
+		s.UpdateIsOfficialJa()
+	})
+}
+
+// SetNameJa sets the "name_ja" field.
+func (u *ProductUpsertBulk) SetNameJa(v string) *ProductUpsertBulk {
+	return u.Update(func(s *ProductUpsert) {
+		s.SetNameJa(v)
+	})
+}
+
+// UpdateNameJa sets the "name_ja" field to the value that was provided on create.
+func (u *ProductUpsertBulk) UpdateNameJa() *ProductUpsertBulk {
+	return u.Update(func(s *ProductUpsert) {
+		s.UpdateNameJa()
+	})
+}
+
+// ClearNameJa clears the value of the "name_ja" field.
+func (u *ProductUpsertBulk) ClearNameJa() *ProductUpsertBulk {
+	return u.Update(func(s *ProductUpsert) {
+		s.ClearNameJa()
+	})
+}
+
+// SetNameEn sets the "name_en" field.
+func (u *ProductUpsertBulk) SetNameEn(v string) *ProductUpsertBulk {
+	return u.Update(func(s *ProductUpsert) {
+		s.SetNameEn(v)
+	})
+}
+
+// UpdateNameEn sets the "name_en" field to the value that was provided on create.
+func (u *ProductUpsertBulk) UpdateNameEn() *ProductUpsertBulk {
+	return u.Update(func(s *ProductUpsert) {
+		s.UpdateNameEn()
+	})
+}
+
+// ClearNameEn clears the value of the "name_en" field.
+func (u *ProductUpsertBulk) ClearNameEn() *ProductUpsertBulk {
+	return u.Update(func(s *ProductUpsert) {
+		s.ClearNameEn()
+	})
+}
+
+// Exec executes the query.
+func (u *ProductUpsertBulk) Exec(ctx context.Context) error {
+	for i, b := range u.create.builders {
+		if len(b.conflict) != 0 {
+			return fmt.Errorf("ent: OnConflict was set for builder %d. Set it on the ProductCreateBulk instead", i)
+		}
+	}
+	if len(u.create.conflict) == 0 {
+		return errors.New("ent: missing options for ProductCreateBulk.OnConflict")
+	}
+	return u.create.Exec(ctx)
+}
+
+// ExecX is like Exec, but panics if an error occurs.
+func (u *ProductUpsertBulk) ExecX(ctx context.Context) {
+	if err := u.create.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

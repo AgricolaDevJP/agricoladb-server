@@ -11,6 +11,7 @@ import (
 	"errors"
 	"fmt"
 
+	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 )
@@ -20,6 +21,7 @@ type RevisionCreate struct {
 	config
 	mutation *RevisionMutation
 	hooks    []Hook
+	conflict []sql.ConflictOption
 }
 
 // SetKey sets the "key" field.
@@ -212,6 +214,7 @@ func (rc *RevisionCreate) createSpec() (*Revision, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
+	_spec.OnConflict = rc.conflict
 	if value, ok := rc.mutation.Key(); ok {
 		_spec.SetField(revision.FieldKey, field.TypeString, value)
 		_node.Key = value
@@ -284,10 +287,216 @@ func (rc *RevisionCreate) createSpec() (*Revision, *sqlgraph.CreateSpec) {
 	return _node, _spec
 }
 
+// OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
+// of the `INSERT` statement. For example:
+//
+//	client.Revision.Create().
+//		SetKey(v).
+//		OnConflict(
+//			// Update the row with the new values
+//			// the was proposed for insertion.
+//			sql.ResolveWithNewValues(),
+//		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.RevisionUpsert) {
+//			SetKey(v+v).
+//		}).
+//		Exec(ctx)
+func (rc *RevisionCreate) OnConflict(opts ...sql.ConflictOption) *RevisionUpsertOne {
+	rc.conflict = opts
+	return &RevisionUpsertOne{
+		create: rc,
+	}
+}
+
+// OnConflictColumns calls `OnConflict` and configures the columns
+// as conflict target. Using this option is equivalent to using:
+//
+//	client.Revision.Create().
+//		OnConflict(sql.ConflictColumns(columns...)).
+//		Exec(ctx)
+func (rc *RevisionCreate) OnConflictColumns(columns ...string) *RevisionUpsertOne {
+	rc.conflict = append(rc.conflict, sql.ConflictColumns(columns...))
+	return &RevisionUpsertOne{
+		create: rc,
+	}
+}
+
+type (
+	// RevisionUpsertOne is the builder for "upsert"-ing
+	//  one Revision node.
+	RevisionUpsertOne struct {
+		create *RevisionCreate
+	}
+
+	// RevisionUpsert is the "OnConflict" setter.
+	RevisionUpsert struct {
+		*sql.UpdateSet
+	}
+)
+
+// SetNameJa sets the "name_ja" field.
+func (u *RevisionUpsert) SetNameJa(v string) *RevisionUpsert {
+	u.Set(revision.FieldNameJa, v)
+	return u
+}
+
+// UpdateNameJa sets the "name_ja" field to the value that was provided on create.
+func (u *RevisionUpsert) UpdateNameJa() *RevisionUpsert {
+	u.SetExcluded(revision.FieldNameJa)
+	return u
+}
+
+// ClearNameJa clears the value of the "name_ja" field.
+func (u *RevisionUpsert) ClearNameJa() *RevisionUpsert {
+	u.SetNull(revision.FieldNameJa)
+	return u
+}
+
+// SetNameEn sets the "name_en" field.
+func (u *RevisionUpsert) SetNameEn(v string) *RevisionUpsert {
+	u.Set(revision.FieldNameEn, v)
+	return u
+}
+
+// UpdateNameEn sets the "name_en" field to the value that was provided on create.
+func (u *RevisionUpsert) UpdateNameEn() *RevisionUpsert {
+	u.SetExcluded(revision.FieldNameEn)
+	return u
+}
+
+// ClearNameEn clears the value of the "name_en" field.
+func (u *RevisionUpsert) ClearNameEn() *RevisionUpsert {
+	u.SetNull(revision.FieldNameEn)
+	return u
+}
+
+// UpdateNewValues updates the mutable fields using the new values that were set on create.
+// Using this option is equivalent to using:
+//
+//	client.Revision.Create().
+//		OnConflict(
+//			sql.ResolveWithNewValues(),
+//		).
+//		Exec(ctx)
+func (u *RevisionUpsertOne) UpdateNewValues() *RevisionUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		if _, exists := u.create.mutation.Key(); exists {
+			s.SetIgnore(revision.FieldKey)
+		}
+	}))
+	return u
+}
+
+// Ignore sets each column to itself in case of conflict.
+// Using this option is equivalent to using:
+//
+//	client.Revision.Create().
+//	    OnConflict(sql.ResolveWithIgnore()).
+//	    Exec(ctx)
+func (u *RevisionUpsertOne) Ignore() *RevisionUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
+	return u
+}
+
+// DoNothing configures the conflict_action to `DO NOTHING`.
+// Supported only by SQLite and PostgreSQL.
+func (u *RevisionUpsertOne) DoNothing() *RevisionUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.DoNothing())
+	return u
+}
+
+// Update allows overriding fields `UPDATE` values. See the RevisionCreate.OnConflict
+// documentation for more info.
+func (u *RevisionUpsertOne) Update(set func(*RevisionUpsert)) *RevisionUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
+		set(&RevisionUpsert{UpdateSet: update})
+	}))
+	return u
+}
+
+// SetNameJa sets the "name_ja" field.
+func (u *RevisionUpsertOne) SetNameJa(v string) *RevisionUpsertOne {
+	return u.Update(func(s *RevisionUpsert) {
+		s.SetNameJa(v)
+	})
+}
+
+// UpdateNameJa sets the "name_ja" field to the value that was provided on create.
+func (u *RevisionUpsertOne) UpdateNameJa() *RevisionUpsertOne {
+	return u.Update(func(s *RevisionUpsert) {
+		s.UpdateNameJa()
+	})
+}
+
+// ClearNameJa clears the value of the "name_ja" field.
+func (u *RevisionUpsertOne) ClearNameJa() *RevisionUpsertOne {
+	return u.Update(func(s *RevisionUpsert) {
+		s.ClearNameJa()
+	})
+}
+
+// SetNameEn sets the "name_en" field.
+func (u *RevisionUpsertOne) SetNameEn(v string) *RevisionUpsertOne {
+	return u.Update(func(s *RevisionUpsert) {
+		s.SetNameEn(v)
+	})
+}
+
+// UpdateNameEn sets the "name_en" field to the value that was provided on create.
+func (u *RevisionUpsertOne) UpdateNameEn() *RevisionUpsertOne {
+	return u.Update(func(s *RevisionUpsert) {
+		s.UpdateNameEn()
+	})
+}
+
+// ClearNameEn clears the value of the "name_en" field.
+func (u *RevisionUpsertOne) ClearNameEn() *RevisionUpsertOne {
+	return u.Update(func(s *RevisionUpsert) {
+		s.ClearNameEn()
+	})
+}
+
+// Exec executes the query.
+func (u *RevisionUpsertOne) Exec(ctx context.Context) error {
+	if len(u.create.conflict) == 0 {
+		return errors.New("ent: missing options for RevisionCreate.OnConflict")
+	}
+	return u.create.Exec(ctx)
+}
+
+// ExecX is like Exec, but panics if an error occurs.
+func (u *RevisionUpsertOne) ExecX(ctx context.Context) {
+	if err := u.create.Exec(ctx); err != nil {
+		panic(err)
+	}
+}
+
+// Exec executes the UPSERT query and returns the inserted/updated ID.
+func (u *RevisionUpsertOne) ID(ctx context.Context) (id int, err error) {
+	node, err := u.create.Save(ctx)
+	if err != nil {
+		return id, err
+	}
+	return node.ID, nil
+}
+
+// IDX is like ID, but panics if an error occurs.
+func (u *RevisionUpsertOne) IDX(ctx context.Context) int {
+	id, err := u.ID(ctx)
+	if err != nil {
+		panic(err)
+	}
+	return id
+}
+
 // RevisionCreateBulk is the builder for creating many Revision entities in bulk.
 type RevisionCreateBulk struct {
 	config
 	builders []*RevisionCreate
+	conflict []sql.ConflictOption
 }
 
 // Save creates the Revision entities in the database.
@@ -313,6 +522,7 @@ func (rcb *RevisionCreateBulk) Save(ctx context.Context) ([]*Revision, error) {
 					_, err = mutators[i+1].Mutate(root, rcb.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
+					spec.OnConflict = rcb.conflict
 					// Invoke the actual operation on the latest mutation in the chain.
 					if err = sqlgraph.BatchCreate(ctx, rcb.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
@@ -363,6 +573,156 @@ func (rcb *RevisionCreateBulk) Exec(ctx context.Context) error {
 // ExecX is like Exec, but panics if an error occurs.
 func (rcb *RevisionCreateBulk) ExecX(ctx context.Context) {
 	if err := rcb.Exec(ctx); err != nil {
+		panic(err)
+	}
+}
+
+// OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
+// of the `INSERT` statement. For example:
+//
+//	client.Revision.CreateBulk(builders...).
+//		OnConflict(
+//			// Update the row with the new values
+//			// the was proposed for insertion.
+//			sql.ResolveWithNewValues(),
+//		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.RevisionUpsert) {
+//			SetKey(v+v).
+//		}).
+//		Exec(ctx)
+func (rcb *RevisionCreateBulk) OnConflict(opts ...sql.ConflictOption) *RevisionUpsertBulk {
+	rcb.conflict = opts
+	return &RevisionUpsertBulk{
+		create: rcb,
+	}
+}
+
+// OnConflictColumns calls `OnConflict` and configures the columns
+// as conflict target. Using this option is equivalent to using:
+//
+//	client.Revision.Create().
+//		OnConflict(sql.ConflictColumns(columns...)).
+//		Exec(ctx)
+func (rcb *RevisionCreateBulk) OnConflictColumns(columns ...string) *RevisionUpsertBulk {
+	rcb.conflict = append(rcb.conflict, sql.ConflictColumns(columns...))
+	return &RevisionUpsertBulk{
+		create: rcb,
+	}
+}
+
+// RevisionUpsertBulk is the builder for "upsert"-ing
+// a bulk of Revision nodes.
+type RevisionUpsertBulk struct {
+	create *RevisionCreateBulk
+}
+
+// UpdateNewValues updates the mutable fields using the new values that
+// were set on create. Using this option is equivalent to using:
+//
+//	client.Revision.Create().
+//		OnConflict(
+//			sql.ResolveWithNewValues(),
+//		).
+//		Exec(ctx)
+func (u *RevisionUpsertBulk) UpdateNewValues() *RevisionUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		for _, b := range u.create.builders {
+			if _, exists := b.mutation.Key(); exists {
+				s.SetIgnore(revision.FieldKey)
+			}
+		}
+	}))
+	return u
+}
+
+// Ignore sets each column to itself in case of conflict.
+// Using this option is equivalent to using:
+//
+//	client.Revision.Create().
+//		OnConflict(sql.ResolveWithIgnore()).
+//		Exec(ctx)
+func (u *RevisionUpsertBulk) Ignore() *RevisionUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
+	return u
+}
+
+// DoNothing configures the conflict_action to `DO NOTHING`.
+// Supported only by SQLite and PostgreSQL.
+func (u *RevisionUpsertBulk) DoNothing() *RevisionUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.DoNothing())
+	return u
+}
+
+// Update allows overriding fields `UPDATE` values. See the RevisionCreateBulk.OnConflict
+// documentation for more info.
+func (u *RevisionUpsertBulk) Update(set func(*RevisionUpsert)) *RevisionUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
+		set(&RevisionUpsert{UpdateSet: update})
+	}))
+	return u
+}
+
+// SetNameJa sets the "name_ja" field.
+func (u *RevisionUpsertBulk) SetNameJa(v string) *RevisionUpsertBulk {
+	return u.Update(func(s *RevisionUpsert) {
+		s.SetNameJa(v)
+	})
+}
+
+// UpdateNameJa sets the "name_ja" field to the value that was provided on create.
+func (u *RevisionUpsertBulk) UpdateNameJa() *RevisionUpsertBulk {
+	return u.Update(func(s *RevisionUpsert) {
+		s.UpdateNameJa()
+	})
+}
+
+// ClearNameJa clears the value of the "name_ja" field.
+func (u *RevisionUpsertBulk) ClearNameJa() *RevisionUpsertBulk {
+	return u.Update(func(s *RevisionUpsert) {
+		s.ClearNameJa()
+	})
+}
+
+// SetNameEn sets the "name_en" field.
+func (u *RevisionUpsertBulk) SetNameEn(v string) *RevisionUpsertBulk {
+	return u.Update(func(s *RevisionUpsert) {
+		s.SetNameEn(v)
+	})
+}
+
+// UpdateNameEn sets the "name_en" field to the value that was provided on create.
+func (u *RevisionUpsertBulk) UpdateNameEn() *RevisionUpsertBulk {
+	return u.Update(func(s *RevisionUpsert) {
+		s.UpdateNameEn()
+	})
+}
+
+// ClearNameEn clears the value of the "name_en" field.
+func (u *RevisionUpsertBulk) ClearNameEn() *RevisionUpsertBulk {
+	return u.Update(func(s *RevisionUpsert) {
+		s.ClearNameEn()
+	})
+}
+
+// Exec executes the query.
+func (u *RevisionUpsertBulk) Exec(ctx context.Context) error {
+	for i, b := range u.create.builders {
+		if len(b.conflict) != 0 {
+			return fmt.Errorf("ent: OnConflict was set for builder %d. Set it on the RevisionCreateBulk instead", i)
+		}
+	}
+	if len(u.create.conflict) == 0 {
+		return errors.New("ent: missing options for RevisionCreateBulk.OnConflict")
+	}
+	return u.create.Exec(ctx)
+}
+
+// ExecX is like Exec, but panics if an error occurs.
+func (u *RevisionUpsertBulk) ExecX(ctx context.Context) {
+	if err := u.create.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
