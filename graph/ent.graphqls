@@ -653,7 +653,6 @@ type PageInfo {
 }
 type Product implements Node {
   id: ID!
-  key: String!
   revisionID: ID!
   isOfficialJa: Boolean!
   nameJa: String
@@ -693,20 +692,6 @@ input ProductWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
-  """key field predicates"""
-  key: String
-  keyNEQ: String
-  keyIn: [String!]
-  keyNotIn: [String!]
-  keyGT: String
-  keyGTE: String
-  keyLT: String
-  keyLTE: String
-  keyContains: String
-  keyHasPrefix: String
-  keyHasSuffix: String
-  keyEqualFold: String
-  keyContainsFold: String
   """revision_id field predicates"""
   revisionID: ID
   revisionIDNEQ: ID

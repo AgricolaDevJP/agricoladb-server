@@ -2223,21 +2223,6 @@ type ProductWhereInput struct {
 	IDLT    *int  `json:"idLT,omitempty"`
 	IDLTE   *int  `json:"idLTE,omitempty"`
 
-	// "key" field predicates.
-	Key             *string  `json:"key,omitempty"`
-	KeyNEQ          *string  `json:"keyNEQ,omitempty"`
-	KeyIn           []string `json:"keyIn,omitempty"`
-	KeyNotIn        []string `json:"keyNotIn,omitempty"`
-	KeyGT           *string  `json:"keyGT,omitempty"`
-	KeyGTE          *string  `json:"keyGTE,omitempty"`
-	KeyLT           *string  `json:"keyLT,omitempty"`
-	KeyLTE          *string  `json:"keyLTE,omitempty"`
-	KeyContains     *string  `json:"keyContains,omitempty"`
-	KeyHasPrefix    *string  `json:"keyHasPrefix,omitempty"`
-	KeyHasSuffix    *string  `json:"keyHasSuffix,omitempty"`
-	KeyEqualFold    *string  `json:"keyEqualFold,omitempty"`
-	KeyContainsFold *string  `json:"keyContainsFold,omitempty"`
-
 	// "revision_id" field predicates.
 	RevisionID      *int  `json:"revisionID,omitempty"`
 	RevisionIDNEQ   *int  `json:"revisionIDNEQ,omitempty"`
@@ -2385,45 +2370,6 @@ func (i *ProductWhereInput) P() (predicate.Product, error) {
 	}
 	if i.IDLTE != nil {
 		predicates = append(predicates, product.IDLTE(*i.IDLTE))
-	}
-	if i.Key != nil {
-		predicates = append(predicates, product.KeyEQ(*i.Key))
-	}
-	if i.KeyNEQ != nil {
-		predicates = append(predicates, product.KeyNEQ(*i.KeyNEQ))
-	}
-	if len(i.KeyIn) > 0 {
-		predicates = append(predicates, product.KeyIn(i.KeyIn...))
-	}
-	if len(i.KeyNotIn) > 0 {
-		predicates = append(predicates, product.KeyNotIn(i.KeyNotIn...))
-	}
-	if i.KeyGT != nil {
-		predicates = append(predicates, product.KeyGT(*i.KeyGT))
-	}
-	if i.KeyGTE != nil {
-		predicates = append(predicates, product.KeyGTE(*i.KeyGTE))
-	}
-	if i.KeyLT != nil {
-		predicates = append(predicates, product.KeyLT(*i.KeyLT))
-	}
-	if i.KeyLTE != nil {
-		predicates = append(predicates, product.KeyLTE(*i.KeyLTE))
-	}
-	if i.KeyContains != nil {
-		predicates = append(predicates, product.KeyContains(*i.KeyContains))
-	}
-	if i.KeyHasPrefix != nil {
-		predicates = append(predicates, product.KeyHasPrefix(*i.KeyHasPrefix))
-	}
-	if i.KeyHasSuffix != nil {
-		predicates = append(predicates, product.KeyHasSuffix(*i.KeyHasSuffix))
-	}
-	if i.KeyEqualFold != nil {
-		predicates = append(predicates, product.KeyEqualFold(*i.KeyEqualFold))
-	}
-	if i.KeyContainsFold != nil {
-		predicates = append(predicates, product.KeyContainsFold(*i.KeyContainsFold))
 	}
 	if i.RevisionID != nil {
 		predicates = append(predicates, product.RevisionIDEQ(*i.RevisionID))

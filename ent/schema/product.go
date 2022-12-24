@@ -14,7 +14,6 @@ type Product struct {
 
 func (Product) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("key").Immutable().NotEmpty().Unique(),
 		field.Int("revision_id").Immutable(),
 		field.Bool("is_official_ja"),
 		field.String("name_ja").Optional(),

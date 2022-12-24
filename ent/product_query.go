@@ -329,12 +329,12 @@ func (pq *ProductQuery) WithRevision(opts ...func(*RevisionQuery)) *ProductQuery
 // Example:
 //
 //	var v []struct {
-//		Key string `json:"key,omitempty"`
+//		RevisionID int `json:"revision_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Product.Query().
-//		GroupBy(product.FieldKey).
+//		GroupBy(product.FieldRevisionID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (pq *ProductQuery) GroupBy(field string, fields ...string) *ProductGroupBy {
@@ -357,11 +357,11 @@ func (pq *ProductQuery) GroupBy(field string, fields ...string) *ProductGroupBy 
 // Example:
 //
 //	var v []struct {
-//		Key string `json:"key,omitempty"`
+//		RevisionID int `json:"revision_id,omitempty"`
 //	}
 //
 //	client.Product.Query().
-//		Select(product.FieldKey).
+//		Select(product.FieldRevisionID).
 //		Scan(ctx, &v)
 func (pq *ProductQuery) Select(fields ...string) *ProductSelect {
 	pq.fields = append(pq.fields, fields...)

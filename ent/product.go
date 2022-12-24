@@ -16,8 +16,6 @@ type Product struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// Key holds the value of the "key" field.
-	Key string `json:"key,omitempty"`
 	// RevisionID holds the value of the "revision_id" field.
 	RevisionID int `json:"revision_id,omitempty"`
 	// IsOfficialJa holds the value of the "is_official_ja" field.
@@ -77,7 +75,7 @@ func (*Product) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case product.FieldID, product.FieldRevisionID:
 			values[i] = new(sql.NullInt64)
-		case product.FieldKey, product.FieldNameJa, product.FieldNameEn:
+		case product.FieldNameJa, product.FieldNameEn:
 			values[i] = new(sql.NullString)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Product", columns[i])
@@ -100,12 +98,6 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			pr.ID = int(value.Int64)
-		case product.FieldKey:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field key", values[i])
-			} else if value.Valid {
-				pr.Key = value.String
-			}
 		case product.FieldRevisionID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field revision_id", values[i])
@@ -168,9 +160,6 @@ func (pr *Product) String() string {
 	var builder strings.Builder
 	builder.WriteString("Product(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", pr.ID))
-	builder.WriteString("key=")
-	builder.WriteString(pr.Key)
-	builder.WriteString(", ")
 	builder.WriteString("revision_id=")
 	builder.WriteString(fmt.Sprintf("%v", pr.RevisionID))
 	builder.WriteString(", ")

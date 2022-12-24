@@ -4582,7 +4582,6 @@ type ProductMutation struct {
 	op              Op
 	typ             string
 	id              *int
-	key             *string
 	is_official_ja  *bool
 	name_ja         *string
 	name_en         *string
@@ -4693,42 +4692,6 @@ func (m *ProductMutation) IDs(ctx context.Context) ([]int, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
-}
-
-// SetKey sets the "key" field.
-func (m *ProductMutation) SetKey(s string) {
-	m.key = &s
-}
-
-// Key returns the value of the "key" field in the mutation.
-func (m *ProductMutation) Key() (r string, exists bool) {
-	v := m.key
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldKey returns the old "key" field's value of the Product entity.
-// If the Product object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProductMutation) OldKey(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldKey is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldKey requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldKey: %w", err)
-	}
-	return oldValue.Key, nil
-}
-
-// ResetKey resets all changes to the "key" field.
-func (m *ProductMutation) ResetKey() {
-	m.key = nil
 }
 
 // SetRevisionID sets the "revision_id" field.
@@ -5000,10 +4963,7 @@ func (m *ProductMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProductMutation) Fields() []string {
-	fields := make([]string, 0, 5)
-	if m.key != nil {
-		fields = append(fields, product.FieldKey)
-	}
+	fields := make([]string, 0, 4)
 	if m.revision != nil {
 		fields = append(fields, product.FieldRevisionID)
 	}
@@ -5024,8 +4984,6 @@ func (m *ProductMutation) Fields() []string {
 // schema.
 func (m *ProductMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case product.FieldKey:
-		return m.Key()
 	case product.FieldRevisionID:
 		return m.RevisionID()
 	case product.FieldIsOfficialJa:
@@ -5043,8 +5001,6 @@ func (m *ProductMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *ProductMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case product.FieldKey:
-		return m.OldKey(ctx)
 	case product.FieldRevisionID:
 		return m.OldRevisionID(ctx)
 	case product.FieldIsOfficialJa:
@@ -5062,13 +5018,6 @@ func (m *ProductMutation) OldField(ctx context.Context, name string) (ent.Value,
 // type.
 func (m *ProductMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case product.FieldKey:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetKey(v)
-		return nil
 	case product.FieldRevisionID:
 		v, ok := value.(int)
 		if !ok {
@@ -5164,9 +5113,6 @@ func (m *ProductMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *ProductMutation) ResetField(name string) error {
 	switch name {
-	case product.FieldKey:
-		m.ResetKey()
-		return nil
 	case product.FieldRevisionID:
 		m.ResetRevisionID()
 		return nil

@@ -135,7 +135,6 @@ var (
 	// ProductsColumns holds the columns for the "products" table.
 	ProductsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "key", Type: field.TypeString, Unique: true},
 		{Name: "is_official_ja", Type: field.TypeBool},
 		{Name: "name_ja", Type: field.TypeString, Nullable: true},
 		{Name: "name_en", Type: field.TypeString, Nullable: true},
@@ -149,7 +148,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "products_revisions_products",
-				Columns:    []*schema.Column{ProductsColumns[5]},
+				Columns:    []*schema.Column{ProductsColumns[4]},
 				RefColumns: []*schema.Column{RevisionsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},

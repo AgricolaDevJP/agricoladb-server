@@ -7,8 +7,6 @@ const (
 	Label = "product"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldKey holds the string denoting the key field in the database.
-	FieldKey = "key"
 	// FieldRevisionID holds the string denoting the revision_id field in the database.
 	FieldRevisionID = "revision_id"
 	// FieldIsOfficialJa holds the string denoting the is_official_ja field in the database.
@@ -40,7 +38,6 @@ const (
 // Columns holds all SQL columns for product fields.
 var Columns = []string{
 	FieldID,
-	FieldKey,
 	FieldRevisionID,
 	FieldIsOfficialJa,
 	FieldNameJa,
@@ -62,8 +59,3 @@ func ValidColumn(column string) bool {
 	}
 	return false
 }
-
-var (
-	// KeyValidator is a validator for the "key" field. It is called by the builders before save.
-	KeyValidator func(string) error
-)

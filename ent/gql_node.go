@@ -553,22 +553,14 @@ func (pr *Product) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
 		ID:     pr.ID,
 		Type:   "Product",
-		Fields: make([]*Field, 5),
+		Fields: make([]*Field, 4),
 		Edges:  make([]*Edge, 2),
 	}
 	var buf []byte
-	if buf, err = json.Marshal(pr.Key); err != nil {
-		return nil, err
-	}
-	node.Fields[0] = &Field{
-		Type:  "string",
-		Name:  "key",
-		Value: string(buf),
-	}
 	if buf, err = json.Marshal(pr.RevisionID); err != nil {
 		return nil, err
 	}
-	node.Fields[1] = &Field{
+	node.Fields[0] = &Field{
 		Type:  "int",
 		Name:  "revision_id",
 		Value: string(buf),
@@ -576,7 +568,7 @@ func (pr *Product) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(pr.IsOfficialJa); err != nil {
 		return nil, err
 	}
-	node.Fields[2] = &Field{
+	node.Fields[1] = &Field{
 		Type:  "bool",
 		Name:  "is_official_ja",
 		Value: string(buf),
@@ -584,7 +576,7 @@ func (pr *Product) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(pr.NameJa); err != nil {
 		return nil, err
 	}
-	node.Fields[3] = &Field{
+	node.Fields[2] = &Field{
 		Type:  "string",
 		Name:  "name_ja",
 		Value: string(buf),
@@ -592,7 +584,7 @@ func (pr *Product) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(pr.NameEn); err != nil {
 		return nil, err
 	}
-	node.Fields[4] = &Field{
+	node.Fields[3] = &Field{
 		Type:  "string",
 		Name:  "name_en",
 		Value: string(buf),

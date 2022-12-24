@@ -7,7 +7,6 @@ import (
 	"agricoladb/ent/cardspecialcolor"
 	"agricoladb/ent/cardtype"
 	"agricoladb/ent/deck"
-	"agricoladb/ent/product"
 	"agricoladb/ent/revision"
 	"agricoladb/ent/schema"
 )
@@ -54,12 +53,6 @@ func init() {
 	deckDescKey := deckFields[0].Descriptor()
 	// deck.KeyValidator is a validator for the "key" field. It is called by the builders before save.
 	deck.KeyValidator = deckDescKey.Validators[0].(func(string) error)
-	productFields := schema.Product{}.Fields()
-	_ = productFields
-	// productDescKey is the schema descriptor for key field.
-	productDescKey := productFields[0].Descriptor()
-	// product.KeyValidator is a validator for the "key" field. It is called by the builders before save.
-	product.KeyValidator = productDescKey.Validators[0].(func(string) error)
 	revisionFields := schema.Revision{}.Fields()
 	_ = revisionFields
 	// revisionDescKey is the schema descriptor for key field.

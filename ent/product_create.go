@@ -21,12 +21,6 @@ type ProductCreate struct {
 	hooks    []Hook
 }
 
-// SetKey sets the "key" field.
-func (pc *ProductCreate) SetKey(s string) *ProductCreate {
-	pc.mutation.SetKey(s)
-	return pc
-}
-
 // SetRevisionID sets the "revision_id" field.
 func (pc *ProductCreate) SetRevisionID(i int) *ProductCreate {
 	pc.mutation.SetRevisionID(i)
@@ -163,14 +157,6 @@ func (pc *ProductCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (pc *ProductCreate) check() error {
-	if _, ok := pc.mutation.Key(); !ok {
-		return &ValidationError{Name: "key", err: errors.New(`ent: missing required field "Product.key"`)}
-	}
-	if v, ok := pc.mutation.Key(); ok {
-		if err := product.KeyValidator(v); err != nil {
-			return &ValidationError{Name: "key", err: fmt.Errorf(`ent: validator failed for field "Product.key": %w`, err)}
-		}
-	}
 	if _, ok := pc.mutation.RevisionID(); !ok {
 		return &ValidationError{Name: "revision_id", err: errors.New(`ent: missing required field "Product.revision_id"`)}
 	}
@@ -207,10 +193,6 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 			},
 		}
 	)
-	if value, ok := pc.mutation.Key(); ok {
-		_spec.SetField(product.FieldKey, field.TypeString, value)
-		_node.Key = value
-	}
 	if value, ok := pc.mutation.IsOfficialJa(); ok {
 		_spec.SetField(product.FieldIsOfficialJa, field.TypeBool, value)
 		_node.IsOfficialJa = value
