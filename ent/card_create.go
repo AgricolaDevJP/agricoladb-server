@@ -184,6 +184,20 @@ func (cc *CardCreate) SetNillableDescription(s *string) *CardCreate {
 	return cc
 }
 
+// SetNote sets the "note" field.
+func (cc *CardCreate) SetNote(s string) *CardCreate {
+	cc.mutation.SetNote(s)
+	return cc
+}
+
+// SetNillableNote sets the "note" field if the given value is not nil.
+func (cc *CardCreate) SetNillableNote(s *string) *CardCreate {
+	if s != nil {
+		cc.SetNote(*s)
+	}
+	return cc
+}
+
 // SetIsOfficialJa sets the "is_official_ja" field.
 func (cc *CardCreate) SetIsOfficialJa(b bool) *CardCreate {
 	cc.mutation.SetIsOfficialJa(b)
@@ -610,6 +624,10 @@ func (cc *CardCreate) createSpec() (*Card, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Description(); ok {
 		_spec.SetField(card.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := cc.mutation.Note(); ok {
+		_spec.SetField(card.FieldNote, field.TypeString, value)
+		_node.Note = value
 	}
 	if value, ok := cc.mutation.IsOfficialJa(); ok {
 		_spec.SetField(card.FieldIsOfficialJa, field.TypeBool, value)
@@ -1075,6 +1093,24 @@ func (u *CardUpsert) UpdateDescription() *CardUpsert {
 // ClearDescription clears the value of the "description" field.
 func (u *CardUpsert) ClearDescription() *CardUpsert {
 	u.SetNull(card.FieldDescription)
+	return u
+}
+
+// SetNote sets the "note" field.
+func (u *CardUpsert) SetNote(v string) *CardUpsert {
+	u.Set(card.FieldNote, v)
+	return u
+}
+
+// UpdateNote sets the "note" field to the value that was provided on create.
+func (u *CardUpsert) UpdateNote() *CardUpsert {
+	u.SetExcluded(card.FieldNote)
+	return u
+}
+
+// ClearNote clears the value of the "note" field.
+func (u *CardUpsert) ClearNote() *CardUpsert {
+	u.SetNull(card.FieldNote)
 	return u
 }
 
@@ -1618,6 +1654,27 @@ func (u *CardUpsertOne) UpdateDescription() *CardUpsertOne {
 func (u *CardUpsertOne) ClearDescription() *CardUpsertOne {
 	return u.Update(func(s *CardUpsert) {
 		s.ClearDescription()
+	})
+}
+
+// SetNote sets the "note" field.
+func (u *CardUpsertOne) SetNote(v string) *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.SetNote(v)
+	})
+}
+
+// UpdateNote sets the "note" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateNote() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateNote()
+	})
+}
+
+// ClearNote clears the value of the "note" field.
+func (u *CardUpsertOne) ClearNote() *CardUpsertOne {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearNote()
 	})
 }
 
@@ -2365,6 +2422,27 @@ func (u *CardUpsertBulk) UpdateDescription() *CardUpsertBulk {
 func (u *CardUpsertBulk) ClearDescription() *CardUpsertBulk {
 	return u.Update(func(s *CardUpsert) {
 		s.ClearDescription()
+	})
+}
+
+// SetNote sets the "note" field.
+func (u *CardUpsertBulk) SetNote(v string) *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.SetNote(v)
+	})
+}
+
+// UpdateNote sets the "note" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateNote() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.UpdateNote()
+	})
+}
+
+// ClearNote clears the value of the "note" field.
+func (u *CardUpsertBulk) ClearNote() *CardUpsertBulk {
+	return u.Update(func(s *CardUpsert) {
+		s.ClearNote()
 	})
 }
 

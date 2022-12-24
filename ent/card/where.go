@@ -171,6 +171,13 @@ func Description(v string) predicate.Card {
 	})
 }
 
+// Note applies equality check predicate on the "note" field. It's identical to NoteEQ.
+func Note(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldNote), v))
+	})
+}
+
 // IsOfficialJa applies equality check predicate on the "is_official_ja" field. It's identical to IsOfficialJaEQ.
 func IsOfficialJa(v bool) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
@@ -1448,6 +1455,119 @@ func DescriptionEqualFold(v string) predicate.Card {
 func DescriptionContainsFold(v string) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldDescription), v))
+	})
+}
+
+// NoteEQ applies the EQ predicate on the "note" field.
+func NoteEQ(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldNote), v))
+	})
+}
+
+// NoteNEQ applies the NEQ predicate on the "note" field.
+func NoteNEQ(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldNote), v))
+	})
+}
+
+// NoteIn applies the In predicate on the "note" field.
+func NoteIn(vs ...string) predicate.Card {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldNote), v...))
+	})
+}
+
+// NoteNotIn applies the NotIn predicate on the "note" field.
+func NoteNotIn(vs ...string) predicate.Card {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldNote), v...))
+	})
+}
+
+// NoteGT applies the GT predicate on the "note" field.
+func NoteGT(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldNote), v))
+	})
+}
+
+// NoteGTE applies the GTE predicate on the "note" field.
+func NoteGTE(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldNote), v))
+	})
+}
+
+// NoteLT applies the LT predicate on the "note" field.
+func NoteLT(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldNote), v))
+	})
+}
+
+// NoteLTE applies the LTE predicate on the "note" field.
+func NoteLTE(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldNote), v))
+	})
+}
+
+// NoteContains applies the Contains predicate on the "note" field.
+func NoteContains(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldNote), v))
+	})
+}
+
+// NoteHasPrefix applies the HasPrefix predicate on the "note" field.
+func NoteHasPrefix(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldNote), v))
+	})
+}
+
+// NoteHasSuffix applies the HasSuffix predicate on the "note" field.
+func NoteHasSuffix(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldNote), v))
+	})
+}
+
+// NoteIsNil applies the IsNil predicate on the "note" field.
+func NoteIsNil() predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldNote)))
+	})
+}
+
+// NoteNotNil applies the NotNil predicate on the "note" field.
+func NoteNotNil() predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldNote)))
+	})
+}
+
+// NoteEqualFold applies the EqualFold predicate on the "note" field.
+func NoteEqualFold(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldNote), v))
+	})
+}
+
+// NoteContainsFold applies the ContainsFold predicate on the "note" field.
+func NoteContainsFold(v string) predicate.Card {
+	return predicate.Card(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldNote), v))
 	})
 }
 

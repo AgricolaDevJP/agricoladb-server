@@ -29,6 +29,7 @@ func (Card) Fields() []ent.Field {
 		field.String("prerequisite").Optional(),
 		field.String("cost").Optional(),
 		field.Text("description").Optional(),
+		field.Text("note").Optional(),
 		field.Bool("is_official_ja"),
 		field.Int("victory_point").Optional(),
 		field.String("special_victory_point").Optional(),

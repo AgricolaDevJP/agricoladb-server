@@ -20,6 +20,7 @@ var (
 		{Name: "prerequisite", Type: field.TypeString, Nullable: true},
 		{Name: "cost", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "note", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "is_official_ja", Type: field.TypeBool},
 		{Name: "victory_point", Type: field.TypeInt, Nullable: true},
 		{Name: "special_victory_point", Type: field.TypeString, Nullable: true},
@@ -53,25 +54,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "cards_card_special_colors_cards",
-				Columns:    []*schema.Column{CardsColumns[30]},
+				Columns:    []*schema.Column{CardsColumns[31]},
 				RefColumns: []*schema.Column{CardSpecialColorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "cards_card_types_cards",
-				Columns:    []*schema.Column{CardsColumns[31]},
+				Columns:    []*schema.Column{CardsColumns[32]},
 				RefColumns: []*schema.Column{CardTypesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "cards_decks_cards",
-				Columns:    []*schema.Column{CardsColumns[32]},
+				Columns:    []*schema.Column{CardsColumns[33]},
 				RefColumns: []*schema.Column{DecksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "cards_revisions_cards",
-				Columns:    []*schema.Column{CardsColumns[33]},
+				Columns:    []*schema.Column{CardsColumns[34]},
 				RefColumns: []*schema.Column{RevisionsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -80,7 +81,7 @@ var (
 			{
 				Name:    "card_revision_id_literal_id",
 				Unique:  true,
-				Columns: []*schema.Column{CardsColumns[33], CardsColumns[1]},
+				Columns: []*schema.Column{CardsColumns[34], CardsColumns[1]},
 			},
 		},
 	}

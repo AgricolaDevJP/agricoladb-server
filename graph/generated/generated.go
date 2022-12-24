@@ -77,6 +77,7 @@ type ComplexityRoot struct {
 		MinPlayersNumber                func(childComplexity int) int
 		NameEn                          func(childComplexity int) int
 		NameJa                          func(childComplexity int) int
+		Note                            func(childComplexity int) int
 		PlayAgricolaCardID              func(childComplexity int) int
 		Prerequisite                    func(childComplexity int) int
 		PrintedID                       func(childComplexity int) int
@@ -420,6 +421,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Card.NameJa(childComplexity), true
+
+	case "Card.note":
+		if e.complexity.Card.Note == nil {
+			break
+		}
+
+		return e.complexity.Card.Note(childComplexity), true
 
 	case "Card.playAgricolaCardID":
 		if e.complexity.Card.PlayAgricolaCardID == nil {
@@ -936,6 +944,7 @@ type Card implements Node {
   prerequisite: String
   cost: String
   description: String
+  note: String
   isOfficialJa: Boolean!
   victoryPoint: Int
   specialVictoryPoint: String
@@ -1336,6 +1345,22 @@ input CardWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """note field predicates"""
+  note: String
+  noteNEQ: String
+  noteIn: [String!]
+  noteNotIn: [String!]
+  noteGT: String
+  noteGTE: String
+  noteLT: String
+  noteLTE: String
+  noteContains: String
+  noteHasPrefix: String
+  noteHasSuffix: String
+  noteIsNil: Boolean
+  noteNotNil: Boolean
+  noteEqualFold: String
+  noteContainsFold: String
   """is_official_ja field predicates"""
   isOfficialJa: Boolean
   isOfficialJaNEQ: Boolean
@@ -2785,6 +2810,47 @@ func (ec *executionContext) fieldContext_Card_description(ctx context.Context, f
 	return fc, nil
 }
 
+func (ec *executionContext) _Card_note(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_note(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Note, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Card_note(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Card",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Card_isOfficialJa(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Card_isOfficialJa(ctx, field)
 	if err != nil {
@@ -4008,6 +4074,8 @@ func (ec *executionContext) fieldContext_Card_children(ctx context.Context, fiel
 				return ec.fieldContext_Card_cost(ctx, field)
 			case "description":
 				return ec.fieldContext_Card_description(ctx, field)
+			case "note":
+				return ec.fieldContext_Card_note(ctx, field)
 			case "isOfficialJa":
 				return ec.fieldContext_Card_isOfficialJa(ctx, field)
 			case "victoryPoint":
@@ -4133,6 +4201,8 @@ func (ec *executionContext) fieldContext_Card_ancestors(ctx context.Context, fie
 				return ec.fieldContext_Card_cost(ctx, field)
 			case "description":
 				return ec.fieldContext_Card_description(ctx, field)
+			case "note":
+				return ec.fieldContext_Card_note(ctx, field)
 			case "isOfficialJa":
 				return ec.fieldContext_Card_isOfficialJa(ctx, field)
 			case "victoryPoint":
@@ -4403,6 +4473,8 @@ func (ec *executionContext) fieldContext_CardEdge_node(ctx context.Context, fiel
 				return ec.fieldContext_Card_cost(ctx, field)
 			case "description":
 				return ec.fieldContext_Card_description(ctx, field)
+			case "note":
+				return ec.fieldContext_Card_note(ctx, field)
 			case "isOfficialJa":
 				return ec.fieldContext_Card_isOfficialJa(ctx, field)
 			case "victoryPoint":
@@ -9517,7 +9589,7 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "literalID", "literalIDNEQ", "literalIDIn", "literalIDNotIn", "literalIDGT", "literalIDGTE", "literalIDLT", "literalIDLTE", "literalIDContains", "literalIDHasPrefix", "literalIDHasSuffix", "literalIDEqualFold", "literalIDContainsFold", "revisionID", "revisionIDNEQ", "revisionIDIn", "revisionIDNotIn", "printedID", "printedIDNEQ", "printedIDIn", "printedIDNotIn", "printedIDGT", "printedIDGTE", "printedIDLT", "printedIDLTE", "printedIDContains", "printedIDHasPrefix", "printedIDHasSuffix", "printedIDIsNil", "printedIDNotNil", "printedIDEqualFold", "printedIDContainsFold", "playAgricolaCardID", "playAgricolaCardIDNEQ", "playAgricolaCardIDIn", "playAgricolaCardIDNotIn", "playAgricolaCardIDGT", "playAgricolaCardIDGTE", "playAgricolaCardIDLT", "playAgricolaCardIDLTE", "playAgricolaCardIDContains", "playAgricolaCardIDHasPrefix", "playAgricolaCardIDHasSuffix", "playAgricolaCardIDIsNil", "playAgricolaCardIDNotNil", "playAgricolaCardIDEqualFold", "playAgricolaCardIDContainsFold", "deckID", "deckIDNEQ", "deckIDIn", "deckIDNotIn", "deckIDIsNil", "deckIDNotNil", "cardTypeID", "cardTypeIDNEQ", "cardTypeIDIn", "cardTypeIDNotIn", "cardSpecialColorID", "cardSpecialColorIDNEQ", "cardSpecialColorIDIn", "cardSpecialColorIDNotIn", "cardSpecialColorIDIsNil", "cardSpecialColorIDNotNil", "nameJa", "nameJaNEQ", "nameJaIn", "nameJaNotIn", "nameJaGT", "nameJaGTE", "nameJaLT", "nameJaLTE", "nameJaContains", "nameJaHasPrefix", "nameJaHasSuffix", "nameJaIsNil", "nameJaNotNil", "nameJaEqualFold", "nameJaContainsFold", "nameEn", "nameEnNEQ", "nameEnIn", "nameEnNotIn", "nameEnGT", "nameEnGTE", "nameEnLT", "nameEnLTE", "nameEnContains", "nameEnHasPrefix", "nameEnHasSuffix", "nameEnIsNil", "nameEnNotNil", "nameEnEqualFold", "nameEnContainsFold", "minPlayersNumber", "minPlayersNumberNEQ", "minPlayersNumberIn", "minPlayersNumberNotIn", "minPlayersNumberGT", "minPlayersNumberGTE", "minPlayersNumberLT", "minPlayersNumberLTE", "minPlayersNumberIsNil", "minPlayersNumberNotNil", "prerequisite", "prerequisiteNEQ", "prerequisiteIn", "prerequisiteNotIn", "prerequisiteGT", "prerequisiteGTE", "prerequisiteLT", "prerequisiteLTE", "prerequisiteContains", "prerequisiteHasPrefix", "prerequisiteHasSuffix", "prerequisiteIsNil", "prerequisiteNotNil", "prerequisiteEqualFold", "prerequisiteContainsFold", "cost", "costNEQ", "costIn", "costNotIn", "costGT", "costGTE", "costLT", "costLTE", "costContains", "costHasPrefix", "costHasSuffix", "costIsNil", "costNotNil", "costEqualFold", "costContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "isOfficialJa", "isOfficialJaNEQ", "victoryPoint", "victoryPointNEQ", "victoryPointIn", "victoryPointNotIn", "victoryPointGT", "victoryPointGTE", "victoryPointLT", "victoryPointLTE", "victoryPointIsNil", "victoryPointNotNil", "specialVictoryPoint", "specialVictoryPointNEQ", "specialVictoryPointIn", "specialVictoryPointNotIn", "specialVictoryPointGT", "specialVictoryPointGTE", "specialVictoryPointLT", "specialVictoryPointLTE", "specialVictoryPointContains", "specialVictoryPointHasPrefix", "specialVictoryPointHasSuffix", "specialVictoryPointIsNil", "specialVictoryPointNotNil", "specialVictoryPointEqualFold", "specialVictoryPointContainsFold", "hasArrrow", "hasArrrowNEQ", "hasBonusPointIcon", "hasBonusPointIconNEQ", "hasNegativeBonusPointIcon", "hasNegativeBonusPointIconNEQ", "hasPanIcon", "hasPanIconNEQ", "hasBreadIcon", "hasBreadIconNEQ", "hasFarmPlannerIcon", "hasFarmPlannerIconNEQ", "hasActionsBoosterIcon", "hasActionsBoosterIconNEQ", "hasPointsProviderIcon", "hasPointsProviderIconNEQ", "hasGoodsProviderIcon", "hasGoodsProviderIconNEQ", "hasFoodProviderIcon", "hasFoodProviderIconNEQ", "hasCropProviderIcon", "hasCropProviderIconNEQ", "hasBuildingResourceProviderIcon", "hasBuildingResourceProviderIconNEQ", "hasLivestockProviderIcon", "hasLivestockProviderIconNEQ", "hasCutPeatIcon", "hasCutPeatIconNEQ", "hasFellTreesIcon", "hasFellTreesIconNEQ", "hasSlashAndBurnIcon", "hasSlashAndBurnIconNEQ", "hasHiringFareIcon", "hasHiringFareIconNEQ", "hasRevision", "hasRevisionWith", "hasProducts", "hasProductsWith", "hasDeck", "hasDeckWith", "hasCardType", "hasCardTypeWith", "hasCardSpecialColor", "hasCardSpecialColorWith", "hasChildren", "hasChildrenWith", "hasAncestors", "hasAncestorsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "literalID", "literalIDNEQ", "literalIDIn", "literalIDNotIn", "literalIDGT", "literalIDGTE", "literalIDLT", "literalIDLTE", "literalIDContains", "literalIDHasPrefix", "literalIDHasSuffix", "literalIDEqualFold", "literalIDContainsFold", "revisionID", "revisionIDNEQ", "revisionIDIn", "revisionIDNotIn", "printedID", "printedIDNEQ", "printedIDIn", "printedIDNotIn", "printedIDGT", "printedIDGTE", "printedIDLT", "printedIDLTE", "printedIDContains", "printedIDHasPrefix", "printedIDHasSuffix", "printedIDIsNil", "printedIDNotNil", "printedIDEqualFold", "printedIDContainsFold", "playAgricolaCardID", "playAgricolaCardIDNEQ", "playAgricolaCardIDIn", "playAgricolaCardIDNotIn", "playAgricolaCardIDGT", "playAgricolaCardIDGTE", "playAgricolaCardIDLT", "playAgricolaCardIDLTE", "playAgricolaCardIDContains", "playAgricolaCardIDHasPrefix", "playAgricolaCardIDHasSuffix", "playAgricolaCardIDIsNil", "playAgricolaCardIDNotNil", "playAgricolaCardIDEqualFold", "playAgricolaCardIDContainsFold", "deckID", "deckIDNEQ", "deckIDIn", "deckIDNotIn", "deckIDIsNil", "deckIDNotNil", "cardTypeID", "cardTypeIDNEQ", "cardTypeIDIn", "cardTypeIDNotIn", "cardSpecialColorID", "cardSpecialColorIDNEQ", "cardSpecialColorIDIn", "cardSpecialColorIDNotIn", "cardSpecialColorIDIsNil", "cardSpecialColorIDNotNil", "nameJa", "nameJaNEQ", "nameJaIn", "nameJaNotIn", "nameJaGT", "nameJaGTE", "nameJaLT", "nameJaLTE", "nameJaContains", "nameJaHasPrefix", "nameJaHasSuffix", "nameJaIsNil", "nameJaNotNil", "nameJaEqualFold", "nameJaContainsFold", "nameEn", "nameEnNEQ", "nameEnIn", "nameEnNotIn", "nameEnGT", "nameEnGTE", "nameEnLT", "nameEnLTE", "nameEnContains", "nameEnHasPrefix", "nameEnHasSuffix", "nameEnIsNil", "nameEnNotNil", "nameEnEqualFold", "nameEnContainsFold", "minPlayersNumber", "minPlayersNumberNEQ", "minPlayersNumberIn", "minPlayersNumberNotIn", "minPlayersNumberGT", "minPlayersNumberGTE", "minPlayersNumberLT", "minPlayersNumberLTE", "minPlayersNumberIsNil", "minPlayersNumberNotNil", "prerequisite", "prerequisiteNEQ", "prerequisiteIn", "prerequisiteNotIn", "prerequisiteGT", "prerequisiteGTE", "prerequisiteLT", "prerequisiteLTE", "prerequisiteContains", "prerequisiteHasPrefix", "prerequisiteHasSuffix", "prerequisiteIsNil", "prerequisiteNotNil", "prerequisiteEqualFold", "prerequisiteContainsFold", "cost", "costNEQ", "costIn", "costNotIn", "costGT", "costGTE", "costLT", "costLTE", "costContains", "costHasPrefix", "costHasSuffix", "costIsNil", "costNotNil", "costEqualFold", "costContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "note", "noteNEQ", "noteIn", "noteNotIn", "noteGT", "noteGTE", "noteLT", "noteLTE", "noteContains", "noteHasPrefix", "noteHasSuffix", "noteIsNil", "noteNotNil", "noteEqualFold", "noteContainsFold", "isOfficialJa", "isOfficialJaNEQ", "victoryPoint", "victoryPointNEQ", "victoryPointIn", "victoryPointNotIn", "victoryPointGT", "victoryPointGTE", "victoryPointLT", "victoryPointLTE", "victoryPointIsNil", "victoryPointNotNil", "specialVictoryPoint", "specialVictoryPointNEQ", "specialVictoryPointIn", "specialVictoryPointNotIn", "specialVictoryPointGT", "specialVictoryPointGTE", "specialVictoryPointLT", "specialVictoryPointLTE", "specialVictoryPointContains", "specialVictoryPointHasPrefix", "specialVictoryPointHasSuffix", "specialVictoryPointIsNil", "specialVictoryPointNotNil", "specialVictoryPointEqualFold", "specialVictoryPointContainsFold", "hasArrrow", "hasArrrowNEQ", "hasBonusPointIcon", "hasBonusPointIconNEQ", "hasNegativeBonusPointIcon", "hasNegativeBonusPointIconNEQ", "hasPanIcon", "hasPanIconNEQ", "hasBreadIcon", "hasBreadIconNEQ", "hasFarmPlannerIcon", "hasFarmPlannerIconNEQ", "hasActionsBoosterIcon", "hasActionsBoosterIconNEQ", "hasPointsProviderIcon", "hasPointsProviderIconNEQ", "hasGoodsProviderIcon", "hasGoodsProviderIconNEQ", "hasFoodProviderIcon", "hasFoodProviderIconNEQ", "hasCropProviderIcon", "hasCropProviderIconNEQ", "hasBuildingResourceProviderIcon", "hasBuildingResourceProviderIconNEQ", "hasLivestockProviderIcon", "hasLivestockProviderIconNEQ", "hasCutPeatIcon", "hasCutPeatIconNEQ", "hasFellTreesIcon", "hasFellTreesIconNEQ", "hasSlashAndBurnIcon", "hasSlashAndBurnIconNEQ", "hasHiringFareIcon", "hasHiringFareIconNEQ", "hasRevision", "hasRevisionWith", "hasProducts", "hasProductsWith", "hasDeck", "hasDeckWith", "hasCardType", "hasCardTypeWith", "hasCardSpecialColor", "hasCardSpecialColorWith", "hasChildren", "hasChildrenWith", "hasAncestors", "hasAncestorsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -10793,6 +10865,126 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionContainsFold"))
 			it.DescriptionContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "note":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("note"))
+			it.Note, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "noteNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteNEQ"))
+			it.NoteNEQ, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "noteIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteIn"))
+			it.NoteIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "noteNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteNotIn"))
+			it.NoteNotIn, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "noteGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteGT"))
+			it.NoteGT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "noteGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteGTE"))
+			it.NoteGTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "noteLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteLT"))
+			it.NoteLT, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "noteLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteLTE"))
+			it.NoteLTE, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "noteContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteContains"))
+			it.NoteContains, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "noteHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteHasPrefix"))
+			it.NoteHasPrefix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "noteHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteHasSuffix"))
+			it.NoteHasSuffix, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "noteIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteIsNil"))
+			it.NoteIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "noteNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteNotNil"))
+			it.NoteNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "noteEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteEqualFold"))
+			it.NoteEqualFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "noteContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteContainsFold"))
+			it.NoteContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -13050,6 +13242,10 @@ func (ec *executionContext) _Card(ctx context.Context, sel ast.SelectionSet, obj
 		case "description":
 
 			out.Values[i] = ec._Card_description(ctx, field, obj)
+
+		case "note":
+
+			out.Values[i] = ec._Card_note(ctx, field, obj)
 
 		case "isOfficialJa":
 

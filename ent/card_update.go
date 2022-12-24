@@ -244,6 +244,26 @@ func (cu *CardUpdate) ClearDescription() *CardUpdate {
 	return cu
 }
 
+// SetNote sets the "note" field.
+func (cu *CardUpdate) SetNote(s string) *CardUpdate {
+	cu.mutation.SetNote(s)
+	return cu
+}
+
+// SetNillableNote sets the "note" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableNote(s *string) *CardUpdate {
+	if s != nil {
+		cu.SetNote(*s)
+	}
+	return cu
+}
+
+// ClearNote clears the value of the "note" field.
+func (cu *CardUpdate) ClearNote() *CardUpdate {
+	cu.mutation.ClearNote()
+	return cu
+}
+
 // SetIsOfficialJa sets the "is_official_ja" field.
 func (cu *CardUpdate) SetIsOfficialJa(b bool) *CardUpdate {
 	cu.mutation.SetIsOfficialJa(b)
@@ -684,6 +704,12 @@ func (cu *CardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.DescriptionCleared() {
 		_spec.ClearField(card.FieldDescription, field.TypeString)
+	}
+	if value, ok := cu.mutation.Note(); ok {
+		_spec.SetField(card.FieldNote, field.TypeString, value)
+	}
+	if cu.mutation.NoteCleared() {
+		_spec.ClearField(card.FieldNote, field.TypeString)
 	}
 	if value, ok := cu.mutation.IsOfficialJa(); ok {
 		_spec.SetField(card.FieldIsOfficialJa, field.TypeBool, value)
@@ -1253,6 +1279,26 @@ func (cuo *CardUpdateOne) ClearDescription() *CardUpdateOne {
 	return cuo
 }
 
+// SetNote sets the "note" field.
+func (cuo *CardUpdateOne) SetNote(s string) *CardUpdateOne {
+	cuo.mutation.SetNote(s)
+	return cuo
+}
+
+// SetNillableNote sets the "note" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableNote(s *string) *CardUpdateOne {
+	if s != nil {
+		cuo.SetNote(*s)
+	}
+	return cuo
+}
+
+// ClearNote clears the value of the "note" field.
+func (cuo *CardUpdateOne) ClearNote() *CardUpdateOne {
+	cuo.mutation.ClearNote()
+	return cuo
+}
+
 // SetIsOfficialJa sets the "is_official_ja" field.
 func (cuo *CardUpdateOne) SetIsOfficialJa(b bool) *CardUpdateOne {
 	cuo.mutation.SetIsOfficialJa(b)
@@ -1723,6 +1769,12 @@ func (cuo *CardUpdateOne) sqlSave(ctx context.Context) (_node *Card, err error) 
 	}
 	if cuo.mutation.DescriptionCleared() {
 		_spec.ClearField(card.FieldDescription, field.TypeString)
+	}
+	if value, ok := cuo.mutation.Note(); ok {
+		_spec.SetField(card.FieldNote, field.TypeString, value)
+	}
+	if cuo.mutation.NoteCleared() {
+		_spec.ClearField(card.FieldNote, field.TypeString)
 	}
 	if value, ok := cuo.mutation.IsOfficialJa(); ok {
 		_spec.SetField(card.FieldIsOfficialJa, field.TypeBool, value)

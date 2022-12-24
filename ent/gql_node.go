@@ -55,7 +55,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
 		ID:     c.ID,
 		Type:   "Card",
-		Fields: make([]*Field, 33),
+		Fields: make([]*Field, 34),
 		Edges:  make([]*Edge, 7),
 	}
 	var buf []byte
@@ -163,10 +163,18 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "description",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(c.IsOfficialJa); err != nil {
+	if buf, err = json.Marshal(c.Note); err != nil {
 		return nil, err
 	}
 	node.Fields[13] = &Field{
+		Type:  "string",
+		Name:  "note",
+		Value: string(buf),
+	}
+	if buf, err = json.Marshal(c.IsOfficialJa); err != nil {
+		return nil, err
+	}
+	node.Fields[14] = &Field{
 		Type:  "bool",
 		Name:  "is_official_ja",
 		Value: string(buf),
@@ -174,7 +182,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.VictoryPoint); err != nil {
 		return nil, err
 	}
-	node.Fields[14] = &Field{
+	node.Fields[15] = &Field{
 		Type:  "int",
 		Name:  "victory_point",
 		Value: string(buf),
@@ -182,7 +190,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.SpecialVictoryPoint); err != nil {
 		return nil, err
 	}
-	node.Fields[15] = &Field{
+	node.Fields[16] = &Field{
 		Type:  "string",
 		Name:  "special_victory_point",
 		Value: string(buf),
@@ -190,7 +198,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.HasArrrow); err != nil {
 		return nil, err
 	}
-	node.Fields[16] = &Field{
+	node.Fields[17] = &Field{
 		Type:  "bool",
 		Name:  "has_arrrow",
 		Value: string(buf),
@@ -198,7 +206,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.HasBonusPointIcon); err != nil {
 		return nil, err
 	}
-	node.Fields[17] = &Field{
+	node.Fields[18] = &Field{
 		Type:  "bool",
 		Name:  "has_bonus_point_icon",
 		Value: string(buf),
@@ -206,7 +214,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.HasNegativeBonusPointIcon); err != nil {
 		return nil, err
 	}
-	node.Fields[18] = &Field{
+	node.Fields[19] = &Field{
 		Type:  "bool",
 		Name:  "has_negative_bonus_point_icon",
 		Value: string(buf),
@@ -214,7 +222,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.HasPanIcon); err != nil {
 		return nil, err
 	}
-	node.Fields[19] = &Field{
+	node.Fields[20] = &Field{
 		Type:  "bool",
 		Name:  "has_pan_icon",
 		Value: string(buf),
@@ -222,7 +230,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.HasBreadIcon); err != nil {
 		return nil, err
 	}
-	node.Fields[20] = &Field{
+	node.Fields[21] = &Field{
 		Type:  "bool",
 		Name:  "has_bread_icon",
 		Value: string(buf),
@@ -230,7 +238,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.HasFarmPlannerIcon); err != nil {
 		return nil, err
 	}
-	node.Fields[21] = &Field{
+	node.Fields[22] = &Field{
 		Type:  "bool",
 		Name:  "has_farm_planner_icon",
 		Value: string(buf),
@@ -238,7 +246,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.HasActionsBoosterIcon); err != nil {
 		return nil, err
 	}
-	node.Fields[22] = &Field{
+	node.Fields[23] = &Field{
 		Type:  "bool",
 		Name:  "has_actions_booster_icon",
 		Value: string(buf),
@@ -246,7 +254,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.HasPointsProviderIcon); err != nil {
 		return nil, err
 	}
-	node.Fields[23] = &Field{
+	node.Fields[24] = &Field{
 		Type:  "bool",
 		Name:  "has_points_provider_icon",
 		Value: string(buf),
@@ -254,7 +262,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.HasGoodsProviderIcon); err != nil {
 		return nil, err
 	}
-	node.Fields[24] = &Field{
+	node.Fields[25] = &Field{
 		Type:  "bool",
 		Name:  "has_goods_provider_icon",
 		Value: string(buf),
@@ -262,7 +270,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.HasFoodProviderIcon); err != nil {
 		return nil, err
 	}
-	node.Fields[25] = &Field{
+	node.Fields[26] = &Field{
 		Type:  "bool",
 		Name:  "has_food_provider_icon",
 		Value: string(buf),
@@ -270,7 +278,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.HasCropProviderIcon); err != nil {
 		return nil, err
 	}
-	node.Fields[26] = &Field{
+	node.Fields[27] = &Field{
 		Type:  "bool",
 		Name:  "has_crop_provider_icon",
 		Value: string(buf),
@@ -278,7 +286,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.HasBuildingResourceProviderIcon); err != nil {
 		return nil, err
 	}
-	node.Fields[27] = &Field{
+	node.Fields[28] = &Field{
 		Type:  "bool",
 		Name:  "has_building_resource_provider_icon",
 		Value: string(buf),
@@ -286,7 +294,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.HasLivestockProviderIcon); err != nil {
 		return nil, err
 	}
-	node.Fields[28] = &Field{
+	node.Fields[29] = &Field{
 		Type:  "bool",
 		Name:  "has_livestock_provider_icon",
 		Value: string(buf),
@@ -294,7 +302,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.HasCutPeatIcon); err != nil {
 		return nil, err
 	}
-	node.Fields[29] = &Field{
+	node.Fields[30] = &Field{
 		Type:  "bool",
 		Name:  "has_cut_peat_icon",
 		Value: string(buf),
@@ -302,7 +310,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.HasFellTreesIcon); err != nil {
 		return nil, err
 	}
-	node.Fields[30] = &Field{
+	node.Fields[31] = &Field{
 		Type:  "bool",
 		Name:  "has_fell_trees_icon",
 		Value: string(buf),
@@ -310,7 +318,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.HasSlashAndBurnIcon); err != nil {
 		return nil, err
 	}
-	node.Fields[31] = &Field{
+	node.Fields[32] = &Field{
 		Type:  "bool",
 		Name:  "has_slash_and_burn_icon",
 		Value: string(buf),
@@ -318,7 +326,7 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 	if buf, err = json.Marshal(c.HasHiringFareIcon); err != nil {
 		return nil, err
 	}
-	node.Fields[32] = &Field{
+	node.Fields[33] = &Field{
 		Type:  "bool",
 		Name:  "has_hiring_fare_icon",
 		Value: string(buf),

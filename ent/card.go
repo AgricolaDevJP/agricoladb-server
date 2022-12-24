@@ -45,6 +45,8 @@ type Card struct {
 	Cost string `json:"cost,omitempty"`
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
+	// Note holds the value of the "note" field.
+	Note string `json:"note,omitempty"`
 	// IsOfficialJa holds the value of the "is_official_ja" field.
 	IsOfficialJa bool `json:"is_official_ja,omitempty"`
 	// VictoryPoint holds the value of the "victory_point" field.
@@ -205,7 +207,7 @@ func (*Card) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case card.FieldID, card.FieldRevisionID, card.FieldDeckID, card.FieldCardTypeID, card.FieldCardSpecialColorID, card.FieldMinPlayersNumber, card.FieldVictoryPoint:
 			values[i] = new(sql.NullInt64)
-		case card.FieldLiteralID, card.FieldPrintedID, card.FieldPlayAgricolaCardID, card.FieldNameJa, card.FieldNameEn, card.FieldPrerequisite, card.FieldCost, card.FieldDescription, card.FieldSpecialVictoryPoint:
+		case card.FieldLiteralID, card.FieldPrintedID, card.FieldPlayAgricolaCardID, card.FieldNameJa, card.FieldNameEn, card.FieldPrerequisite, card.FieldCost, card.FieldDescription, card.FieldNote, card.FieldSpecialVictoryPoint:
 			values[i] = new(sql.NullString)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Card", columns[i])
@@ -305,6 +307,12 @@ func (c *Card) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				c.Description = value.String
+			}
+		case card.FieldNote:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field note", values[i])
+			} else if value.Valid {
+				c.Note = value.String
 			}
 		case card.FieldIsOfficialJa:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -527,6 +535,9 @@ func (c *Card) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(c.Description)
+	builder.WriteString(", ")
+	builder.WriteString("note=")
+	builder.WriteString(c.Note)
 	builder.WriteString(", ")
 	builder.WriteString("is_official_ja=")
 	builder.WriteString(fmt.Sprintf("%v", c.IsOfficialJa))

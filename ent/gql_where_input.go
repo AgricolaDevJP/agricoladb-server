@@ -205,6 +205,23 @@ type CardWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
+	// "note" field predicates.
+	Note             *string  `json:"note,omitempty"`
+	NoteNEQ          *string  `json:"noteNEQ,omitempty"`
+	NoteIn           []string `json:"noteIn,omitempty"`
+	NoteNotIn        []string `json:"noteNotIn,omitempty"`
+	NoteGT           *string  `json:"noteGT,omitempty"`
+	NoteGTE          *string  `json:"noteGTE,omitempty"`
+	NoteLT           *string  `json:"noteLT,omitempty"`
+	NoteLTE          *string  `json:"noteLTE,omitempty"`
+	NoteContains     *string  `json:"noteContains,omitempty"`
+	NoteHasPrefix    *string  `json:"noteHasPrefix,omitempty"`
+	NoteHasSuffix    *string  `json:"noteHasSuffix,omitempty"`
+	NoteIsNil        bool     `json:"noteIsNil,omitempty"`
+	NoteNotNil       bool     `json:"noteNotNil,omitempty"`
+	NoteEqualFold    *string  `json:"noteEqualFold,omitempty"`
+	NoteContainsFold *string  `json:"noteContainsFold,omitempty"`
+
 	// "is_official_ja" field predicates.
 	IsOfficialJa    *bool `json:"isOfficialJa,omitempty"`
 	IsOfficialJaNEQ *bool `json:"isOfficialJaNEQ,omitempty"`
@@ -873,6 +890,51 @@ func (i *CardWhereInput) P() (predicate.Card, error) {
 	}
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, card.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.Note != nil {
+		predicates = append(predicates, card.NoteEQ(*i.Note))
+	}
+	if i.NoteNEQ != nil {
+		predicates = append(predicates, card.NoteNEQ(*i.NoteNEQ))
+	}
+	if len(i.NoteIn) > 0 {
+		predicates = append(predicates, card.NoteIn(i.NoteIn...))
+	}
+	if len(i.NoteNotIn) > 0 {
+		predicates = append(predicates, card.NoteNotIn(i.NoteNotIn...))
+	}
+	if i.NoteGT != nil {
+		predicates = append(predicates, card.NoteGT(*i.NoteGT))
+	}
+	if i.NoteGTE != nil {
+		predicates = append(predicates, card.NoteGTE(*i.NoteGTE))
+	}
+	if i.NoteLT != nil {
+		predicates = append(predicates, card.NoteLT(*i.NoteLT))
+	}
+	if i.NoteLTE != nil {
+		predicates = append(predicates, card.NoteLTE(*i.NoteLTE))
+	}
+	if i.NoteContains != nil {
+		predicates = append(predicates, card.NoteContains(*i.NoteContains))
+	}
+	if i.NoteHasPrefix != nil {
+		predicates = append(predicates, card.NoteHasPrefix(*i.NoteHasPrefix))
+	}
+	if i.NoteHasSuffix != nil {
+		predicates = append(predicates, card.NoteHasSuffix(*i.NoteHasSuffix))
+	}
+	if i.NoteIsNil {
+		predicates = append(predicates, card.NoteIsNil())
+	}
+	if i.NoteNotNil {
+		predicates = append(predicates, card.NoteNotNil())
+	}
+	if i.NoteEqualFold != nil {
+		predicates = append(predicates, card.NoteEqualFold(*i.NoteEqualFold))
+	}
+	if i.NoteContainsFold != nil {
+		predicates = append(predicates, card.NoteContainsFold(*i.NoteContainsFold))
 	}
 	if i.IsOfficialJa != nil {
 		predicates = append(predicates, card.IsOfficialJaEQ(*i.IsOfficialJa))

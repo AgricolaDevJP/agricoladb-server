@@ -33,6 +33,8 @@ const (
 	FieldCost = "cost"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldNote holds the string denoting the note field in the database.
+	FieldNote = "note"
 	// FieldIsOfficialJa holds the string denoting the is_official_ja field in the database.
 	FieldIsOfficialJa = "is_official_ja"
 	// FieldVictoryPoint holds the string denoting the victory_point field in the database.
@@ -144,6 +146,7 @@ var Columns = []string{
 	FieldPrerequisite,
 	FieldCost,
 	FieldDescription,
+	FieldNote,
 	FieldIsOfficialJa,
 	FieldVictoryPoint,
 	FieldSpecialVictoryPoint,

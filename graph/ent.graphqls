@@ -15,6 +15,7 @@ type Card implements Node {
   prerequisite: String
   cost: String
   description: String
+  note: String
   isOfficialJa: Boolean!
   victoryPoint: Int
   specialVictoryPoint: String
@@ -415,6 +416,22 @@ input CardWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
+  """note field predicates"""
+  note: String
+  noteNEQ: String
+  noteIn: [String!]
+  noteNotIn: [String!]
+  noteGT: String
+  noteGTE: String
+  noteLT: String
+  noteLTE: String
+  noteContains: String
+  noteHasPrefix: String
+  noteHasSuffix: String
+  noteIsNil: Boolean
+  noteNotNil: Boolean
+  noteEqualFold: String
+  noteContainsFold: String
   """is_official_ja field predicates"""
   isOfficialJa: Boolean
   isOfficialJaNEQ: Boolean
