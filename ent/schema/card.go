@@ -15,6 +15,7 @@ type Card struct {
 
 func (Card) Fields() []ent.Field {
 	return []ent.Field{
+		field.Int("id"),
 		field.String("literal_id").MaxLen(32).NotEmpty().Immutable(),
 		field.Int("revision_id").Immutable(),
 		field.String("printed_id").Optional(),

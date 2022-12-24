@@ -56,6 +56,12 @@ func (cscc *CardSpecialColorCreate) SetNillableNameEn(s *string) *CardSpecialCol
 	return cscc
 }
 
+// SetID sets the "id" field.
+func (cscc *CardSpecialColorCreate) SetID(i int) *CardSpecialColorCreate {
+	cscc.mutation.SetID(i)
+	return cscc
+}
+
 // AddCardIDs adds the "cards" edge to the Card entity by IDs.
 func (cscc *CardSpecialColorCreate) AddCardIDs(ids ...int) *CardSpecialColorCreate {
 	cscc.mutation.AddCardIDs(ids...)
@@ -166,8 +172,10 @@ func (cscc *CardSpecialColorCreate) sqlSave(ctx context.Context) (*CardSpecialCo
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int(id)
+	}
 	return _node, nil
 }
 
@@ -183,6 +191,10 @@ func (cscc *CardSpecialColorCreate) createSpec() (*CardSpecialColor, *sqlgraph.C
 		}
 	)
 	_spec.OnConflict = cscc.conflict
+	if id, ok := cscc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := cscc.mutation.Key(); ok {
 		_spec.SetField(cardspecialcolor.FieldKey, field.TypeString, value)
 		_node.Key = value
@@ -302,17 +314,23 @@ func (u *CardSpecialColorUpsert) ClearNameEn() *CardSpecialColorUpsert {
 	return u
 }
 
-// UpdateNewValues updates the mutable fields using the new values that were set on create.
+// UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
 //	client.CardSpecialColor.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(cardspecialcolor.FieldID)
+//			}),
 //		).
 //		Exec(ctx)
 func (u *CardSpecialColorUpsertOne) UpdateNewValues() *CardSpecialColorUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
 	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		if _, exists := u.create.mutation.ID(); exists {
+			s.SetIgnore(cardspecialcolor.FieldID)
+		}
 		if _, exists := u.create.mutation.Key(); exists {
 			s.SetIgnore(cardspecialcolor.FieldKey)
 		}
@@ -464,7 +482,7 @@ func (csccb *CardSpecialColorCreateBulk) Save(ctx context.Context) ([]*CardSpeci
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
 					nodes[i].ID = int(id)
 				}
@@ -554,12 +572,18 @@ type CardSpecialColorUpsertBulk struct {
 //	client.CardSpecialColor.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(cardspecialcolor.FieldID)
+//			}),
 //		).
 //		Exec(ctx)
 func (u *CardSpecialColorUpsertBulk) UpdateNewValues() *CardSpecialColorUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
 	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
 		for _, b := range u.create.builders {
+			if _, exists := b.mutation.ID(); exists {
+				s.SetIgnore(cardspecialcolor.FieldID)
+			}
 			if _, exists := b.mutation.Key(); exists {
 				s.SetIgnore(cardspecialcolor.FieldKey)
 			}

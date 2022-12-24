@@ -58,6 +58,12 @@ func (rc *RevisionCreate) SetNillableNameEn(s *string) *RevisionCreate {
 	return rc
 }
 
+// SetID sets the "id" field.
+func (rc *RevisionCreate) SetID(i int) *RevisionCreate {
+	rc.mutation.SetID(i)
+	return rc
+}
+
 // AddCardIDs adds the "cards" edge to the Card entity by IDs.
 func (rc *RevisionCreate) AddCardIDs(ids ...int) *RevisionCreate {
 	rc.mutation.AddCardIDs(ids...)
@@ -198,8 +204,10 @@ func (rc *RevisionCreate) sqlSave(ctx context.Context) (*Revision, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int(id)
+	}
 	return _node, nil
 }
 
@@ -215,6 +223,10 @@ func (rc *RevisionCreate) createSpec() (*Revision, *sqlgraph.CreateSpec) {
 		}
 	)
 	_spec.OnConflict = rc.conflict
+	if id, ok := rc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := rc.mutation.Key(); ok {
 		_spec.SetField(revision.FieldKey, field.TypeString, value)
 		_node.Key = value
@@ -372,17 +384,23 @@ func (u *RevisionUpsert) ClearNameEn() *RevisionUpsert {
 	return u
 }
 
-// UpdateNewValues updates the mutable fields using the new values that were set on create.
+// UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
 //	client.Revision.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(revision.FieldID)
+//			}),
 //		).
 //		Exec(ctx)
 func (u *RevisionUpsertOne) UpdateNewValues() *RevisionUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
 	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		if _, exists := u.create.mutation.ID(); exists {
+			s.SetIgnore(revision.FieldID)
+		}
 		if _, exists := u.create.mutation.Key(); exists {
 			s.SetIgnore(revision.FieldKey)
 		}
@@ -534,7 +552,7 @@ func (rcb *RevisionCreateBulk) Save(ctx context.Context) ([]*Revision, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
 					nodes[i].ID = int(id)
 				}
@@ -624,12 +642,18 @@ type RevisionUpsertBulk struct {
 //	client.Revision.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(revision.FieldID)
+//			}),
 //		).
 //		Exec(ctx)
 func (u *RevisionUpsertBulk) UpdateNewValues() *RevisionUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
 	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
 		for _, b := range u.create.builders {
+			if _, exists := b.mutation.ID(); exists {
+				s.SetIgnore(revision.FieldID)
+			}
 			if _, exists := b.mutation.Key(); exists {
 				s.SetIgnore(revision.FieldKey)
 			}

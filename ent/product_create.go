@@ -63,6 +63,12 @@ func (pc *ProductCreate) SetNillableNameEn(s *string) *ProductCreate {
 	return pc
 }
 
+// SetID sets the "id" field.
+func (pc *ProductCreate) SetID(i int) *ProductCreate {
+	pc.mutation.SetID(i)
+	return pc
+}
+
 // AddCardIDs adds the "cards" edge to the Card entity by IDs.
 func (pc *ProductCreate) AddCardIDs(ids ...int) *ProductCreate {
 	pc.mutation.AddCardIDs(ids...)
@@ -179,8 +185,10 @@ func (pc *ProductCreate) sqlSave(ctx context.Context) (*Product, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int(id)
+	}
 	return _node, nil
 }
 
@@ -196,6 +204,10 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 		}
 	)
 	_spec.OnConflict = pc.conflict
+	if id, ok := pc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := pc.mutation.IsOfficialJa(); ok {
 		_spec.SetField(product.FieldIsOfficialJa, field.TypeBool, value)
 		_node.IsOfficialJa = value
@@ -347,17 +359,23 @@ func (u *ProductUpsert) ClearNameEn() *ProductUpsert {
 	return u
 }
 
-// UpdateNewValues updates the mutable fields using the new values that were set on create.
+// UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
 //	client.Product.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(product.FieldID)
+//			}),
 //		).
 //		Exec(ctx)
 func (u *ProductUpsertOne) UpdateNewValues() *ProductUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
 	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		if _, exists := u.create.mutation.ID(); exists {
+			s.SetIgnore(product.FieldID)
+		}
 		if _, exists := u.create.mutation.RevisionID(); exists {
 			s.SetIgnore(product.FieldRevisionID)
 		}
@@ -523,7 +541,7 @@ func (pcb *ProductCreateBulk) Save(ctx context.Context) ([]*Product, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
 					nodes[i].ID = int(id)
 				}
@@ -613,12 +631,18 @@ type ProductUpsertBulk struct {
 //	client.Product.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(product.FieldID)
+//			}),
 //		).
 //		Exec(ctx)
 func (u *ProductUpsertBulk) UpdateNewValues() *ProductUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
 	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
 		for _, b := range u.create.builders {
+			if _, exists := b.mutation.ID(); exists {
+				s.SetIgnore(product.FieldID)
+			}
 			if _, exists := b.mutation.RevisionID(); exists {
 				s.SetIgnore(product.FieldRevisionID)
 			}

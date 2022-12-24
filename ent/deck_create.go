@@ -63,6 +63,12 @@ func (dc *DeckCreate) SetNillableNameEn(s *string) *DeckCreate {
 	return dc
 }
 
+// SetID sets the "id" field.
+func (dc *DeckCreate) SetID(i int) *DeckCreate {
+	dc.mutation.SetID(i)
+	return dc
+}
+
 // AddCardIDs adds the "cards" edge to the Card entity by IDs.
 func (dc *DeckCreate) AddCardIDs(ids ...int) *DeckCreate {
 	dc.mutation.AddCardIDs(ids...)
@@ -184,8 +190,10 @@ func (dc *DeckCreate) sqlSave(ctx context.Context) (*Deck, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int(id)
+	}
 	return _node, nil
 }
 
@@ -201,6 +209,10 @@ func (dc *DeckCreate) createSpec() (*Deck, *sqlgraph.CreateSpec) {
 		}
 	)
 	_spec.OnConflict = dc.conflict
+	if id, ok := dc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := dc.mutation.Key(); ok {
 		_spec.SetField(deck.FieldKey, field.TypeString, value)
 		_node.Key = value
@@ -340,17 +352,23 @@ func (u *DeckUpsert) ClearNameEn() *DeckUpsert {
 	return u
 }
 
-// UpdateNewValues updates the mutable fields using the new values that were set on create.
+// UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
 //	client.Deck.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(deck.FieldID)
+//			}),
 //		).
 //		Exec(ctx)
 func (u *DeckUpsertOne) UpdateNewValues() *DeckUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
 	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		if _, exists := u.create.mutation.ID(); exists {
+			s.SetIgnore(deck.FieldID)
+		}
 		if _, exists := u.create.mutation.Key(); exists {
 			s.SetIgnore(deck.FieldKey)
 		}
@@ -505,7 +523,7 @@ func (dcb *DeckCreateBulk) Save(ctx context.Context) ([]*Deck, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
 					nodes[i].ID = int(id)
 				}
@@ -595,12 +613,18 @@ type DeckUpsertBulk struct {
 //	client.Deck.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(deck.FieldID)
+//			}),
 //		).
 //		Exec(ctx)
 func (u *DeckUpsertBulk) UpdateNewValues() *DeckUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
 	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
 		for _, b := range u.create.builders {
+			if _, exists := b.mutation.ID(); exists {
+				s.SetIgnore(deck.FieldID)
+			}
 			if _, exists := b.mutation.Key(); exists {
 				s.SetIgnore(deck.FieldKey)
 			}

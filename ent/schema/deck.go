@@ -14,6 +14,7 @@ type Deck struct {
 
 func (Deck) Fields() []ent.Field {
 	return []ent.Field{
+		field.Int("id"),
 		field.String("key").Immutable().NotEmpty().Unique(),
 		field.Int("revision_id").Immutable(),
 		field.String("name_ja").Optional(),

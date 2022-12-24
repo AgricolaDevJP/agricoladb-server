@@ -320,6 +320,12 @@ func (cc *CardCreate) SetHasHiringFareIcon(b bool) *CardCreate {
 	return cc
 }
 
+// SetID sets the "id" field.
+func (cc *CardCreate) SetID(i int) *CardCreate {
+	cc.mutation.SetID(i)
+	return cc
+}
+
 // SetRevision sets the "revision" edge to the Revision entity.
 func (cc *CardCreate) SetRevision(r *Revision) *CardCreate {
 	return cc.SetRevisionID(r.ID)
@@ -546,8 +552,10 @@ func (cc *CardCreate) sqlSave(ctx context.Context) (*Card, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int(id)
+	}
 	return _node, nil
 }
 
@@ -563,6 +571,10 @@ func (cc *CardCreate) createSpec() (*Card, *sqlgraph.CreateSpec) {
 		}
 	)
 	_spec.OnConflict = cc.conflict
+	if id, ok := cc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := cc.mutation.LiteralID(); ok {
 		_spec.SetField(card.FieldLiteralID, field.TypeString, value)
 		_node.LiteralID = value
@@ -1324,17 +1336,23 @@ func (u *CardUpsert) UpdateHasHiringFareIcon() *CardUpsert {
 	return u
 }
 
-// UpdateNewValues updates the mutable fields using the new values that were set on create.
+// UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
 //	client.Card.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(card.FieldID)
+//			}),
 //		).
 //		Exec(ctx)
 func (u *CardUpsertOne) UpdateNewValues() *CardUpsertOne {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
 	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		if _, exists := u.create.mutation.ID(); exists {
+			s.SetIgnore(card.FieldID)
+		}
 		if _, exists := u.create.mutation.LiteralID(); exists {
 			s.SetIgnore(card.FieldLiteralID)
 		}
@@ -1979,7 +1997,7 @@ func (ccb *CardCreateBulk) Save(ctx context.Context) ([]*Card, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
 					nodes[i].ID = int(id)
 				}
@@ -2069,12 +2087,18 @@ type CardUpsertBulk struct {
 //	client.Card.Create().
 //		OnConflict(
 //			sql.ResolveWithNewValues(),
+//			sql.ResolveWith(func(u *sql.UpdateSet) {
+//				u.SetIgnore(card.FieldID)
+//			}),
 //		).
 //		Exec(ctx)
 func (u *CardUpsertBulk) UpdateNewValues() *CardUpsertBulk {
 	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
 	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
 		for _, b := range u.create.builders {
+			if _, exists := b.mutation.ID(); exists {
+				s.SetIgnore(card.FieldID)
+			}
 			if _, exists := b.mutation.LiteralID(); exists {
 				s.SetIgnore(card.FieldLiteralID)
 			}

@@ -18,7 +18,7 @@ func init() {
 	cardFields := schema.Card{}.Fields()
 	_ = cardFields
 	// cardDescLiteralID is the schema descriptor for literal_id field.
-	cardDescLiteralID := cardFields[0].Descriptor()
+	cardDescLiteralID := cardFields[1].Descriptor()
 	// card.LiteralIDValidator is a validator for the "literal_id" field. It is called by the builders before save.
 	card.LiteralIDValidator = func() func(string) error {
 		validators := cardDescLiteralID.Validators
@@ -38,25 +38,25 @@ func init() {
 	cardspecialcolorFields := schema.CardSpecialColor{}.Fields()
 	_ = cardspecialcolorFields
 	// cardspecialcolorDescKey is the schema descriptor for key field.
-	cardspecialcolorDescKey := cardspecialcolorFields[0].Descriptor()
+	cardspecialcolorDescKey := cardspecialcolorFields[1].Descriptor()
 	// cardspecialcolor.KeyValidator is a validator for the "key" field. It is called by the builders before save.
 	cardspecialcolor.KeyValidator = cardspecialcolorDescKey.Validators[0].(func(string) error)
 	cardtypeFields := schema.CardType{}.Fields()
 	_ = cardtypeFields
 	// cardtypeDescKey is the schema descriptor for key field.
-	cardtypeDescKey := cardtypeFields[0].Descriptor()
+	cardtypeDescKey := cardtypeFields[1].Descriptor()
 	// cardtype.KeyValidator is a validator for the "key" field. It is called by the builders before save.
 	cardtype.KeyValidator = cardtypeDescKey.Validators[0].(func(string) error)
 	deckFields := schema.Deck{}.Fields()
 	_ = deckFields
 	// deckDescKey is the schema descriptor for key field.
-	deckDescKey := deckFields[0].Descriptor()
+	deckDescKey := deckFields[1].Descriptor()
 	// deck.KeyValidator is a validator for the "key" field. It is called by the builders before save.
 	deck.KeyValidator = deckDescKey.Validators[0].(func(string) error)
 	revisionFields := schema.Revision{}.Fields()
 	_ = revisionFields
 	// revisionDescKey is the schema descriptor for key field.
-	revisionDescKey := revisionFields[0].Descriptor()
+	revisionDescKey := revisionFields[1].Descriptor()
 	// revision.KeyValidator is a validator for the "key" field. It is called by the builders before save.
 	revision.KeyValidator = revisionDescKey.Validators[0].(func(string) error)
 }

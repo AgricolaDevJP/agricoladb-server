@@ -165,6 +165,12 @@ func (m CardMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Card entities.
+func (m *CardMutation) SetID(id int) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
 func (m *CardMutation) ID() (id int, exists bool) {
@@ -2903,6 +2909,12 @@ func (m CardSpecialColorMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of CardSpecialColor entities.
+func (m *CardSpecialColorMutation) SetID(id int) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
 func (m *CardSpecialColorMutation) ID() (id int, exists bool) {
@@ -3454,6 +3466,12 @@ func (m CardTypeMutation) Tx() (*Tx, error) {
 	tx := &Tx{config: m.config}
 	tx.init()
 	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of CardType entities.
+func (m *CardTypeMutation) SetID(id int) {
+	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
@@ -4009,6 +4027,12 @@ func (m DeckMutation) Tx() (*Tx, error) {
 	tx := &Tx{config: m.config}
 	tx.init()
 	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Deck entities.
+func (m *DeckMutation) SetID(id int) {
+	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
@@ -4664,6 +4688,12 @@ func (m ProductMutation) Tx() (*Tx, error) {
 	tx := &Tx{config: m.config}
 	tx.init()
 	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Product entities.
+func (m *ProductMutation) SetID(id int) {
+	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
@@ -5323,6 +5353,12 @@ func (m RevisionMutation) Tx() (*Tx, error) {
 	tx := &Tx{config: m.config}
 	tx.init()
 	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Revision entities.
+func (m *RevisionMutation) SetID(id int) {
+	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
