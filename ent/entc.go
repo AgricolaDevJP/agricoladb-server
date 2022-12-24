@@ -24,6 +24,7 @@ func main() {
 	conf := &gen.Config{
 		Features: []gen.Feature{
 			gen.FeatureUpsert,
+			gen.FeatureExecQuery,
 		},
 	}
 	if err := entc.Generate("./ent/schema", conf, entc.Extensions(ex)); err != nil {
