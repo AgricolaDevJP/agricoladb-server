@@ -4603,21 +4603,23 @@ func (m *DeckMutation) ResetEdge(name string) error {
 // ProductMutation represents an operation that mutates the Product nodes in the graph.
 type ProductMutation struct {
 	config
-	op              Op
-	typ             string
-	id              *int
-	is_official_ja  *bool
-	name_ja         *string
-	name_en         *string
-	clearedFields   map[string]struct{}
-	cards           map[int]struct{}
-	removedcards    map[int]struct{}
-	clearedcards    bool
-	revision        *int
-	clearedrevision bool
-	done            bool
-	oldValue        func(context.Context) (*Product, error)
-	predicates      []predicate.Product
+	op                Op
+	typ               string
+	id                *int
+	is_official_ja    *bool
+	name_ja           *string
+	name_en           *string
+	published_year    *int
+	addpublished_year *int
+	clearedFields     map[string]struct{}
+	cards             map[int]struct{}
+	removedcards      map[int]struct{}
+	clearedcards      bool
+	revision          *int
+	clearedrevision   bool
+	done              bool
+	oldValue          func(context.Context) (*Product, error)
+	predicates        []predicate.Product
 }
 
 var _ ent.Mutation = (*ProductMutation)(nil)
@@ -4894,6 +4896,76 @@ func (m *ProductMutation) ResetNameEn() {
 	delete(m.clearedFields, product.FieldNameEn)
 }
 
+// SetPublishedYear sets the "published_year" field.
+func (m *ProductMutation) SetPublishedYear(i int) {
+	m.published_year = &i
+	m.addpublished_year = nil
+}
+
+// PublishedYear returns the value of the "published_year" field in the mutation.
+func (m *ProductMutation) PublishedYear() (r int, exists bool) {
+	v := m.published_year
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPublishedYear returns the old "published_year" field's value of the Product entity.
+// If the Product object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProductMutation) OldPublishedYear(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPublishedYear is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPublishedYear requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPublishedYear: %w", err)
+	}
+	return oldValue.PublishedYear, nil
+}
+
+// AddPublishedYear adds i to the "published_year" field.
+func (m *ProductMutation) AddPublishedYear(i int) {
+	if m.addpublished_year != nil {
+		*m.addpublished_year += i
+	} else {
+		m.addpublished_year = &i
+	}
+}
+
+// AddedPublishedYear returns the value that was added to the "published_year" field in this mutation.
+func (m *ProductMutation) AddedPublishedYear() (r int, exists bool) {
+	v := m.addpublished_year
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearPublishedYear clears the value of the "published_year" field.
+func (m *ProductMutation) ClearPublishedYear() {
+	m.published_year = nil
+	m.addpublished_year = nil
+	m.clearedFields[product.FieldPublishedYear] = struct{}{}
+}
+
+// PublishedYearCleared returns if the "published_year" field was cleared in this mutation.
+func (m *ProductMutation) PublishedYearCleared() bool {
+	_, ok := m.clearedFields[product.FieldPublishedYear]
+	return ok
+}
+
+// ResetPublishedYear resets all changes to the "published_year" field.
+func (m *ProductMutation) ResetPublishedYear() {
+	m.published_year = nil
+	m.addpublished_year = nil
+	delete(m.clearedFields, product.FieldPublishedYear)
+}
+
 // AddCardIDs adds the "cards" edge to the Card entity by ids.
 func (m *ProductMutation) AddCardIDs(ids ...int) {
 	if m.cards == nil {
@@ -4993,7 +5065,7 @@ func (m *ProductMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProductMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 5)
 	if m.revision != nil {
 		fields = append(fields, product.FieldRevisionID)
 	}
@@ -5005,6 +5077,9 @@ func (m *ProductMutation) Fields() []string {
 	}
 	if m.name_en != nil {
 		fields = append(fields, product.FieldNameEn)
+	}
+	if m.published_year != nil {
+		fields = append(fields, product.FieldPublishedYear)
 	}
 	return fields
 }
@@ -5022,6 +5097,8 @@ func (m *ProductMutation) Field(name string) (ent.Value, bool) {
 		return m.NameJa()
 	case product.FieldNameEn:
 		return m.NameEn()
+	case product.FieldPublishedYear:
+		return m.PublishedYear()
 	}
 	return nil, false
 }
@@ -5039,6 +5116,8 @@ func (m *ProductMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldNameJa(ctx)
 	case product.FieldNameEn:
 		return m.OldNameEn(ctx)
+	case product.FieldPublishedYear:
+		return m.OldPublishedYear(ctx)
 	}
 	return nil, fmt.Errorf("unknown Product field %s", name)
 }
@@ -5076,6 +5155,13 @@ func (m *ProductMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetNameEn(v)
 		return nil
+	case product.FieldPublishedYear:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPublishedYear(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Product field %s", name)
 }
@@ -5084,6 +5170,9 @@ func (m *ProductMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *ProductMutation) AddedFields() []string {
 	var fields []string
+	if m.addpublished_year != nil {
+		fields = append(fields, product.FieldPublishedYear)
+	}
 	return fields
 }
 
@@ -5092,6 +5181,8 @@ func (m *ProductMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *ProductMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
+	case product.FieldPublishedYear:
+		return m.AddedPublishedYear()
 	}
 	return nil, false
 }
@@ -5101,6 +5192,13 @@ func (m *ProductMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ProductMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case product.FieldPublishedYear:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPublishedYear(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Product numeric field %s", name)
 }
@@ -5114,6 +5212,9 @@ func (m *ProductMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(product.FieldNameEn) {
 		fields = append(fields, product.FieldNameEn)
+	}
+	if m.FieldCleared(product.FieldPublishedYear) {
+		fields = append(fields, product.FieldPublishedYear)
 	}
 	return fields
 }
@@ -5135,6 +5236,9 @@ func (m *ProductMutation) ClearField(name string) error {
 	case product.FieldNameEn:
 		m.ClearNameEn()
 		return nil
+	case product.FieldPublishedYear:
+		m.ClearPublishedYear()
+		return nil
 	}
 	return fmt.Errorf("unknown Product nullable field %s", name)
 }
@@ -5154,6 +5258,9 @@ func (m *ProductMutation) ResetField(name string) error {
 		return nil
 	case product.FieldNameEn:
 		m.ResetNameEn()
+		return nil
+	case product.FieldPublishedYear:
+		m.ResetPublishedYear()
 		return nil
 	}
 	return fmt.Errorf("unknown Product field %s", name)

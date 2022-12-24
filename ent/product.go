@@ -24,6 +24,8 @@ type Product struct {
 	NameJa string `json:"name_ja,omitempty"`
 	// NameEn holds the value of the "name_en" field.
 	NameEn string `json:"name_en,omitempty"`
+	// PublishedYear holds the value of the "published_year" field.
+	PublishedYear int `json:"published_year,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProductQuery when eager-loading is set.
 	Edges ProductEdges `json:"edges"`
@@ -73,7 +75,7 @@ func (*Product) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case product.FieldIsOfficialJa:
 			values[i] = new(sql.NullBool)
-		case product.FieldID, product.FieldRevisionID:
+		case product.FieldID, product.FieldRevisionID, product.FieldPublishedYear:
 			values[i] = new(sql.NullInt64)
 		case product.FieldNameJa, product.FieldNameEn:
 			values[i] = new(sql.NullString)
@@ -121,6 +123,12 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field name_en", values[i])
 			} else if value.Valid {
 				pr.NameEn = value.String
+			}
+		case product.FieldPublishedYear:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field published_year", values[i])
+			} else if value.Valid {
+				pr.PublishedYear = int(value.Int64)
 			}
 		}
 	}
@@ -171,6 +179,9 @@ func (pr *Product) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("name_en=")
 	builder.WriteString(pr.NameEn)
+	builder.WriteString(", ")
+	builder.WriteString("published_year=")
+	builder.WriteString(fmt.Sprintf("%v", pr.PublishedYear))
 	builder.WriteByte(')')
 	return builder.String()
 }

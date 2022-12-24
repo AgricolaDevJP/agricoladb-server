@@ -138,6 +138,7 @@ var (
 		{Name: "is_official_ja", Type: field.TypeBool},
 		{Name: "name_ja", Type: field.TypeString, Nullable: true},
 		{Name: "name_en", Type: field.TypeString, Nullable: true},
+		{Name: "published_year", Type: field.TypeInt, Nullable: true},
 		{Name: "revision_id", Type: field.TypeInt},
 	}
 	// ProductsTable holds the schema information for the "products" table.
@@ -148,7 +149,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "products_revisions_products",
-				Columns:    []*schema.Column{ProductsColumns[4]},
+				Columns:    []*schema.Column{ProductsColumns[5]},
 				RefColumns: []*schema.Column{RevisionsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},

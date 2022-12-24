@@ -108,6 +108,13 @@ func NameEn(v string) predicate.Product {
 	})
 }
 
+// PublishedYear applies equality check predicate on the "published_year" field. It's identical to PublishedYearEQ.
+func PublishedYear(v int) predicate.Product {
+	return predicate.Product(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPublishedYear), v))
+	})
+}
+
 // RevisionIDEQ applies the EQ predicate on the "revision_id" field.
 func RevisionIDEQ(v int) predicate.Product {
 	return predicate.Product(func(s *sql.Selector) {
@@ -381,6 +388,84 @@ func NameEnEqualFold(v string) predicate.Product {
 func NameEnContainsFold(v string) predicate.Product {
 	return predicate.Product(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldNameEn), v))
+	})
+}
+
+// PublishedYearEQ applies the EQ predicate on the "published_year" field.
+func PublishedYearEQ(v int) predicate.Product {
+	return predicate.Product(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPublishedYear), v))
+	})
+}
+
+// PublishedYearNEQ applies the NEQ predicate on the "published_year" field.
+func PublishedYearNEQ(v int) predicate.Product {
+	return predicate.Product(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldPublishedYear), v))
+	})
+}
+
+// PublishedYearIn applies the In predicate on the "published_year" field.
+func PublishedYearIn(vs ...int) predicate.Product {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Product(func(s *sql.Selector) {
+		s.Where(sql.In(s.C(FieldPublishedYear), v...))
+	})
+}
+
+// PublishedYearNotIn applies the NotIn predicate on the "published_year" field.
+func PublishedYearNotIn(vs ...int) predicate.Product {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Product(func(s *sql.Selector) {
+		s.Where(sql.NotIn(s.C(FieldPublishedYear), v...))
+	})
+}
+
+// PublishedYearGT applies the GT predicate on the "published_year" field.
+func PublishedYearGT(v int) predicate.Product {
+	return predicate.Product(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldPublishedYear), v))
+	})
+}
+
+// PublishedYearGTE applies the GTE predicate on the "published_year" field.
+func PublishedYearGTE(v int) predicate.Product {
+	return predicate.Product(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldPublishedYear), v))
+	})
+}
+
+// PublishedYearLT applies the LT predicate on the "published_year" field.
+func PublishedYearLT(v int) predicate.Product {
+	return predicate.Product(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldPublishedYear), v))
+	})
+}
+
+// PublishedYearLTE applies the LTE predicate on the "published_year" field.
+func PublishedYearLTE(v int) predicate.Product {
+	return predicate.Product(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldPublishedYear), v))
+	})
+}
+
+// PublishedYearIsNil applies the IsNil predicate on the "published_year" field.
+func PublishedYearIsNil() predicate.Product {
+	return predicate.Product(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldPublishedYear)))
+	})
+}
+
+// PublishedYearNotNil applies the NotNil predicate on the "published_year" field.
+func PublishedYearNotNil() predicate.Product {
+	return predicate.Product(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldPublishedYear)))
 	})
 }
 

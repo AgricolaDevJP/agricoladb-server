@@ -2267,6 +2267,18 @@ type ProductWhereInput struct {
 	NameEnEqualFold    *string  `json:"nameEnEqualFold,omitempty"`
 	NameEnContainsFold *string  `json:"nameEnContainsFold,omitempty"`
 
+	// "published_year" field predicates.
+	PublishedYear       *int  `json:"publishedYear,omitempty"`
+	PublishedYearNEQ    *int  `json:"publishedYearNEQ,omitempty"`
+	PublishedYearIn     []int `json:"publishedYearIn,omitempty"`
+	PublishedYearNotIn  []int `json:"publishedYearNotIn,omitempty"`
+	PublishedYearGT     *int  `json:"publishedYearGT,omitempty"`
+	PublishedYearGTE    *int  `json:"publishedYearGTE,omitempty"`
+	PublishedYearLT     *int  `json:"publishedYearLT,omitempty"`
+	PublishedYearLTE    *int  `json:"publishedYearLTE,omitempty"`
+	PublishedYearIsNil  bool  `json:"publishedYearIsNil,omitempty"`
+	PublishedYearNotNil bool  `json:"publishedYearNotNil,omitempty"`
+
 	// "cards" edge predicates.
 	HasCards     *bool             `json:"hasCards,omitempty"`
 	HasCardsWith []*CardWhereInput `json:"hasCardsWith,omitempty"`
@@ -2478,6 +2490,36 @@ func (i *ProductWhereInput) P() (predicate.Product, error) {
 	}
 	if i.NameEnContainsFold != nil {
 		predicates = append(predicates, product.NameEnContainsFold(*i.NameEnContainsFold))
+	}
+	if i.PublishedYear != nil {
+		predicates = append(predicates, product.PublishedYearEQ(*i.PublishedYear))
+	}
+	if i.PublishedYearNEQ != nil {
+		predicates = append(predicates, product.PublishedYearNEQ(*i.PublishedYearNEQ))
+	}
+	if len(i.PublishedYearIn) > 0 {
+		predicates = append(predicates, product.PublishedYearIn(i.PublishedYearIn...))
+	}
+	if len(i.PublishedYearNotIn) > 0 {
+		predicates = append(predicates, product.PublishedYearNotIn(i.PublishedYearNotIn...))
+	}
+	if i.PublishedYearGT != nil {
+		predicates = append(predicates, product.PublishedYearGT(*i.PublishedYearGT))
+	}
+	if i.PublishedYearGTE != nil {
+		predicates = append(predicates, product.PublishedYearGTE(*i.PublishedYearGTE))
+	}
+	if i.PublishedYearLT != nil {
+		predicates = append(predicates, product.PublishedYearLT(*i.PublishedYearLT))
+	}
+	if i.PublishedYearLTE != nil {
+		predicates = append(predicates, product.PublishedYearLTE(*i.PublishedYearLTE))
+	}
+	if i.PublishedYearIsNil {
+		predicates = append(predicates, product.PublishedYearIsNil())
+	}
+	if i.PublishedYearNotNil {
+		predicates = append(predicates, product.PublishedYearNotNil())
 	}
 
 	if i.HasCards != nil {

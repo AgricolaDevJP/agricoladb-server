@@ -19,6 +19,7 @@ func (Product) Fields() []ent.Field {
 		field.Bool("is_official_ja"),
 		field.String("name_ja").Optional(),
 		field.String("name_en").Optional(),
+		field.Int("published_year").Optional(),
 	}
 }
 

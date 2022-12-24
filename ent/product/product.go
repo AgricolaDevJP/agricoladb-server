@@ -15,6 +15,8 @@ const (
 	FieldNameJa = "name_ja"
 	// FieldNameEn holds the string denoting the name_en field in the database.
 	FieldNameEn = "name_en"
+	// FieldPublishedYear holds the string denoting the published_year field in the database.
+	FieldPublishedYear = "published_year"
 	// EdgeCards holds the string denoting the cards edge name in mutations.
 	EdgeCards = "cards"
 	// EdgeRevision holds the string denoting the revision edge name in mutations.
@@ -42,6 +44,7 @@ var Columns = []string{
 	FieldIsOfficialJa,
 	FieldNameJa,
 	FieldNameEn,
+	FieldPublishedYear,
 }
 
 var (

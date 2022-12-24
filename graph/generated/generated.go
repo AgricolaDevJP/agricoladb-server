@@ -132,13 +132,14 @@ type ComplexityRoot struct {
 	}
 
 	Product struct {
-		Cards        func(childComplexity int, after *ent.Cursor, first *int, before *ent.Cursor, last *int, where *ent.CardWhereInput) int
-		ID           func(childComplexity int) int
-		IsOfficialJa func(childComplexity int) int
-		NameEn       func(childComplexity int) int
-		NameJa       func(childComplexity int) int
-		Revision     func(childComplexity int) int
-		RevisionID   func(childComplexity int) int
+		Cards         func(childComplexity int, after *ent.Cursor, first *int, before *ent.Cursor, last *int, where *ent.CardWhereInput) int
+		ID            func(childComplexity int) int
+		IsOfficialJa  func(childComplexity int) int
+		NameEn        func(childComplexity int) int
+		NameJa        func(childComplexity int) int
+		PublishedYear func(childComplexity int) int
+		Revision      func(childComplexity int) int
+		RevisionID    func(childComplexity int) int
 	}
 
 	Query struct {
@@ -712,6 +713,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Product.NameJa(childComplexity), true
+
+	case "Product.publishedYear":
+		if e.complexity.Product.PublishedYear == nil {
+			break
+		}
+
+		return e.complexity.Product.PublishedYear(childComplexity), true
 
 	case "Product.revision":
 		if e.complexity.Product.Revision == nil {
@@ -1570,6 +1578,7 @@ type Product implements Node {
   isOfficialJa: Boolean!
   nameJa: String
   nameEn: String
+  publishedYear: Int
   cards(
     """Returns the elements in the list that come after the specified cursor."""
     after: Cursor
@@ -1645,6 +1654,17 @@ input ProductWhereInput {
   nameEnNotNil: Boolean
   nameEnEqualFold: String
   nameEnContainsFold: String
+  """published_year field predicates"""
+  publishedYear: Int
+  publishedYearNEQ: Int
+  publishedYearIn: [Int!]
+  publishedYearNotIn: [Int!]
+  publishedYearGT: Int
+  publishedYearGTE: Int
+  publishedYearLT: Int
+  publishedYearLTE: Int
+  publishedYearIsNil: Boolean
+  publishedYearNotNil: Boolean
   """cards edge predicates"""
   hasCards: Boolean
   hasCardsWith: [CardWhereInput!]
@@ -3745,6 +3765,8 @@ func (ec *executionContext) fieldContext_Card_products(ctx context.Context, fiel
 				return ec.fieldContext_Product_nameJa(ctx, field)
 			case "nameEn":
 				return ec.fieldContext_Product_nameEn(ctx, field)
+			case "publishedYear":
+				return ec.fieldContext_Product_publishedYear(ctx, field)
 			case "cards":
 				return ec.fieldContext_Product_cards(ctx, field)
 			case "revision":
@@ -5673,6 +5695,47 @@ func (ec *executionContext) fieldContext_Product_nameEn(ctx context.Context, fie
 	return fc, nil
 }
 
+func (ec *executionContext) _Product_publishedYear(ctx context.Context, field graphql.CollectedField, obj *ent.Product) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Product_publishedYear(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PublishedYear, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Product_publishedYear(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Product",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Product_cards(ctx context.Context, field graphql.CollectedField, obj *ent.Product) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Product_cards(ctx, field)
 	if err != nil {
@@ -6187,6 +6250,8 @@ func (ec *executionContext) fieldContext_Query_products(ctx context.Context, fie
 				return ec.fieldContext_Product_nameJa(ctx, field)
 			case "nameEn":
 				return ec.fieldContext_Product_nameEn(ctx, field)
+			case "publishedYear":
+				return ec.fieldContext_Product_publishedYear(ctx, field)
 			case "cards":
 				return ec.fieldContext_Product_cards(ctx, field)
 			case "revision":
@@ -6666,6 +6731,8 @@ func (ec *executionContext) fieldContext_Revision_products(ctx context.Context, 
 				return ec.fieldContext_Product_nameJa(ctx, field)
 			case "nameEn":
 				return ec.fieldContext_Product_nameEn(ctx, field)
+			case "publishedYear":
+				return ec.fieldContext_Product_publishedYear(ctx, field)
 			case "cards":
 				return ec.fieldContext_Product_cards(ctx, field)
 			case "revision":
@@ -11858,7 +11925,7 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "revisionID", "revisionIDNEQ", "revisionIDIn", "revisionIDNotIn", "isOfficialJa", "isOfficialJaNEQ", "nameJa", "nameJaNEQ", "nameJaIn", "nameJaNotIn", "nameJaGT", "nameJaGTE", "nameJaLT", "nameJaLTE", "nameJaContains", "nameJaHasPrefix", "nameJaHasSuffix", "nameJaIsNil", "nameJaNotNil", "nameJaEqualFold", "nameJaContainsFold", "nameEn", "nameEnNEQ", "nameEnIn", "nameEnNotIn", "nameEnGT", "nameEnGTE", "nameEnLT", "nameEnLTE", "nameEnContains", "nameEnHasPrefix", "nameEnHasSuffix", "nameEnIsNil", "nameEnNotNil", "nameEnEqualFold", "nameEnContainsFold", "hasCards", "hasCardsWith", "hasRevision", "hasRevisionWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "revisionID", "revisionIDNEQ", "revisionIDIn", "revisionIDNotIn", "isOfficialJa", "isOfficialJaNEQ", "nameJa", "nameJaNEQ", "nameJaIn", "nameJaNotIn", "nameJaGT", "nameJaGTE", "nameJaLT", "nameJaLTE", "nameJaContains", "nameJaHasPrefix", "nameJaHasSuffix", "nameJaIsNil", "nameJaNotNil", "nameJaEqualFold", "nameJaContainsFold", "nameEn", "nameEnNEQ", "nameEnIn", "nameEnNotIn", "nameEnGT", "nameEnGTE", "nameEnLT", "nameEnLTE", "nameEnContains", "nameEnHasPrefix", "nameEnHasSuffix", "nameEnIsNil", "nameEnNotNil", "nameEnEqualFold", "nameEnContainsFold", "publishedYear", "publishedYearNEQ", "publishedYearIn", "publishedYearNotIn", "publishedYearGT", "publishedYearGTE", "publishedYearLT", "publishedYearLTE", "publishedYearIsNil", "publishedYearNotNil", "hasCards", "hasCardsWith", "hasRevision", "hasRevisionWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -12238,6 +12305,86 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContainsFold"))
 			it.NameEnContainsFold, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "publishedYear":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYear"))
+			it.PublishedYear, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "publishedYearNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearNEQ"))
+			it.PublishedYearNEQ, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "publishedYearIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearIn"))
+			it.PublishedYearIn, err = ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "publishedYearNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearNotIn"))
+			it.PublishedYearNotIn, err = ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "publishedYearGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearGT"))
+			it.PublishedYearGT, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "publishedYearGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearGTE"))
+			it.PublishedYearGTE, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "publishedYearLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearLT"))
+			it.PublishedYearLT, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "publishedYearLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearLTE"))
+			it.PublishedYearLTE, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "publishedYearIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearIsNil"))
+			it.PublishedYearIsNil, err = ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "publishedYearNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearNotNil"))
+			it.PublishedYearNotNil, err = ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -13542,6 +13689,10 @@ func (ec *executionContext) _Product(ctx context.Context, sel ast.SelectionSet, 
 		case "nameEn":
 
 			out.Values[i] = ec._Product_nameEn(ctx, field, obj)
+
+		case "publishedYear":
+
+			out.Values[i] = ec._Product_publishedYear(ctx, field, obj)
 
 		case "cards":
 			field := field

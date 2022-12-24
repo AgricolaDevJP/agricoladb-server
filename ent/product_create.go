@@ -63,6 +63,20 @@ func (pc *ProductCreate) SetNillableNameEn(s *string) *ProductCreate {
 	return pc
 }
 
+// SetPublishedYear sets the "published_year" field.
+func (pc *ProductCreate) SetPublishedYear(i int) *ProductCreate {
+	pc.mutation.SetPublishedYear(i)
+	return pc
+}
+
+// SetNillablePublishedYear sets the "published_year" field if the given value is not nil.
+func (pc *ProductCreate) SetNillablePublishedYear(i *int) *ProductCreate {
+	if i != nil {
+		pc.SetPublishedYear(*i)
+	}
+	return pc
+}
+
 // SetID sets the "id" field.
 func (pc *ProductCreate) SetID(i int) *ProductCreate {
 	pc.mutation.SetID(i)
@@ -220,6 +234,10 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 		_spec.SetField(product.FieldNameEn, field.TypeString, value)
 		_node.NameEn = value
 	}
+	if value, ok := pc.mutation.PublishedYear(); ok {
+		_spec.SetField(product.FieldPublishedYear, field.TypeInt, value)
+		_node.PublishedYear = value
+	}
 	if nodes := pc.mutation.CardsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -359,6 +377,30 @@ func (u *ProductUpsert) ClearNameEn() *ProductUpsert {
 	return u
 }
 
+// SetPublishedYear sets the "published_year" field.
+func (u *ProductUpsert) SetPublishedYear(v int) *ProductUpsert {
+	u.Set(product.FieldPublishedYear, v)
+	return u
+}
+
+// UpdatePublishedYear sets the "published_year" field to the value that was provided on create.
+func (u *ProductUpsert) UpdatePublishedYear() *ProductUpsert {
+	u.SetExcluded(product.FieldPublishedYear)
+	return u
+}
+
+// AddPublishedYear adds v to the "published_year" field.
+func (u *ProductUpsert) AddPublishedYear(v int) *ProductUpsert {
+	u.Add(product.FieldPublishedYear, v)
+	return u
+}
+
+// ClearPublishedYear clears the value of the "published_year" field.
+func (u *ProductUpsert) ClearPublishedYear() *ProductUpsert {
+	u.SetNull(product.FieldPublishedYear)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -463,6 +505,34 @@ func (u *ProductUpsertOne) UpdateNameEn() *ProductUpsertOne {
 func (u *ProductUpsertOne) ClearNameEn() *ProductUpsertOne {
 	return u.Update(func(s *ProductUpsert) {
 		s.ClearNameEn()
+	})
+}
+
+// SetPublishedYear sets the "published_year" field.
+func (u *ProductUpsertOne) SetPublishedYear(v int) *ProductUpsertOne {
+	return u.Update(func(s *ProductUpsert) {
+		s.SetPublishedYear(v)
+	})
+}
+
+// AddPublishedYear adds v to the "published_year" field.
+func (u *ProductUpsertOne) AddPublishedYear(v int) *ProductUpsertOne {
+	return u.Update(func(s *ProductUpsert) {
+		s.AddPublishedYear(v)
+	})
+}
+
+// UpdatePublishedYear sets the "published_year" field to the value that was provided on create.
+func (u *ProductUpsertOne) UpdatePublishedYear() *ProductUpsertOne {
+	return u.Update(func(s *ProductUpsert) {
+		s.UpdatePublishedYear()
+	})
+}
+
+// ClearPublishedYear clears the value of the "published_year" field.
+func (u *ProductUpsertOne) ClearPublishedYear() *ProductUpsertOne {
+	return u.Update(func(s *ProductUpsert) {
+		s.ClearPublishedYear()
 	})
 }
 
@@ -731,6 +801,34 @@ func (u *ProductUpsertBulk) UpdateNameEn() *ProductUpsertBulk {
 func (u *ProductUpsertBulk) ClearNameEn() *ProductUpsertBulk {
 	return u.Update(func(s *ProductUpsert) {
 		s.ClearNameEn()
+	})
+}
+
+// SetPublishedYear sets the "published_year" field.
+func (u *ProductUpsertBulk) SetPublishedYear(v int) *ProductUpsertBulk {
+	return u.Update(func(s *ProductUpsert) {
+		s.SetPublishedYear(v)
+	})
+}
+
+// AddPublishedYear adds v to the "published_year" field.
+func (u *ProductUpsertBulk) AddPublishedYear(v int) *ProductUpsertBulk {
+	return u.Update(func(s *ProductUpsert) {
+		s.AddPublishedYear(v)
+	})
+}
+
+// UpdatePublishedYear sets the "published_year" field to the value that was provided on create.
+func (u *ProductUpsertBulk) UpdatePublishedYear() *ProductUpsertBulk {
+	return u.Update(func(s *ProductUpsert) {
+		s.UpdatePublishedYear()
+	})
+}
+
+// ClearPublishedYear clears the value of the "published_year" field.
+func (u *ProductUpsertBulk) ClearPublishedYear() *ProductUpsertBulk {
+	return u.Update(func(s *ProductUpsert) {
+		s.ClearPublishedYear()
 	})
 }
 

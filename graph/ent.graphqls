@@ -657,6 +657,7 @@ type Product implements Node {
   isOfficialJa: Boolean!
   nameJa: String
   nameEn: String
+  publishedYear: Int
   cards(
     """Returns the elements in the list that come after the specified cursor."""
     after: Cursor
@@ -732,6 +733,17 @@ input ProductWhereInput {
   nameEnNotNil: Boolean
   nameEnEqualFold: String
   nameEnContainsFold: String
+  """published_year field predicates"""
+  publishedYear: Int
+  publishedYearNEQ: Int
+  publishedYearIn: [Int!]
+  publishedYearNotIn: [Int!]
+  publishedYearGT: Int
+  publishedYearGTE: Int
+  publishedYearLT: Int
+  publishedYearLTE: Int
+  publishedYearIsNil: Boolean
+  publishedYearNotNil: Boolean
   """cards edge predicates"""
   hasCards: Boolean
   hasCardsWith: [CardWhereInput!]

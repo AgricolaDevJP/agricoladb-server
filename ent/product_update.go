@@ -74,6 +74,33 @@ func (pu *ProductUpdate) ClearNameEn() *ProductUpdate {
 	return pu
 }
 
+// SetPublishedYear sets the "published_year" field.
+func (pu *ProductUpdate) SetPublishedYear(i int) *ProductUpdate {
+	pu.mutation.ResetPublishedYear()
+	pu.mutation.SetPublishedYear(i)
+	return pu
+}
+
+// SetNillablePublishedYear sets the "published_year" field if the given value is not nil.
+func (pu *ProductUpdate) SetNillablePublishedYear(i *int) *ProductUpdate {
+	if i != nil {
+		pu.SetPublishedYear(*i)
+	}
+	return pu
+}
+
+// AddPublishedYear adds i to the "published_year" field.
+func (pu *ProductUpdate) AddPublishedYear(i int) *ProductUpdate {
+	pu.mutation.AddPublishedYear(i)
+	return pu
+}
+
+// ClearPublishedYear clears the value of the "published_year" field.
+func (pu *ProductUpdate) ClearPublishedYear() *ProductUpdate {
+	pu.mutation.ClearPublishedYear()
+	return pu
+}
+
 // AddCardIDs adds the "cards" edge to the Card entity by IDs.
 func (pu *ProductUpdate) AddCardIDs(ids ...int) *ProductUpdate {
 	pu.mutation.AddCardIDs(ids...)
@@ -216,6 +243,15 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.NameEnCleared() {
 		_spec.ClearField(product.FieldNameEn, field.TypeString)
 	}
+	if value, ok := pu.mutation.PublishedYear(); ok {
+		_spec.SetField(product.FieldPublishedYear, field.TypeInt, value)
+	}
+	if value, ok := pu.mutation.AddedPublishedYear(); ok {
+		_spec.AddField(product.FieldPublishedYear, field.TypeInt, value)
+	}
+	if pu.mutation.PublishedYearCleared() {
+		_spec.ClearField(product.FieldPublishedYear, field.TypeInt)
+	}
 	if pu.mutation.CardsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -332,6 +368,33 @@ func (puo *ProductUpdateOne) SetNillableNameEn(s *string) *ProductUpdateOne {
 // ClearNameEn clears the value of the "name_en" field.
 func (puo *ProductUpdateOne) ClearNameEn() *ProductUpdateOne {
 	puo.mutation.ClearNameEn()
+	return puo
+}
+
+// SetPublishedYear sets the "published_year" field.
+func (puo *ProductUpdateOne) SetPublishedYear(i int) *ProductUpdateOne {
+	puo.mutation.ResetPublishedYear()
+	puo.mutation.SetPublishedYear(i)
+	return puo
+}
+
+// SetNillablePublishedYear sets the "published_year" field if the given value is not nil.
+func (puo *ProductUpdateOne) SetNillablePublishedYear(i *int) *ProductUpdateOne {
+	if i != nil {
+		puo.SetPublishedYear(*i)
+	}
+	return puo
+}
+
+// AddPublishedYear adds i to the "published_year" field.
+func (puo *ProductUpdateOne) AddPublishedYear(i int) *ProductUpdateOne {
+	puo.mutation.AddPublishedYear(i)
+	return puo
+}
+
+// ClearPublishedYear clears the value of the "published_year" field.
+func (puo *ProductUpdateOne) ClearPublishedYear() *ProductUpdateOne {
+	puo.mutation.ClearPublishedYear()
 	return puo
 }
 
@@ -506,6 +569,15 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 	}
 	if puo.mutation.NameEnCleared() {
 		_spec.ClearField(product.FieldNameEn, field.TypeString)
+	}
+	if value, ok := puo.mutation.PublishedYear(); ok {
+		_spec.SetField(product.FieldPublishedYear, field.TypeInt, value)
+	}
+	if value, ok := puo.mutation.AddedPublishedYear(); ok {
+		_spec.AddField(product.FieldPublishedYear, field.TypeInt, value)
+	}
+	if puo.mutation.PublishedYearCleared() {
+		_spec.ClearField(product.FieldPublishedYear, field.TypeInt)
 	}
 	if puo.mutation.CardsCleared() {
 		edge := &sqlgraph.EdgeSpec{
