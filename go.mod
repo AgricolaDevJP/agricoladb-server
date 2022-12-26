@@ -29,6 +29,7 @@ require (
 require (
 	entgo.io/contrib v0.3.4
 	github.com/agnivade/levenshtein v1.1.1 // indirect
+	github.com/caarlos0/env/v6 v6.10.1
 	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
 	github.com/go-sql-driver/mysql v1.7.0
 	github.com/gorilla/websocket v1.5.0 // indirect
