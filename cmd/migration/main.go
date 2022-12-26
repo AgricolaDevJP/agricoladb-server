@@ -2,7 +2,7 @@ package main
 
 import (
 	"agricoladb/ent"
-	"agricoladb/initdata"
+	"agricoladb/initdb"
 	"context"
 	"log"
 	"os"
@@ -24,7 +24,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	g := initdata.NewGenerator(client, "./masterdata/", true)
+	g := initdb.NewGenerator(client, "./masterdata/", true)
 	if err := g.Generate(); err != nil {
 		log.Fatalf("failed creating schema resources: %v", err)
 		os.Exit(1)
