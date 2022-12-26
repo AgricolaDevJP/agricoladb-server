@@ -57,6 +57,12 @@ func (g *Generator) GenerateWithContext(ctx context.Context) error {
 	if err = initCards(ctx, tx, filepath.Join(g.csvDir, CardsFileName)); err != nil {
 		return rollback(tx, fmt.Errorf("failed initCards: %w", err))
 	}
+	if err = initProductCards(ctx, tx, filepath.Join(g.csvDir, ProductCardsFileName)); err != nil {
+		return rollback(tx, fmt.Errorf("failed initProductCards: %w", err))
+	}
+	if err = initCardAncestors(ctx, tx, filepath.Join(g.csvDir, CardAncestorsFileName)); err != nil {
+		return rollback(tx, fmt.Errorf("failed initCardAncestors: %w", err))
+	}
 
 	return tx.Commit()
 }
