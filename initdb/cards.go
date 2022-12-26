@@ -10,7 +10,7 @@ import (
 
 const (
 	CardsFileName = "agricoladb-master - cards.csv"
-	CardsCapacity = 64
+	CardsCapacity = 512
 )
 
 type Card struct {
