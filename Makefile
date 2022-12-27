@@ -1,4 +1,5 @@
 DOCKER_COMPOSE_LOCAL := docker-compose -f docker-compose.local.yml
+DOCKER_COMPOSE_TEST := docker-compose -f docker-compose.test.yml
 
 .PHONY: clean
 clean:
@@ -9,9 +10,21 @@ clean:
 generate:
 	CGO_ENABLED=0 go generate ./
 
+.PHONY: build
+build:
+	go build ./cmd/server
+
+.PHONY: build-migration
+build-migration:
+	go build ./cmd/migration
+
 .PHONY: run
 run:
 	go run cmd/server/main.go
+
+.PHONY: run-migration
+run-migration:
+	go run mcd/migration/main.go
 
 .PHONY: docker-build
 docker-build:
@@ -28,3 +41,15 @@ docker-stop:
 .PHONY: docker-restart-server
 docker-restart-server:
 	$(DOCKER_COMPOSE_LOCAL) restart server
+
+.PHONY: docker-build-test
+docker-build-test:
+	$(DOCKER_COMPOSE_TEST) build
+
+.PHONY: docker-start-test
+docker-start-test:
+	$(DOCKER_COMPOSE_TEST) up -d
+
+.PHONY: docker-stop-test
+docker-stop-test:
+	$(DOCKER_COMPOSE_TEST) down

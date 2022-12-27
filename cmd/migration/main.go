@@ -4,7 +4,6 @@ import (
 	"agricoladb/ent"
 	"agricoladb/initdb"
 	"context"
-	"fmt"
 	"log"
 	"net"
 	"os"
@@ -28,7 +27,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println(cfg.getDNS())
 	// ent client
 	client, err := ent.Open("mysql", cfg.getDNS())
 	if err != nil {

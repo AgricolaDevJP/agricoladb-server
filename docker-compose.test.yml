@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  server:
+    container_name: agricoladb-server-test
+    build:
+      context: .
+      dockerfile: ./docker/test/server/Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+  migration:
+    container_name: agricoladb-migration-test
+    build:
+      context: .
+      dockerfile: ./docker/test/migration/Dockerfile
+    depends_on:
+      - db
+      - server
+  db:
+    container_name: agricoladb-db-test
+    build:
+      context: .
+      dockerfile: ./docker/test/db/Dockerfile
+    ports:
+      - 3306:3306
