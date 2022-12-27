@@ -19,5 +19,5 @@ jobs:
         run: make docker-start-test
       - name: E2E test
         run: go test -v ./test/e2e_test.go
-      - name: Docker2 stop
+      - name: Docker stop
         run: make docker-stop-test
