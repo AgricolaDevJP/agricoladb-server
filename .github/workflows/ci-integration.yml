@@ -13,6 +13,8 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version: 1.19
+      - uses: jpribyl/action-docker-layer-caching@v0.1.1
+        continue-on-error: true
       - name: Docker build
         run: make docker-build-test
       - name: Docker start
