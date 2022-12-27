@@ -1,3 +1,7 @@
+<div align="center">
+    <img alt="AgricolaDB Server" src="docs/img/agricoladb-server-logo.png" />
+</div>
+
 # agricoladb-server
 
 AgricolaDB (v2~) のサーバアプリケーション。GraphQL の API 提供と、データベースのスキーマ管理を行う。
