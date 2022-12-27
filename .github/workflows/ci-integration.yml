@@ -6,7 +6,7 @@ on:
       - main
   pull_request:
 jobs:
-  lint:
+  e2e:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -17,5 +17,7 @@ jobs:
         run: make docker-build-test
       - name: Docker start
         run: make docker-start-test
-      - name: Docker stop
+      - name: E2E test
+        run: go test -v ./test/e2e_test.go
+      - name: Docker2 stop
         run: make docker-stop-test
