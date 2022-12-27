@@ -1,3 +1,5 @@
+DOCKER_COMPOSE_LOCAL := docker-compose -f docker-compose.local.yml
+
 .PHONY: clean
 clean:
 	$(RM) -r ./graph
@@ -13,16 +15,16 @@ run:
 
 .PHONY: docker-build
 docker-build:
-	docker-compose build
+	$(DOCKER_COMPOSE_LOCAL) build
 
 .PHONY: docker-start
 docker-start:
-	docker-compose up -d
+	$(DOCKER_COMPOSE_LOCAL) up -d
 
 .PHONY: docker-stop
 docker-stop:
-	docker-compose down
+	$(DOCKER_COMPOSE_LOCAL) down
 
 .PHONY: docker-restart-server
 docker-restart-server:
-	docker-compose restart server
+	$(DOCKER_COMPOSE_LOCAL) restart server

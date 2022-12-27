@@ -5,7 +5,7 @@ services:
     container_name: agricoladb-server
     build:
       context: .
-      dockerfile: ./docker/server/Dockerfile
+      dockerfile: ./docker/local/server/Dockerfile
     ports:
       - 8080:8080
     volumes:       
@@ -16,7 +16,7 @@ services:
     container_name: agricoladb-db
     build:
       context: .
-      dockerfile: ./docker/db/Dockerfile
+      dockerfile: ./docker/local/db/Dockerfile
     environment:
       MYSQL_DATABASE: agricoladb
       MYSQL_USER: user
