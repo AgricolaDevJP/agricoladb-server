@@ -9,7 +9,7 @@ RUN apk add make gcc g++
 
 RUN make build
 
-FROM alpine
+FROM gcr.io/distroless/base-debian11
 COPY --from=builder /go/src/agricoladb-server/server /server
 
 ENV DB_NAME agricoladb
