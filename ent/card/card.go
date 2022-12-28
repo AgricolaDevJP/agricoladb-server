@@ -41,8 +41,8 @@ const (
 	FieldVictoryPoint = "victory_point"
 	// FieldSpecialVictoryPoint holds the string denoting the special_victory_point field in the database.
 	FieldSpecialVictoryPoint = "special_victory_point"
-	// FieldHasArrrow holds the string denoting the has_arrrow field in the database.
-	FieldHasArrrow = "has_arrrow"
+	// FieldHasArrow holds the string denoting the has_arrow field in the database.
+	FieldHasArrow = "has_arrow"
 	// FieldHasBonusPointIcon holds the string denoting the has_bonus_point_icon field in the database.
 	FieldHasBonusPointIcon = "has_bonus_point_icon"
 	// FieldHasNegativeBonusPointIcon holds the string denoting the has_negative_bonus_point_icon field in the database.
@@ -150,7 +150,7 @@ var Columns = []string{
 	FieldIsOfficialJa,
 	FieldVictoryPoint,
 	FieldSpecialVictoryPoint,
-	FieldHasArrrow,
+	FieldHasArrow,
 	FieldHasBonusPointIcon,
 	FieldHasNegativeBonusPointIcon,
 	FieldHasPanIcon,

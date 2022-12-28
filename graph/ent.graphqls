@@ -19,7 +19,7 @@ type Card implements Node {
   isOfficialJa: Boolean!
   victoryPoint: Int
   specialVictoryPoint: String
-  hasArrrow: Boolean!
+  hasArrow: Boolean!
   hasBonusPointIcon: Boolean!
   hasNegativeBonusPointIcon: Boolean!
   hasPanIcon: Boolean!
@@ -462,9 +462,9 @@ input CardWhereInput {
   specialVictoryPointNotNil: Boolean
   specialVictoryPointEqualFold: String
   specialVictoryPointContainsFold: String
-  """has_arrrow field predicates"""
-  hasArrrow: Boolean
-  hasArrrowNEQ: Boolean
+  """has_arrow field predicates"""
+  hasArrow: Boolean
+  hasArrowNEQ: Boolean
   """has_bonus_point_icon field predicates"""
   hasBonusPointIcon: Boolean
   hasBonusPointIconNEQ: Boolean

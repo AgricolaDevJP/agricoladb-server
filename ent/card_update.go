@@ -317,9 +317,9 @@ func (cu *CardUpdate) ClearSpecialVictoryPoint() *CardUpdate {
 	return cu
 }
 
-// SetHasArrrow sets the "has_arrrow" field.
-func (cu *CardUpdate) SetHasArrrow(b bool) *CardUpdate {
-	cu.mutation.SetHasArrrow(b)
+// SetHasArrow sets the "has_arrow" field.
+func (cu *CardUpdate) SetHasArrow(b bool) *CardUpdate {
+	cu.mutation.SetHasArrow(b)
 	return cu
 }
 
@@ -729,8 +729,8 @@ func (cu *CardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.SpecialVictoryPointCleared() {
 		_spec.ClearField(card.FieldSpecialVictoryPoint, field.TypeString)
 	}
-	if value, ok := cu.mutation.HasArrrow(); ok {
-		_spec.SetField(card.FieldHasArrrow, field.TypeBool, value)
+	if value, ok := cu.mutation.HasArrow(); ok {
+		_spec.SetField(card.FieldHasArrow, field.TypeBool, value)
 	}
 	if value, ok := cu.mutation.HasBonusPointIcon(); ok {
 		_spec.SetField(card.FieldHasBonusPointIcon, field.TypeBool, value)
@@ -1352,9 +1352,9 @@ func (cuo *CardUpdateOne) ClearSpecialVictoryPoint() *CardUpdateOne {
 	return cuo
 }
 
-// SetHasArrrow sets the "has_arrrow" field.
-func (cuo *CardUpdateOne) SetHasArrrow(b bool) *CardUpdateOne {
-	cuo.mutation.SetHasArrrow(b)
+// SetHasArrow sets the "has_arrow" field.
+func (cuo *CardUpdateOne) SetHasArrow(b bool) *CardUpdateOne {
+	cuo.mutation.SetHasArrow(b)
 	return cuo
 }
 
@@ -1794,8 +1794,8 @@ func (cuo *CardUpdateOne) sqlSave(ctx context.Context) (_node *Card, err error) 
 	if cuo.mutation.SpecialVictoryPointCleared() {
 		_spec.ClearField(card.FieldSpecialVictoryPoint, field.TypeString)
 	}
-	if value, ok := cuo.mutation.HasArrrow(); ok {
-		_spec.SetField(card.FieldHasArrrow, field.TypeBool, value)
+	if value, ok := cuo.mutation.HasArrow(); ok {
+		_spec.SetField(card.FieldHasArrow, field.TypeBool, value)
 	}
 	if value, ok := cuo.mutation.HasBonusPointIcon(); ok {
 		_spec.SetField(card.FieldHasBonusPointIcon, field.TypeBool, value)

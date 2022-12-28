@@ -255,9 +255,9 @@ type CardWhereInput struct {
 	SpecialVictoryPointEqualFold    *string  `json:"specialVictoryPointEqualFold,omitempty"`
 	SpecialVictoryPointContainsFold *string  `json:"specialVictoryPointContainsFold,omitempty"`
 
-	// "has_arrrow" field predicates.
-	HasArrrow    *bool `json:"hasArrrow,omitempty"`
-	HasArrrowNEQ *bool `json:"hasArrrowNEQ,omitempty"`
+	// "has_arrow" field predicates.
+	HasArrow    *bool `json:"hasArrow,omitempty"`
+	HasArrowNEQ *bool `json:"hasArrowNEQ,omitempty"`
 
 	// "has_bonus_point_icon" field predicates.
 	HasBonusPointIcon    *bool `json:"hasBonusPointIcon,omitempty"`
@@ -1017,11 +1017,11 @@ func (i *CardWhereInput) P() (predicate.Card, error) {
 	if i.SpecialVictoryPointContainsFold != nil {
 		predicates = append(predicates, card.SpecialVictoryPointContainsFold(*i.SpecialVictoryPointContainsFold))
 	}
-	if i.HasArrrow != nil {
-		predicates = append(predicates, card.HasArrrowEQ(*i.HasArrrow))
+	if i.HasArrow != nil {
+		predicates = append(predicates, card.HasArrowEQ(*i.HasArrow))
 	}
-	if i.HasArrrowNEQ != nil {
-		predicates = append(predicates, card.HasArrrowNEQ(*i.HasArrrowNEQ))
+	if i.HasArrowNEQ != nil {
+		predicates = append(predicates, card.HasArrowNEQ(*i.HasArrowNEQ))
 	}
 	if i.HasBonusPointIcon != nil {
 		predicates = append(predicates, card.HasBonusPointIconEQ(*i.HasBonusPointIcon))

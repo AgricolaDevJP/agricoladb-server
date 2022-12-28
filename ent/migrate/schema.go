@@ -24,7 +24,7 @@ var (
 		{Name: "is_official_ja", Type: field.TypeBool},
 		{Name: "victory_point", Type: field.TypeInt, Nullable: true},
 		{Name: "special_victory_point", Type: field.TypeString, Nullable: true},
-		{Name: "has_arrrow", Type: field.TypeBool},
+		{Name: "has_arrow", Type: field.TypeBool},
 		{Name: "has_bonus_point_icon", Type: field.TypeBool},
 		{Name: "has_negative_bonus_point_icon", Type: field.TypeBool},
 		{Name: "has_pan_icon", Type: field.TypeBool},

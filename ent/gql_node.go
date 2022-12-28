@@ -195,12 +195,12 @@ func (c *Card) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "special_victory_point",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(c.HasArrrow); err != nil {
+	if buf, err = json.Marshal(c.HasArrow); err != nil {
 		return nil, err
 	}
 	node.Fields[17] = &Field{
 		Type:  "bool",
-		Name:  "has_arrrow",
+		Name:  "has_arrow",
 		Value: string(buf),
 	}
 	if buf, err = json.Marshal(c.HasBonusPointIcon); err != nil {

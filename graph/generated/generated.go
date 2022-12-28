@@ -55,7 +55,7 @@ type ComplexityRoot struct {
 		DeckID                          func(childComplexity int) int
 		Description                     func(childComplexity int) int
 		HasActionsBoosterIcon           func(childComplexity int) int
-		HasArrrow                       func(childComplexity int) int
+		HasArrow                        func(childComplexity int) int
 		HasBonusPointIcon               func(childComplexity int) int
 		HasBreadIcon                    func(childComplexity int) int
 		HasBuildingResourceProviderIcon func(childComplexity int) int
@@ -268,12 +268,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Card.HasActionsBoosterIcon(childComplexity), true
 
-	case "Card.hasArrrow":
-		if e.complexity.Card.HasArrrow == nil {
+	case "Card.hasArrow":
+		if e.complexity.Card.HasArrow == nil {
 			break
 		}
 
-		return e.complexity.Card.HasArrrow(childComplexity), true
+		return e.complexity.Card.HasArrow(childComplexity), true
 
 	case "Card.hasBonusPointIcon":
 		if e.complexity.Card.HasBonusPointIcon == nil {
@@ -948,7 +948,7 @@ type Card implements Node {
   isOfficialJa: Boolean!
   victoryPoint: Int
   specialVictoryPoint: String
-  hasArrrow: Boolean!
+  hasArrow: Boolean!
   hasBonusPointIcon: Boolean!
   hasNegativeBonusPointIcon: Boolean!
   hasPanIcon: Boolean!
@@ -1391,9 +1391,9 @@ input CardWhereInput {
   specialVictoryPointNotNil: Boolean
   specialVictoryPointEqualFold: String
   specialVictoryPointContainsFold: String
-  """has_arrrow field predicates"""
-  hasArrrow: Boolean
-  hasArrrowNEQ: Boolean
+  """has_arrow field predicates"""
+  hasArrow: Boolean
+  hasArrowNEQ: Boolean
   """has_bonus_point_icon field predicates"""
   hasBonusPointIcon: Boolean
   hasBonusPointIconNEQ: Boolean
@@ -2977,8 +2977,8 @@ func (ec *executionContext) fieldContext_Card_specialVictoryPoint(ctx context.Co
 	return fc, nil
 }
 
-func (ec *executionContext) _Card_hasArrrow(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Card_hasArrrow(ctx, field)
+func (ec *executionContext) _Card_hasArrow(ctx context.Context, field graphql.CollectedField, obj *ent.Card) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Card_hasArrow(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2991,7 +2991,7 @@ func (ec *executionContext) _Card_hasArrrow(ctx context.Context, field graphql.C
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.HasArrrow, nil
+		return obj.HasArrow, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3008,7 +3008,7 @@ func (ec *executionContext) _Card_hasArrrow(ctx context.Context, field graphql.C
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Card_hasArrrow(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Card_hasArrow(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Card",
 		Field:      field,
@@ -4082,8 +4082,8 @@ func (ec *executionContext) fieldContext_Card_children(ctx context.Context, fiel
 				return ec.fieldContext_Card_victoryPoint(ctx, field)
 			case "specialVictoryPoint":
 				return ec.fieldContext_Card_specialVictoryPoint(ctx, field)
-			case "hasArrrow":
-				return ec.fieldContext_Card_hasArrrow(ctx, field)
+			case "hasArrow":
+				return ec.fieldContext_Card_hasArrow(ctx, field)
 			case "hasBonusPointIcon":
 				return ec.fieldContext_Card_hasBonusPointIcon(ctx, field)
 			case "hasNegativeBonusPointIcon":
@@ -4209,8 +4209,8 @@ func (ec *executionContext) fieldContext_Card_ancestors(ctx context.Context, fie
 				return ec.fieldContext_Card_victoryPoint(ctx, field)
 			case "specialVictoryPoint":
 				return ec.fieldContext_Card_specialVictoryPoint(ctx, field)
-			case "hasArrrow":
-				return ec.fieldContext_Card_hasArrrow(ctx, field)
+			case "hasArrow":
+				return ec.fieldContext_Card_hasArrow(ctx, field)
 			case "hasBonusPointIcon":
 				return ec.fieldContext_Card_hasBonusPointIcon(ctx, field)
 			case "hasNegativeBonusPointIcon":
@@ -4481,8 +4481,8 @@ func (ec *executionContext) fieldContext_CardEdge_node(ctx context.Context, fiel
 				return ec.fieldContext_Card_victoryPoint(ctx, field)
 			case "specialVictoryPoint":
 				return ec.fieldContext_Card_specialVictoryPoint(ctx, field)
-			case "hasArrrow":
-				return ec.fieldContext_Card_hasArrrow(ctx, field)
+			case "hasArrow":
+				return ec.fieldContext_Card_hasArrow(ctx, field)
 			case "hasBonusPointIcon":
 				return ec.fieldContext_Card_hasBonusPointIcon(ctx, field)
 			case "hasNegativeBonusPointIcon":
@@ -9589,7 +9589,7 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "literalID", "literalIDNEQ", "literalIDIn", "literalIDNotIn", "literalIDGT", "literalIDGTE", "literalIDLT", "literalIDLTE", "literalIDContains", "literalIDHasPrefix", "literalIDHasSuffix", "literalIDEqualFold", "literalIDContainsFold", "revisionID", "revisionIDNEQ", "revisionIDIn", "revisionIDNotIn", "printedID", "printedIDNEQ", "printedIDIn", "printedIDNotIn", "printedIDGT", "printedIDGTE", "printedIDLT", "printedIDLTE", "printedIDContains", "printedIDHasPrefix", "printedIDHasSuffix", "printedIDIsNil", "printedIDNotNil", "printedIDEqualFold", "printedIDContainsFold", "playAgricolaCardID", "playAgricolaCardIDNEQ", "playAgricolaCardIDIn", "playAgricolaCardIDNotIn", "playAgricolaCardIDGT", "playAgricolaCardIDGTE", "playAgricolaCardIDLT", "playAgricolaCardIDLTE", "playAgricolaCardIDContains", "playAgricolaCardIDHasPrefix", "playAgricolaCardIDHasSuffix", "playAgricolaCardIDIsNil", "playAgricolaCardIDNotNil", "playAgricolaCardIDEqualFold", "playAgricolaCardIDContainsFold", "deckID", "deckIDNEQ", "deckIDIn", "deckIDNotIn", "deckIDIsNil", "deckIDNotNil", "cardTypeID", "cardTypeIDNEQ", "cardTypeIDIn", "cardTypeIDNotIn", "cardSpecialColorID", "cardSpecialColorIDNEQ", "cardSpecialColorIDIn", "cardSpecialColorIDNotIn", "cardSpecialColorIDIsNil", "cardSpecialColorIDNotNil", "nameJa", "nameJaNEQ", "nameJaIn", "nameJaNotIn", "nameJaGT", "nameJaGTE", "nameJaLT", "nameJaLTE", "nameJaContains", "nameJaHasPrefix", "nameJaHasSuffix", "nameJaIsNil", "nameJaNotNil", "nameJaEqualFold", "nameJaContainsFold", "nameEn", "nameEnNEQ", "nameEnIn", "nameEnNotIn", "nameEnGT", "nameEnGTE", "nameEnLT", "nameEnLTE", "nameEnContains", "nameEnHasPrefix", "nameEnHasSuffix", "nameEnIsNil", "nameEnNotNil", "nameEnEqualFold", "nameEnContainsFold", "minPlayersNumber", "minPlayersNumberNEQ", "minPlayersNumberIn", "minPlayersNumberNotIn", "minPlayersNumberGT", "minPlayersNumberGTE", "minPlayersNumberLT", "minPlayersNumberLTE", "minPlayersNumberIsNil", "minPlayersNumberNotNil", "prerequisite", "prerequisiteNEQ", "prerequisiteIn", "prerequisiteNotIn", "prerequisiteGT", "prerequisiteGTE", "prerequisiteLT", "prerequisiteLTE", "prerequisiteContains", "prerequisiteHasPrefix", "prerequisiteHasSuffix", "prerequisiteIsNil", "prerequisiteNotNil", "prerequisiteEqualFold", "prerequisiteContainsFold", "cost", "costNEQ", "costIn", "costNotIn", "costGT", "costGTE", "costLT", "costLTE", "costContains", "costHasPrefix", "costHasSuffix", "costIsNil", "costNotNil", "costEqualFold", "costContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "note", "noteNEQ", "noteIn", "noteNotIn", "noteGT", "noteGTE", "noteLT", "noteLTE", "noteContains", "noteHasPrefix", "noteHasSuffix", "noteIsNil", "noteNotNil", "noteEqualFold", "noteContainsFold", "isOfficialJa", "isOfficialJaNEQ", "victoryPoint", "victoryPointNEQ", "victoryPointIn", "victoryPointNotIn", "victoryPointGT", "victoryPointGTE", "victoryPointLT", "victoryPointLTE", "victoryPointIsNil", "victoryPointNotNil", "specialVictoryPoint", "specialVictoryPointNEQ", "specialVictoryPointIn", "specialVictoryPointNotIn", "specialVictoryPointGT", "specialVictoryPointGTE", "specialVictoryPointLT", "specialVictoryPointLTE", "specialVictoryPointContains", "specialVictoryPointHasPrefix", "specialVictoryPointHasSuffix", "specialVictoryPointIsNil", "specialVictoryPointNotNil", "specialVictoryPointEqualFold", "specialVictoryPointContainsFold", "hasArrrow", "hasArrrowNEQ", "hasBonusPointIcon", "hasBonusPointIconNEQ", "hasNegativeBonusPointIcon", "hasNegativeBonusPointIconNEQ", "hasPanIcon", "hasPanIconNEQ", "hasBreadIcon", "hasBreadIconNEQ", "hasFarmPlannerIcon", "hasFarmPlannerIconNEQ", "hasActionsBoosterIcon", "hasActionsBoosterIconNEQ", "hasPointsProviderIcon", "hasPointsProviderIconNEQ", "hasGoodsProviderIcon", "hasGoodsProviderIconNEQ", "hasFoodProviderIcon", "hasFoodProviderIconNEQ", "hasCropProviderIcon", "hasCropProviderIconNEQ", "hasBuildingResourceProviderIcon", "hasBuildingResourceProviderIconNEQ", "hasLivestockProviderIcon", "hasLivestockProviderIconNEQ", "hasCutPeatIcon", "hasCutPeatIconNEQ", "hasFellTreesIcon", "hasFellTreesIconNEQ", "hasSlashAndBurnIcon", "hasSlashAndBurnIconNEQ", "hasHiringFareIcon", "hasHiringFareIconNEQ", "hasRevision", "hasRevisionWith", "hasProducts", "hasProductsWith", "hasDeck", "hasDeckWith", "hasCardType", "hasCardTypeWith", "hasCardSpecialColor", "hasCardSpecialColorWith", "hasChildren", "hasChildrenWith", "hasAncestors", "hasAncestorsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "literalID", "literalIDNEQ", "literalIDIn", "literalIDNotIn", "literalIDGT", "literalIDGTE", "literalIDLT", "literalIDLTE", "literalIDContains", "literalIDHasPrefix", "literalIDHasSuffix", "literalIDEqualFold", "literalIDContainsFold", "revisionID", "revisionIDNEQ", "revisionIDIn", "revisionIDNotIn", "printedID", "printedIDNEQ", "printedIDIn", "printedIDNotIn", "printedIDGT", "printedIDGTE", "printedIDLT", "printedIDLTE", "printedIDContains", "printedIDHasPrefix", "printedIDHasSuffix", "printedIDIsNil", "printedIDNotNil", "printedIDEqualFold", "printedIDContainsFold", "playAgricolaCardID", "playAgricolaCardIDNEQ", "playAgricolaCardIDIn", "playAgricolaCardIDNotIn", "playAgricolaCardIDGT", "playAgricolaCardIDGTE", "playAgricolaCardIDLT", "playAgricolaCardIDLTE", "playAgricolaCardIDContains", "playAgricolaCardIDHasPrefix", "playAgricolaCardIDHasSuffix", "playAgricolaCardIDIsNil", "playAgricolaCardIDNotNil", "playAgricolaCardIDEqualFold", "playAgricolaCardIDContainsFold", "deckID", "deckIDNEQ", "deckIDIn", "deckIDNotIn", "deckIDIsNil", "deckIDNotNil", "cardTypeID", "cardTypeIDNEQ", "cardTypeIDIn", "cardTypeIDNotIn", "cardSpecialColorID", "cardSpecialColorIDNEQ", "cardSpecialColorIDIn", "cardSpecialColorIDNotIn", "cardSpecialColorIDIsNil", "cardSpecialColorIDNotNil", "nameJa", "nameJaNEQ", "nameJaIn", "nameJaNotIn", "nameJaGT", "nameJaGTE", "nameJaLT", "nameJaLTE", "nameJaContains", "nameJaHasPrefix", "nameJaHasSuffix", "nameJaIsNil", "nameJaNotNil", "nameJaEqualFold", "nameJaContainsFold", "nameEn", "nameEnNEQ", "nameEnIn", "nameEnNotIn", "nameEnGT", "nameEnGTE", "nameEnLT", "nameEnLTE", "nameEnContains", "nameEnHasPrefix", "nameEnHasSuffix", "nameEnIsNil", "nameEnNotNil", "nameEnEqualFold", "nameEnContainsFold", "minPlayersNumber", "minPlayersNumberNEQ", "minPlayersNumberIn", "minPlayersNumberNotIn", "minPlayersNumberGT", "minPlayersNumberGTE", "minPlayersNumberLT", "minPlayersNumberLTE", "minPlayersNumberIsNil", "minPlayersNumberNotNil", "prerequisite", "prerequisiteNEQ", "prerequisiteIn", "prerequisiteNotIn", "prerequisiteGT", "prerequisiteGTE", "prerequisiteLT", "prerequisiteLTE", "prerequisiteContains", "prerequisiteHasPrefix", "prerequisiteHasSuffix", "prerequisiteIsNil", "prerequisiteNotNil", "prerequisiteEqualFold", "prerequisiteContainsFold", "cost", "costNEQ", "costIn", "costNotIn", "costGT", "costGTE", "costLT", "costLTE", "costContains", "costHasPrefix", "costHasSuffix", "costIsNil", "costNotNil", "costEqualFold", "costContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "note", "noteNEQ", "noteIn", "noteNotIn", "noteGT", "noteGTE", "noteLT", "noteLTE", "noteContains", "noteHasPrefix", "noteHasSuffix", "noteIsNil", "noteNotNil", "noteEqualFold", "noteContainsFold", "isOfficialJa", "isOfficialJaNEQ", "victoryPoint", "victoryPointNEQ", "victoryPointIn", "victoryPointNotIn", "victoryPointGT", "victoryPointGTE", "victoryPointLT", "victoryPointLTE", "victoryPointIsNil", "victoryPointNotNil", "specialVictoryPoint", "specialVictoryPointNEQ", "specialVictoryPointIn", "specialVictoryPointNotIn", "specialVictoryPointGT", "specialVictoryPointGTE", "specialVictoryPointLT", "specialVictoryPointLTE", "specialVictoryPointContains", "specialVictoryPointHasPrefix", "specialVictoryPointHasSuffix", "specialVictoryPointIsNil", "specialVictoryPointNotNil", "specialVictoryPointEqualFold", "specialVictoryPointContainsFold", "hasArrow", "hasArrowNEQ", "hasBonusPointIcon", "hasBonusPointIconNEQ", "hasNegativeBonusPointIcon", "hasNegativeBonusPointIconNEQ", "hasPanIcon", "hasPanIconNEQ", "hasBreadIcon", "hasBreadIconNEQ", "hasFarmPlannerIcon", "hasFarmPlannerIconNEQ", "hasActionsBoosterIcon", "hasActionsBoosterIconNEQ", "hasPointsProviderIcon", "hasPointsProviderIconNEQ", "hasGoodsProviderIcon", "hasGoodsProviderIconNEQ", "hasFoodProviderIcon", "hasFoodProviderIconNEQ", "hasCropProviderIcon", "hasCropProviderIconNEQ", "hasBuildingResourceProviderIcon", "hasBuildingResourceProviderIconNEQ", "hasLivestockProviderIcon", "hasLivestockProviderIconNEQ", "hasCutPeatIcon", "hasCutPeatIconNEQ", "hasFellTreesIcon", "hasFellTreesIconNEQ", "hasSlashAndBurnIcon", "hasSlashAndBurnIconNEQ", "hasHiringFareIcon", "hasHiringFareIconNEQ", "hasRevision", "hasRevisionWith", "hasProducts", "hasProductsWith", "hasDeck", "hasDeckWith", "hasCardType", "hasCardTypeWith", "hasCardSpecialColor", "hasCardSpecialColorWith", "hasChildren", "hasChildrenWith", "hasAncestors", "hasAncestorsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -11204,19 +11204,19 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			if err != nil {
 				return it, err
 			}
-		case "hasArrrow":
+		case "hasArrow":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasArrrow"))
-			it.HasArrrow, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasArrow"))
+			it.HasArrow, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
 				return it, err
 			}
-		case "hasArrrowNEQ":
+		case "hasArrowNEQ":
 			var err error
 
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasArrrowNEQ"))
-			it.HasArrrowNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasArrowNEQ"))
+			it.HasArrowNEQ, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -13262,9 +13262,9 @@ func (ec *executionContext) _Card(ctx context.Context, sel ast.SelectionSet, obj
 
 			out.Values[i] = ec._Card_specialVictoryPoint(ctx, field, obj)
 
-		case "hasArrrow":
+		case "hasArrow":
 
-			out.Values[i] = ec._Card_hasArrrow(ctx, field, obj)
+			out.Values[i] = ec._Card_hasArrow(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)

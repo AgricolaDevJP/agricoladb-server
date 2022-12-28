@@ -33,7 +33,7 @@ func (Card) Fields() []ent.Field {
 		field.Bool("is_official_ja"),
 		field.Int("victory_point").Optional().Nillable(),
 		field.String("special_victory_point").Optional().Nillable(),
-		field.Bool("has_arrrow"),
+		field.Bool("has_arrow"),
 		field.Bool("has_bonus_point_icon"),
 		field.Bool("has_negative_bonus_point_icon"),
 		field.Bool("has_pan_icon"),

@@ -232,9 +232,9 @@ func (cc *CardCreate) SetNillableSpecialVictoryPoint(s *string) *CardCreate {
 	return cc
 }
 
-// SetHasArrrow sets the "has_arrrow" field.
-func (cc *CardCreate) SetHasArrrow(b bool) *CardCreate {
-	cc.mutation.SetHasArrrow(b)
+// SetHasArrow sets the "has_arrow" field.
+func (cc *CardCreate) SetHasArrow(b bool) *CardCreate {
+	cc.mutation.SetHasArrow(b)
 	return cc
 }
 
@@ -498,8 +498,8 @@ func (cc *CardCreate) check() error {
 	if _, ok := cc.mutation.IsOfficialJa(); !ok {
 		return &ValidationError{Name: "is_official_ja", err: errors.New(`ent: missing required field "Card.is_official_ja"`)}
 	}
-	if _, ok := cc.mutation.HasArrrow(); !ok {
-		return &ValidationError{Name: "has_arrrow", err: errors.New(`ent: missing required field "Card.has_arrrow"`)}
+	if _, ok := cc.mutation.HasArrow(); !ok {
+		return &ValidationError{Name: "has_arrow", err: errors.New(`ent: missing required field "Card.has_arrow"`)}
 	}
 	if _, ok := cc.mutation.HasBonusPointIcon(); !ok {
 		return &ValidationError{Name: "has_bonus_point_icon", err: errors.New(`ent: missing required field "Card.has_bonus_point_icon"`)}
@@ -641,9 +641,9 @@ func (cc *CardCreate) createSpec() (*Card, *sqlgraph.CreateSpec) {
 		_spec.SetField(card.FieldSpecialVictoryPoint, field.TypeString, value)
 		_node.SpecialVictoryPoint = &value
 	}
-	if value, ok := cc.mutation.HasArrrow(); ok {
-		_spec.SetField(card.FieldHasArrrow, field.TypeBool, value)
-		_node.HasArrrow = value
+	if value, ok := cc.mutation.HasArrow(); ok {
+		_spec.SetField(card.FieldHasArrow, field.TypeBool, value)
+		_node.HasArrow = value
 	}
 	if value, ok := cc.mutation.HasBonusPointIcon(); ok {
 		_spec.SetField(card.FieldHasBonusPointIcon, field.TypeBool, value)
@@ -1168,15 +1168,15 @@ func (u *CardUpsert) ClearSpecialVictoryPoint() *CardUpsert {
 	return u
 }
 
-// SetHasArrrow sets the "has_arrrow" field.
-func (u *CardUpsert) SetHasArrrow(v bool) *CardUpsert {
-	u.Set(card.FieldHasArrrow, v)
+// SetHasArrow sets the "has_arrow" field.
+func (u *CardUpsert) SetHasArrow(v bool) *CardUpsert {
+	u.Set(card.FieldHasArrow, v)
 	return u
 }
 
-// UpdateHasArrrow sets the "has_arrrow" field to the value that was provided on create.
-func (u *CardUpsert) UpdateHasArrrow() *CardUpsert {
-	u.SetExcluded(card.FieldHasArrrow)
+// UpdateHasArrow sets the "has_arrow" field to the value that was provided on create.
+func (u *CardUpsert) UpdateHasArrow() *CardUpsert {
+	u.SetExcluded(card.FieldHasArrow)
 	return u
 }
 
@@ -1741,17 +1741,17 @@ func (u *CardUpsertOne) ClearSpecialVictoryPoint() *CardUpsertOne {
 	})
 }
 
-// SetHasArrrow sets the "has_arrrow" field.
-func (u *CardUpsertOne) SetHasArrrow(v bool) *CardUpsertOne {
+// SetHasArrow sets the "has_arrow" field.
+func (u *CardUpsertOne) SetHasArrow(v bool) *CardUpsertOne {
 	return u.Update(func(s *CardUpsert) {
-		s.SetHasArrrow(v)
+		s.SetHasArrow(v)
 	})
 }
 
-// UpdateHasArrrow sets the "has_arrrow" field to the value that was provided on create.
-func (u *CardUpsertOne) UpdateHasArrrow() *CardUpsertOne {
+// UpdateHasArrow sets the "has_arrow" field to the value that was provided on create.
+func (u *CardUpsertOne) UpdateHasArrow() *CardUpsertOne {
 	return u.Update(func(s *CardUpsert) {
-		s.UpdateHasArrrow()
+		s.UpdateHasArrow()
 	})
 }
 
@@ -2509,17 +2509,17 @@ func (u *CardUpsertBulk) ClearSpecialVictoryPoint() *CardUpsertBulk {
 	})
 }
 
-// SetHasArrrow sets the "has_arrrow" field.
-func (u *CardUpsertBulk) SetHasArrrow(v bool) *CardUpsertBulk {
+// SetHasArrow sets the "has_arrow" field.
+func (u *CardUpsertBulk) SetHasArrow(v bool) *CardUpsertBulk {
 	return u.Update(func(s *CardUpsert) {
-		s.SetHasArrrow(v)
+		s.SetHasArrow(v)
 	})
 }
 
-// UpdateHasArrrow sets the "has_arrrow" field to the value that was provided on create.
-func (u *CardUpsertBulk) UpdateHasArrrow() *CardUpsertBulk {
+// UpdateHasArrow sets the "has_arrow" field to the value that was provided on create.
+func (u *CardUpsertBulk) UpdateHasArrow() *CardUpsertBulk {
 	return u.Update(func(s *CardUpsert) {
-		s.UpdateHasArrrow()
+		s.UpdateHasArrow()
 	})
 }
 

@@ -56,7 +56,7 @@ type CardMutation struct {
 	victory_point                       *int
 	addvictory_point                    *int
 	special_victory_point               *string
-	has_arrrow                          *bool
+	has_arrow                           *bool
 	has_bonus_point_icon                *bool
 	has_negative_bonus_point_icon       *bool
 	has_pan_icon                        *bool
@@ -1023,40 +1023,40 @@ func (m *CardMutation) ResetSpecialVictoryPoint() {
 	delete(m.clearedFields, card.FieldSpecialVictoryPoint)
 }
 
-// SetHasArrrow sets the "has_arrrow" field.
-func (m *CardMutation) SetHasArrrow(b bool) {
-	m.has_arrrow = &b
+// SetHasArrow sets the "has_arrow" field.
+func (m *CardMutation) SetHasArrow(b bool) {
+	m.has_arrow = &b
 }
 
-// HasArrrow returns the value of the "has_arrrow" field in the mutation.
-func (m *CardMutation) HasArrrow() (r bool, exists bool) {
-	v := m.has_arrrow
+// HasArrow returns the value of the "has_arrow" field in the mutation.
+func (m *CardMutation) HasArrow() (r bool, exists bool) {
+	v := m.has_arrow
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldHasArrrow returns the old "has_arrrow" field's value of the Card entity.
+// OldHasArrow returns the old "has_arrow" field's value of the Card entity.
 // If the Card object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CardMutation) OldHasArrrow(ctx context.Context) (v bool, err error) {
+func (m *CardMutation) OldHasArrow(ctx context.Context) (v bool, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldHasArrrow is only allowed on UpdateOne operations")
+		return v, errors.New("OldHasArrow is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldHasArrrow requires an ID field in the mutation")
+		return v, errors.New("OldHasArrow requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldHasArrrow: %w", err)
+		return v, fmt.Errorf("querying old value for OldHasArrow: %w", err)
 	}
-	return oldValue.HasArrrow, nil
+	return oldValue.HasArrow, nil
 }
 
-// ResetHasArrrow resets all changes to the "has_arrrow" field.
-func (m *CardMutation) ResetHasArrrow() {
-	m.has_arrrow = nil
+// ResetHasArrow resets all changes to the "has_arrow" field.
+func (m *CardMutation) ResetHasArrow() {
+	m.has_arrow = nil
 }
 
 // SetHasBonusPointIcon sets the "has_bonus_point_icon" field.
@@ -1972,8 +1972,8 @@ func (m *CardMutation) Fields() []string {
 	if m.special_victory_point != nil {
 		fields = append(fields, card.FieldSpecialVictoryPoint)
 	}
-	if m.has_arrrow != nil {
-		fields = append(fields, card.FieldHasArrrow)
+	if m.has_arrow != nil {
+		fields = append(fields, card.FieldHasArrow)
 	}
 	if m.has_bonus_point_icon != nil {
 		fields = append(fields, card.FieldHasBonusPointIcon)
@@ -2065,8 +2065,8 @@ func (m *CardMutation) Field(name string) (ent.Value, bool) {
 		return m.VictoryPoint()
 	case card.FieldSpecialVictoryPoint:
 		return m.SpecialVictoryPoint()
-	case card.FieldHasArrrow:
-		return m.HasArrrow()
+	case card.FieldHasArrow:
+		return m.HasArrow()
 	case card.FieldHasBonusPointIcon:
 		return m.HasBonusPointIcon()
 	case card.FieldHasNegativeBonusPointIcon:
@@ -2142,8 +2142,8 @@ func (m *CardMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldVictoryPoint(ctx)
 	case card.FieldSpecialVictoryPoint:
 		return m.OldSpecialVictoryPoint(ctx)
-	case card.FieldHasArrrow:
-		return m.OldHasArrrow(ctx)
+	case card.FieldHasArrow:
+		return m.OldHasArrow(ctx)
 	case card.FieldHasBonusPointIcon:
 		return m.OldHasBonusPointIcon(ctx)
 	case card.FieldHasNegativeBonusPointIcon:
@@ -2304,12 +2304,12 @@ func (m *CardMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSpecialVictoryPoint(v)
 		return nil
-	case card.FieldHasArrrow:
+	case card.FieldHasArrow:
 		v, ok := value.(bool)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetHasArrrow(v)
+		m.SetHasArrow(v)
 		return nil
 	case card.FieldHasBonusPointIcon:
 		v, ok := value.(bool)
@@ -2631,8 +2631,8 @@ func (m *CardMutation) ResetField(name string) error {
 	case card.FieldSpecialVictoryPoint:
 		m.ResetSpecialVictoryPoint()
 		return nil
-	case card.FieldHasArrrow:
-		m.ResetHasArrrow()
+	case card.FieldHasArrow:
+		m.ResetHasArrow()
 		return nil
 	case card.FieldHasBonusPointIcon:
 		m.ResetHasBonusPointIcon()

@@ -199,10 +199,10 @@ func SpecialVictoryPoint(v string) predicate.Card {
 	})
 }
 
-// HasArrrow applies equality check predicate on the "has_arrrow" field. It's identical to HasArrrowEQ.
-func HasArrrow(v bool) predicate.Card {
+// HasArrow applies equality check predicate on the "has_arrow" field. It's identical to HasArrowEQ.
+func HasArrow(v bool) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasArrrow), v))
+		s.Where(sql.EQ(s.C(FieldHasArrow), v))
 	})
 }
 
@@ -1776,17 +1776,17 @@ func SpecialVictoryPointContainsFold(v string) predicate.Card {
 	})
 }
 
-// HasArrrowEQ applies the EQ predicate on the "has_arrrow" field.
-func HasArrrowEQ(v bool) predicate.Card {
+// HasArrowEQ applies the EQ predicate on the "has_arrow" field.
+func HasArrowEQ(v bool) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasArrrow), v))
+		s.Where(sql.EQ(s.C(FieldHasArrow), v))
 	})
 }
 
-// HasArrrowNEQ applies the NEQ predicate on the "has_arrrow" field.
-func HasArrrowNEQ(v bool) predicate.Card {
+// HasArrowNEQ applies the NEQ predicate on the "has_arrow" field.
+func HasArrowNEQ(v bool) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasArrrow), v))
+		s.Where(sql.NEQ(s.C(FieldHasArrow), v))
 	})
 }
 

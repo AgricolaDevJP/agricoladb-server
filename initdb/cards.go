@@ -77,7 +77,7 @@ func initCards(ctx context.Context, tx *ent.Tx, csvFilePath string) error {
 		builder := tx.Card.Create().SetID(card.ID).SetLiteralID(card.LiteralID).SetPrintedID(card.PrintedID).SetNillablePlayAgricolaCardID(card.PlayAgricolaCardID).SetNameJa(card.NameJa).
 			SetNillableMinPlayersNumber(card.MinPlayersNumber).SetNillablePrerequisite(card.Prerequisite).SetNillableCost(card.Cost).SetNillableDescription(card.Description).
 			SetNameEn(card.NameEn).SetNillableNote(card.Note).SetIsOfficialJa(card.IsOfficialJa).SetNillableVictoryPoint(card.VictoryPoint).SetNillableSpecialVictoryPoint(card.SpecialVictoryPoint).
-			SetHasArrrow(card.HasArrow).SetHasBonusPointIcon(card.HasBonusPointIcon).SetHasNegativeBonusPointIcon(card.HasNegativeBonusPointIcon).SetHasPanIcon(card.HasPanIcon).
+			SetHasArrow(card.HasArrow).SetHasBonusPointIcon(card.HasBonusPointIcon).SetHasNegativeBonusPointIcon(card.HasNegativeBonusPointIcon).SetHasPanIcon(card.HasPanIcon).
 			SetHasBreadIcon(card.HasBreadIcon).SetHasFarmPlannerIcon(card.HasFarmPlannerIcon).SetHasActionsBoosterIcon(card.HasActionsBoosterIcon).
 			SetHasPointsProviderIcon(card.HasPointsProviderIcon).SetHasGoodsProviderIcon(card.HasGoodsProviderIcon).SetHasFoodProviderIcon(card.HasFoodProviderIcon).
 			SetHasCropProviderIcon(card.HasCropProviderIcon).SetHasBuildingResourceProviderIcon(card.HasBuildingResourceProviderIcon).

@@ -53,8 +53,8 @@ type Card struct {
 	VictoryPoint *int `json:"victory_point,omitempty"`
 	// SpecialVictoryPoint holds the value of the "special_victory_point" field.
 	SpecialVictoryPoint *string `json:"special_victory_point,omitempty"`
-	// HasArrrow holds the value of the "has_arrrow" field.
-	HasArrrow bool `json:"has_arrrow,omitempty"`
+	// HasArrow holds the value of the "has_arrow" field.
+	HasArrow bool `json:"has_arrow,omitempty"`
 	// HasBonusPointIcon holds the value of the "has_bonus_point_icon" field.
 	HasBonusPointIcon bool `json:"has_bonus_point_icon,omitempty"`
 	// HasNegativeBonusPointIcon holds the value of the "has_negative_bonus_point_icon" field.
@@ -203,7 +203,7 @@ func (*Card) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case card.FieldIsOfficialJa, card.FieldHasArrrow, card.FieldHasBonusPointIcon, card.FieldHasNegativeBonusPointIcon, card.FieldHasPanIcon, card.FieldHasBreadIcon, card.FieldHasFarmPlannerIcon, card.FieldHasActionsBoosterIcon, card.FieldHasPointsProviderIcon, card.FieldHasGoodsProviderIcon, card.FieldHasFoodProviderIcon, card.FieldHasCropProviderIcon, card.FieldHasBuildingResourceProviderIcon, card.FieldHasLivestockProviderIcon, card.FieldHasCutPeatIcon, card.FieldHasFellTreesIcon, card.FieldHasSlashAndBurnIcon, card.FieldHasHiringFareIcon:
+		case card.FieldIsOfficialJa, card.FieldHasArrow, card.FieldHasBonusPointIcon, card.FieldHasNegativeBonusPointIcon, card.FieldHasPanIcon, card.FieldHasBreadIcon, card.FieldHasFarmPlannerIcon, card.FieldHasActionsBoosterIcon, card.FieldHasPointsProviderIcon, card.FieldHasGoodsProviderIcon, card.FieldHasFoodProviderIcon, card.FieldHasCropProviderIcon, card.FieldHasBuildingResourceProviderIcon, card.FieldHasLivestockProviderIcon, card.FieldHasCutPeatIcon, card.FieldHasFellTreesIcon, card.FieldHasSlashAndBurnIcon, card.FieldHasHiringFareIcon:
 			values[i] = new(sql.NullBool)
 		case card.FieldID, card.FieldRevisionID, card.FieldDeckID, card.FieldCardTypeID, card.FieldCardSpecialColorID, card.FieldMinPlayersNumber, card.FieldVictoryPoint:
 			values[i] = new(sql.NullInt64)
@@ -343,11 +343,11 @@ func (c *Card) assignValues(columns []string, values []any) error {
 				c.SpecialVictoryPoint = new(string)
 				*c.SpecialVictoryPoint = value.String
 			}
-		case card.FieldHasArrrow:
+		case card.FieldHasArrow:
 			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field has_arrrow", values[i])
+				return fmt.Errorf("unexpected type %T for field has_arrow", values[i])
 			} else if value.Valid {
-				c.HasArrrow = value.Bool
+				c.HasArrow = value.Bool
 			}
 		case card.FieldHasBonusPointIcon:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -581,8 +581,8 @@ func (c *Card) String() string {
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	builder.WriteString("has_arrrow=")
-	builder.WriteString(fmt.Sprintf("%v", c.HasArrrow))
+	builder.WriteString("has_arrow=")
+	builder.WriteString(fmt.Sprintf("%v", c.HasArrow))
 	builder.WriteString(", ")
 	builder.WriteString("has_bonus_point_icon=")
 	builder.WriteString(fmt.Sprintf("%v", c.HasBonusPointIcon))
