@@ -1,0 +1,117 @@
+desc: get a major improvement card of AG2
+runners:
+  req:
+    endpoint: http://localhost:8080
+steps:
+  get_card_ag1_major_improvement:
+    req:
+      /query:
+        post:
+          body:
+            application/json:
+              query: "
+                query {
+  	              cards(where: { literalID: \"1\", revisionID: 2 }) {
+                    edges {
+                      node {
+                        id
+                        literalID
+                        revision {
+                          key
+                        }
+                        printedID
+                        playAgricolaCardID
+                        deck {
+                          nameJa
+                        }
+                        cardType {
+                          nameJa
+                        }
+                        cardSpecialColor {
+                          nameJa
+                        }
+                        nameJa
+                        nameEn
+                        minPlayersNumber
+                        prerequisite
+                        cost
+                        description
+                        note
+                        isOfficialJa
+                        victoryPoint
+                        specialVictoryPoint
+                        hasArrow
+                        hasBonusPointIcon
+                        hasNegativeBonusPointIcon
+                        hasPanIcon
+                        hasBreadIcon
+                        hasFarmPlannerIcon
+                        hasActionsBoosterIcon
+                        hasPointsProviderIcon
+                        hasGoodsProviderIcon
+                        hasFoodProviderIcon
+                        hasCropProviderIcon
+                        hasBuildingResourceProviderIcon
+                        hasLivestockProviderIcon
+                        hasCutPeatIcon
+                        hasFellTreesIcon
+                        hasSlashAndBurnIcon
+                        products {
+                          nameJa
+                        }
+					              ancestors {
+          	              revision {
+                            key
+                          }
+                          literalID
+                        }
+                        children {
+                          revision {
+                            key
+                          }
+                          literalID
+                        }
+                      }
+                    }
+                  }
+                }
+              "
+    test: |
+      current.res.status == 200 &&
+      current.res.body.data.cards.edges[0].node.literalID == "1" &&
+      current.res.body.data.cards.edges[0].node.revision.key == "AG2" &&
+      current.res.body.data.cards.edges[0].node.printedID == "1" &&
+      current.res.body.data.cards.edges[0].node.playAgricolaCardID == null &&
+      current.res.body.data.cards.edges[0].node.deck == null &&
+      current.res.body.data.cards.edges[0].node.cardType.nameJa == "大きい進歩" &&
+      current.res.body.data.cards.edges[0].node.cardSpecialColor == null &&
+      current.res.body.data.cards.edges[0].node.nameJa == "かまど" &&
+      current.res.body.data.cards.edges[0].node.nameEn == "Fireplace" &&
+      current.res.body.data.cards.edges[0].node.minPlayersNumber == null &&
+      current.res.body.data.cards.edges[0].node.prerequisite == null &&
+      current.res.body.data.cards.edges[0].node.cost == "レンガ2" &&
+      current.res.body.data.cards.edges[0].node.description != "" &&
+      current.res.body.data.cards.edges[0].node.isOfficialJa == true &&
+      current.res.body.data.cards.edges[0].node.victoryPoint == 1 &&
+      current.res.body.data.cards.edges[0].node.specialVictoryPoint == null &&
+      current.res.body.data.cards.edges[0].node.hasArrow == false &&
+      current.res.body.data.cards.edges[0].node.hasBonusPointIcon == false &&
+      current.res.body.data.cards.edges[0].node.hasNegativeBonusPointIcon == false &&
+      current.res.body.data.cards.edges[0].node.hasPanIcon == true &&
+      current.res.body.data.cards.edges[0].node.hasBreadIcon == true &&
+      current.res.body.data.cards.edges[0].node.hasFarmPlannerIcon == false &&
+      current.res.body.data.cards.edges[0].node.hasActionsBoosterIcon == false &&
+      current.res.body.data.cards.edges[0].node.hasPointsProviderIcon == false &&
+      current.res.body.data.cards.edges[0].node.hasGoodsProviderIcon == false &&
+      current.res.body.data.cards.edges[0].node.hasFoodProviderIcon == true &&
+      current.res.body.data.cards.edges[0].node.hasCropProviderIcon == false &&
+      current.res.body.data.cards.edges[0].node.hasBuildingResourceProviderIcon == false &&
+      current.res.body.data.cards.edges[0].node.hasLivestockProviderIcon == false &&
+      current.res.body.data.cards.edges[0].node.hasCutPeatIcon == false &&
+      current.res.body.data.cards.edges[0].node.hasFellTreesIcon == false &&
+      current.res.body.data.cards.edges[0].node.hasSlashAndBurnIcon == false &&
+      len(current.res.body.data.cards.edges[0].node.products) == 2 &&
+      current.res.body.data.cards.edges[0].node.products[0].nameJa == "アグリコラ リバイズドエディション" &&
+      current.res.body.data.cards.edges[0].node.products[1].nameJa == "アグリコラ：15周年記念BOX" &&
+      len(current.res.body.data.cards.edges[0].node.ancestors) == 0 &&
+      len(current.res.body.data.cards.edges[0].node.children) == 0
