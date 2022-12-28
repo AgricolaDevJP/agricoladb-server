@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	RevisionsFileName = "agricoladb-master - card_special_colors.csv"
+	RevisionsFileName = "agricoladb-master - revisions.csv"
 	RevisionsCapacity = 8
 )
 
