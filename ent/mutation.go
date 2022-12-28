@@ -289,7 +289,7 @@ func (m *CardMutation) PrintedID() (r string, exists bool) {
 // OldPrintedID returns the old "printed_id" field's value of the Card entity.
 // If the Card object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CardMutation) OldPrintedID(ctx context.Context) (v string, err error) {
+func (m *CardMutation) OldPrintedID(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPrintedID is only allowed on UpdateOne operations")
 	}
@@ -338,7 +338,7 @@ func (m *CardMutation) PlayAgricolaCardID() (r string, exists bool) {
 // OldPlayAgricolaCardID returns the old "play_agricola_card_id" field's value of the Card entity.
 // If the Card object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CardMutation) OldPlayAgricolaCardID(ctx context.Context) (v string, err error) {
+func (m *CardMutation) OldPlayAgricolaCardID(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPlayAgricolaCardID is only allowed on UpdateOne operations")
 	}
@@ -521,7 +521,7 @@ func (m *CardMutation) NameJa() (r string, exists bool) {
 // OldNameJa returns the old "name_ja" field's value of the Card entity.
 // If the Card object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CardMutation) OldNameJa(ctx context.Context) (v string, err error) {
+func (m *CardMutation) OldNameJa(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldNameJa is only allowed on UpdateOne operations")
 	}
@@ -570,7 +570,7 @@ func (m *CardMutation) NameEn() (r string, exists bool) {
 // OldNameEn returns the old "name_en" field's value of the Card entity.
 // If the Card object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CardMutation) OldNameEn(ctx context.Context) (v string, err error) {
+func (m *CardMutation) OldNameEn(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldNameEn is only allowed on UpdateOne operations")
 	}
@@ -620,7 +620,7 @@ func (m *CardMutation) MinPlayersNumber() (r int, exists bool) {
 // OldMinPlayersNumber returns the old "min_players_number" field's value of the Card entity.
 // If the Card object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CardMutation) OldMinPlayersNumber(ctx context.Context) (v int, err error) {
+func (m *CardMutation) OldMinPlayersNumber(ctx context.Context) (v *int, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldMinPlayersNumber is only allowed on UpdateOne operations")
 	}
@@ -689,7 +689,7 @@ func (m *CardMutation) Prerequisite() (r string, exists bool) {
 // OldPrerequisite returns the old "prerequisite" field's value of the Card entity.
 // If the Card object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CardMutation) OldPrerequisite(ctx context.Context) (v string, err error) {
+func (m *CardMutation) OldPrerequisite(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPrerequisite is only allowed on UpdateOne operations")
 	}
@@ -738,7 +738,7 @@ func (m *CardMutation) Cost() (r string, exists bool) {
 // OldCost returns the old "cost" field's value of the Card entity.
 // If the Card object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CardMutation) OldCost(ctx context.Context) (v string, err error) {
+func (m *CardMutation) OldCost(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldCost is only allowed on UpdateOne operations")
 	}
@@ -787,7 +787,7 @@ func (m *CardMutation) Description() (r string, exists bool) {
 // OldDescription returns the old "description" field's value of the Card entity.
 // If the Card object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CardMutation) OldDescription(ctx context.Context) (v string, err error) {
+func (m *CardMutation) OldDescription(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
 	}
@@ -836,7 +836,7 @@ func (m *CardMutation) Note() (r string, exists bool) {
 // OldNote returns the old "note" field's value of the Card entity.
 // If the Card object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CardMutation) OldNote(ctx context.Context) (v string, err error) {
+func (m *CardMutation) OldNote(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldNote is only allowed on UpdateOne operations")
 	}
@@ -922,7 +922,7 @@ func (m *CardMutation) VictoryPoint() (r int, exists bool) {
 // OldVictoryPoint returns the old "victory_point" field's value of the Card entity.
 // If the Card object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CardMutation) OldVictoryPoint(ctx context.Context) (v int, err error) {
+func (m *CardMutation) OldVictoryPoint(ctx context.Context) (v *int, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldVictoryPoint is only allowed on UpdateOne operations")
 	}
@@ -991,7 +991,7 @@ func (m *CardMutation) SpecialVictoryPoint() (r string, exists bool) {
 // OldSpecialVictoryPoint returns the old "special_victory_point" field's value of the Card entity.
 // If the Card object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CardMutation) OldSpecialVictoryPoint(ctx context.Context) (v string, err error) {
+func (m *CardMutation) OldSpecialVictoryPoint(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldSpecialVictoryPoint is only allowed on UpdateOne operations")
 	}

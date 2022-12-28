@@ -24,9 +24,9 @@ type Card struct {
 	// RevisionID holds the value of the "revision_id" field.
 	RevisionID int `json:"revision_id,omitempty"`
 	// PrintedID holds the value of the "printed_id" field.
-	PrintedID string `json:"printed_id,omitempty"`
+	PrintedID *string `json:"printed_id,omitempty"`
 	// PlayAgricolaCardID holds the value of the "play_agricola_card_id" field.
-	PlayAgricolaCardID string `json:"play_agricola_card_id,omitempty"`
+	PlayAgricolaCardID *string `json:"play_agricola_card_id,omitempty"`
 	// DeckID holds the value of the "deck_id" field.
 	DeckID int `json:"deck_id,omitempty"`
 	// CardTypeID holds the value of the "card_type_id" field.
@@ -34,25 +34,25 @@ type Card struct {
 	// CardSpecialColorID holds the value of the "card_special_color_id" field.
 	CardSpecialColorID int `json:"card_special_color_id,omitempty"`
 	// NameJa holds the value of the "name_ja" field.
-	NameJa string `json:"name_ja,omitempty"`
+	NameJa *string `json:"name_ja,omitempty"`
 	// NameEn holds the value of the "name_en" field.
-	NameEn string `json:"name_en,omitempty"`
+	NameEn *string `json:"name_en,omitempty"`
 	// MinPlayersNumber holds the value of the "min_players_number" field.
-	MinPlayersNumber int `json:"min_players_number,omitempty"`
+	MinPlayersNumber *int `json:"min_players_number,omitempty"`
 	// Prerequisite holds the value of the "prerequisite" field.
-	Prerequisite string `json:"prerequisite,omitempty"`
+	Prerequisite *string `json:"prerequisite,omitempty"`
 	// Cost holds the value of the "cost" field.
-	Cost string `json:"cost,omitempty"`
+	Cost *string `json:"cost,omitempty"`
 	// Description holds the value of the "description" field.
-	Description string `json:"description,omitempty"`
+	Description *string `json:"description,omitempty"`
 	// Note holds the value of the "note" field.
-	Note string `json:"note,omitempty"`
+	Note *string `json:"note,omitempty"`
 	// IsOfficialJa holds the value of the "is_official_ja" field.
 	IsOfficialJa bool `json:"is_official_ja,omitempty"`
 	// VictoryPoint holds the value of the "victory_point" field.
-	VictoryPoint int `json:"victory_point,omitempty"`
+	VictoryPoint *int `json:"victory_point,omitempty"`
 	// SpecialVictoryPoint holds the value of the "special_victory_point" field.
-	SpecialVictoryPoint string `json:"special_victory_point,omitempty"`
+	SpecialVictoryPoint *string `json:"special_victory_point,omitempty"`
 	// HasArrrow holds the value of the "has_arrrow" field.
 	HasArrrow bool `json:"has_arrrow,omitempty"`
 	// HasBonusPointIcon holds the value of the "has_bonus_point_icon" field.
@@ -246,13 +246,15 @@ func (c *Card) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field printed_id", values[i])
 			} else if value.Valid {
-				c.PrintedID = value.String
+				c.PrintedID = new(string)
+				*c.PrintedID = value.String
 			}
 		case card.FieldPlayAgricolaCardID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field play_agricola_card_id", values[i])
 			} else if value.Valid {
-				c.PlayAgricolaCardID = value.String
+				c.PlayAgricolaCardID = new(string)
+				*c.PlayAgricolaCardID = value.String
 			}
 		case card.FieldDeckID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -276,43 +278,50 @@ func (c *Card) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name_ja", values[i])
 			} else if value.Valid {
-				c.NameJa = value.String
+				c.NameJa = new(string)
+				*c.NameJa = value.String
 			}
 		case card.FieldNameEn:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name_en", values[i])
 			} else if value.Valid {
-				c.NameEn = value.String
+				c.NameEn = new(string)
+				*c.NameEn = value.String
 			}
 		case card.FieldMinPlayersNumber:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field min_players_number", values[i])
 			} else if value.Valid {
-				c.MinPlayersNumber = int(value.Int64)
+				c.MinPlayersNumber = new(int)
+				*c.MinPlayersNumber = int(value.Int64)
 			}
 		case card.FieldPrerequisite:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field prerequisite", values[i])
 			} else if value.Valid {
-				c.Prerequisite = value.String
+				c.Prerequisite = new(string)
+				*c.Prerequisite = value.String
 			}
 		case card.FieldCost:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field cost", values[i])
 			} else if value.Valid {
-				c.Cost = value.String
+				c.Cost = new(string)
+				*c.Cost = value.String
 			}
 		case card.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				c.Description = value.String
+				c.Description = new(string)
+				*c.Description = value.String
 			}
 		case card.FieldNote:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field note", values[i])
 			} else if value.Valid {
-				c.Note = value.String
+				c.Note = new(string)
+				*c.Note = value.String
 			}
 		case card.FieldIsOfficialJa:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -324,13 +333,15 @@ func (c *Card) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field victory_point", values[i])
 			} else if value.Valid {
-				c.VictoryPoint = int(value.Int64)
+				c.VictoryPoint = new(int)
+				*c.VictoryPoint = int(value.Int64)
 			}
 		case card.FieldSpecialVictoryPoint:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field special_victory_point", values[i])
 			} else if value.Valid {
-				c.SpecialVictoryPoint = value.String
+				c.SpecialVictoryPoint = new(string)
+				*c.SpecialVictoryPoint = value.String
 			}
 		case card.FieldHasArrrow:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -503,11 +514,15 @@ func (c *Card) String() string {
 	builder.WriteString("revision_id=")
 	builder.WriteString(fmt.Sprintf("%v", c.RevisionID))
 	builder.WriteString(", ")
-	builder.WriteString("printed_id=")
-	builder.WriteString(c.PrintedID)
+	if v := c.PrintedID; v != nil {
+		builder.WriteString("printed_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("play_agricola_card_id=")
-	builder.WriteString(c.PlayAgricolaCardID)
+	if v := c.PlayAgricolaCardID; v != nil {
+		builder.WriteString("play_agricola_card_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("deck_id=")
 	builder.WriteString(fmt.Sprintf("%v", c.DeckID))
@@ -518,35 +533,53 @@ func (c *Card) String() string {
 	builder.WriteString("card_special_color_id=")
 	builder.WriteString(fmt.Sprintf("%v", c.CardSpecialColorID))
 	builder.WriteString(", ")
-	builder.WriteString("name_ja=")
-	builder.WriteString(c.NameJa)
+	if v := c.NameJa; v != nil {
+		builder.WriteString("name_ja=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("name_en=")
-	builder.WriteString(c.NameEn)
+	if v := c.NameEn; v != nil {
+		builder.WriteString("name_en=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("min_players_number=")
-	builder.WriteString(fmt.Sprintf("%v", c.MinPlayersNumber))
+	if v := c.MinPlayersNumber; v != nil {
+		builder.WriteString("min_players_number=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("prerequisite=")
-	builder.WriteString(c.Prerequisite)
+	if v := c.Prerequisite; v != nil {
+		builder.WriteString("prerequisite=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("cost=")
-	builder.WriteString(c.Cost)
+	if v := c.Cost; v != nil {
+		builder.WriteString("cost=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("description=")
-	builder.WriteString(c.Description)
+	if v := c.Description; v != nil {
+		builder.WriteString("description=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
-	builder.WriteString("note=")
-	builder.WriteString(c.Note)
+	if v := c.Note; v != nil {
+		builder.WriteString("note=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("is_official_ja=")
 	builder.WriteString(fmt.Sprintf("%v", c.IsOfficialJa))
 	builder.WriteString(", ")
-	builder.WriteString("victory_point=")
-	builder.WriteString(fmt.Sprintf("%v", c.VictoryPoint))
+	if v := c.VictoryPoint; v != nil {
+		builder.WriteString("victory_point=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
-	builder.WriteString("special_victory_point=")
-	builder.WriteString(c.SpecialVictoryPoint)
+	if v := c.SpecialVictoryPoint; v != nil {
+		builder.WriteString("special_victory_point=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("has_arrrow=")
 	builder.WriteString(fmt.Sprintf("%v", c.HasArrrow))

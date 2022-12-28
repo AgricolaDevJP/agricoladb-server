@@ -2379,9 +2379,9 @@ func (ec *executionContext) _Card_printedID(ctx context.Context, field graphql.C
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_printedID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2420,9 +2420,9 @@ func (ec *executionContext) _Card_playAgricolaCardID(ctx context.Context, field 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_playAgricolaCardID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2587,9 +2587,9 @@ func (ec *executionContext) _Card_nameJa(ctx context.Context, field graphql.Coll
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_nameJa(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2628,9 +2628,9 @@ func (ec *executionContext) _Card_nameEn(ctx context.Context, field graphql.Coll
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_nameEn(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2669,9 +2669,9 @@ func (ec *executionContext) _Card_minPlayersNumber(ctx context.Context, field gr
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(int)
+	res := resTmp.(*int)
 	fc.Result = res
-	return ec.marshalOInt2int(ctx, field.Selections, res)
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_minPlayersNumber(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2710,9 +2710,9 @@ func (ec *executionContext) _Card_prerequisite(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_prerequisite(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2751,9 +2751,9 @@ func (ec *executionContext) _Card_cost(ctx context.Context, field graphql.Collec
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_cost(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2792,9 +2792,9 @@ func (ec *executionContext) _Card_description(ctx context.Context, field graphql
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_description(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2833,9 +2833,9 @@ func (ec *executionContext) _Card_note(ctx context.Context, field graphql.Collec
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_note(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2918,9 +2918,9 @@ func (ec *executionContext) _Card_victoryPoint(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(int)
+	res := resTmp.(*int)
 	fc.Result = res
-	return ec.marshalOInt2int(ctx, field.Selections, res)
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_victoryPoint(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2959,9 +2959,9 @@ func (ec *executionContext) _Card_specialVictoryPoint(ctx context.Context, field
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_specialVictoryPoint(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {

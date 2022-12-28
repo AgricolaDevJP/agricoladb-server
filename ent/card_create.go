@@ -595,39 +595,39 @@ func (cc *CardCreate) createSpec() (*Card, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := cc.mutation.PrintedID(); ok {
 		_spec.SetField(card.FieldPrintedID, field.TypeString, value)
-		_node.PrintedID = value
+		_node.PrintedID = &value
 	}
 	if value, ok := cc.mutation.PlayAgricolaCardID(); ok {
 		_spec.SetField(card.FieldPlayAgricolaCardID, field.TypeString, value)
-		_node.PlayAgricolaCardID = value
+		_node.PlayAgricolaCardID = &value
 	}
 	if value, ok := cc.mutation.NameJa(); ok {
 		_spec.SetField(card.FieldNameJa, field.TypeString, value)
-		_node.NameJa = value
+		_node.NameJa = &value
 	}
 	if value, ok := cc.mutation.NameEn(); ok {
 		_spec.SetField(card.FieldNameEn, field.TypeString, value)
-		_node.NameEn = value
+		_node.NameEn = &value
 	}
 	if value, ok := cc.mutation.MinPlayersNumber(); ok {
 		_spec.SetField(card.FieldMinPlayersNumber, field.TypeInt, value)
-		_node.MinPlayersNumber = value
+		_node.MinPlayersNumber = &value
 	}
 	if value, ok := cc.mutation.Prerequisite(); ok {
 		_spec.SetField(card.FieldPrerequisite, field.TypeString, value)
-		_node.Prerequisite = value
+		_node.Prerequisite = &value
 	}
 	if value, ok := cc.mutation.Cost(); ok {
 		_spec.SetField(card.FieldCost, field.TypeString, value)
-		_node.Cost = value
+		_node.Cost = &value
 	}
 	if value, ok := cc.mutation.Description(); ok {
 		_spec.SetField(card.FieldDescription, field.TypeString, value)
-		_node.Description = value
+		_node.Description = &value
 	}
 	if value, ok := cc.mutation.Note(); ok {
 		_spec.SetField(card.FieldNote, field.TypeString, value)
-		_node.Note = value
+		_node.Note = &value
 	}
 	if value, ok := cc.mutation.IsOfficialJa(); ok {
 		_spec.SetField(card.FieldIsOfficialJa, field.TypeBool, value)
@@ -635,11 +635,11 @@ func (cc *CardCreate) createSpec() (*Card, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := cc.mutation.VictoryPoint(); ok {
 		_spec.SetField(card.FieldVictoryPoint, field.TypeInt, value)
-		_node.VictoryPoint = value
+		_node.VictoryPoint = &value
 	}
 	if value, ok := cc.mutation.SpecialVictoryPoint(); ok {
 		_spec.SetField(card.FieldSpecialVictoryPoint, field.TypeString, value)
-		_node.SpecialVictoryPoint = value
+		_node.SpecialVictoryPoint = &value
 	}
 	if value, ok := cc.mutation.HasArrrow(); ok {
 		_spec.SetField(card.FieldHasArrrow, field.TypeBool, value)
