@@ -17,10 +17,6 @@ jobs:
         run: make docker-build-test
       - name: Docker start
         run: make docker-start-test
-      - name: Docker ps
-        run: docker-compose -f docker-compose.test.yml ps
-      - name: Docker logs
-        run: docker-compose -f docker-compose.test.yml logs migration
       - name: Install runn
         run: go install github.com/k1LoW/runn/cmd/runn@latest
       - name: E2E test
