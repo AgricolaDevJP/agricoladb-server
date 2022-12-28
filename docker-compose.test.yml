@@ -9,15 +9,16 @@ services:
     ports:
       - 8080:8080
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   migration:
     container_name: agricoladb-migration-test
     build:
       context: .
       dockerfile: ./docker/test/migration/Dockerfile
     depends_on:
-      - db
-      - server
+      db:
+        condition: service_healthy
   db:
     container_name: agricoladb-db-test
     build:
@@ -25,3 +26,8 @@ services:
       dockerfile: ./docker/test/db/Dockerfile
     ports:
       - 3306:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "user", "-ppassword"]
+      timeout: 5s
+      interval: 5s
+      retries: 10

@@ -42,6 +42,10 @@ docker-stop:
 docker-restart-server:
 	$(DOCKER_COMPOSE_LOCAL) restart server
 
+.PHONY: docker-remove
+docker-remove:
+	$(DOCKER_COMPOSE_LOCAL) rm -v
+
 .PHONY: docker-build-test
 docker-build-test:
 	$(DOCKER_COMPOSE_TEST) build
@@ -53,3 +57,7 @@ docker-start-test:
 .PHONY: docker-stop-test
 docker-stop-test:
 	$(DOCKER_COMPOSE_TEST) down
+
+.PHONY: docker-remove-test
+docker-remove-test:
+	$(DOCKER_COMPOSE_TEST) rm -v
