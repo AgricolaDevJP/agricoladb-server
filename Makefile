@@ -24,7 +24,7 @@ run:
 
 .PHONY: run-migration
 run-migration:
-	go run mcd/migration/main.go
+	go run cmd/migration/main.go
 
 .PHONY: docker-build
 docker-build:
