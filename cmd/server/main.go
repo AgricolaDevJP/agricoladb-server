@@ -33,7 +33,7 @@ func main() {
 	}
 
 	// ent client
-	client, err := ent.Open("mysql", cfg.getDNS())
+	client, err := ent.Open("mysql", cfg.getDSN())
 	if err != nil {
 		log.Fatalf("failed opening connection to mysql: %v", err)
 	}
@@ -55,14 +55,12 @@ func main() {
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
-func (c *config) getDNS() string {
-	mc := mysql.Config{
-		DBName:               c.DBName,
-		User:                 c.DBUser,
-		Passwd:               c.DBPassword,
-		Addr:                 net.JoinHostPort(c.DBHost, c.DBPort),
-		Net:                  "tcp",
-		AllowNativePasswords: true,
-	}
+func (c *config) getDSN() string {
+	mc := mysql.NewConfig()
+	mc.DBName = c.DBName
+	mc.User = c.DBUser
+	mc.Passwd = c.DBPassword
+	mc.Addr = net.JoinHostPort(c.DBHost, c.DBPort)
+	mc.Net = "tcp"
 	return mc.FormatDSN()
 }
