@@ -5,7 +5,7 @@ runners:
 steps:
   get_card_ag1_major_improvement:
     req:
-      /query:
+      /graphql:
         post:
           body:
             application/json:

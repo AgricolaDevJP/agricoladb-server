@@ -5,7 +5,7 @@ runners:
 steps:
   get_cards_ag1:
     req:
-      /query:
+      /graphql:
         post:
           body:
             application/json:
