@@ -113,7 +113,7 @@ steps:
       len(current.res.body.data.cards.edges[0].node.products) == 2 &&
       current.res.body.data.cards.edges[0].node.products[0].nameJa == "アグリコラ リバイズドエディション" &&
       current.res.body.data.cards.edges[0].node.products[1].nameJa == "アグリコラ：15周年記念BOX" &&
-      len(current.res.body.data.cards.edges[0].node.ancestors) == 0 &&
-      len(current.res.body.data.cards.edges[0].node.children) == 1 &&
-      current.res.body.data.cards.edges[0].node.children[0].revision.key == "AG1" &&
-      current.res.body.data.cards.edges[0].node.children[0].literalID == "NL019"
+      len(current.res.body.data.cards.edges[0].node.children) == 0 &&
+      len(current.res.body.data.cards.edges[0].node.ancestors) == 1 &&
+      current.res.body.data.cards.edges[0].node.ancestors[0].revision.key == "AG1" &&
+      current.res.body.data.cards.edges[0].node.ancestors[0].literalID == "NL019"

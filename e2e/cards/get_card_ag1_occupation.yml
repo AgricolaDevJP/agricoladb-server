@@ -112,7 +112,7 @@ steps:
       current.res.body.data.cards.edges[0].node.hasSlashAndBurnIcon == false &&
       len(current.res.body.data.cards.edges[0].node.products) == 1 &&
       current.res.body.data.cards.edges[0].node.products[0].nameJa == "アグリコラ" &&
-      len(current.res.body.data.cards.edges[0].node.ancestors) == 1 &&
-      current.res.body.data.cards.edges[0].node.ancestors[0].revision.key == "AG2" &&
-      current.res.body.data.cards.edges[0].node.ancestors[0].literalID == "C107" &&
-      len(current.res.body.data.cards.edges[0].node.children) == 0
+      len(current.res.body.data.cards.edges[0].node.children) == 1 &&
+      current.res.body.data.cards.edges[0].node.children[0].revision.key == "AG2" &&
+      current.res.body.data.cards.edges[0].node.children[0].literalID == "C107" &&
+      len(current.res.body.data.cards.edges[0].node.ancestors) == 0
