@@ -9,16 +9,16 @@ import (
 )
 
 type Generator struct {
-	client        *ent.Client
-	csvDir        string
-	needsTruncate bool
+	client     *ent.Client
+	csvDir     string
+	forceFresh bool
 }
 
-func NewGenerator(client *ent.Client, csvDir string, needsTruncate bool) *Generator {
+func NewGenerator(client *ent.Client, csvDir string, forceFresh bool) *Generator {
 	return &Generator{
-		client:        client,
-		csvDir:        csvDir,
-		needsTruncate: needsTruncate,
+		client:     client,
+		csvDir:     csvDir,
+		forceFresh: forceFresh,
 	}
 }
 
@@ -28,8 +28,8 @@ func (g *Generator) Generate() error {
 }
 
 func (g *Generator) GenerateWithContext(ctx context.Context) error {
-	if g.needsTruncate {
-		if err := truncate(ctx, g.client); err != nil {
+	if g.forceFresh {
+		if err := dropTables(ctx, g.client); err != nil {
 			return err
 		}
 	}
@@ -74,12 +74,12 @@ func rollback(tx *ent.Tx, err error) error {
 	return err
 }
 
-func truncate(ctx context.Context, client *ent.Client) error {
+func dropTables(ctx context.Context, client *ent.Client) error {
 	if _, err := client.ExecContext(ctx, "set foreign_key_checks = 0"); err != nil {
 		return err
 	}
 	for _, table := range migrate.Tables {
-		query := fmt.Sprintf("TRUNCATE `%s`", table.Name)
+		query := fmt.Sprintf("DROP TABLE IF EXISTS `%s`", table.Name)
 		if _, err := client.ExecContext(ctx, query); err != nil {
 			return err
 		}
