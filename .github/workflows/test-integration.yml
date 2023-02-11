@@ -25,6 +25,9 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version-file: go.mod
+          cache: true
+      - name: install dependencies
+        run: go mod download
       - name: install runn
         run: go install github.com/k1LoW/runn/cmd/runn@latest
       - name: execute migration
