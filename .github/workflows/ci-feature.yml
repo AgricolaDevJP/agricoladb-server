@@ -58,3 +58,5 @@ jobs:
 
   build-containers:
     uses: ./.github/workflows/build-containers.yml
+    with:
+      needs-push: true
