@@ -15,6 +15,7 @@ jobs:
           MYSQL_USER: user
           MYSQL_PASSWORD: password
           MYSQL_DATABASE: agricoladb
+          MYSQL_ROOT_PASSWORD: passw0rd
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
     env:
       DB_USER: user
