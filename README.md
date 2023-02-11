@@ -6,9 +6,7 @@
 
 ![release](https://img.shields.io/github/v/release/AgricolaDevJP/agricoladb-server)
 ![go-version](https://img.shields.io/github/go-mod/go-version/AgricolaDevJP/agricoladb-server)
-[![ci-go](https://github.com/AgricolaDevJP/agricoladb-server/actions/workflows/ci-go.yml/badge.svg)](https://github.com/AgricolaDevJP/agricoladb-server/actions/workflows/ci-go.yml)
-[![ci-ent](https://github.com/AgricolaDevJP/agricoladb-server/actions/workflows/ci-ent.yml/badge.svg)](https://github.com/AgricolaDevJP/agricoladb-server/actions/workflows/ci-ent.yml)
-[![ci-integration](https://github.com/AgricolaDevJP/agricoladb-server/actions/workflows/ci-integration.yml/badge.svg)](https://github.com/AgricolaDevJP/agricoladb-server/actions/workflows/ci-integration.yml) 
+[![ci-main](https://github.com/AgricolaDevJP/agricoladb-server/actions/workflows/ci-main.yml/badge.svg)](https://github.com/AgricolaDevJP/agricoladb-server/actions/workflows/ci-main.yml)
 
 <br />
 

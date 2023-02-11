@@ -1,23 +1,18 @@
-name: ci-gha
+name: test-actions
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    paths:
-      - .github/workflows/*.yml
-      - .github/actionlint-matcher.json
+  workflow_call:
+
 jobs:
-  actionlint:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install actionlint
+      - name: install actionlint
         run: bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
         shell: bash
-      - name: Add problem matcher
+      - name: add problem matcher
         run: echo "::add-matcher::.github/actionlint-matcher.json"
-      - name: Run actonlint
+      - name: run actonlint
         run: ./actionlint
         shell: bash
