@@ -1,10 +1,8 @@
-name: ci-go
+name: test-go
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
+  workflow_call:
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -12,6 +10,6 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
-          go-version: 1.19
+          go-version-file: go.mod
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3

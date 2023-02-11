@@ -1,0 +1,55 @@
+name: ci-feature
+
+on:
+  pull_request:
+
+jobs:
+  judge-execute:
+    outputs:
+      needs-test-go: ${{ steps.needs-test-go.outputs.any_changed }}
+      needs-test-ent: ${{ steps.needs-test-ent.outputs.any_changed }}
+      needs-test-actions: ${{ steps.needs-test-actions.outputs.any_changed }}
+      needs-test-integration: "true"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - id: needs-test-go
+        uses: tj-actions/changed-files@v35
+        with:
+          files: |
+            .github/workflows/test-go.yml
+            **/*.go
+            go.mod
+            go.sum
+      - id: needs-test-ent
+        uses: tj-actions/changed-files@v35
+        with:
+          files: |
+            .github/workflows/test-ent.yml
+            ent/*
+      - id: needs-test-actions
+        uses: tj-actions/changed-files@v35
+        with:
+          files: |
+            .github/workflows/*.yml
+            .github/actionlint-matcher.json
+
+  test-go:
+    needs: judge-execute
+    if: needs.judge-execute.outputs.needs-test-go == 'true'
+    uses: ./.github/workflows/test-go.yml
+
+  test-ent:
+    needs: judge-execute
+    if: needs.judge-execute.outputs.needs-test-ent == 'true'
+    uses: ./.github/workflows/test-ent.yml
+
+  test-actions:
+    needs: judge-execute
+    if: needs.judge-execute.outputs.needs-test-actions == 'true'
+    uses: ./.github/workflows/test-actions.yml
+
+  test-integration:
+    needs: judge-execute
+    if: needs.judge-execute.outputs.needs-test-integration == 'true'
+    uses: ./.github/workflows/test-integration.yml

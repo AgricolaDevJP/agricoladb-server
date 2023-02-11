@@ -1,25 +1,23 @@
-name: ci-integration
+name: test-integration
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
+  workflow_call:
+
 jobs:
-  e2e:
+  e2e-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
-          go-version: 1.19
-      - name: Docker build
+          go-version-file: go.mod
+      - name: docker build
         run: make docker-build-test
-      - name: Docker start
+      - name: docker start
         run: make docker-start-test
-      - name: Install runn
+      - name: install runn
         run: go install github.com/k1LoW/runn/cmd/runn@latest
-      - name: E2E test
+      - name: e2e test
         run: runn run ./e2e/**/*.yml
-      - name: Docker stop
+      - name: docker stop
         run: make docker-stop-test

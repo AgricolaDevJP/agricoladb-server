@@ -1,0 +1,19 @@
+name: ci-main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-go:
+    uses: ./.github/workflows/test-go.yml
+
+  test-ent:
+    uses: ./.github/workflows/test-ent.yml
+
+  test-actions:
+    uses: ./.github/workflows/test-actions.yml
+
+  test-integration:
+    uses: ./.github/workflows/test-integration.yml
