@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	entgo.io/ent v0.11.5-0.20221031135557-521f9b57bc3d
-	github.com/99designs/gqlgen v0.17.22
+	github.com/99designs/gqlgen v0.17.24
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/jszwec/csvutil v1.7.1
 	github.com/vektah/gqlparser/v2 v2.5.1
