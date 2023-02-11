@@ -31,5 +31,5 @@ jobs:
           push: true
           context: .
           file: ./docker/production/server/Dockerfile
-          tags: ghcr.io/AgricolaDevJP/agricoladb-server/server:v0.0.1-alpha
+          tags: ghcr.io/agricoladevjp/agricoladb-server/server:v0.0.1-alpha
           cache-to: type=gha,mode=max
