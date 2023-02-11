@@ -6,7 +6,6 @@ import (
 	"context"
 	"log"
 	"net"
-	"os"
 
 	"github.com/caarlos0/env/v6"
 	"github.com/go-sql-driver/mysql"
@@ -24,7 +23,6 @@ func main() {
 	cfg := config{}
 	if err := env.Parse(&cfg); err != nil {
 		log.Fatalf("%v", err)
-		os.Exit(1)
 	}
 
 	// ent client
@@ -34,16 +32,19 @@ func main() {
 	}
 	defer client.Close()
 
+	g := initdb.NewGenerator(client, "./masterdata/", true)
+
+	if err := g.DropTablesIfNeed(); err != nil {
+		log.Fatalf("failed creating schema resources: %v", err)
+	}
+
 	// auto migration
 	if err := client.Schema.Create(context.Background()); err != nil {
 		log.Fatalf("failed creating schema resources: %v", err)
-		os.Exit(1)
 	}
 
-	g := initdb.NewGenerator(client, "./masterdata/", true)
 	if err := g.Generate(); err != nil {
 		log.Fatalf("failed creating schema resources: %v", err)
-		os.Exit(1)
 	}
 
 	log.Println("success")

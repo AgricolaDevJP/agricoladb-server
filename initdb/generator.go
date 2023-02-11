@@ -28,12 +28,6 @@ func (g *Generator) Generate() error {
 }
 
 func (g *Generator) GenerateWithContext(ctx context.Context) error {
-	if g.forceFresh {
-		if err := dropTables(ctx, g.client); err != nil {
-			return err
-		}
-	}
-
 	tx, err := g.client.Tx(ctx)
 	if err != nil {
 		return err
@@ -67,25 +61,34 @@ func (g *Generator) GenerateWithContext(ctx context.Context) error {
 	return tx.Commit()
 }
 
+func (g *Generator) DropTablesIfNeed() error {
+	ctx := context.Background()
+	return g.DropTablesIfNeedWithContext(ctx)
+}
+
+func (g *Generator) DropTablesIfNeedWithContext(ctx context.Context) error {
+	if !g.forceFresh {
+		fmt.Println("skip fresh")
+		return nil
+	}
+	if _, err := g.client.ExecContext(ctx, "set foreign_key_checks = 0"); err != nil {
+		return err
+	}
+	for _, table := range migrate.Tables {
+		query := fmt.Sprintf("DROP TABLE IF EXISTS `%s`", table.Name)
+		if _, err := g.client.ExecContext(ctx, query); err != nil {
+			return err
+		}
+	}
+	if _, err := g.client.ExecContext(ctx, "set foreign_key_checks = 1"); err != nil {
+		return err
+	}
+	return nil
+}
+
 func rollback(tx *ent.Tx, err error) error {
 	if rerr := tx.Rollback(); rerr != nil {
 		err = fmt.Errorf("%w: %v", err, rerr)
 	}
 	return err
-}
-
-func dropTables(ctx context.Context, client *ent.Client) error {
-	if _, err := client.ExecContext(ctx, "set foreign_key_checks = 0"); err != nil {
-		return err
-	}
-	for _, table := range migrate.Tables {
-		query := fmt.Sprintf("DROP TABLE IF EXISTS `%s`", table.Name)
-		if _, err := client.ExecContext(ctx, query); err != nil {
-			return err
-		}
-	}
-	if _, err := client.ExecContext(ctx, "set foreign_key_checks = 1"); err != nil {
-		return err
-	}
-	return nil
 }

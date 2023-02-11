@@ -29,7 +29,6 @@ func main() {
 	cfg := config{}
 	if err := env.Parse(&cfg); err != nil {
 		log.Fatalf("%v", err)
-		os.Exit(1)
 	}
 
 	// ent client
