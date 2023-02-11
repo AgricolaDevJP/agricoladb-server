@@ -3,2015 +3,1344 @@
 package card
 
 import (
-	"agricoladb/ent/predicate"
-
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.
 func ID(id int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldID), id))
-	})
+	return predicate.Card(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
 func IDEQ(id int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldID), id))
-	})
+	return predicate.Card(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
 func IDNEQ(id int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldID), id))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
 func IDIn(ids ...int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		v := make([]any, len(ids))
-		for i := range v {
-			v[i] = ids[i]
-		}
-		s.Where(sql.In(s.C(FieldID), v...))
-	})
+	return predicate.Card(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
 func IDNotIn(ids ...int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		v := make([]any, len(ids))
-		for i := range v {
-			v[i] = ids[i]
-		}
-		s.Where(sql.NotIn(s.C(FieldID), v...))
-	})
+	return predicate.Card(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
 func IDGT(id int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldID), id))
-	})
+	return predicate.Card(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
 func IDGTE(id int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldID), id))
-	})
+	return predicate.Card(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
 func IDLT(id int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldID), id))
-	})
+	return predicate.Card(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
 func IDLTE(id int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldID), id))
-	})
+	return predicate.Card(sql.FieldLTE(FieldID, id))
 }
 
 // LiteralID applies equality check predicate on the "literal_id" field. It's identical to LiteralIDEQ.
 func LiteralID(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldLiteralID), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldLiteralID, v))
 }
 
 // RevisionID applies equality check predicate on the "revision_id" field. It's identical to RevisionIDEQ.
 func RevisionID(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldRevisionID), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldRevisionID, v))
 }
 
 // PrintedID applies equality check predicate on the "printed_id" field. It's identical to PrintedIDEQ.
 func PrintedID(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldPrintedID), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldPrintedID, v))
 }
 
 // PlayAgricolaCardID applies equality check predicate on the "play_agricola_card_id" field. It's identical to PlayAgricolaCardIDEQ.
 func PlayAgricolaCardID(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldPlayAgricolaCardID), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldPlayAgricolaCardID, v))
 }
 
 // DeckID applies equality check predicate on the "deck_id" field. It's identical to DeckIDEQ.
 func DeckID(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDeckID), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldDeckID, v))
 }
 
 // CardTypeID applies equality check predicate on the "card_type_id" field. It's identical to CardTypeIDEQ.
 func CardTypeID(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCardTypeID), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldCardTypeID, v))
 }
 
 // CardSpecialColorID applies equality check predicate on the "card_special_color_id" field. It's identical to CardSpecialColorIDEQ.
 func CardSpecialColorID(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCardSpecialColorID), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldCardSpecialColorID, v))
 }
 
 // NameJa applies equality check predicate on the "name_ja" field. It's identical to NameJaEQ.
 func NameJa(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldNameJa), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldNameJa, v))
 }
 
 // NameEn applies equality check predicate on the "name_en" field. It's identical to NameEnEQ.
 func NameEn(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldNameEn), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldNameEn, v))
 }
 
 // MinPlayersNumber applies equality check predicate on the "min_players_number" field. It's identical to MinPlayersNumberEQ.
 func MinPlayersNumber(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldMinPlayersNumber), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldMinPlayersNumber, v))
 }
 
 // Prerequisite applies equality check predicate on the "prerequisite" field. It's identical to PrerequisiteEQ.
 func Prerequisite(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldPrerequisite), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldPrerequisite, v))
 }
 
 // Cost applies equality check predicate on the "cost" field. It's identical to CostEQ.
 func Cost(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCost), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldCost, v))
 }
 
 // Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
 func Description(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDescription), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldDescription, v))
 }
 
 // Note applies equality check predicate on the "note" field. It's identical to NoteEQ.
 func Note(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldNote), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldNote, v))
 }
 
 // IsOfficialJa applies equality check predicate on the "is_official_ja" field. It's identical to IsOfficialJaEQ.
 func IsOfficialJa(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldIsOfficialJa), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldIsOfficialJa, v))
 }
 
 // VictoryPoint applies equality check predicate on the "victory_point" field. It's identical to VictoryPointEQ.
 func VictoryPoint(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldVictoryPoint, v))
 }
 
 // SpecialVictoryPoint applies equality check predicate on the "special_victory_point" field. It's identical to SpecialVictoryPointEQ.
 func SpecialVictoryPoint(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSpecialVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldSpecialVictoryPoint, v))
 }
 
 // HasArrow applies equality check predicate on the "has_arrow" field. It's identical to HasArrowEQ.
 func HasArrow(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasArrow), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasArrow, v))
 }
 
 // HasBonusPointIcon applies equality check predicate on the "has_bonus_point_icon" field. It's identical to HasBonusPointIconEQ.
 func HasBonusPointIcon(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasBonusPointIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasBonusPointIcon, v))
 }
 
 // HasNegativeBonusPointIcon applies equality check predicate on the "has_negative_bonus_point_icon" field. It's identical to HasNegativeBonusPointIconEQ.
 func HasNegativeBonusPointIcon(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasNegativeBonusPointIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasNegativeBonusPointIcon, v))
 }
 
 // HasPanIcon applies equality check predicate on the "has_pan_icon" field. It's identical to HasPanIconEQ.
 func HasPanIcon(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasPanIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasPanIcon, v))
 }
 
 // HasBreadIcon applies equality check predicate on the "has_bread_icon" field. It's identical to HasBreadIconEQ.
 func HasBreadIcon(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasBreadIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasBreadIcon, v))
 }
 
 // HasFarmPlannerIcon applies equality check predicate on the "has_farm_planner_icon" field. It's identical to HasFarmPlannerIconEQ.
 func HasFarmPlannerIcon(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasFarmPlannerIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasFarmPlannerIcon, v))
 }
 
 // HasActionsBoosterIcon applies equality check predicate on the "has_actions_booster_icon" field. It's identical to HasActionsBoosterIconEQ.
 func HasActionsBoosterIcon(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasActionsBoosterIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasActionsBoosterIcon, v))
 }
 
 // HasPointsProviderIcon applies equality check predicate on the "has_points_provider_icon" field. It's identical to HasPointsProviderIconEQ.
 func HasPointsProviderIcon(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasPointsProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasPointsProviderIcon, v))
 }
 
 // HasGoodsProviderIcon applies equality check predicate on the "has_goods_provider_icon" field. It's identical to HasGoodsProviderIconEQ.
 func HasGoodsProviderIcon(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasGoodsProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasGoodsProviderIcon, v))
 }
 
 // HasFoodProviderIcon applies equality check predicate on the "has_food_provider_icon" field. It's identical to HasFoodProviderIconEQ.
 func HasFoodProviderIcon(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasFoodProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasFoodProviderIcon, v))
 }
 
 // HasCropProviderIcon applies equality check predicate on the "has_crop_provider_icon" field. It's identical to HasCropProviderIconEQ.
 func HasCropProviderIcon(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasCropProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasCropProviderIcon, v))
 }
 
 // HasBuildingResourceProviderIcon applies equality check predicate on the "has_building_resource_provider_icon" field. It's identical to HasBuildingResourceProviderIconEQ.
 func HasBuildingResourceProviderIcon(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasBuildingResourceProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasBuildingResourceProviderIcon, v))
 }
 
 // HasLivestockProviderIcon applies equality check predicate on the "has_livestock_provider_icon" field. It's identical to HasLivestockProviderIconEQ.
 func HasLivestockProviderIcon(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasLivestockProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasLivestockProviderIcon, v))
 }
 
 // HasCutPeatIcon applies equality check predicate on the "has_cut_peat_icon" field. It's identical to HasCutPeatIconEQ.
 func HasCutPeatIcon(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasCutPeatIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasCutPeatIcon, v))
 }
 
 // HasFellTreesIcon applies equality check predicate on the "has_fell_trees_icon" field. It's identical to HasFellTreesIconEQ.
 func HasFellTreesIcon(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasFellTreesIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasFellTreesIcon, v))
 }
 
 // HasSlashAndBurnIcon applies equality check predicate on the "has_slash_and_burn_icon" field. It's identical to HasSlashAndBurnIconEQ.
 func HasSlashAndBurnIcon(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasSlashAndBurnIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasSlashAndBurnIcon, v))
 }
 
 // HasHiringFareIcon applies equality check predicate on the "has_hiring_fare_icon" field. It's identical to HasHiringFareIconEQ.
 func HasHiringFareIcon(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasHiringFareIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasHiringFareIcon, v))
 }
 
 // LiteralIDEQ applies the EQ predicate on the "literal_id" field.
 func LiteralIDEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldLiteralID), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldLiteralID, v))
 }
 
 // LiteralIDNEQ applies the NEQ predicate on the "literal_id" field.
 func LiteralIDNEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldLiteralID), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldLiteralID, v))
 }
 
 // LiteralIDIn applies the In predicate on the "literal_id" field.
 func LiteralIDIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldLiteralID), v...))
-	})
+	return predicate.Card(sql.FieldIn(FieldLiteralID, vs...))
 }
 
 // LiteralIDNotIn applies the NotIn predicate on the "literal_id" field.
 func LiteralIDNotIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldLiteralID), v...))
-	})
+	return predicate.Card(sql.FieldNotIn(FieldLiteralID, vs...))
 }
 
 // LiteralIDGT applies the GT predicate on the "literal_id" field.
 func LiteralIDGT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldLiteralID), v))
-	})
+	return predicate.Card(sql.FieldGT(FieldLiteralID, v))
 }
 
 // LiteralIDGTE applies the GTE predicate on the "literal_id" field.
 func LiteralIDGTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldLiteralID), v))
-	})
+	return predicate.Card(sql.FieldGTE(FieldLiteralID, v))
 }
 
 // LiteralIDLT applies the LT predicate on the "literal_id" field.
 func LiteralIDLT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldLiteralID), v))
-	})
+	return predicate.Card(sql.FieldLT(FieldLiteralID, v))
 }
 
 // LiteralIDLTE applies the LTE predicate on the "literal_id" field.
 func LiteralIDLTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldLiteralID), v))
-	})
+	return predicate.Card(sql.FieldLTE(FieldLiteralID, v))
 }
 
 // LiteralIDContains applies the Contains predicate on the "literal_id" field.
 func LiteralIDContains(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldLiteralID), v))
-	})
+	return predicate.Card(sql.FieldContains(FieldLiteralID, v))
 }
 
 // LiteralIDHasPrefix applies the HasPrefix predicate on the "literal_id" field.
 func LiteralIDHasPrefix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldLiteralID), v))
-	})
+	return predicate.Card(sql.FieldHasPrefix(FieldLiteralID, v))
 }
 
 // LiteralIDHasSuffix applies the HasSuffix predicate on the "literal_id" field.
 func LiteralIDHasSuffix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldLiteralID), v))
-	})
+	return predicate.Card(sql.FieldHasSuffix(FieldLiteralID, v))
 }
 
 // LiteralIDEqualFold applies the EqualFold predicate on the "literal_id" field.
 func LiteralIDEqualFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldLiteralID), v))
-	})
+	return predicate.Card(sql.FieldEqualFold(FieldLiteralID, v))
 }
 
 // LiteralIDContainsFold applies the ContainsFold predicate on the "literal_id" field.
 func LiteralIDContainsFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldLiteralID), v))
-	})
+	return predicate.Card(sql.FieldContainsFold(FieldLiteralID, v))
 }
 
 // RevisionIDEQ applies the EQ predicate on the "revision_id" field.
 func RevisionIDEQ(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldRevisionID), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldRevisionID, v))
 }
 
 // RevisionIDNEQ applies the NEQ predicate on the "revision_id" field.
 func RevisionIDNEQ(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldRevisionID), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldRevisionID, v))
 }
 
 // RevisionIDIn applies the In predicate on the "revision_id" field.
 func RevisionIDIn(vs ...int) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldRevisionID), v...))
-	})
+	return predicate.Card(sql.FieldIn(FieldRevisionID, vs...))
 }
 
 // RevisionIDNotIn applies the NotIn predicate on the "revision_id" field.
 func RevisionIDNotIn(vs ...int) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldRevisionID), v...))
-	})
+	return predicate.Card(sql.FieldNotIn(FieldRevisionID, vs...))
 }
 
 // PrintedIDEQ applies the EQ predicate on the "printed_id" field.
 func PrintedIDEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldPrintedID), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldPrintedID, v))
 }
 
 // PrintedIDNEQ applies the NEQ predicate on the "printed_id" field.
 func PrintedIDNEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldPrintedID), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldPrintedID, v))
 }
 
 // PrintedIDIn applies the In predicate on the "printed_id" field.
 func PrintedIDIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldPrintedID), v...))
-	})
+	return predicate.Card(sql.FieldIn(FieldPrintedID, vs...))
 }
 
 // PrintedIDNotIn applies the NotIn predicate on the "printed_id" field.
 func PrintedIDNotIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldPrintedID), v...))
-	})
+	return predicate.Card(sql.FieldNotIn(FieldPrintedID, vs...))
 }
 
 // PrintedIDGT applies the GT predicate on the "printed_id" field.
 func PrintedIDGT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldPrintedID), v))
-	})
+	return predicate.Card(sql.FieldGT(FieldPrintedID, v))
 }
 
 // PrintedIDGTE applies the GTE predicate on the "printed_id" field.
 func PrintedIDGTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldPrintedID), v))
-	})
+	return predicate.Card(sql.FieldGTE(FieldPrintedID, v))
 }
 
 // PrintedIDLT applies the LT predicate on the "printed_id" field.
 func PrintedIDLT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldPrintedID), v))
-	})
+	return predicate.Card(sql.FieldLT(FieldPrintedID, v))
 }
 
 // PrintedIDLTE applies the LTE predicate on the "printed_id" field.
 func PrintedIDLTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldPrintedID), v))
-	})
+	return predicate.Card(sql.FieldLTE(FieldPrintedID, v))
 }
 
 // PrintedIDContains applies the Contains predicate on the "printed_id" field.
 func PrintedIDContains(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldPrintedID), v))
-	})
+	return predicate.Card(sql.FieldContains(FieldPrintedID, v))
 }
 
 // PrintedIDHasPrefix applies the HasPrefix predicate on the "printed_id" field.
 func PrintedIDHasPrefix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldPrintedID), v))
-	})
+	return predicate.Card(sql.FieldHasPrefix(FieldPrintedID, v))
 }
 
 // PrintedIDHasSuffix applies the HasSuffix predicate on the "printed_id" field.
 func PrintedIDHasSuffix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldPrintedID), v))
-	})
+	return predicate.Card(sql.FieldHasSuffix(FieldPrintedID, v))
 }
 
 // PrintedIDIsNil applies the IsNil predicate on the "printed_id" field.
 func PrintedIDIsNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldPrintedID)))
-	})
+	return predicate.Card(sql.FieldIsNull(FieldPrintedID))
 }
 
 // PrintedIDNotNil applies the NotNil predicate on the "printed_id" field.
 func PrintedIDNotNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldPrintedID)))
-	})
+	return predicate.Card(sql.FieldNotNull(FieldPrintedID))
 }
 
 // PrintedIDEqualFold applies the EqualFold predicate on the "printed_id" field.
 func PrintedIDEqualFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldPrintedID), v))
-	})
+	return predicate.Card(sql.FieldEqualFold(FieldPrintedID, v))
 }
 
 // PrintedIDContainsFold applies the ContainsFold predicate on the "printed_id" field.
 func PrintedIDContainsFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldPrintedID), v))
-	})
+	return predicate.Card(sql.FieldContainsFold(FieldPrintedID, v))
 }
 
 // PlayAgricolaCardIDEQ applies the EQ predicate on the "play_agricola_card_id" field.
 func PlayAgricolaCardIDEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldPlayAgricolaCardID), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldPlayAgricolaCardID, v))
 }
 
 // PlayAgricolaCardIDNEQ applies the NEQ predicate on the "play_agricola_card_id" field.
 func PlayAgricolaCardIDNEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldPlayAgricolaCardID), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldPlayAgricolaCardID, v))
 }
 
 // PlayAgricolaCardIDIn applies the In predicate on the "play_agricola_card_id" field.
 func PlayAgricolaCardIDIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldPlayAgricolaCardID), v...))
-	})
+	return predicate.Card(sql.FieldIn(FieldPlayAgricolaCardID, vs...))
 }
 
 // PlayAgricolaCardIDNotIn applies the NotIn predicate on the "play_agricola_card_id" field.
 func PlayAgricolaCardIDNotIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldPlayAgricolaCardID), v...))
-	})
+	return predicate.Card(sql.FieldNotIn(FieldPlayAgricolaCardID, vs...))
 }
 
 // PlayAgricolaCardIDGT applies the GT predicate on the "play_agricola_card_id" field.
 func PlayAgricolaCardIDGT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldPlayAgricolaCardID), v))
-	})
+	return predicate.Card(sql.FieldGT(FieldPlayAgricolaCardID, v))
 }
 
 // PlayAgricolaCardIDGTE applies the GTE predicate on the "play_agricola_card_id" field.
 func PlayAgricolaCardIDGTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldPlayAgricolaCardID), v))
-	})
+	return predicate.Card(sql.FieldGTE(FieldPlayAgricolaCardID, v))
 }
 
 // PlayAgricolaCardIDLT applies the LT predicate on the "play_agricola_card_id" field.
 func PlayAgricolaCardIDLT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldPlayAgricolaCardID), v))
-	})
+	return predicate.Card(sql.FieldLT(FieldPlayAgricolaCardID, v))
 }
 
 // PlayAgricolaCardIDLTE applies the LTE predicate on the "play_agricola_card_id" field.
 func PlayAgricolaCardIDLTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldPlayAgricolaCardID), v))
-	})
+	return predicate.Card(sql.FieldLTE(FieldPlayAgricolaCardID, v))
 }
 
 // PlayAgricolaCardIDContains applies the Contains predicate on the "play_agricola_card_id" field.
 func PlayAgricolaCardIDContains(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldPlayAgricolaCardID), v))
-	})
+	return predicate.Card(sql.FieldContains(FieldPlayAgricolaCardID, v))
 }
 
 // PlayAgricolaCardIDHasPrefix applies the HasPrefix predicate on the "play_agricola_card_id" field.
 func PlayAgricolaCardIDHasPrefix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldPlayAgricolaCardID), v))
-	})
+	return predicate.Card(sql.FieldHasPrefix(FieldPlayAgricolaCardID, v))
 }
 
 // PlayAgricolaCardIDHasSuffix applies the HasSuffix predicate on the "play_agricola_card_id" field.
 func PlayAgricolaCardIDHasSuffix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldPlayAgricolaCardID), v))
-	})
+	return predicate.Card(sql.FieldHasSuffix(FieldPlayAgricolaCardID, v))
 }
 
 // PlayAgricolaCardIDIsNil applies the IsNil predicate on the "play_agricola_card_id" field.
 func PlayAgricolaCardIDIsNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldPlayAgricolaCardID)))
-	})
+	return predicate.Card(sql.FieldIsNull(FieldPlayAgricolaCardID))
 }
 
 // PlayAgricolaCardIDNotNil applies the NotNil predicate on the "play_agricola_card_id" field.
 func PlayAgricolaCardIDNotNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldPlayAgricolaCardID)))
-	})
+	return predicate.Card(sql.FieldNotNull(FieldPlayAgricolaCardID))
 }
 
 // PlayAgricolaCardIDEqualFold applies the EqualFold predicate on the "play_agricola_card_id" field.
 func PlayAgricolaCardIDEqualFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldPlayAgricolaCardID), v))
-	})
+	return predicate.Card(sql.FieldEqualFold(FieldPlayAgricolaCardID, v))
 }
 
 // PlayAgricolaCardIDContainsFold applies the ContainsFold predicate on the "play_agricola_card_id" field.
 func PlayAgricolaCardIDContainsFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldPlayAgricolaCardID), v))
-	})
+	return predicate.Card(sql.FieldContainsFold(FieldPlayAgricolaCardID, v))
 }
 
 // DeckIDEQ applies the EQ predicate on the "deck_id" field.
 func DeckIDEQ(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDeckID), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldDeckID, v))
 }
 
 // DeckIDNEQ applies the NEQ predicate on the "deck_id" field.
 func DeckIDNEQ(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldDeckID), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldDeckID, v))
 }
 
 // DeckIDIn applies the In predicate on the "deck_id" field.
 func DeckIDIn(vs ...int) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldDeckID), v...))
-	})
+	return predicate.Card(sql.FieldIn(FieldDeckID, vs...))
 }
 
 // DeckIDNotIn applies the NotIn predicate on the "deck_id" field.
 func DeckIDNotIn(vs ...int) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldDeckID), v...))
-	})
+	return predicate.Card(sql.FieldNotIn(FieldDeckID, vs...))
 }
 
 // DeckIDIsNil applies the IsNil predicate on the "deck_id" field.
 func DeckIDIsNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldDeckID)))
-	})
+	return predicate.Card(sql.FieldIsNull(FieldDeckID))
 }
 
 // DeckIDNotNil applies the NotNil predicate on the "deck_id" field.
 func DeckIDNotNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldDeckID)))
-	})
+	return predicate.Card(sql.FieldNotNull(FieldDeckID))
 }
 
 // CardTypeIDEQ applies the EQ predicate on the "card_type_id" field.
 func CardTypeIDEQ(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCardTypeID), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldCardTypeID, v))
 }
 
 // CardTypeIDNEQ applies the NEQ predicate on the "card_type_id" field.
 func CardTypeIDNEQ(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldCardTypeID), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldCardTypeID, v))
 }
 
 // CardTypeIDIn applies the In predicate on the "card_type_id" field.
 func CardTypeIDIn(vs ...int) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldCardTypeID), v...))
-	})
+	return predicate.Card(sql.FieldIn(FieldCardTypeID, vs...))
 }
 
 // CardTypeIDNotIn applies the NotIn predicate on the "card_type_id" field.
 func CardTypeIDNotIn(vs ...int) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldCardTypeID), v...))
-	})
+	return predicate.Card(sql.FieldNotIn(FieldCardTypeID, vs...))
 }
 
 // CardSpecialColorIDEQ applies the EQ predicate on the "card_special_color_id" field.
 func CardSpecialColorIDEQ(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCardSpecialColorID), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldCardSpecialColorID, v))
 }
 
 // CardSpecialColorIDNEQ applies the NEQ predicate on the "card_special_color_id" field.
 func CardSpecialColorIDNEQ(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldCardSpecialColorID), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldCardSpecialColorID, v))
 }
 
 // CardSpecialColorIDIn applies the In predicate on the "card_special_color_id" field.
 func CardSpecialColorIDIn(vs ...int) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldCardSpecialColorID), v...))
-	})
+	return predicate.Card(sql.FieldIn(FieldCardSpecialColorID, vs...))
 }
 
 // CardSpecialColorIDNotIn applies the NotIn predicate on the "card_special_color_id" field.
 func CardSpecialColorIDNotIn(vs ...int) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldCardSpecialColorID), v...))
-	})
+	return predicate.Card(sql.FieldNotIn(FieldCardSpecialColorID, vs...))
 }
 
 // CardSpecialColorIDIsNil applies the IsNil predicate on the "card_special_color_id" field.
 func CardSpecialColorIDIsNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldCardSpecialColorID)))
-	})
+	return predicate.Card(sql.FieldIsNull(FieldCardSpecialColorID))
 }
 
 // CardSpecialColorIDNotNil applies the NotNil predicate on the "card_special_color_id" field.
 func CardSpecialColorIDNotNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldCardSpecialColorID)))
-	})
+	return predicate.Card(sql.FieldNotNull(FieldCardSpecialColorID))
 }
 
 // NameJaEQ applies the EQ predicate on the "name_ja" field.
 func NameJaEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldNameJa), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldNameJa, v))
 }
 
 // NameJaNEQ applies the NEQ predicate on the "name_ja" field.
 func NameJaNEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldNameJa), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldNameJa, v))
 }
 
 // NameJaIn applies the In predicate on the "name_ja" field.
 func NameJaIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldNameJa), v...))
-	})
+	return predicate.Card(sql.FieldIn(FieldNameJa, vs...))
 }
 
 // NameJaNotIn applies the NotIn predicate on the "name_ja" field.
 func NameJaNotIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldNameJa), v...))
-	})
+	return predicate.Card(sql.FieldNotIn(FieldNameJa, vs...))
 }
 
 // NameJaGT applies the GT predicate on the "name_ja" field.
 func NameJaGT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldNameJa), v))
-	})
+	return predicate.Card(sql.FieldGT(FieldNameJa, v))
 }
 
 // NameJaGTE applies the GTE predicate on the "name_ja" field.
 func NameJaGTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldNameJa), v))
-	})
+	return predicate.Card(sql.FieldGTE(FieldNameJa, v))
 }
 
 // NameJaLT applies the LT predicate on the "name_ja" field.
 func NameJaLT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldNameJa), v))
-	})
+	return predicate.Card(sql.FieldLT(FieldNameJa, v))
 }
 
 // NameJaLTE applies the LTE predicate on the "name_ja" field.
 func NameJaLTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldNameJa), v))
-	})
+	return predicate.Card(sql.FieldLTE(FieldNameJa, v))
 }
 
 // NameJaContains applies the Contains predicate on the "name_ja" field.
 func NameJaContains(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldNameJa), v))
-	})
+	return predicate.Card(sql.FieldContains(FieldNameJa, v))
 }
 
 // NameJaHasPrefix applies the HasPrefix predicate on the "name_ja" field.
 func NameJaHasPrefix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldNameJa), v))
-	})
+	return predicate.Card(sql.FieldHasPrefix(FieldNameJa, v))
 }
 
 // NameJaHasSuffix applies the HasSuffix predicate on the "name_ja" field.
 func NameJaHasSuffix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldNameJa), v))
-	})
+	return predicate.Card(sql.FieldHasSuffix(FieldNameJa, v))
 }
 
 // NameJaIsNil applies the IsNil predicate on the "name_ja" field.
 func NameJaIsNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldNameJa)))
-	})
+	return predicate.Card(sql.FieldIsNull(FieldNameJa))
 }
 
 // NameJaNotNil applies the NotNil predicate on the "name_ja" field.
 func NameJaNotNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldNameJa)))
-	})
+	return predicate.Card(sql.FieldNotNull(FieldNameJa))
 }
 
 // NameJaEqualFold applies the EqualFold predicate on the "name_ja" field.
 func NameJaEqualFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldNameJa), v))
-	})
+	return predicate.Card(sql.FieldEqualFold(FieldNameJa, v))
 }
 
 // NameJaContainsFold applies the ContainsFold predicate on the "name_ja" field.
 func NameJaContainsFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldNameJa), v))
-	})
+	return predicate.Card(sql.FieldContainsFold(FieldNameJa, v))
 }
 
 // NameEnEQ applies the EQ predicate on the "name_en" field.
 func NameEnEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldNameEn), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldNameEn, v))
 }
 
 // NameEnNEQ applies the NEQ predicate on the "name_en" field.
 func NameEnNEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldNameEn), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldNameEn, v))
 }
 
 // NameEnIn applies the In predicate on the "name_en" field.
 func NameEnIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldNameEn), v...))
-	})
+	return predicate.Card(sql.FieldIn(FieldNameEn, vs...))
 }
 
 // NameEnNotIn applies the NotIn predicate on the "name_en" field.
 func NameEnNotIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldNameEn), v...))
-	})
+	return predicate.Card(sql.FieldNotIn(FieldNameEn, vs...))
 }
 
 // NameEnGT applies the GT predicate on the "name_en" field.
 func NameEnGT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldNameEn), v))
-	})
+	return predicate.Card(sql.FieldGT(FieldNameEn, v))
 }
 
 // NameEnGTE applies the GTE predicate on the "name_en" field.
 func NameEnGTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldNameEn), v))
-	})
+	return predicate.Card(sql.FieldGTE(FieldNameEn, v))
 }
 
 // NameEnLT applies the LT predicate on the "name_en" field.
 func NameEnLT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldNameEn), v))
-	})
+	return predicate.Card(sql.FieldLT(FieldNameEn, v))
 }
 
 // NameEnLTE applies the LTE predicate on the "name_en" field.
 func NameEnLTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldNameEn), v))
-	})
+	return predicate.Card(sql.FieldLTE(FieldNameEn, v))
 }
 
 // NameEnContains applies the Contains predicate on the "name_en" field.
 func NameEnContains(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldNameEn), v))
-	})
+	return predicate.Card(sql.FieldContains(FieldNameEn, v))
 }
 
 // NameEnHasPrefix applies the HasPrefix predicate on the "name_en" field.
 func NameEnHasPrefix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldNameEn), v))
-	})
+	return predicate.Card(sql.FieldHasPrefix(FieldNameEn, v))
 }
 
 // NameEnHasSuffix applies the HasSuffix predicate on the "name_en" field.
 func NameEnHasSuffix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldNameEn), v))
-	})
+	return predicate.Card(sql.FieldHasSuffix(FieldNameEn, v))
 }
 
 // NameEnIsNil applies the IsNil predicate on the "name_en" field.
 func NameEnIsNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldNameEn)))
-	})
+	return predicate.Card(sql.FieldIsNull(FieldNameEn))
 }
 
 // NameEnNotNil applies the NotNil predicate on the "name_en" field.
 func NameEnNotNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldNameEn)))
-	})
+	return predicate.Card(sql.FieldNotNull(FieldNameEn))
 }
 
 // NameEnEqualFold applies the EqualFold predicate on the "name_en" field.
 func NameEnEqualFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldNameEn), v))
-	})
+	return predicate.Card(sql.FieldEqualFold(FieldNameEn, v))
 }
 
 // NameEnContainsFold applies the ContainsFold predicate on the "name_en" field.
 func NameEnContainsFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldNameEn), v))
-	})
+	return predicate.Card(sql.FieldContainsFold(FieldNameEn, v))
 }
 
 // MinPlayersNumberEQ applies the EQ predicate on the "min_players_number" field.
 func MinPlayersNumberEQ(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldMinPlayersNumber), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldMinPlayersNumber, v))
 }
 
 // MinPlayersNumberNEQ applies the NEQ predicate on the "min_players_number" field.
 func MinPlayersNumberNEQ(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldMinPlayersNumber), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldMinPlayersNumber, v))
 }
 
 // MinPlayersNumberIn applies the In predicate on the "min_players_number" field.
 func MinPlayersNumberIn(vs ...int) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldMinPlayersNumber), v...))
-	})
+	return predicate.Card(sql.FieldIn(FieldMinPlayersNumber, vs...))
 }
 
 // MinPlayersNumberNotIn applies the NotIn predicate on the "min_players_number" field.
 func MinPlayersNumberNotIn(vs ...int) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldMinPlayersNumber), v...))
-	})
+	return predicate.Card(sql.FieldNotIn(FieldMinPlayersNumber, vs...))
 }
 
 // MinPlayersNumberGT applies the GT predicate on the "min_players_number" field.
 func MinPlayersNumberGT(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldMinPlayersNumber), v))
-	})
+	return predicate.Card(sql.FieldGT(FieldMinPlayersNumber, v))
 }
 
 // MinPlayersNumberGTE applies the GTE predicate on the "min_players_number" field.
 func MinPlayersNumberGTE(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldMinPlayersNumber), v))
-	})
+	return predicate.Card(sql.FieldGTE(FieldMinPlayersNumber, v))
 }
 
 // MinPlayersNumberLT applies the LT predicate on the "min_players_number" field.
 func MinPlayersNumberLT(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldMinPlayersNumber), v))
-	})
+	return predicate.Card(sql.FieldLT(FieldMinPlayersNumber, v))
 }
 
 // MinPlayersNumberLTE applies the LTE predicate on the "min_players_number" field.
 func MinPlayersNumberLTE(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldMinPlayersNumber), v))
-	})
+	return predicate.Card(sql.FieldLTE(FieldMinPlayersNumber, v))
 }
 
 // MinPlayersNumberIsNil applies the IsNil predicate on the "min_players_number" field.
 func MinPlayersNumberIsNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldMinPlayersNumber)))
-	})
+	return predicate.Card(sql.FieldIsNull(FieldMinPlayersNumber))
 }
 
 // MinPlayersNumberNotNil applies the NotNil predicate on the "min_players_number" field.
 func MinPlayersNumberNotNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldMinPlayersNumber)))
-	})
+	return predicate.Card(sql.FieldNotNull(FieldMinPlayersNumber))
 }
 
 // PrerequisiteEQ applies the EQ predicate on the "prerequisite" field.
 func PrerequisiteEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldPrerequisite), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldPrerequisite, v))
 }
 
 // PrerequisiteNEQ applies the NEQ predicate on the "prerequisite" field.
 func PrerequisiteNEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldPrerequisite), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldPrerequisite, v))
 }
 
 // PrerequisiteIn applies the In predicate on the "prerequisite" field.
 func PrerequisiteIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldPrerequisite), v...))
-	})
+	return predicate.Card(sql.FieldIn(FieldPrerequisite, vs...))
 }
 
 // PrerequisiteNotIn applies the NotIn predicate on the "prerequisite" field.
 func PrerequisiteNotIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldPrerequisite), v...))
-	})
+	return predicate.Card(sql.FieldNotIn(FieldPrerequisite, vs...))
 }
 
 // PrerequisiteGT applies the GT predicate on the "prerequisite" field.
 func PrerequisiteGT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldPrerequisite), v))
-	})
+	return predicate.Card(sql.FieldGT(FieldPrerequisite, v))
 }
 
 // PrerequisiteGTE applies the GTE predicate on the "prerequisite" field.
 func PrerequisiteGTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldPrerequisite), v))
-	})
+	return predicate.Card(sql.FieldGTE(FieldPrerequisite, v))
 }
 
 // PrerequisiteLT applies the LT predicate on the "prerequisite" field.
 func PrerequisiteLT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldPrerequisite), v))
-	})
+	return predicate.Card(sql.FieldLT(FieldPrerequisite, v))
 }
 
 // PrerequisiteLTE applies the LTE predicate on the "prerequisite" field.
 func PrerequisiteLTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldPrerequisite), v))
-	})
+	return predicate.Card(sql.FieldLTE(FieldPrerequisite, v))
 }
 
 // PrerequisiteContains applies the Contains predicate on the "prerequisite" field.
 func PrerequisiteContains(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldPrerequisite), v))
-	})
+	return predicate.Card(sql.FieldContains(FieldPrerequisite, v))
 }
 
 // PrerequisiteHasPrefix applies the HasPrefix predicate on the "prerequisite" field.
 func PrerequisiteHasPrefix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldPrerequisite), v))
-	})
+	return predicate.Card(sql.FieldHasPrefix(FieldPrerequisite, v))
 }
 
 // PrerequisiteHasSuffix applies the HasSuffix predicate on the "prerequisite" field.
 func PrerequisiteHasSuffix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldPrerequisite), v))
-	})
+	return predicate.Card(sql.FieldHasSuffix(FieldPrerequisite, v))
 }
 
 // PrerequisiteIsNil applies the IsNil predicate on the "prerequisite" field.
 func PrerequisiteIsNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldPrerequisite)))
-	})
+	return predicate.Card(sql.FieldIsNull(FieldPrerequisite))
 }
 
 // PrerequisiteNotNil applies the NotNil predicate on the "prerequisite" field.
 func PrerequisiteNotNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldPrerequisite)))
-	})
+	return predicate.Card(sql.FieldNotNull(FieldPrerequisite))
 }
 
 // PrerequisiteEqualFold applies the EqualFold predicate on the "prerequisite" field.
 func PrerequisiteEqualFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldPrerequisite), v))
-	})
+	return predicate.Card(sql.FieldEqualFold(FieldPrerequisite, v))
 }
 
 // PrerequisiteContainsFold applies the ContainsFold predicate on the "prerequisite" field.
 func PrerequisiteContainsFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldPrerequisite), v))
-	})
+	return predicate.Card(sql.FieldContainsFold(FieldPrerequisite, v))
 }
 
 // CostEQ applies the EQ predicate on the "cost" field.
 func CostEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCost), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldCost, v))
 }
 
 // CostNEQ applies the NEQ predicate on the "cost" field.
 func CostNEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldCost), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldCost, v))
 }
 
 // CostIn applies the In predicate on the "cost" field.
 func CostIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldCost), v...))
-	})
+	return predicate.Card(sql.FieldIn(FieldCost, vs...))
 }
 
 // CostNotIn applies the NotIn predicate on the "cost" field.
 func CostNotIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldCost), v...))
-	})
+	return predicate.Card(sql.FieldNotIn(FieldCost, vs...))
 }
 
 // CostGT applies the GT predicate on the "cost" field.
 func CostGT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldCost), v))
-	})
+	return predicate.Card(sql.FieldGT(FieldCost, v))
 }
 
 // CostGTE applies the GTE predicate on the "cost" field.
 func CostGTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldCost), v))
-	})
+	return predicate.Card(sql.FieldGTE(FieldCost, v))
 }
 
 // CostLT applies the LT predicate on the "cost" field.
 func CostLT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldCost), v))
-	})
+	return predicate.Card(sql.FieldLT(FieldCost, v))
 }
 
 // CostLTE applies the LTE predicate on the "cost" field.
 func CostLTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldCost), v))
-	})
+	return predicate.Card(sql.FieldLTE(FieldCost, v))
 }
 
 // CostContains applies the Contains predicate on the "cost" field.
 func CostContains(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldCost), v))
-	})
+	return predicate.Card(sql.FieldContains(FieldCost, v))
 }
 
 // CostHasPrefix applies the HasPrefix predicate on the "cost" field.
 func CostHasPrefix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldCost), v))
-	})
+	return predicate.Card(sql.FieldHasPrefix(FieldCost, v))
 }
 
 // CostHasSuffix applies the HasSuffix predicate on the "cost" field.
 func CostHasSuffix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldCost), v))
-	})
+	return predicate.Card(sql.FieldHasSuffix(FieldCost, v))
 }
 
 // CostIsNil applies the IsNil predicate on the "cost" field.
 func CostIsNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldCost)))
-	})
+	return predicate.Card(sql.FieldIsNull(FieldCost))
 }
 
 // CostNotNil applies the NotNil predicate on the "cost" field.
 func CostNotNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldCost)))
-	})
+	return predicate.Card(sql.FieldNotNull(FieldCost))
 }
 
 // CostEqualFold applies the EqualFold predicate on the "cost" field.
 func CostEqualFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldCost), v))
-	})
+	return predicate.Card(sql.FieldEqualFold(FieldCost, v))
 }
 
 // CostContainsFold applies the ContainsFold predicate on the "cost" field.
 func CostContainsFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldCost), v))
-	})
+	return predicate.Card(sql.FieldContainsFold(FieldCost, v))
 }
 
 // DescriptionEQ applies the EQ predicate on the "description" field.
 func DescriptionEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldDescription), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldDescription, v))
 }
 
 // DescriptionNEQ applies the NEQ predicate on the "description" field.
 func DescriptionNEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldDescription), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldDescription, v))
 }
 
 // DescriptionIn applies the In predicate on the "description" field.
 func DescriptionIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldDescription), v...))
-	})
+	return predicate.Card(sql.FieldIn(FieldDescription, vs...))
 }
 
 // DescriptionNotIn applies the NotIn predicate on the "description" field.
 func DescriptionNotIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldDescription), v...))
-	})
+	return predicate.Card(sql.FieldNotIn(FieldDescription, vs...))
 }
 
 // DescriptionGT applies the GT predicate on the "description" field.
 func DescriptionGT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldDescription), v))
-	})
+	return predicate.Card(sql.FieldGT(FieldDescription, v))
 }
 
 // DescriptionGTE applies the GTE predicate on the "description" field.
 func DescriptionGTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldDescription), v))
-	})
+	return predicate.Card(sql.FieldGTE(FieldDescription, v))
 }
 
 // DescriptionLT applies the LT predicate on the "description" field.
 func DescriptionLT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldDescription), v))
-	})
+	return predicate.Card(sql.FieldLT(FieldDescription, v))
 }
 
 // DescriptionLTE applies the LTE predicate on the "description" field.
 func DescriptionLTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldDescription), v))
-	})
+	return predicate.Card(sql.FieldLTE(FieldDescription, v))
 }
 
 // DescriptionContains applies the Contains predicate on the "description" field.
 func DescriptionContains(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldDescription), v))
-	})
+	return predicate.Card(sql.FieldContains(FieldDescription, v))
 }
 
 // DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
 func DescriptionHasPrefix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldDescription), v))
-	})
+	return predicate.Card(sql.FieldHasPrefix(FieldDescription, v))
 }
 
 // DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
 func DescriptionHasSuffix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldDescription), v))
-	})
+	return predicate.Card(sql.FieldHasSuffix(FieldDescription, v))
 }
 
 // DescriptionIsNil applies the IsNil predicate on the "description" field.
 func DescriptionIsNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldDescription)))
-	})
+	return predicate.Card(sql.FieldIsNull(FieldDescription))
 }
 
 // DescriptionNotNil applies the NotNil predicate on the "description" field.
 func DescriptionNotNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldDescription)))
-	})
+	return predicate.Card(sql.FieldNotNull(FieldDescription))
 }
 
 // DescriptionEqualFold applies the EqualFold predicate on the "description" field.
 func DescriptionEqualFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldDescription), v))
-	})
+	return predicate.Card(sql.FieldEqualFold(FieldDescription, v))
 }
 
 // DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
 func DescriptionContainsFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldDescription), v))
-	})
+	return predicate.Card(sql.FieldContainsFold(FieldDescription, v))
 }
 
 // NoteEQ applies the EQ predicate on the "note" field.
 func NoteEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldNote), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldNote, v))
 }
 
 // NoteNEQ applies the NEQ predicate on the "note" field.
 func NoteNEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldNote), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldNote, v))
 }
 
 // NoteIn applies the In predicate on the "note" field.
 func NoteIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldNote), v...))
-	})
+	return predicate.Card(sql.FieldIn(FieldNote, vs...))
 }
 
 // NoteNotIn applies the NotIn predicate on the "note" field.
 func NoteNotIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldNote), v...))
-	})
+	return predicate.Card(sql.FieldNotIn(FieldNote, vs...))
 }
 
 // NoteGT applies the GT predicate on the "note" field.
 func NoteGT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldNote), v))
-	})
+	return predicate.Card(sql.FieldGT(FieldNote, v))
 }
 
 // NoteGTE applies the GTE predicate on the "note" field.
 func NoteGTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldNote), v))
-	})
+	return predicate.Card(sql.FieldGTE(FieldNote, v))
 }
 
 // NoteLT applies the LT predicate on the "note" field.
 func NoteLT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldNote), v))
-	})
+	return predicate.Card(sql.FieldLT(FieldNote, v))
 }
 
 // NoteLTE applies the LTE predicate on the "note" field.
 func NoteLTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldNote), v))
-	})
+	return predicate.Card(sql.FieldLTE(FieldNote, v))
 }
 
 // NoteContains applies the Contains predicate on the "note" field.
 func NoteContains(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldNote), v))
-	})
+	return predicate.Card(sql.FieldContains(FieldNote, v))
 }
 
 // NoteHasPrefix applies the HasPrefix predicate on the "note" field.
 func NoteHasPrefix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldNote), v))
-	})
+	return predicate.Card(sql.FieldHasPrefix(FieldNote, v))
 }
 
 // NoteHasSuffix applies the HasSuffix predicate on the "note" field.
 func NoteHasSuffix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldNote), v))
-	})
+	return predicate.Card(sql.FieldHasSuffix(FieldNote, v))
 }
 
 // NoteIsNil applies the IsNil predicate on the "note" field.
 func NoteIsNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldNote)))
-	})
+	return predicate.Card(sql.FieldIsNull(FieldNote))
 }
 
 // NoteNotNil applies the NotNil predicate on the "note" field.
 func NoteNotNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldNote)))
-	})
+	return predicate.Card(sql.FieldNotNull(FieldNote))
 }
 
 // NoteEqualFold applies the EqualFold predicate on the "note" field.
 func NoteEqualFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldNote), v))
-	})
+	return predicate.Card(sql.FieldEqualFold(FieldNote, v))
 }
 
 // NoteContainsFold applies the ContainsFold predicate on the "note" field.
 func NoteContainsFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldNote), v))
-	})
+	return predicate.Card(sql.FieldContainsFold(FieldNote, v))
 }
 
 // IsOfficialJaEQ applies the EQ predicate on the "is_official_ja" field.
 func IsOfficialJaEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldIsOfficialJa), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldIsOfficialJa, v))
 }
 
 // IsOfficialJaNEQ applies the NEQ predicate on the "is_official_ja" field.
 func IsOfficialJaNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldIsOfficialJa), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldIsOfficialJa, v))
 }
 
 // VictoryPointEQ applies the EQ predicate on the "victory_point" field.
 func VictoryPointEQ(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldVictoryPoint, v))
 }
 
 // VictoryPointNEQ applies the NEQ predicate on the "victory_point" field.
 func VictoryPointNEQ(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldVictoryPoint, v))
 }
 
 // VictoryPointIn applies the In predicate on the "victory_point" field.
 func VictoryPointIn(vs ...int) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldVictoryPoint), v...))
-	})
+	return predicate.Card(sql.FieldIn(FieldVictoryPoint, vs...))
 }
 
 // VictoryPointNotIn applies the NotIn predicate on the "victory_point" field.
 func VictoryPointNotIn(vs ...int) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldVictoryPoint), v...))
-	})
+	return predicate.Card(sql.FieldNotIn(FieldVictoryPoint, vs...))
 }
 
 // VictoryPointGT applies the GT predicate on the "victory_point" field.
 func VictoryPointGT(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldGT(FieldVictoryPoint, v))
 }
 
 // VictoryPointGTE applies the GTE predicate on the "victory_point" field.
 func VictoryPointGTE(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldGTE(FieldVictoryPoint, v))
 }
 
 // VictoryPointLT applies the LT predicate on the "victory_point" field.
 func VictoryPointLT(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldLT(FieldVictoryPoint, v))
 }
 
 // VictoryPointLTE applies the LTE predicate on the "victory_point" field.
 func VictoryPointLTE(v int) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldLTE(FieldVictoryPoint, v))
 }
 
 // VictoryPointIsNil applies the IsNil predicate on the "victory_point" field.
 func VictoryPointIsNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldVictoryPoint)))
-	})
+	return predicate.Card(sql.FieldIsNull(FieldVictoryPoint))
 }
 
 // VictoryPointNotNil applies the NotNil predicate on the "victory_point" field.
 func VictoryPointNotNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldVictoryPoint)))
-	})
+	return predicate.Card(sql.FieldNotNull(FieldVictoryPoint))
 }
 
 // SpecialVictoryPointEQ applies the EQ predicate on the "special_victory_point" field.
 func SpecialVictoryPointEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSpecialVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldSpecialVictoryPoint, v))
 }
 
 // SpecialVictoryPointNEQ applies the NEQ predicate on the "special_victory_point" field.
 func SpecialVictoryPointNEQ(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldSpecialVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldSpecialVictoryPoint, v))
 }
 
 // SpecialVictoryPointIn applies the In predicate on the "special_victory_point" field.
 func SpecialVictoryPointIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldSpecialVictoryPoint), v...))
-	})
+	return predicate.Card(sql.FieldIn(FieldSpecialVictoryPoint, vs...))
 }
 
 // SpecialVictoryPointNotIn applies the NotIn predicate on the "special_victory_point" field.
 func SpecialVictoryPointNotIn(vs ...string) predicate.Card {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldSpecialVictoryPoint), v...))
-	})
+	return predicate.Card(sql.FieldNotIn(FieldSpecialVictoryPoint, vs...))
 }
 
 // SpecialVictoryPointGT applies the GT predicate on the "special_victory_point" field.
 func SpecialVictoryPointGT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldSpecialVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldGT(FieldSpecialVictoryPoint, v))
 }
 
 // SpecialVictoryPointGTE applies the GTE predicate on the "special_victory_point" field.
 func SpecialVictoryPointGTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldSpecialVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldGTE(FieldSpecialVictoryPoint, v))
 }
 
 // SpecialVictoryPointLT applies the LT predicate on the "special_victory_point" field.
 func SpecialVictoryPointLT(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldSpecialVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldLT(FieldSpecialVictoryPoint, v))
 }
 
 // SpecialVictoryPointLTE applies the LTE predicate on the "special_victory_point" field.
 func SpecialVictoryPointLTE(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldSpecialVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldLTE(FieldSpecialVictoryPoint, v))
 }
 
 // SpecialVictoryPointContains applies the Contains predicate on the "special_victory_point" field.
 func SpecialVictoryPointContains(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldSpecialVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldContains(FieldSpecialVictoryPoint, v))
 }
 
 // SpecialVictoryPointHasPrefix applies the HasPrefix predicate on the "special_victory_point" field.
 func SpecialVictoryPointHasPrefix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldSpecialVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldHasPrefix(FieldSpecialVictoryPoint, v))
 }
 
 // SpecialVictoryPointHasSuffix applies the HasSuffix predicate on the "special_victory_point" field.
 func SpecialVictoryPointHasSuffix(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldSpecialVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldHasSuffix(FieldSpecialVictoryPoint, v))
 }
 
 // SpecialVictoryPointIsNil applies the IsNil predicate on the "special_victory_point" field.
 func SpecialVictoryPointIsNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldSpecialVictoryPoint)))
-	})
+	return predicate.Card(sql.FieldIsNull(FieldSpecialVictoryPoint))
 }
 
 // SpecialVictoryPointNotNil applies the NotNil predicate on the "special_victory_point" field.
 func SpecialVictoryPointNotNil() predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldSpecialVictoryPoint)))
-	})
+	return predicate.Card(sql.FieldNotNull(FieldSpecialVictoryPoint))
 }
 
 // SpecialVictoryPointEqualFold applies the EqualFold predicate on the "special_victory_point" field.
 func SpecialVictoryPointEqualFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldSpecialVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldEqualFold(FieldSpecialVictoryPoint, v))
 }
 
 // SpecialVictoryPointContainsFold applies the ContainsFold predicate on the "special_victory_point" field.
 func SpecialVictoryPointContainsFold(v string) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldSpecialVictoryPoint), v))
-	})
+	return predicate.Card(sql.FieldContainsFold(FieldSpecialVictoryPoint, v))
 }
 
 // HasArrowEQ applies the EQ predicate on the "has_arrow" field.
 func HasArrowEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasArrow), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasArrow, v))
 }
 
 // HasArrowNEQ applies the NEQ predicate on the "has_arrow" field.
 func HasArrowNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasArrow), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldHasArrow, v))
 }
 
 // HasBonusPointIconEQ applies the EQ predicate on the "has_bonus_point_icon" field.
 func HasBonusPointIconEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasBonusPointIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasBonusPointIcon, v))
 }
 
 // HasBonusPointIconNEQ applies the NEQ predicate on the "has_bonus_point_icon" field.
 func HasBonusPointIconNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasBonusPointIcon), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldHasBonusPointIcon, v))
 }
 
 // HasNegativeBonusPointIconEQ applies the EQ predicate on the "has_negative_bonus_point_icon" field.
 func HasNegativeBonusPointIconEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasNegativeBonusPointIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasNegativeBonusPointIcon, v))
 }
 
 // HasNegativeBonusPointIconNEQ applies the NEQ predicate on the "has_negative_bonus_point_icon" field.
 func HasNegativeBonusPointIconNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasNegativeBonusPointIcon), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldHasNegativeBonusPointIcon, v))
 }
 
 // HasPanIconEQ applies the EQ predicate on the "has_pan_icon" field.
 func HasPanIconEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasPanIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasPanIcon, v))
 }
 
 // HasPanIconNEQ applies the NEQ predicate on the "has_pan_icon" field.
 func HasPanIconNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasPanIcon), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldHasPanIcon, v))
 }
 
 // HasBreadIconEQ applies the EQ predicate on the "has_bread_icon" field.
 func HasBreadIconEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasBreadIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasBreadIcon, v))
 }
 
 // HasBreadIconNEQ applies the NEQ predicate on the "has_bread_icon" field.
 func HasBreadIconNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasBreadIcon), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldHasBreadIcon, v))
 }
 
 // HasFarmPlannerIconEQ applies the EQ predicate on the "has_farm_planner_icon" field.
 func HasFarmPlannerIconEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasFarmPlannerIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasFarmPlannerIcon, v))
 }
 
 // HasFarmPlannerIconNEQ applies the NEQ predicate on the "has_farm_planner_icon" field.
 func HasFarmPlannerIconNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasFarmPlannerIcon), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldHasFarmPlannerIcon, v))
 }
 
 // HasActionsBoosterIconEQ applies the EQ predicate on the "has_actions_booster_icon" field.
 func HasActionsBoosterIconEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasActionsBoosterIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasActionsBoosterIcon, v))
 }
 
 // HasActionsBoosterIconNEQ applies the NEQ predicate on the "has_actions_booster_icon" field.
 func HasActionsBoosterIconNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasActionsBoosterIcon), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldHasActionsBoosterIcon, v))
 }
 
 // HasPointsProviderIconEQ applies the EQ predicate on the "has_points_provider_icon" field.
 func HasPointsProviderIconEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasPointsProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasPointsProviderIcon, v))
 }
 
 // HasPointsProviderIconNEQ applies the NEQ predicate on the "has_points_provider_icon" field.
 func HasPointsProviderIconNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasPointsProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldHasPointsProviderIcon, v))
 }
 
 // HasGoodsProviderIconEQ applies the EQ predicate on the "has_goods_provider_icon" field.
 func HasGoodsProviderIconEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasGoodsProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasGoodsProviderIcon, v))
 }
 
 // HasGoodsProviderIconNEQ applies the NEQ predicate on the "has_goods_provider_icon" field.
 func HasGoodsProviderIconNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasGoodsProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldHasGoodsProviderIcon, v))
 }
 
 // HasFoodProviderIconEQ applies the EQ predicate on the "has_food_provider_icon" field.
 func HasFoodProviderIconEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasFoodProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasFoodProviderIcon, v))
 }
 
 // HasFoodProviderIconNEQ applies the NEQ predicate on the "has_food_provider_icon" field.
 func HasFoodProviderIconNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasFoodProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldHasFoodProviderIcon, v))
 }
 
 // HasCropProviderIconEQ applies the EQ predicate on the "has_crop_provider_icon" field.
 func HasCropProviderIconEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasCropProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasCropProviderIcon, v))
 }
 
 // HasCropProviderIconNEQ applies the NEQ predicate on the "has_crop_provider_icon" field.
 func HasCropProviderIconNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasCropProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldHasCropProviderIcon, v))
 }
 
 // HasBuildingResourceProviderIconEQ applies the EQ predicate on the "has_building_resource_provider_icon" field.
 func HasBuildingResourceProviderIconEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasBuildingResourceProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasBuildingResourceProviderIcon, v))
 }
 
 // HasBuildingResourceProviderIconNEQ applies the NEQ predicate on the "has_building_resource_provider_icon" field.
 func HasBuildingResourceProviderIconNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasBuildingResourceProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldHasBuildingResourceProviderIcon, v))
 }
 
 // HasLivestockProviderIconEQ applies the EQ predicate on the "has_livestock_provider_icon" field.
 func HasLivestockProviderIconEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasLivestockProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasLivestockProviderIcon, v))
 }
 
 // HasLivestockProviderIconNEQ applies the NEQ predicate on the "has_livestock_provider_icon" field.
 func HasLivestockProviderIconNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasLivestockProviderIcon), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldHasLivestockProviderIcon, v))
 }
 
 // HasCutPeatIconEQ applies the EQ predicate on the "has_cut_peat_icon" field.
 func HasCutPeatIconEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasCutPeatIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasCutPeatIcon, v))
 }
 
 // HasCutPeatIconNEQ applies the NEQ predicate on the "has_cut_peat_icon" field.
 func HasCutPeatIconNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasCutPeatIcon), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldHasCutPeatIcon, v))
 }
 
 // HasFellTreesIconEQ applies the EQ predicate on the "has_fell_trees_icon" field.
 func HasFellTreesIconEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasFellTreesIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasFellTreesIcon, v))
 }
 
 // HasFellTreesIconNEQ applies the NEQ predicate on the "has_fell_trees_icon" field.
 func HasFellTreesIconNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasFellTreesIcon), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldHasFellTreesIcon, v))
 }
 
 // HasSlashAndBurnIconEQ applies the EQ predicate on the "has_slash_and_burn_icon" field.
 func HasSlashAndBurnIconEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasSlashAndBurnIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasSlashAndBurnIcon, v))
 }
 
 // HasSlashAndBurnIconNEQ applies the NEQ predicate on the "has_slash_and_burn_icon" field.
 func HasSlashAndBurnIconNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasSlashAndBurnIcon), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldHasSlashAndBurnIcon, v))
 }
 
 // HasHiringFareIconEQ applies the EQ predicate on the "has_hiring_fare_icon" field.
 func HasHiringFareIconEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHasHiringFareIcon), v))
-	})
+	return predicate.Card(sql.FieldEQ(FieldHasHiringFareIcon, v))
 }
 
 // HasHiringFareIconNEQ applies the NEQ predicate on the "has_hiring_fare_icon" field.
 func HasHiringFareIconNEQ(v bool) predicate.Card {
-	return predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHasHiringFareIcon), v))
-	})
+	return predicate.Card(sql.FieldNEQ(FieldHasHiringFareIcon, v))
 }
 
 // HasRevision applies the HasEdge predicate on the "revision" edge.
@@ -2019,7 +1348,6 @@ func HasRevision() predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(RevisionTable, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, RevisionTable, RevisionColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
@@ -2047,7 +1375,6 @@ func HasProducts() predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(ProductsTable, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, ProductsTable, ProductsPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
@@ -2075,7 +1402,6 @@ func HasDeck() predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(DeckTable, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, DeckTable, DeckColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
@@ -2103,7 +1429,6 @@ func HasCardType() predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(CardTypeTable, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, CardTypeTable, CardTypeColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
@@ -2131,7 +1456,6 @@ func HasCardSpecialColor() predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(CardSpecialColorTable, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, CardSpecialColorTable, CardSpecialColorColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
@@ -2159,7 +1483,6 @@ func HasChildren() predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(ChildrenTable, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, ChildrenTable, ChildrenPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
@@ -2187,7 +1510,6 @@ func HasAncestors() predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(AncestorsTable, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, AncestorsTable, AncestorsPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)

@@ -3,12 +3,12 @@
 package ent
 
 import (
-	"agricoladb/ent/product"
-	"agricoladb/ent/revision"
 	"fmt"
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/product"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/revision"
 )
 
 // Product is the model entity for the Product schema.
@@ -137,19 +137,19 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 
 // QueryCards queries the "cards" edge of the Product entity.
 func (pr *Product) QueryCards() *CardQuery {
-	return (&ProductClient{config: pr.config}).QueryCards(pr)
+	return NewProductClient(pr.config).QueryCards(pr)
 }
 
 // QueryRevision queries the "revision" edge of the Product entity.
 func (pr *Product) QueryRevision() *RevisionQuery {
-	return (&ProductClient{config: pr.config}).QueryRevision(pr)
+	return NewProductClient(pr.config).QueryRevision(pr)
 }
 
 // Update returns a builder for updating this Product.
 // Note that you need to call Product.Unwrap() before calling this method if this Product
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (pr *Product) Update() *ProductUpdateOne {
-	return (&ProductClient{config: pr.config}).UpdateOne(pr)
+	return NewProductClient(pr.config).UpdateOne(pr)
 }
 
 // Unwrap unwraps the Product entity that was returned from a transaction after it was closed,

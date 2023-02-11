@@ -3,8 +3,6 @@
 package ent
 
 import (
-	"agricoladb/ent/card"
-	"agricoladb/ent/cardtype"
 	"context"
 	"errors"
 	"fmt"
@@ -12,6 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/card"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardtype"
 )
 
 // CardTypeCreate is the builder for creating a CardType entity.
@@ -84,49 +84,7 @@ func (ctc *CardTypeCreate) Mutation() *CardTypeMutation {
 
 // Save creates the CardType in the database.
 func (ctc *CardTypeCreate) Save(ctx context.Context) (*CardType, error) {
-	var (
-		err  error
-		node *CardType
-	)
-	if len(ctc.hooks) == 0 {
-		if err = ctc.check(); err != nil {
-			return nil, err
-		}
-		node, err = ctc.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*CardTypeMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = ctc.check(); err != nil {
-				return nil, err
-			}
-			ctc.mutation = mutation
-			if node, err = ctc.sqlSave(ctx); err != nil {
-				return nil, err
-			}
-			mutation.id = &node.ID
-			mutation.done = true
-			return node, err
-		})
-		for i := len(ctc.hooks) - 1; i >= 0; i-- {
-			if ctc.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = ctc.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, ctc.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*CardType)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from CardTypeMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*CardType, CardTypeMutation](ctx, ctc.sqlSave, ctc.mutation, ctc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -165,6 +123,9 @@ func (ctc *CardTypeCreate) check() error {
 }
 
 func (ctc *CardTypeCreate) sqlSave(ctx context.Context) (*CardType, error) {
+	if err := ctc.check(); err != nil {
+		return nil, err
+	}
 	_node, _spec := ctc.createSpec()
 	if err := sqlgraph.CreateNode(ctx, ctc.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
@@ -176,6 +137,8 @@ func (ctc *CardTypeCreate) sqlSave(ctx context.Context) (*CardType, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = int(id)
 	}
+	ctc.mutation.id = &_node.ID
+	ctc.mutation.done = true
 	return _node, nil
 }
 

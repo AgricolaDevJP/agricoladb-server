@@ -1,11 +1,12 @@
 package initdb
 
 import (
-	"agricoladb/ent"
-	"agricoladb/ent/migrate"
 	"context"
 	"fmt"
 	"path/filepath"
+
+	"github.com/AgricolaDevJP/agricoladb-server/ent"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/migrate"
 )
 
 type Generator struct {

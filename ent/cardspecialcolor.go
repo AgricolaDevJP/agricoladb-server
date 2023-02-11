@@ -3,11 +3,11 @@
 package ent
 
 import (
-	"agricoladb/ent/cardspecialcolor"
 	"fmt"
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardspecialcolor"
 )
 
 // CardSpecialColor is the model entity for the CardSpecialColor schema.
@@ -103,14 +103,14 @@ func (csc *CardSpecialColor) assignValues(columns []string, values []any) error 
 
 // QueryCards queries the "cards" edge of the CardSpecialColor entity.
 func (csc *CardSpecialColor) QueryCards() *CardQuery {
-	return (&CardSpecialColorClient{config: csc.config}).QueryCards(csc)
+	return NewCardSpecialColorClient(csc.config).QueryCards(csc)
 }
 
 // Update returns a builder for updating this CardSpecialColor.
 // Note that you need to call CardSpecialColor.Unwrap() before calling this method if this CardSpecialColor
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (csc *CardSpecialColor) Update() *CardSpecialColorUpdateOne {
-	return (&CardSpecialColorClient{config: csc.config}).UpdateOne(csc)
+	return NewCardSpecialColorClient(csc.config).UpdateOne(csc)
 }
 
 // Unwrap unwraps the CardSpecialColor entity that was returned from a transaction after it was closed,

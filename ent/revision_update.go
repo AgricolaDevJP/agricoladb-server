@@ -3,11 +3,6 @@
 package ent
 
 import (
-	"agricoladb/ent/card"
-	"agricoladb/ent/deck"
-	"agricoladb/ent/predicate"
-	"agricoladb/ent/product"
-	"agricoladb/ent/revision"
 	"context"
 	"errors"
 	"fmt"
@@ -15,6 +10,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/card"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/deck"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/predicate"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/product"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/revision"
 )
 
 // RevisionUpdate is the builder for updating Revision entities.
@@ -185,34 +185,7 @@ func (ru *RevisionUpdate) RemoveDecks(d ...*Deck) *RevisionUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ru *RevisionUpdate) Save(ctx context.Context) (int, error) {
-	var (
-		err      error
-		affected int
-	)
-	if len(ru.hooks) == 0 {
-		affected, err = ru.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*RevisionMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			ru.mutation = mutation
-			affected, err = ru.sqlSave(ctx)
-			mutation.done = true
-			return affected, err
-		})
-		for i := len(ru.hooks) - 1; i >= 0; i-- {
-			if ru.hooks[i] == nil {
-				return 0, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = ru.hooks[i](mut)
-		}
-		if _, err := mut.Mutate(ctx, ru.mutation); err != nil {
-			return 0, err
-		}
-	}
-	return affected, err
+	return withHooks[int, RevisionMutation](ctx, ru.sqlSave, ru.mutation, ru.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -437,6 +410,7 @@ func (ru *RevisionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
+	ru.mutation.done = true
 	return n, nil
 }
 
@@ -610,40 +584,7 @@ func (ruo *RevisionUpdateOne) Select(field string, fields ...string) *RevisionUp
 
 // Save executes the query and returns the updated Revision entity.
 func (ruo *RevisionUpdateOne) Save(ctx context.Context) (*Revision, error) {
-	var (
-		err  error
-		node *Revision
-	)
-	if len(ruo.hooks) == 0 {
-		node, err = ruo.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*RevisionMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			ruo.mutation = mutation
-			node, err = ruo.sqlSave(ctx)
-			mutation.done = true
-			return node, err
-		})
-		for i := len(ruo.hooks) - 1; i >= 0; i-- {
-			if ruo.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = ruo.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, ruo.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*Revision)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from RevisionMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*Revision, RevisionMutation](ctx, ruo.sqlSave, ruo.mutation, ruo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -888,5 +829,6 @@ func (ruo *RevisionUpdateOne) sqlSave(ctx context.Context) (_node *Revision, err
 		}
 		return nil, err
 	}
+	ruo.mutation.done = true
 	return _node, nil
 }

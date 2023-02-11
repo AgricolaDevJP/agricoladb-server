@@ -1,11 +1,12 @@
 package main
 
 import (
-	"agricoladb/ent"
-	"agricoladb/initdb"
 	"context"
 	"log"
 	"net"
+
+	"github.com/AgricolaDevJP/agricoladb-server/ent"
+	"github.com/AgricolaDevJP/agricoladb-server/initdb"
 
 	"github.com/caarlos0/env/v6"
 	"github.com/go-sql-driver/mysql"

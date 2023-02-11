@@ -3,9 +3,6 @@
 package ent
 
 import (
-	"agricoladb/ent/card"
-	"agricoladb/ent/cardtype"
-	"agricoladb/ent/predicate"
 	"context"
 	"database/sql/driver"
 	"fmt"
@@ -14,16 +11,17 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/card"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardtype"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/predicate"
 )
 
 // CardTypeQuery is the builder for querying CardType entities.
 type CardTypeQuery struct {
 	config
-	limit          *int
-	offset         *int
-	unique         *bool
+	ctx            *QueryContext
 	order          []OrderFunc
-	fields         []string
+	inters         []Interceptor
 	predicates     []predicate.CardType
 	withCards      *CardQuery
 	modifiers      []func(*sql.Selector)
@@ -40,26 +38,26 @@ func (ctq *CardTypeQuery) Where(ps ...predicate.CardType) *CardTypeQuery {
 	return ctq
 }
 
-// Limit adds a limit step to the query.
+// Limit the number of records to be returned by this query.
 func (ctq *CardTypeQuery) Limit(limit int) *CardTypeQuery {
-	ctq.limit = &limit
+	ctq.ctx.Limit = &limit
 	return ctq
 }
 
-// Offset adds an offset step to the query.
+// Offset to start from.
 func (ctq *CardTypeQuery) Offset(offset int) *CardTypeQuery {
-	ctq.offset = &offset
+	ctq.ctx.Offset = &offset
 	return ctq
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
 func (ctq *CardTypeQuery) Unique(unique bool) *CardTypeQuery {
-	ctq.unique = &unique
+	ctq.ctx.Unique = &unique
 	return ctq
 }
 
-// Order adds an order step to the query.
+// Order specifies how the records should be ordered.
 func (ctq *CardTypeQuery) Order(o ...OrderFunc) *CardTypeQuery {
 	ctq.order = append(ctq.order, o...)
 	return ctq
@@ -67,7 +65,7 @@ func (ctq *CardTypeQuery) Order(o ...OrderFunc) *CardTypeQuery {
 
 // QueryCards chains the current query on the "cards" edge.
 func (ctq *CardTypeQuery) QueryCards() *CardQuery {
-	query := &CardQuery{config: ctq.config}
+	query := (&CardClient{config: ctq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := ctq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -90,7 +88,7 @@ func (ctq *CardTypeQuery) QueryCards() *CardQuery {
 // First returns the first CardType entity from the query.
 // Returns a *NotFoundError when no CardType was found.
 func (ctq *CardTypeQuery) First(ctx context.Context) (*CardType, error) {
-	nodes, err := ctq.Limit(1).All(ctx)
+	nodes, err := ctq.Limit(1).All(setContextOp(ctx, ctq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -113,7 +111,7 @@ func (ctq *CardTypeQuery) FirstX(ctx context.Context) *CardType {
 // Returns a *NotFoundError when no CardType ID was found.
 func (ctq *CardTypeQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = ctq.Limit(1).IDs(ctx); err != nil {
+	if ids, err = ctq.Limit(1).IDs(setContextOp(ctx, ctq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -136,7 +134,7 @@ func (ctq *CardTypeQuery) FirstIDX(ctx context.Context) int {
 // Returns a *NotSingularError when more than one CardType entity is found.
 // Returns a *NotFoundError when no CardType entities are found.
 func (ctq *CardTypeQuery) Only(ctx context.Context) (*CardType, error) {
-	nodes, err := ctq.Limit(2).All(ctx)
+	nodes, err := ctq.Limit(2).All(setContextOp(ctx, ctq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -164,7 +162,7 @@ func (ctq *CardTypeQuery) OnlyX(ctx context.Context) *CardType {
 // Returns a *NotFoundError when no entities are found.
 func (ctq *CardTypeQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = ctq.Limit(2).IDs(ctx); err != nil {
+	if ids, err = ctq.Limit(2).IDs(setContextOp(ctx, ctq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -189,10 +187,12 @@ func (ctq *CardTypeQuery) OnlyIDX(ctx context.Context) int {
 
 // All executes the query and returns a list of CardTypes.
 func (ctq *CardTypeQuery) All(ctx context.Context) ([]*CardType, error) {
+	ctx = setContextOp(ctx, ctq.ctx, "All")
 	if err := ctq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
-	return ctq.sqlAll(ctx)
+	qr := querierAll[[]*CardType, *CardTypeQuery]()
+	return withInterceptors[[]*CardType](ctx, ctq, qr, ctq.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
@@ -207,6 +207,7 @@ func (ctq *CardTypeQuery) AllX(ctx context.Context) []*CardType {
 // IDs executes the query and returns a list of CardType IDs.
 func (ctq *CardTypeQuery) IDs(ctx context.Context) ([]int, error) {
 	var ids []int
+	ctx = setContextOp(ctx, ctq.ctx, "IDs")
 	if err := ctq.Select(cardtype.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -224,10 +225,11 @@ func (ctq *CardTypeQuery) IDsX(ctx context.Context) []int {
 
 // Count returns the count of the given query.
 func (ctq *CardTypeQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, ctq.ctx, "Count")
 	if err := ctq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return ctq.sqlCount(ctx)
+	return withInterceptors[int](ctx, ctq, querierCount[*CardTypeQuery](), ctq.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
@@ -241,10 +243,15 @@ func (ctq *CardTypeQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (ctq *CardTypeQuery) Exist(ctx context.Context) (bool, error) {
-	if err := ctq.prepareQuery(ctx); err != nil {
-		return false, err
+	ctx = setContextOp(ctx, ctq.ctx, "Exist")
+	switch _, err := ctq.FirstID(ctx); {
+	case IsNotFound(err):
+		return false, nil
+	case err != nil:
+		return false, fmt.Errorf("ent: check existence: %w", err)
+	default:
+		return true, nil
 	}
-	return ctq.sqlExist(ctx)
 }
 
 // ExistX is like Exist, but panics if an error occurs.
@@ -264,22 +271,21 @@ func (ctq *CardTypeQuery) Clone() *CardTypeQuery {
 	}
 	return &CardTypeQuery{
 		config:     ctq.config,
-		limit:      ctq.limit,
-		offset:     ctq.offset,
+		ctx:        ctq.ctx.Clone(),
 		order:      append([]OrderFunc{}, ctq.order...),
+		inters:     append([]Interceptor{}, ctq.inters...),
 		predicates: append([]predicate.CardType{}, ctq.predicates...),
 		withCards:  ctq.withCards.Clone(),
 		// clone intermediate query.
-		sql:    ctq.sql.Clone(),
-		path:   ctq.path,
-		unique: ctq.unique,
+		sql:  ctq.sql.Clone(),
+		path: ctq.path,
 	}
 }
 
 // WithCards tells the query-builder to eager-load the nodes that are connected to
 // the "cards" edge. The optional arguments are used to configure the query builder of the edge.
 func (ctq *CardTypeQuery) WithCards(opts ...func(*CardQuery)) *CardTypeQuery {
-	query := &CardQuery{config: ctq.config}
+	query := (&CardClient{config: ctq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -302,16 +308,11 @@ func (ctq *CardTypeQuery) WithCards(opts ...func(*CardQuery)) *CardTypeQuery {
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (ctq *CardTypeQuery) GroupBy(field string, fields ...string) *CardTypeGroupBy {
-	grbuild := &CardTypeGroupBy{config: ctq.config}
-	grbuild.fields = append([]string{field}, fields...)
-	grbuild.path = func(ctx context.Context) (prev *sql.Selector, err error) {
-		if err := ctq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		return ctq.sqlQuery(ctx), nil
-	}
+	ctq.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &CardTypeGroupBy{build: ctq}
+	grbuild.flds = &ctq.ctx.Fields
 	grbuild.label = cardtype.Label
-	grbuild.flds, grbuild.scan = &grbuild.fields, grbuild.Scan
+	grbuild.scan = grbuild.Scan
 	return grbuild
 }
 
@@ -328,11 +329,11 @@ func (ctq *CardTypeQuery) GroupBy(field string, fields ...string) *CardTypeGroup
 //		Select(cardtype.FieldKey).
 //		Scan(ctx, &v)
 func (ctq *CardTypeQuery) Select(fields ...string) *CardTypeSelect {
-	ctq.fields = append(ctq.fields, fields...)
-	selbuild := &CardTypeSelect{CardTypeQuery: ctq}
-	selbuild.label = cardtype.Label
-	selbuild.flds, selbuild.scan = &ctq.fields, selbuild.Scan
-	return selbuild
+	ctq.ctx.Fields = append(ctq.ctx.Fields, fields...)
+	sbuild := &CardTypeSelect{CardTypeQuery: ctq}
+	sbuild.label = cardtype.Label
+	sbuild.flds, sbuild.scan = &ctq.ctx.Fields, sbuild.Scan
+	return sbuild
 }
 
 // Aggregate returns a CardTypeSelect configured with the given aggregations.
@@ -341,7 +342,17 @@ func (ctq *CardTypeQuery) Aggregate(fns ...AggregateFunc) *CardTypeSelect {
 }
 
 func (ctq *CardTypeQuery) prepareQuery(ctx context.Context) error {
-	for _, f := range ctq.fields {
+	for _, inter := range ctq.inters {
+		if inter == nil {
+			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
+		}
+		if trv, ok := inter.(Traverser); ok {
+			if err := trv.Traverse(ctx, ctq); err != nil {
+				return err
+			}
+		}
+	}
+	for _, f := range ctq.ctx.Fields {
 		if !cardtype.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
@@ -440,22 +451,11 @@ func (ctq *CardTypeQuery) sqlCount(ctx context.Context) (int, error) {
 	if len(ctq.modifiers) > 0 {
 		_spec.Modifiers = ctq.modifiers
 	}
-	_spec.Node.Columns = ctq.fields
-	if len(ctq.fields) > 0 {
-		_spec.Unique = ctq.unique != nil && *ctq.unique
+	_spec.Node.Columns = ctq.ctx.Fields
+	if len(ctq.ctx.Fields) > 0 {
+		_spec.Unique = ctq.ctx.Unique != nil && *ctq.ctx.Unique
 	}
 	return sqlgraph.CountNodes(ctx, ctq.driver, _spec)
-}
-
-func (ctq *CardTypeQuery) sqlExist(ctx context.Context) (bool, error) {
-	switch _, err := ctq.FirstID(ctx); {
-	case IsNotFound(err):
-		return false, nil
-	case err != nil:
-		return false, fmt.Errorf("ent: check existence: %w", err)
-	default:
-		return true, nil
-	}
 }
 
 func (ctq *CardTypeQuery) querySpec() *sqlgraph.QuerySpec {
@@ -471,10 +471,10 @@ func (ctq *CardTypeQuery) querySpec() *sqlgraph.QuerySpec {
 		From:   ctq.sql,
 		Unique: true,
 	}
-	if unique := ctq.unique; unique != nil {
+	if unique := ctq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
 	}
-	if fields := ctq.fields; len(fields) > 0 {
+	if fields := ctq.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, cardtype.FieldID)
 		for i := range fields {
@@ -490,10 +490,10 @@ func (ctq *CardTypeQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if limit := ctq.limit; limit != nil {
+	if limit := ctq.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := ctq.offset; offset != nil {
+	if offset := ctq.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
 	if ps := ctq.order; len(ps) > 0 {
@@ -509,7 +509,7 @@ func (ctq *CardTypeQuery) querySpec() *sqlgraph.QuerySpec {
 func (ctq *CardTypeQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	builder := sql.Dialect(ctq.driver.Dialect())
 	t1 := builder.Table(cardtype.Table)
-	columns := ctq.fields
+	columns := ctq.ctx.Fields
 	if len(columns) == 0 {
 		columns = cardtype.Columns
 	}
@@ -518,7 +518,7 @@ func (ctq *CardTypeQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector = ctq.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if ctq.unique != nil && *ctq.unique {
+	if ctq.ctx.Unique != nil && *ctq.ctx.Unique {
 		selector.Distinct()
 	}
 	for _, p := range ctq.predicates {
@@ -527,12 +527,12 @@ func (ctq *CardTypeQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	for _, p := range ctq.order {
 		p(selector)
 	}
-	if offset := ctq.offset; offset != nil {
+	if offset := ctq.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := ctq.limit; limit != nil {
+	if limit := ctq.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -541,7 +541,7 @@ func (ctq *CardTypeQuery) sqlQuery(ctx context.Context) *sql.Selector {
 // WithNamedCards tells the query-builder to eager-load the nodes that are connected to the "cards"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (ctq *CardTypeQuery) WithNamedCards(name string, opts ...func(*CardQuery)) *CardTypeQuery {
-	query := &CardQuery{config: ctq.config}
+	query := (&CardClient{config: ctq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -554,13 +554,8 @@ func (ctq *CardTypeQuery) WithNamedCards(name string, opts ...func(*CardQuery)) 
 
 // CardTypeGroupBy is the group-by builder for CardType entities.
 type CardTypeGroupBy struct {
-	config
 	selector
-	fields []string
-	fns    []AggregateFunc
-	// intermediate query (i.e. traversal path).
-	sql  *sql.Selector
-	path func(context.Context) (*sql.Selector, error)
+	build *CardTypeQuery
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
@@ -569,58 +564,46 @@ func (ctgb *CardTypeGroupBy) Aggregate(fns ...AggregateFunc) *CardTypeGroupBy {
 	return ctgb
 }
 
-// Scan applies the group-by query and scans the result into the given value.
+// Scan applies the selector query and scans the result into the given value.
 func (ctgb *CardTypeGroupBy) Scan(ctx context.Context, v any) error {
-	query, err := ctgb.path(ctx)
-	if err != nil {
+	ctx = setContextOp(ctx, ctgb.build.ctx, "GroupBy")
+	if err := ctgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	ctgb.sql = query
-	return ctgb.sqlScan(ctx, v)
+	return scanWithInterceptors[*CardTypeQuery, *CardTypeGroupBy](ctx, ctgb.build, ctgb, ctgb.build.inters, v)
 }
 
-func (ctgb *CardTypeGroupBy) sqlScan(ctx context.Context, v any) error {
-	for _, f := range ctgb.fields {
-		if !cardtype.ValidColumn(f) {
-			return &ValidationError{Name: f, err: fmt.Errorf("invalid field %q for group-by", f)}
-		}
+func (ctgb *CardTypeGroupBy) sqlScan(ctx context.Context, root *CardTypeQuery, v any) error {
+	selector := root.sqlQuery(ctx).Select()
+	aggregation := make([]string, 0, len(ctgb.fns))
+	for _, fn := range ctgb.fns {
+		aggregation = append(aggregation, fn(selector))
 	}
-	selector := ctgb.sqlQuery()
+	if len(selector.SelectedColumns()) == 0 {
+		columns := make([]string, 0, len(*ctgb.flds)+len(ctgb.fns))
+		for _, f := range *ctgb.flds {
+			columns = append(columns, selector.C(f))
+		}
+		columns = append(columns, aggregation...)
+		selector.Select(columns...)
+	}
+	selector.GroupBy(selector.Columns(*ctgb.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := ctgb.driver.Query(ctx, query, args, rows); err != nil {
+	if err := ctgb.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
 }
 
-func (ctgb *CardTypeGroupBy) sqlQuery() *sql.Selector {
-	selector := ctgb.sql.Select()
-	aggregation := make([]string, 0, len(ctgb.fns))
-	for _, fn := range ctgb.fns {
-		aggregation = append(aggregation, fn(selector))
-	}
-	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(ctgb.fields)+len(ctgb.fns))
-		for _, f := range ctgb.fields {
-			columns = append(columns, selector.C(f))
-		}
-		columns = append(columns, aggregation...)
-		selector.Select(columns...)
-	}
-	return selector.GroupBy(selector.Columns(ctgb.fields...)...)
-}
-
 // CardTypeSelect is the builder for selecting fields of CardType entities.
 type CardTypeSelect struct {
 	*CardTypeQuery
 	selector
-	// intermediate query (i.e. traversal path).
-	sql *sql.Selector
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
@@ -631,26 +614,27 @@ func (cts *CardTypeSelect) Aggregate(fns ...AggregateFunc) *CardTypeSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (cts *CardTypeSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, cts.ctx, "Select")
 	if err := cts.prepareQuery(ctx); err != nil {
 		return err
 	}
-	cts.sql = cts.CardTypeQuery.sqlQuery(ctx)
-	return cts.sqlScan(ctx, v)
+	return scanWithInterceptors[*CardTypeQuery, *CardTypeSelect](ctx, cts.CardTypeQuery, cts, cts.inters, v)
 }
 
-func (cts *CardTypeSelect) sqlScan(ctx context.Context, v any) error {
+func (cts *CardTypeSelect) sqlScan(ctx context.Context, root *CardTypeQuery, v any) error {
+	selector := root.sqlQuery(ctx)
 	aggregation := make([]string, 0, len(cts.fns))
 	for _, fn := range cts.fns {
-		aggregation = append(aggregation, fn(cts.sql))
+		aggregation = append(aggregation, fn(selector))
 	}
 	switch n := len(*cts.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
-		cts.sql.Select(aggregation...)
+		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
-		cts.sql.AppendSelect(aggregation...)
+		selector.AppendSelect(aggregation...)
 	}
 	rows := &sql.Rows{}
-	query, args := cts.sql.Query()
+	query, args := selector.Query()
 	if err := cts.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}

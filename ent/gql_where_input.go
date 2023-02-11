@@ -3,15 +3,16 @@
 package ent
 
 import (
-	"agricoladb/ent/card"
-	"agricoladb/ent/cardspecialcolor"
-	"agricoladb/ent/cardtype"
-	"agricoladb/ent/deck"
-	"agricoladb/ent/predicate"
-	"agricoladb/ent/product"
-	"agricoladb/ent/revision"
 	"errors"
 	"fmt"
+
+	"github.com/AgricolaDevJP/agricoladb-server/ent/card"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardspecialcolor"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardtype"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/deck"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/predicate"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/product"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/revision"
 )
 
 // CardWhereInput represents a where input for filtering Card queries.

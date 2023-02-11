@@ -3,19 +3,21 @@
 package ent
 
 import (
-	"agricoladb/ent/card"
-	"agricoladb/ent/cardspecialcolor"
-	"agricoladb/ent/cardtype"
-	"agricoladb/ent/deck"
-	"agricoladb/ent/predicate"
-	"agricoladb/ent/product"
-	"agricoladb/ent/revision"
 	"context"
 	"errors"
 	"fmt"
 	"sync"
 
+	"github.com/AgricolaDevJP/agricoladb-server/ent/card"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardspecialcolor"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardtype"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/deck"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/predicate"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/product"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/revision"
+
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
 )
 
 const (
@@ -1906,9 +1908,24 @@ func (m *CardMutation) Where(ps ...predicate.Card) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the CardMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *CardMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Card, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *CardMutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *CardMutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (Card).
@@ -3209,9 +3226,24 @@ func (m *CardSpecialColorMutation) Where(ps ...predicate.CardSpecialColor) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the CardSpecialColorMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *CardSpecialColorMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.CardSpecialColor, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *CardSpecialColorMutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *CardSpecialColorMutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (CardSpecialColor).
@@ -3768,9 +3800,24 @@ func (m *CardTypeMutation) Where(ps ...predicate.CardType) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the CardTypeMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *CardTypeMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.CardType, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *CardTypeMutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *CardTypeMutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (CardType).
@@ -4391,9 +4438,24 @@ func (m *DeckMutation) Where(ps ...predicate.Deck) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the DeckMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *DeckMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Deck, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *DeckMutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *DeckMutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (Deck).
@@ -5124,9 +5186,24 @@ func (m *ProductMutation) Where(ps ...predicate.Product) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the ProductMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ProductMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Product, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *ProductMutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ProductMutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (Product).
@@ -5870,9 +5947,24 @@ func (m *RevisionMutation) Where(ps ...predicate.Revision) {
 	m.predicates = append(m.predicates, ps...)
 }
 
+// WhereP appends storage-level predicates to the RevisionMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *RevisionMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Revision, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
 // Op returns the operation name.
 func (m *RevisionMutation) Op() Op {
 	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *RevisionMutation) SetOp(op Op) {
+	m.op = op
 }
 
 // Type returns the node type of this mutation (Revision).

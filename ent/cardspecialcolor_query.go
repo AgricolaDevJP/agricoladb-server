@@ -3,9 +3,6 @@
 package ent
 
 import (
-	"agricoladb/ent/card"
-	"agricoladb/ent/cardspecialcolor"
-	"agricoladb/ent/predicate"
 	"context"
 	"database/sql/driver"
 	"fmt"
@@ -14,16 +11,17 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/card"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardspecialcolor"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/predicate"
 )
 
 // CardSpecialColorQuery is the builder for querying CardSpecialColor entities.
 type CardSpecialColorQuery struct {
 	config
-	limit          *int
-	offset         *int
-	unique         *bool
+	ctx            *QueryContext
 	order          []OrderFunc
-	fields         []string
+	inters         []Interceptor
 	predicates     []predicate.CardSpecialColor
 	withCards      *CardQuery
 	modifiers      []func(*sql.Selector)
@@ -40,26 +38,26 @@ func (cscq *CardSpecialColorQuery) Where(ps ...predicate.CardSpecialColor) *Card
 	return cscq
 }
 
-// Limit adds a limit step to the query.
+// Limit the number of records to be returned by this query.
 func (cscq *CardSpecialColorQuery) Limit(limit int) *CardSpecialColorQuery {
-	cscq.limit = &limit
+	cscq.ctx.Limit = &limit
 	return cscq
 }
 
-// Offset adds an offset step to the query.
+// Offset to start from.
 func (cscq *CardSpecialColorQuery) Offset(offset int) *CardSpecialColorQuery {
-	cscq.offset = &offset
+	cscq.ctx.Offset = &offset
 	return cscq
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
 func (cscq *CardSpecialColorQuery) Unique(unique bool) *CardSpecialColorQuery {
-	cscq.unique = &unique
+	cscq.ctx.Unique = &unique
 	return cscq
 }
 
-// Order adds an order step to the query.
+// Order specifies how the records should be ordered.
 func (cscq *CardSpecialColorQuery) Order(o ...OrderFunc) *CardSpecialColorQuery {
 	cscq.order = append(cscq.order, o...)
 	return cscq
@@ -67,7 +65,7 @@ func (cscq *CardSpecialColorQuery) Order(o ...OrderFunc) *CardSpecialColorQuery 
 
 // QueryCards chains the current query on the "cards" edge.
 func (cscq *CardSpecialColorQuery) QueryCards() *CardQuery {
-	query := &CardQuery{config: cscq.config}
+	query := (&CardClient{config: cscq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := cscq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -90,7 +88,7 @@ func (cscq *CardSpecialColorQuery) QueryCards() *CardQuery {
 // First returns the first CardSpecialColor entity from the query.
 // Returns a *NotFoundError when no CardSpecialColor was found.
 func (cscq *CardSpecialColorQuery) First(ctx context.Context) (*CardSpecialColor, error) {
-	nodes, err := cscq.Limit(1).All(ctx)
+	nodes, err := cscq.Limit(1).All(setContextOp(ctx, cscq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -113,7 +111,7 @@ func (cscq *CardSpecialColorQuery) FirstX(ctx context.Context) *CardSpecialColor
 // Returns a *NotFoundError when no CardSpecialColor ID was found.
 func (cscq *CardSpecialColorQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = cscq.Limit(1).IDs(ctx); err != nil {
+	if ids, err = cscq.Limit(1).IDs(setContextOp(ctx, cscq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -136,7 +134,7 @@ func (cscq *CardSpecialColorQuery) FirstIDX(ctx context.Context) int {
 // Returns a *NotSingularError when more than one CardSpecialColor entity is found.
 // Returns a *NotFoundError when no CardSpecialColor entities are found.
 func (cscq *CardSpecialColorQuery) Only(ctx context.Context) (*CardSpecialColor, error) {
-	nodes, err := cscq.Limit(2).All(ctx)
+	nodes, err := cscq.Limit(2).All(setContextOp(ctx, cscq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -164,7 +162,7 @@ func (cscq *CardSpecialColorQuery) OnlyX(ctx context.Context) *CardSpecialColor 
 // Returns a *NotFoundError when no entities are found.
 func (cscq *CardSpecialColorQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = cscq.Limit(2).IDs(ctx); err != nil {
+	if ids, err = cscq.Limit(2).IDs(setContextOp(ctx, cscq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -189,10 +187,12 @@ func (cscq *CardSpecialColorQuery) OnlyIDX(ctx context.Context) int {
 
 // All executes the query and returns a list of CardSpecialColors.
 func (cscq *CardSpecialColorQuery) All(ctx context.Context) ([]*CardSpecialColor, error) {
+	ctx = setContextOp(ctx, cscq.ctx, "All")
 	if err := cscq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
-	return cscq.sqlAll(ctx)
+	qr := querierAll[[]*CardSpecialColor, *CardSpecialColorQuery]()
+	return withInterceptors[[]*CardSpecialColor](ctx, cscq, qr, cscq.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
@@ -207,6 +207,7 @@ func (cscq *CardSpecialColorQuery) AllX(ctx context.Context) []*CardSpecialColor
 // IDs executes the query and returns a list of CardSpecialColor IDs.
 func (cscq *CardSpecialColorQuery) IDs(ctx context.Context) ([]int, error) {
 	var ids []int
+	ctx = setContextOp(ctx, cscq.ctx, "IDs")
 	if err := cscq.Select(cardspecialcolor.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -224,10 +225,11 @@ func (cscq *CardSpecialColorQuery) IDsX(ctx context.Context) []int {
 
 // Count returns the count of the given query.
 func (cscq *CardSpecialColorQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, cscq.ctx, "Count")
 	if err := cscq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return cscq.sqlCount(ctx)
+	return withInterceptors[int](ctx, cscq, querierCount[*CardSpecialColorQuery](), cscq.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
@@ -241,10 +243,15 @@ func (cscq *CardSpecialColorQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (cscq *CardSpecialColorQuery) Exist(ctx context.Context) (bool, error) {
-	if err := cscq.prepareQuery(ctx); err != nil {
-		return false, err
+	ctx = setContextOp(ctx, cscq.ctx, "Exist")
+	switch _, err := cscq.FirstID(ctx); {
+	case IsNotFound(err):
+		return false, nil
+	case err != nil:
+		return false, fmt.Errorf("ent: check existence: %w", err)
+	default:
+		return true, nil
 	}
-	return cscq.sqlExist(ctx)
 }
 
 // ExistX is like Exist, but panics if an error occurs.
@@ -264,22 +271,21 @@ func (cscq *CardSpecialColorQuery) Clone() *CardSpecialColorQuery {
 	}
 	return &CardSpecialColorQuery{
 		config:     cscq.config,
-		limit:      cscq.limit,
-		offset:     cscq.offset,
+		ctx:        cscq.ctx.Clone(),
 		order:      append([]OrderFunc{}, cscq.order...),
+		inters:     append([]Interceptor{}, cscq.inters...),
 		predicates: append([]predicate.CardSpecialColor{}, cscq.predicates...),
 		withCards:  cscq.withCards.Clone(),
 		// clone intermediate query.
-		sql:    cscq.sql.Clone(),
-		path:   cscq.path,
-		unique: cscq.unique,
+		sql:  cscq.sql.Clone(),
+		path: cscq.path,
 	}
 }
 
 // WithCards tells the query-builder to eager-load the nodes that are connected to
 // the "cards" edge. The optional arguments are used to configure the query builder of the edge.
 func (cscq *CardSpecialColorQuery) WithCards(opts ...func(*CardQuery)) *CardSpecialColorQuery {
-	query := &CardQuery{config: cscq.config}
+	query := (&CardClient{config: cscq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -302,16 +308,11 @@ func (cscq *CardSpecialColorQuery) WithCards(opts ...func(*CardQuery)) *CardSpec
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (cscq *CardSpecialColorQuery) GroupBy(field string, fields ...string) *CardSpecialColorGroupBy {
-	grbuild := &CardSpecialColorGroupBy{config: cscq.config}
-	grbuild.fields = append([]string{field}, fields...)
-	grbuild.path = func(ctx context.Context) (prev *sql.Selector, err error) {
-		if err := cscq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		return cscq.sqlQuery(ctx), nil
-	}
+	cscq.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &CardSpecialColorGroupBy{build: cscq}
+	grbuild.flds = &cscq.ctx.Fields
 	grbuild.label = cardspecialcolor.Label
-	grbuild.flds, grbuild.scan = &grbuild.fields, grbuild.Scan
+	grbuild.scan = grbuild.Scan
 	return grbuild
 }
 
@@ -328,11 +329,11 @@ func (cscq *CardSpecialColorQuery) GroupBy(field string, fields ...string) *Card
 //		Select(cardspecialcolor.FieldKey).
 //		Scan(ctx, &v)
 func (cscq *CardSpecialColorQuery) Select(fields ...string) *CardSpecialColorSelect {
-	cscq.fields = append(cscq.fields, fields...)
-	selbuild := &CardSpecialColorSelect{CardSpecialColorQuery: cscq}
-	selbuild.label = cardspecialcolor.Label
-	selbuild.flds, selbuild.scan = &cscq.fields, selbuild.Scan
-	return selbuild
+	cscq.ctx.Fields = append(cscq.ctx.Fields, fields...)
+	sbuild := &CardSpecialColorSelect{CardSpecialColorQuery: cscq}
+	sbuild.label = cardspecialcolor.Label
+	sbuild.flds, sbuild.scan = &cscq.ctx.Fields, sbuild.Scan
+	return sbuild
 }
 
 // Aggregate returns a CardSpecialColorSelect configured with the given aggregations.
@@ -341,7 +342,17 @@ func (cscq *CardSpecialColorQuery) Aggregate(fns ...AggregateFunc) *CardSpecialC
 }
 
 func (cscq *CardSpecialColorQuery) prepareQuery(ctx context.Context) error {
-	for _, f := range cscq.fields {
+	for _, inter := range cscq.inters {
+		if inter == nil {
+			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
+		}
+		if trv, ok := inter.(Traverser); ok {
+			if err := trv.Traverse(ctx, cscq); err != nil {
+				return err
+			}
+		}
+	}
+	for _, f := range cscq.ctx.Fields {
 		if !cardspecialcolor.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
@@ -440,22 +451,11 @@ func (cscq *CardSpecialColorQuery) sqlCount(ctx context.Context) (int, error) {
 	if len(cscq.modifiers) > 0 {
 		_spec.Modifiers = cscq.modifiers
 	}
-	_spec.Node.Columns = cscq.fields
-	if len(cscq.fields) > 0 {
-		_spec.Unique = cscq.unique != nil && *cscq.unique
+	_spec.Node.Columns = cscq.ctx.Fields
+	if len(cscq.ctx.Fields) > 0 {
+		_spec.Unique = cscq.ctx.Unique != nil && *cscq.ctx.Unique
 	}
 	return sqlgraph.CountNodes(ctx, cscq.driver, _spec)
-}
-
-func (cscq *CardSpecialColorQuery) sqlExist(ctx context.Context) (bool, error) {
-	switch _, err := cscq.FirstID(ctx); {
-	case IsNotFound(err):
-		return false, nil
-	case err != nil:
-		return false, fmt.Errorf("ent: check existence: %w", err)
-	default:
-		return true, nil
-	}
 }
 
 func (cscq *CardSpecialColorQuery) querySpec() *sqlgraph.QuerySpec {
@@ -471,10 +471,10 @@ func (cscq *CardSpecialColorQuery) querySpec() *sqlgraph.QuerySpec {
 		From:   cscq.sql,
 		Unique: true,
 	}
-	if unique := cscq.unique; unique != nil {
+	if unique := cscq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
 	}
-	if fields := cscq.fields; len(fields) > 0 {
+	if fields := cscq.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, cardspecialcolor.FieldID)
 		for i := range fields {
@@ -490,10 +490,10 @@ func (cscq *CardSpecialColorQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if limit := cscq.limit; limit != nil {
+	if limit := cscq.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := cscq.offset; offset != nil {
+	if offset := cscq.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
 	if ps := cscq.order; len(ps) > 0 {
@@ -509,7 +509,7 @@ func (cscq *CardSpecialColorQuery) querySpec() *sqlgraph.QuerySpec {
 func (cscq *CardSpecialColorQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	builder := sql.Dialect(cscq.driver.Dialect())
 	t1 := builder.Table(cardspecialcolor.Table)
-	columns := cscq.fields
+	columns := cscq.ctx.Fields
 	if len(columns) == 0 {
 		columns = cardspecialcolor.Columns
 	}
@@ -518,7 +518,7 @@ func (cscq *CardSpecialColorQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector = cscq.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if cscq.unique != nil && *cscq.unique {
+	if cscq.ctx.Unique != nil && *cscq.ctx.Unique {
 		selector.Distinct()
 	}
 	for _, p := range cscq.predicates {
@@ -527,12 +527,12 @@ func (cscq *CardSpecialColorQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	for _, p := range cscq.order {
 		p(selector)
 	}
-	if offset := cscq.offset; offset != nil {
+	if offset := cscq.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := cscq.limit; limit != nil {
+	if limit := cscq.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -541,7 +541,7 @@ func (cscq *CardSpecialColorQuery) sqlQuery(ctx context.Context) *sql.Selector {
 // WithNamedCards tells the query-builder to eager-load the nodes that are connected to the "cards"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (cscq *CardSpecialColorQuery) WithNamedCards(name string, opts ...func(*CardQuery)) *CardSpecialColorQuery {
-	query := &CardQuery{config: cscq.config}
+	query := (&CardClient{config: cscq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -554,13 +554,8 @@ func (cscq *CardSpecialColorQuery) WithNamedCards(name string, opts ...func(*Car
 
 // CardSpecialColorGroupBy is the group-by builder for CardSpecialColor entities.
 type CardSpecialColorGroupBy struct {
-	config
 	selector
-	fields []string
-	fns    []AggregateFunc
-	// intermediate query (i.e. traversal path).
-	sql  *sql.Selector
-	path func(context.Context) (*sql.Selector, error)
+	build *CardSpecialColorQuery
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
@@ -569,58 +564,46 @@ func (cscgb *CardSpecialColorGroupBy) Aggregate(fns ...AggregateFunc) *CardSpeci
 	return cscgb
 }
 
-// Scan applies the group-by query and scans the result into the given value.
+// Scan applies the selector query and scans the result into the given value.
 func (cscgb *CardSpecialColorGroupBy) Scan(ctx context.Context, v any) error {
-	query, err := cscgb.path(ctx)
-	if err != nil {
+	ctx = setContextOp(ctx, cscgb.build.ctx, "GroupBy")
+	if err := cscgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	cscgb.sql = query
-	return cscgb.sqlScan(ctx, v)
+	return scanWithInterceptors[*CardSpecialColorQuery, *CardSpecialColorGroupBy](ctx, cscgb.build, cscgb, cscgb.build.inters, v)
 }
 
-func (cscgb *CardSpecialColorGroupBy) sqlScan(ctx context.Context, v any) error {
-	for _, f := range cscgb.fields {
-		if !cardspecialcolor.ValidColumn(f) {
-			return &ValidationError{Name: f, err: fmt.Errorf("invalid field %q for group-by", f)}
-		}
+func (cscgb *CardSpecialColorGroupBy) sqlScan(ctx context.Context, root *CardSpecialColorQuery, v any) error {
+	selector := root.sqlQuery(ctx).Select()
+	aggregation := make([]string, 0, len(cscgb.fns))
+	for _, fn := range cscgb.fns {
+		aggregation = append(aggregation, fn(selector))
 	}
-	selector := cscgb.sqlQuery()
+	if len(selector.SelectedColumns()) == 0 {
+		columns := make([]string, 0, len(*cscgb.flds)+len(cscgb.fns))
+		for _, f := range *cscgb.flds {
+			columns = append(columns, selector.C(f))
+		}
+		columns = append(columns, aggregation...)
+		selector.Select(columns...)
+	}
+	selector.GroupBy(selector.Columns(*cscgb.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := cscgb.driver.Query(ctx, query, args, rows); err != nil {
+	if err := cscgb.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
 }
 
-func (cscgb *CardSpecialColorGroupBy) sqlQuery() *sql.Selector {
-	selector := cscgb.sql.Select()
-	aggregation := make([]string, 0, len(cscgb.fns))
-	for _, fn := range cscgb.fns {
-		aggregation = append(aggregation, fn(selector))
-	}
-	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(cscgb.fields)+len(cscgb.fns))
-		for _, f := range cscgb.fields {
-			columns = append(columns, selector.C(f))
-		}
-		columns = append(columns, aggregation...)
-		selector.Select(columns...)
-	}
-	return selector.GroupBy(selector.Columns(cscgb.fields...)...)
-}
-
 // CardSpecialColorSelect is the builder for selecting fields of CardSpecialColor entities.
 type CardSpecialColorSelect struct {
 	*CardSpecialColorQuery
 	selector
-	// intermediate query (i.e. traversal path).
-	sql *sql.Selector
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
@@ -631,26 +614,27 @@ func (cscs *CardSpecialColorSelect) Aggregate(fns ...AggregateFunc) *CardSpecial
 
 // Scan applies the selector query and scans the result into the given value.
 func (cscs *CardSpecialColorSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, cscs.ctx, "Select")
 	if err := cscs.prepareQuery(ctx); err != nil {
 		return err
 	}
-	cscs.sql = cscs.CardSpecialColorQuery.sqlQuery(ctx)
-	return cscs.sqlScan(ctx, v)
+	return scanWithInterceptors[*CardSpecialColorQuery, *CardSpecialColorSelect](ctx, cscs.CardSpecialColorQuery, cscs, cscs.inters, v)
 }
 
-func (cscs *CardSpecialColorSelect) sqlScan(ctx context.Context, v any) error {
+func (cscs *CardSpecialColorSelect) sqlScan(ctx context.Context, root *CardSpecialColorQuery, v any) error {
+	selector := root.sqlQuery(ctx)
 	aggregation := make([]string, 0, len(cscs.fns))
 	for _, fn := range cscs.fns {
-		aggregation = append(aggregation, fn(cscs.sql))
+		aggregation = append(aggregation, fn(selector))
 	}
 	switch n := len(*cscs.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
-		cscs.sql.Select(aggregation...)
+		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
-		cscs.sql.AppendSelect(aggregation...)
+		selector.AppendSelect(aggregation...)
 	}
 	rows := &sql.Rows{}
-	query, args := cscs.sql.Query()
+	query, args := selector.Query()
 	if err := cscs.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}

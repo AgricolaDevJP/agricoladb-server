@@ -3,18 +3,18 @@
 package ent
 
 import (
-	"agricoladb/ent/card"
-	"agricoladb/ent/cardspecialcolor"
-	"agricoladb/ent/cardtype"
-	"agricoladb/ent/deck"
-	"agricoladb/ent/product"
-	"agricoladb/ent/revision"
 	"context"
 	"database/sql/driver"
 	"fmt"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/card"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardspecialcolor"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardtype"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/deck"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/product"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/revision"
 )
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
@@ -37,7 +37,7 @@ func (c *CardQuery) collectField(ctx context.Context, op *graphql.OperationConte
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = &RevisionQuery{config: c.config}
+				query = (&RevisionClient{config: c.config}).Query()
 			)
 			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
 				return err
@@ -47,7 +47,7 @@ func (c *CardQuery) collectField(ctx context.Context, op *graphql.OperationConte
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = &ProductQuery{config: c.config}
+				query = (&ProductClient{config: c.config}).Query()
 			)
 			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
 				return err
@@ -59,7 +59,7 @@ func (c *CardQuery) collectField(ctx context.Context, op *graphql.OperationConte
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = &DeckQuery{config: c.config}
+				query = (&DeckClient{config: c.config}).Query()
 			)
 			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
 				return err
@@ -69,7 +69,7 @@ func (c *CardQuery) collectField(ctx context.Context, op *graphql.OperationConte
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = &CardTypeQuery{config: c.config}
+				query = (&CardTypeClient{config: c.config}).Query()
 			)
 			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
 				return err
@@ -79,7 +79,7 @@ func (c *CardQuery) collectField(ctx context.Context, op *graphql.OperationConte
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = &CardSpecialColorQuery{config: c.config}
+				query = (&CardSpecialColorClient{config: c.config}).Query()
 			)
 			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
 				return err
@@ -89,7 +89,7 @@ func (c *CardQuery) collectField(ctx context.Context, op *graphql.OperationConte
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = &CardQuery{config: c.config}
+				query = (&CardClient{config: c.config}).Query()
 			)
 			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
 				return err
@@ -101,7 +101,7 @@ func (c *CardQuery) collectField(ctx context.Context, op *graphql.OperationConte
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = &CardQuery{config: c.config}
+				query = (&CardClient{config: c.config}).Query()
 			)
 			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
 				return err
@@ -163,7 +163,7 @@ func (csc *CardSpecialColorQuery) collectField(ctx context.Context, op *graphql.
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = &CardQuery{config: csc.config}
+				query = (&CardClient{config: csc.config}).Query()
 			)
 			args := newCardPaginateArgs(fieldArgs(ctx, new(CardWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -296,7 +296,7 @@ func (ct *CardTypeQuery) collectField(ctx context.Context, op *graphql.Operation
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = &CardQuery{config: ct.config}
+				query = (&CardClient{config: ct.config}).Query()
 			)
 			args := newCardPaginateArgs(fieldArgs(ctx, new(CardWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -429,7 +429,7 @@ func (d *DeckQuery) collectField(ctx context.Context, op *graphql.OperationConte
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = &CardQuery{config: d.config}
+				query = (&CardClient{config: d.config}).Query()
 			)
 			args := newCardPaginateArgs(fieldArgs(ctx, new(CardWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -512,7 +512,7 @@ func (d *DeckQuery) collectField(ctx context.Context, op *graphql.OperationConte
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = &RevisionQuery{config: d.config}
+				query = (&RevisionClient{config: d.config}).Query()
 			)
 			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
 				return err
@@ -572,7 +572,7 @@ func (pr *ProductQuery) collectField(ctx context.Context, op *graphql.OperationC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = &CardQuery{config: pr.config}
+				query = (&CardClient{config: pr.config}).Query()
 			)
 			args := newCardPaginateArgs(fieldArgs(ctx, new(CardWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -659,7 +659,7 @@ func (pr *ProductQuery) collectField(ctx context.Context, op *graphql.OperationC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = &RevisionQuery{config: pr.config}
+				query = (&RevisionClient{config: pr.config}).Query()
 			)
 			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
 				return err
@@ -719,7 +719,7 @@ func (r *RevisionQuery) collectField(ctx context.Context, op *graphql.OperationC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = &CardQuery{config: r.config}
+				query = (&CardClient{config: r.config}).Query()
 			)
 			args := newCardPaginateArgs(fieldArgs(ctx, new(CardWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
@@ -802,7 +802,7 @@ func (r *RevisionQuery) collectField(ctx context.Context, op *graphql.OperationC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = &ProductQuery{config: r.config}
+				query = (&ProductClient{config: r.config}).Query()
 			)
 			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
 				return err
@@ -814,7 +814,7 @@ func (r *RevisionQuery) collectField(ctx context.Context, op *graphql.OperationC
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = &DeckQuery{config: r.config}
+				query = (&DeckClient{config: r.config}).Query()
 			)
 			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
 				return err

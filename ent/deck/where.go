@@ -3,470 +3,309 @@
 package deck
 
 import (
-	"agricoladb/ent/predicate"
-
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.
 func ID(id int) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldID), id))
-	})
+	return predicate.Deck(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
 func IDEQ(id int) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldID), id))
-	})
+	return predicate.Deck(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
 func IDNEQ(id int) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldID), id))
-	})
+	return predicate.Deck(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
 func IDIn(ids ...int) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		v := make([]any, len(ids))
-		for i := range v {
-			v[i] = ids[i]
-		}
-		s.Where(sql.In(s.C(FieldID), v...))
-	})
+	return predicate.Deck(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
 func IDNotIn(ids ...int) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		v := make([]any, len(ids))
-		for i := range v {
-			v[i] = ids[i]
-		}
-		s.Where(sql.NotIn(s.C(FieldID), v...))
-	})
+	return predicate.Deck(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
 func IDGT(id int) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldID), id))
-	})
+	return predicate.Deck(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
 func IDGTE(id int) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldID), id))
-	})
+	return predicate.Deck(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
 func IDLT(id int) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldID), id))
-	})
+	return predicate.Deck(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
 func IDLTE(id int) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldID), id))
-	})
+	return predicate.Deck(sql.FieldLTE(FieldID, id))
 }
 
 // Key applies equality check predicate on the "key" field. It's identical to KeyEQ.
 func Key(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldKey), v))
-	})
+	return predicate.Deck(sql.FieldEQ(FieldKey, v))
 }
 
 // RevisionID applies equality check predicate on the "revision_id" field. It's identical to RevisionIDEQ.
 func RevisionID(v int) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldRevisionID), v))
-	})
+	return predicate.Deck(sql.FieldEQ(FieldRevisionID, v))
 }
 
 // NameJa applies equality check predicate on the "name_ja" field. It's identical to NameJaEQ.
 func NameJa(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldNameJa), v))
-	})
+	return predicate.Deck(sql.FieldEQ(FieldNameJa, v))
 }
 
 // NameEn applies equality check predicate on the "name_en" field. It's identical to NameEnEQ.
 func NameEn(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldNameEn), v))
-	})
+	return predicate.Deck(sql.FieldEQ(FieldNameEn, v))
 }
 
 // KeyEQ applies the EQ predicate on the "key" field.
 func KeyEQ(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldKey), v))
-	})
+	return predicate.Deck(sql.FieldEQ(FieldKey, v))
 }
 
 // KeyNEQ applies the NEQ predicate on the "key" field.
 func KeyNEQ(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldKey), v))
-	})
+	return predicate.Deck(sql.FieldNEQ(FieldKey, v))
 }
 
 // KeyIn applies the In predicate on the "key" field.
 func KeyIn(vs ...string) predicate.Deck {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldKey), v...))
-	})
+	return predicate.Deck(sql.FieldIn(FieldKey, vs...))
 }
 
 // KeyNotIn applies the NotIn predicate on the "key" field.
 func KeyNotIn(vs ...string) predicate.Deck {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldKey), v...))
-	})
+	return predicate.Deck(sql.FieldNotIn(FieldKey, vs...))
 }
 
 // KeyGT applies the GT predicate on the "key" field.
 func KeyGT(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldKey), v))
-	})
+	return predicate.Deck(sql.FieldGT(FieldKey, v))
 }
 
 // KeyGTE applies the GTE predicate on the "key" field.
 func KeyGTE(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldKey), v))
-	})
+	return predicate.Deck(sql.FieldGTE(FieldKey, v))
 }
 
 // KeyLT applies the LT predicate on the "key" field.
 func KeyLT(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldKey), v))
-	})
+	return predicate.Deck(sql.FieldLT(FieldKey, v))
 }
 
 // KeyLTE applies the LTE predicate on the "key" field.
 func KeyLTE(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldKey), v))
-	})
+	return predicate.Deck(sql.FieldLTE(FieldKey, v))
 }
 
 // KeyContains applies the Contains predicate on the "key" field.
 func KeyContains(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldKey), v))
-	})
+	return predicate.Deck(sql.FieldContains(FieldKey, v))
 }
 
 // KeyHasPrefix applies the HasPrefix predicate on the "key" field.
 func KeyHasPrefix(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldKey), v))
-	})
+	return predicate.Deck(sql.FieldHasPrefix(FieldKey, v))
 }
 
 // KeyHasSuffix applies the HasSuffix predicate on the "key" field.
 func KeyHasSuffix(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldKey), v))
-	})
+	return predicate.Deck(sql.FieldHasSuffix(FieldKey, v))
 }
 
 // KeyEqualFold applies the EqualFold predicate on the "key" field.
 func KeyEqualFold(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldKey), v))
-	})
+	return predicate.Deck(sql.FieldEqualFold(FieldKey, v))
 }
 
 // KeyContainsFold applies the ContainsFold predicate on the "key" field.
 func KeyContainsFold(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldKey), v))
-	})
+	return predicate.Deck(sql.FieldContainsFold(FieldKey, v))
 }
 
 // RevisionIDEQ applies the EQ predicate on the "revision_id" field.
 func RevisionIDEQ(v int) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldRevisionID), v))
-	})
+	return predicate.Deck(sql.FieldEQ(FieldRevisionID, v))
 }
 
 // RevisionIDNEQ applies the NEQ predicate on the "revision_id" field.
 func RevisionIDNEQ(v int) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldRevisionID), v))
-	})
+	return predicate.Deck(sql.FieldNEQ(FieldRevisionID, v))
 }
 
 // RevisionIDIn applies the In predicate on the "revision_id" field.
 func RevisionIDIn(vs ...int) predicate.Deck {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldRevisionID), v...))
-	})
+	return predicate.Deck(sql.FieldIn(FieldRevisionID, vs...))
 }
 
 // RevisionIDNotIn applies the NotIn predicate on the "revision_id" field.
 func RevisionIDNotIn(vs ...int) predicate.Deck {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldRevisionID), v...))
-	})
+	return predicate.Deck(sql.FieldNotIn(FieldRevisionID, vs...))
 }
 
 // NameJaEQ applies the EQ predicate on the "name_ja" field.
 func NameJaEQ(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldNameJa), v))
-	})
+	return predicate.Deck(sql.FieldEQ(FieldNameJa, v))
 }
 
 // NameJaNEQ applies the NEQ predicate on the "name_ja" field.
 func NameJaNEQ(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldNameJa), v))
-	})
+	return predicate.Deck(sql.FieldNEQ(FieldNameJa, v))
 }
 
 // NameJaIn applies the In predicate on the "name_ja" field.
 func NameJaIn(vs ...string) predicate.Deck {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldNameJa), v...))
-	})
+	return predicate.Deck(sql.FieldIn(FieldNameJa, vs...))
 }
 
 // NameJaNotIn applies the NotIn predicate on the "name_ja" field.
 func NameJaNotIn(vs ...string) predicate.Deck {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldNameJa), v...))
-	})
+	return predicate.Deck(sql.FieldNotIn(FieldNameJa, vs...))
 }
 
 // NameJaGT applies the GT predicate on the "name_ja" field.
 func NameJaGT(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldNameJa), v))
-	})
+	return predicate.Deck(sql.FieldGT(FieldNameJa, v))
 }
 
 // NameJaGTE applies the GTE predicate on the "name_ja" field.
 func NameJaGTE(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldNameJa), v))
-	})
+	return predicate.Deck(sql.FieldGTE(FieldNameJa, v))
 }
 
 // NameJaLT applies the LT predicate on the "name_ja" field.
 func NameJaLT(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldNameJa), v))
-	})
+	return predicate.Deck(sql.FieldLT(FieldNameJa, v))
 }
 
 // NameJaLTE applies the LTE predicate on the "name_ja" field.
 func NameJaLTE(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldNameJa), v))
-	})
+	return predicate.Deck(sql.FieldLTE(FieldNameJa, v))
 }
 
 // NameJaContains applies the Contains predicate on the "name_ja" field.
 func NameJaContains(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldNameJa), v))
-	})
+	return predicate.Deck(sql.FieldContains(FieldNameJa, v))
 }
 
 // NameJaHasPrefix applies the HasPrefix predicate on the "name_ja" field.
 func NameJaHasPrefix(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldNameJa), v))
-	})
+	return predicate.Deck(sql.FieldHasPrefix(FieldNameJa, v))
 }
 
 // NameJaHasSuffix applies the HasSuffix predicate on the "name_ja" field.
 func NameJaHasSuffix(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldNameJa), v))
-	})
+	return predicate.Deck(sql.FieldHasSuffix(FieldNameJa, v))
 }
 
 // NameJaIsNil applies the IsNil predicate on the "name_ja" field.
 func NameJaIsNil() predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldNameJa)))
-	})
+	return predicate.Deck(sql.FieldIsNull(FieldNameJa))
 }
 
 // NameJaNotNil applies the NotNil predicate on the "name_ja" field.
 func NameJaNotNil() predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldNameJa)))
-	})
+	return predicate.Deck(sql.FieldNotNull(FieldNameJa))
 }
 
 // NameJaEqualFold applies the EqualFold predicate on the "name_ja" field.
 func NameJaEqualFold(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldNameJa), v))
-	})
+	return predicate.Deck(sql.FieldEqualFold(FieldNameJa, v))
 }
 
 // NameJaContainsFold applies the ContainsFold predicate on the "name_ja" field.
 func NameJaContainsFold(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldNameJa), v))
-	})
+	return predicate.Deck(sql.FieldContainsFold(FieldNameJa, v))
 }
 
 // NameEnEQ applies the EQ predicate on the "name_en" field.
 func NameEnEQ(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldNameEn), v))
-	})
+	return predicate.Deck(sql.FieldEQ(FieldNameEn, v))
 }
 
 // NameEnNEQ applies the NEQ predicate on the "name_en" field.
 func NameEnNEQ(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldNameEn), v))
-	})
+	return predicate.Deck(sql.FieldNEQ(FieldNameEn, v))
 }
 
 // NameEnIn applies the In predicate on the "name_en" field.
 func NameEnIn(vs ...string) predicate.Deck {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldNameEn), v...))
-	})
+	return predicate.Deck(sql.FieldIn(FieldNameEn, vs...))
 }
 
 // NameEnNotIn applies the NotIn predicate on the "name_en" field.
 func NameEnNotIn(vs ...string) predicate.Deck {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldNameEn), v...))
-	})
+	return predicate.Deck(sql.FieldNotIn(FieldNameEn, vs...))
 }
 
 // NameEnGT applies the GT predicate on the "name_en" field.
 func NameEnGT(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldNameEn), v))
-	})
+	return predicate.Deck(sql.FieldGT(FieldNameEn, v))
 }
 
 // NameEnGTE applies the GTE predicate on the "name_en" field.
 func NameEnGTE(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldNameEn), v))
-	})
+	return predicate.Deck(sql.FieldGTE(FieldNameEn, v))
 }
 
 // NameEnLT applies the LT predicate on the "name_en" field.
 func NameEnLT(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldNameEn), v))
-	})
+	return predicate.Deck(sql.FieldLT(FieldNameEn, v))
 }
 
 // NameEnLTE applies the LTE predicate on the "name_en" field.
 func NameEnLTE(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldNameEn), v))
-	})
+	return predicate.Deck(sql.FieldLTE(FieldNameEn, v))
 }
 
 // NameEnContains applies the Contains predicate on the "name_en" field.
 func NameEnContains(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldNameEn), v))
-	})
+	return predicate.Deck(sql.FieldContains(FieldNameEn, v))
 }
 
 // NameEnHasPrefix applies the HasPrefix predicate on the "name_en" field.
 func NameEnHasPrefix(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldNameEn), v))
-	})
+	return predicate.Deck(sql.FieldHasPrefix(FieldNameEn, v))
 }
 
 // NameEnHasSuffix applies the HasSuffix predicate on the "name_en" field.
 func NameEnHasSuffix(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldNameEn), v))
-	})
+	return predicate.Deck(sql.FieldHasSuffix(FieldNameEn, v))
 }
 
 // NameEnIsNil applies the IsNil predicate on the "name_en" field.
 func NameEnIsNil() predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldNameEn)))
-	})
+	return predicate.Deck(sql.FieldIsNull(FieldNameEn))
 }
 
 // NameEnNotNil applies the NotNil predicate on the "name_en" field.
 func NameEnNotNil() predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldNameEn)))
-	})
+	return predicate.Deck(sql.FieldNotNull(FieldNameEn))
 }
 
 // NameEnEqualFold applies the EqualFold predicate on the "name_en" field.
 func NameEnEqualFold(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldNameEn), v))
-	})
+	return predicate.Deck(sql.FieldEqualFold(FieldNameEn, v))
 }
 
 // NameEnContainsFold applies the ContainsFold predicate on the "name_en" field.
 func NameEnContainsFold(v string) predicate.Deck {
-	return predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldNameEn), v))
-	})
+	return predicate.Deck(sql.FieldContainsFold(FieldNameEn, v))
 }
 
 // HasCards applies the HasEdge predicate on the "cards" edge.
@@ -474,7 +313,6 @@ func HasCards() predicate.Deck {
 	return predicate.Deck(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(CardsTable, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, CardsTable, CardsColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
@@ -502,7 +340,6 @@ func HasRevision() predicate.Deck {
 	return predicate.Deck(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(RevisionTable, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, RevisionTable, RevisionColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)

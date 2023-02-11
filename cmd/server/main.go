@@ -1,13 +1,14 @@
 package main
 
 import (
-	"agricoladb/ent"
-	"agricoladb/graph"
-	"agricoladb/graph/generated"
 	"log"
 	"net"
 	"net/http"
 	"os"
+
+	"github.com/AgricolaDevJP/agricoladb-server/ent"
+	"github.com/AgricolaDevJP/agricoladb-server/graph"
+	"github.com/AgricolaDevJP/agricoladb-server/graph/generated"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"

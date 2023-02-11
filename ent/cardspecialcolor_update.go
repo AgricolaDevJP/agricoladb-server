@@ -3,9 +3,6 @@
 package ent
 
 import (
-	"agricoladb/ent/card"
-	"agricoladb/ent/cardspecialcolor"
-	"agricoladb/ent/predicate"
 	"context"
 	"errors"
 	"fmt"
@@ -13,6 +10,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/card"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardspecialcolor"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/predicate"
 )
 
 // CardSpecialColorUpdate is the builder for updating CardSpecialColor entities.
@@ -111,34 +111,7 @@ func (cscu *CardSpecialColorUpdate) RemoveCards(c ...*Card) *CardSpecialColorUpd
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (cscu *CardSpecialColorUpdate) Save(ctx context.Context) (int, error) {
-	var (
-		err      error
-		affected int
-	)
-	if len(cscu.hooks) == 0 {
-		affected, err = cscu.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*CardSpecialColorMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			cscu.mutation = mutation
-			affected, err = cscu.sqlSave(ctx)
-			mutation.done = true
-			return affected, err
-		})
-		for i := len(cscu.hooks) - 1; i >= 0; i-- {
-			if cscu.hooks[i] == nil {
-				return 0, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = cscu.hooks[i](mut)
-		}
-		if _, err := mut.Mutate(ctx, cscu.mutation); err != nil {
-			return 0, err
-		}
-	}
-	return affected, err
+	return withHooks[int, CardSpecialColorMutation](ctx, cscu.sqlSave, cscu.mutation, cscu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -255,6 +228,7 @@ func (cscu *CardSpecialColorUpdate) sqlSave(ctx context.Context) (n int, err err
 		}
 		return 0, err
 	}
+	cscu.mutation.done = true
 	return n, nil
 }
 
@@ -356,40 +330,7 @@ func (cscuo *CardSpecialColorUpdateOne) Select(field string, fields ...string) *
 
 // Save executes the query and returns the updated CardSpecialColor entity.
 func (cscuo *CardSpecialColorUpdateOne) Save(ctx context.Context) (*CardSpecialColor, error) {
-	var (
-		err  error
-		node *CardSpecialColor
-	)
-	if len(cscuo.hooks) == 0 {
-		node, err = cscuo.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*CardSpecialColorMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			cscuo.mutation = mutation
-			node, err = cscuo.sqlSave(ctx)
-			mutation.done = true
-			return node, err
-		})
-		for i := len(cscuo.hooks) - 1; i >= 0; i-- {
-			if cscuo.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = cscuo.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, cscuo.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*CardSpecialColor)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from CardSpecialColorMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*CardSpecialColor, CardSpecialColorMutation](ctx, cscuo.sqlSave, cscuo.mutation, cscuo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -526,5 +467,6 @@ func (cscuo *CardSpecialColorUpdateOne) sqlSave(ctx context.Context) (_node *Car
 		}
 		return nil, err
 	}
+	cscuo.mutation.done = true
 	return _node, nil
 }

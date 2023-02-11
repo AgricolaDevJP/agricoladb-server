@@ -1,9 +1,10 @@
 package initdb
 
 import (
-	"agricoladb/ent"
 	"context"
 	"os"
+
+	"github.com/AgricolaDevJP/agricoladb-server/ent"
 
 	"github.com/jszwec/csvutil"
 )

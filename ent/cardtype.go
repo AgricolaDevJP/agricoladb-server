@@ -3,11 +3,11 @@
 package ent
 
 import (
-	"agricoladb/ent/cardtype"
 	"fmt"
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardtype"
 )
 
 // CardType is the model entity for the CardType schema.
@@ -103,14 +103,14 @@ func (ct *CardType) assignValues(columns []string, values []any) error {
 
 // QueryCards queries the "cards" edge of the CardType entity.
 func (ct *CardType) QueryCards() *CardQuery {
-	return (&CardTypeClient{config: ct.config}).QueryCards(ct)
+	return NewCardTypeClient(ct.config).QueryCards(ct)
 }
 
 // Update returns a builder for updating this CardType.
 // Note that you need to call CardType.Unwrap() before calling this method if this CardType
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (ct *CardType) Update() *CardTypeUpdateOne {
-	return (&CardTypeClient{config: ct.config}).UpdateOne(ct)
+	return NewCardTypeClient(ct.config).UpdateOne(ct)
 }
 
 // Unwrap unwraps the CardType entity that was returned from a transaction after it was closed,

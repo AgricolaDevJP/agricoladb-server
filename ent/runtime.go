@@ -3,12 +3,12 @@
 package ent
 
 import (
-	"agricoladb/ent/card"
-	"agricoladb/ent/cardspecialcolor"
-	"agricoladb/ent/cardtype"
-	"agricoladb/ent/deck"
-	"agricoladb/ent/revision"
-	"agricoladb/ent/schema"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/card"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardspecialcolor"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardtype"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/deck"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/revision"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/schema"
 )
 
 // The init function reads all schema descriptors with runtime code

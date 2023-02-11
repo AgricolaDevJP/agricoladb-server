@@ -3,12 +3,12 @@
 package ent
 
 import (
-	"agricoladb/ent/deck"
-	"agricoladb/ent/revision"
 	"fmt"
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/deck"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/revision"
 )
 
 // Deck is the model entity for the Deck schema.
@@ -127,19 +127,19 @@ func (d *Deck) assignValues(columns []string, values []any) error {
 
 // QueryCards queries the "cards" edge of the Deck entity.
 func (d *Deck) QueryCards() *CardQuery {
-	return (&DeckClient{config: d.config}).QueryCards(d)
+	return NewDeckClient(d.config).QueryCards(d)
 }
 
 // QueryRevision queries the "revision" edge of the Deck entity.
 func (d *Deck) QueryRevision() *RevisionQuery {
-	return (&DeckClient{config: d.config}).QueryRevision(d)
+	return NewDeckClient(d.config).QueryRevision(d)
 }
 
 // Update returns a builder for updating this Deck.
 // Note that you need to call Deck.Unwrap() before calling this method if this Deck
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (d *Deck) Update() *DeckUpdateOne {
-	return (&DeckClient{config: d.config}).UpdateOne(d)
+	return NewDeckClient(d.config).UpdateOne(d)
 }
 
 // Unwrap unwraps the Deck entity that was returned from a transaction after it was closed,

@@ -3,7 +3,6 @@
 package generated
 
 import (
-	"agricoladb/ent"
 	"bytes"
 	"context"
 	"errors"
@@ -14,6 +13,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/AgricolaDevJP/agricoladb-server/ent"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -1572,7 +1572,7 @@ input DeckWhereInput {
 An object with an ID.
 Follows the [Relay Global Object Identification Specification](https://relay.dev/graphql/objectidentification.htm)
 """
-interface Node @goModel(model: "agricoladb/ent.Noder") {
+interface Node @goModel(model: "github.com/AgricolaDevJP/agricoladb-server/ent.Noder") {
   """The id of the object."""
   id: ID!
 }
@@ -1841,7 +1841,7 @@ func (ec *executionContext) field_CardSpecialColor_cards_args(ctx context.Contex
 	var arg0 *ent.Cursor
 	if tmp, ok := rawArgs["after"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
-		arg0, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		arg0, err = ec.unmarshalOCursor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1859,7 +1859,7 @@ func (ec *executionContext) field_CardSpecialColor_cards_args(ctx context.Contex
 	var arg2 *ent.Cursor
 	if tmp, ok := rawArgs["before"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
-		arg2, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		arg2, err = ec.unmarshalOCursor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1877,7 +1877,7 @@ func (ec *executionContext) field_CardSpecialColor_cards_args(ctx context.Contex
 	var arg4 *ent.CardWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg4, err = ec.unmarshalOCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx, tmp)
+		arg4, err = ec.unmarshalOCardWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1892,7 +1892,7 @@ func (ec *executionContext) field_CardType_cards_args(ctx context.Context, rawAr
 	var arg0 *ent.Cursor
 	if tmp, ok := rawArgs["after"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
-		arg0, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		arg0, err = ec.unmarshalOCursor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1910,7 +1910,7 @@ func (ec *executionContext) field_CardType_cards_args(ctx context.Context, rawAr
 	var arg2 *ent.Cursor
 	if tmp, ok := rawArgs["before"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
-		arg2, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		arg2, err = ec.unmarshalOCursor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1928,7 +1928,7 @@ func (ec *executionContext) field_CardType_cards_args(ctx context.Context, rawAr
 	var arg4 *ent.CardWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg4, err = ec.unmarshalOCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx, tmp)
+		arg4, err = ec.unmarshalOCardWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1943,7 +1943,7 @@ func (ec *executionContext) field_Deck_cards_args(ctx context.Context, rawArgs m
 	var arg0 *ent.Cursor
 	if tmp, ok := rawArgs["after"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
-		arg0, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		arg0, err = ec.unmarshalOCursor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1961,7 +1961,7 @@ func (ec *executionContext) field_Deck_cards_args(ctx context.Context, rawArgs m
 	var arg2 *ent.Cursor
 	if tmp, ok := rawArgs["before"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
-		arg2, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		arg2, err = ec.unmarshalOCursor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1979,7 +1979,7 @@ func (ec *executionContext) field_Deck_cards_args(ctx context.Context, rawArgs m
 	var arg4 *ent.CardWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg4, err = ec.unmarshalOCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx, tmp)
+		arg4, err = ec.unmarshalOCardWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1994,7 +1994,7 @@ func (ec *executionContext) field_Product_cards_args(ctx context.Context, rawArg
 	var arg0 *ent.Cursor
 	if tmp, ok := rawArgs["after"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
-		arg0, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		arg0, err = ec.unmarshalOCursor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2012,7 +2012,7 @@ func (ec *executionContext) field_Product_cards_args(ctx context.Context, rawArg
 	var arg2 *ent.Cursor
 	if tmp, ok := rawArgs["before"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
-		arg2, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		arg2, err = ec.unmarshalOCursor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2030,7 +2030,7 @@ func (ec *executionContext) field_Product_cards_args(ctx context.Context, rawArg
 	var arg4 *ent.CardWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg4, err = ec.unmarshalOCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx, tmp)
+		arg4, err = ec.unmarshalOCardWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2060,7 +2060,7 @@ func (ec *executionContext) field_Query_cards_args(ctx context.Context, rawArgs 
 	var arg0 *ent.Cursor
 	if tmp, ok := rawArgs["after"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
-		arg0, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		arg0, err = ec.unmarshalOCursor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2078,7 +2078,7 @@ func (ec *executionContext) field_Query_cards_args(ctx context.Context, rawArgs 
 	var arg2 *ent.Cursor
 	if tmp, ok := rawArgs["before"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
-		arg2, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		arg2, err = ec.unmarshalOCursor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2096,7 +2096,7 @@ func (ec *executionContext) field_Query_cards_args(ctx context.Context, rawArgs 
 	var arg4 *ent.CardWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg4, err = ec.unmarshalOCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx, tmp)
+		arg4, err = ec.unmarshalOCardWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2141,7 +2141,7 @@ func (ec *executionContext) field_Revision_cards_args(ctx context.Context, rawAr
 	var arg0 *ent.Cursor
 	if tmp, ok := rawArgs["after"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
-		arg0, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		arg0, err = ec.unmarshalOCursor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2159,7 +2159,7 @@ func (ec *executionContext) field_Revision_cards_args(ctx context.Context, rawAr
 	var arg2 *ent.Cursor
 	if tmp, ok := rawArgs["before"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
-		arg2, err = ec.unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, tmp)
+		arg2, err = ec.unmarshalOCursor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2177,7 +2177,7 @@ func (ec *executionContext) field_Revision_cards_args(ctx context.Context, rawAr
 	var arg4 *ent.CardWhereInput
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
-		arg4, err = ec.unmarshalOCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx, tmp)
+		arg4, err = ec.unmarshalOCardWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3753,7 +3753,7 @@ func (ec *executionContext) _Card_revision(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*ent.Revision)
 	fc.Result = res
-	return ec.marshalNRevision2ᚖagricoladbᚋentᚐRevision(ctx, field.Selections, res)
+	return ec.marshalNRevision2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevision(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_revision(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3810,7 +3810,7 @@ func (ec *executionContext) _Card_products(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.([]*ent.Product)
 	fc.Result = res
-	return ec.marshalOProduct2ᚕᚖagricoladbᚋentᚐProductᚄ(ctx, field.Selections, res)
+	return ec.marshalOProduct2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_products(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3869,7 +3869,7 @@ func (ec *executionContext) _Card_deck(ctx context.Context, field graphql.Collec
 	}
 	res := resTmp.(*ent.Deck)
 	fc.Result = res
-	return ec.marshalODeck2ᚖagricoladbᚋentᚐDeck(ctx, field.Selections, res)
+	return ec.marshalODeck2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeck(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_deck(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3929,7 +3929,7 @@ func (ec *executionContext) _Card_cardType(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*ent.CardType)
 	fc.Result = res
-	return ec.marshalNCardType2ᚖagricoladbᚋentᚐCardType(ctx, field.Selections, res)
+	return ec.marshalNCardType2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_cardType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3982,7 +3982,7 @@ func (ec *executionContext) _Card_cardSpecialColor(ctx context.Context, field gr
 	}
 	res := resTmp.(*ent.CardSpecialColor)
 	fc.Result = res
-	return ec.marshalOCardSpecialColor2ᚖagricoladbᚋentᚐCardSpecialColor(ctx, field.Selections, res)
+	return ec.marshalOCardSpecialColor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_cardSpecialColor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4035,7 +4035,7 @@ func (ec *executionContext) _Card_children(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.([]*ent.Card)
 	fc.Result = res
-	return ec.marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx, field.Selections, res)
+	return ec.marshalOCard2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_children(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4162,7 +4162,7 @@ func (ec *executionContext) _Card_ancestors(ctx context.Context, field graphql.C
 	}
 	res := resTmp.([]*ent.Card)
 	fc.Result = res
-	return ec.marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx, field.Selections, res)
+	return ec.marshalOCard2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Card_ancestors(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4289,7 +4289,7 @@ func (ec *executionContext) _CardConnection_edges(ctx context.Context, field gra
 	}
 	res := resTmp.([]*ent.CardEdge)
 	fc.Result = res
-	return ec.marshalOCardEdge2ᚕᚖagricoladbᚋentᚐCardEdge(ctx, field.Selections, res)
+	return ec.marshalOCardEdge2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CardConnection_edges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4339,7 +4339,7 @@ func (ec *executionContext) _CardConnection_pageInfo(ctx context.Context, field 
 	}
 	res := resTmp.(ent.PageInfo)
 	fc.Result = res
-	return ec.marshalNPageInfo2agricoladbᚋentᚐPageInfo(ctx, field.Selections, res)
+	return ec.marshalNPageInfo2githubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐPageInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CardConnection_pageInfo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4434,7 +4434,7 @@ func (ec *executionContext) _CardEdge_node(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*ent.Card)
 	fc.Result = res
-	return ec.marshalOCard2ᚖagricoladbᚋentᚐCard(ctx, field.Selections, res)
+	return ec.marshalOCard2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCard(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CardEdge_node(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4564,7 +4564,7 @@ func (ec *executionContext) _CardEdge_cursor(ctx context.Context, field graphql.
 	}
 	res := resTmp.(ent.Cursor)
 	fc.Result = res
-	return ec.marshalNCursor2agricoladbᚋentᚐCursor(ctx, field.Selections, res)
+	return ec.marshalNCursor2githubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CardEdge_cursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4778,7 +4778,7 @@ func (ec *executionContext) _CardSpecialColor_cards(ctx context.Context, field g
 	}
 	res := resTmp.(*ent.CardConnection)
 	fc.Result = res
-	return ec.marshalNCardConnection2ᚖagricoladbᚋentᚐCardConnection(ctx, field.Selections, res)
+	return ec.marshalNCardConnection2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CardSpecialColor_cards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5011,7 +5011,7 @@ func (ec *executionContext) _CardType_cards(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*ent.CardConnection)
 	fc.Result = res
-	return ec.marshalNCardConnection2ᚖagricoladbᚋentᚐCardConnection(ctx, field.Selections, res)
+	return ec.marshalNCardConnection2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_CardType_cards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5288,7 +5288,7 @@ func (ec *executionContext) _Deck_cards(ctx context.Context, field graphql.Colle
 	}
 	res := resTmp.(*ent.CardConnection)
 	fc.Result = res
-	return ec.marshalNCardConnection2ᚖagricoladbᚋentᚐCardConnection(ctx, field.Selections, res)
+	return ec.marshalNCardConnection2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Deck_cards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5351,7 +5351,7 @@ func (ec *executionContext) _Deck_revision(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*ent.Revision)
 	fc.Result = res
-	return ec.marshalNRevision2ᚖagricoladbᚋentᚐRevision(ctx, field.Selections, res)
+	return ec.marshalNRevision2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevision(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Deck_revision(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5496,7 +5496,7 @@ func (ec *executionContext) _PageInfo_startCursor(ctx context.Context, field gra
 	}
 	res := resTmp.(*ent.Cursor)
 	fc.Result = res
-	return ec.marshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, field.Selections, res)
+	return ec.marshalOCursor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_PageInfo_startCursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5537,7 +5537,7 @@ func (ec *executionContext) _PageInfo_endCursor(ctx context.Context, field graph
 	}
 	res := resTmp.(*ent.Cursor)
 	fc.Result = res
-	return ec.marshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx, field.Selections, res)
+	return ec.marshalOCursor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_PageInfo_endCursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5836,7 +5836,7 @@ func (ec *executionContext) _Product_cards(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*ent.CardConnection)
 	fc.Result = res
-	return ec.marshalNCardConnection2ᚖagricoladbᚋentᚐCardConnection(ctx, field.Selections, res)
+	return ec.marshalNCardConnection2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Product_cards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5899,7 +5899,7 @@ func (ec *executionContext) _Product_revision(ctx context.Context, field graphql
 	}
 	res := resTmp.(*ent.Revision)
 	fc.Result = res
-	return ec.marshalNRevision2ᚖagricoladbᚋentᚐRevision(ctx, field.Selections, res)
+	return ec.marshalNRevision2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevision(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Product_revision(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5949,14 +5949,13 @@ func (ec *executionContext) _Query_node(ctx context.Context, field graphql.Colle
 	})
 	if err != nil {
 		ec.Error(ctx, err)
-		return graphql.Null
 	}
 	if resTmp == nil {
 		return graphql.Null
 	}
 	res := resTmp.(ent.Noder)
 	fc.Result = res
-	return ec.marshalONode2agricoladbᚋentᚐNoder(ctx, field.Selections, res)
+	return ec.marshalONode2githubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐNoder(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_node(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6001,7 +6000,6 @@ func (ec *executionContext) _Query_nodes(ctx context.Context, field graphql.Coll
 	})
 	if err != nil {
 		ec.Error(ctx, err)
-		return graphql.Null
 	}
 	if resTmp == nil {
 		if !graphql.HasFieldError(ctx, fc) {
@@ -6011,7 +6009,7 @@ func (ec *executionContext) _Query_nodes(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]ent.Noder)
 	fc.Result = res
-	return ec.marshalNNode2ᚕagricoladbᚋentᚐNoder(ctx, field.Selections, res)
+	return ec.marshalNNode2ᚕgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐNoder(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_nodes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6056,7 +6054,6 @@ func (ec *executionContext) _Query_cards(ctx context.Context, field graphql.Coll
 	})
 	if err != nil {
 		ec.Error(ctx, err)
-		return graphql.Null
 	}
 	if resTmp == nil {
 		if !graphql.HasFieldError(ctx, fc) {
@@ -6066,7 +6063,7 @@ func (ec *executionContext) _Query_cards(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(*ent.CardConnection)
 	fc.Result = res
-	return ec.marshalNCardConnection2ᚖagricoladbᚋentᚐCardConnection(ctx, field.Selections, res)
+	return ec.marshalNCardConnection2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_cards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6119,7 +6116,6 @@ func (ec *executionContext) _Query_cardSpecialColors(ctx context.Context, field 
 	})
 	if err != nil {
 		ec.Error(ctx, err)
-		return graphql.Null
 	}
 	if resTmp == nil {
 		if !graphql.HasFieldError(ctx, fc) {
@@ -6129,7 +6125,7 @@ func (ec *executionContext) _Query_cardSpecialColors(ctx context.Context, field 
 	}
 	res := resTmp.([]*ent.CardSpecialColor)
 	fc.Result = res
-	return ec.marshalNCardSpecialColor2ᚕᚖagricoladbᚋentᚐCardSpecialColorᚄ(ctx, field.Selections, res)
+	return ec.marshalNCardSpecialColor2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColorᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_cardSpecialColors(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6175,7 +6171,6 @@ func (ec *executionContext) _Query_cardTypes(ctx context.Context, field graphql.
 	})
 	if err != nil {
 		ec.Error(ctx, err)
-		return graphql.Null
 	}
 	if resTmp == nil {
 		if !graphql.HasFieldError(ctx, fc) {
@@ -6185,7 +6180,7 @@ func (ec *executionContext) _Query_cardTypes(ctx context.Context, field graphql.
 	}
 	res := resTmp.([]*ent.CardType)
 	fc.Result = res
-	return ec.marshalNCardType2ᚕᚖagricoladbᚋentᚐCardTypeᚄ(ctx, field.Selections, res)
+	return ec.marshalNCardType2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardTypeᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_cardTypes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6231,7 +6226,6 @@ func (ec *executionContext) _Query_decks(ctx context.Context, field graphql.Coll
 	})
 	if err != nil {
 		ec.Error(ctx, err)
-		return graphql.Null
 	}
 	if resTmp == nil {
 		if !graphql.HasFieldError(ctx, fc) {
@@ -6241,7 +6235,7 @@ func (ec *executionContext) _Query_decks(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*ent.Deck)
 	fc.Result = res
-	return ec.marshalNDeck2ᚕᚖagricoladbᚋentᚐDeckᚄ(ctx, field.Selections, res)
+	return ec.marshalNDeck2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_decks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6291,7 +6285,6 @@ func (ec *executionContext) _Query_products(ctx context.Context, field graphql.C
 	})
 	if err != nil {
 		ec.Error(ctx, err)
-		return graphql.Null
 	}
 	if resTmp == nil {
 		if !graphql.HasFieldError(ctx, fc) {
@@ -6301,7 +6294,7 @@ func (ec *executionContext) _Query_products(ctx context.Context, field graphql.C
 	}
 	res := resTmp.([]*ent.Product)
 	fc.Result = res
-	return ec.marshalNProduct2ᚕᚖagricoladbᚋentᚐProductᚄ(ctx, field.Selections, res)
+	return ec.marshalNProduct2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_products(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6353,7 +6346,6 @@ func (ec *executionContext) _Query_revisions(ctx context.Context, field graphql.
 	})
 	if err != nil {
 		ec.Error(ctx, err)
-		return graphql.Null
 	}
 	if resTmp == nil {
 		if !graphql.HasFieldError(ctx, fc) {
@@ -6363,7 +6355,7 @@ func (ec *executionContext) _Query_revisions(ctx context.Context, field graphql.
 	}
 	res := resTmp.([]*ent.Revision)
 	fc.Result = res
-	return ec.marshalNRevision2ᚕᚖagricoladbᚋentᚐRevisionᚄ(ctx, field.Selections, res)
+	return ec.marshalNRevision2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_revisions(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6413,7 +6405,6 @@ func (ec *executionContext) _Query___type(ctx context.Context, field graphql.Col
 	})
 	if err != nil {
 		ec.Error(ctx, err)
-		return graphql.Null
 	}
 	if resTmp == nil {
 		return graphql.Null
@@ -6487,7 +6478,6 @@ func (ec *executionContext) _Query___schema(ctx context.Context, field graphql.C
 	})
 	if err != nil {
 		ec.Error(ctx, err)
-		return graphql.Null
 	}
 	if resTmp == nil {
 		return graphql.Null
@@ -6722,7 +6712,7 @@ func (ec *executionContext) _Revision_cards(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*ent.CardConnection)
 	fc.Result = res
-	return ec.marshalNCardConnection2ᚖagricoladbᚋentᚐCardConnection(ctx, field.Selections, res)
+	return ec.marshalNCardConnection2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Revision_cards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6782,7 +6772,7 @@ func (ec *executionContext) _Revision_products(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*ent.Product)
 	fc.Result = res
-	return ec.marshalOProduct2ᚕᚖagricoladbᚋentᚐProductᚄ(ctx, field.Selections, res)
+	return ec.marshalOProduct2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Revision_products(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -6841,7 +6831,7 @@ func (ec *executionContext) _Revision_decks(ctx context.Context, field graphql.C
 	}
 	res := resTmp.([]*ent.Deck)
 	fc.Result = res
-	return ec.marshalODeck2ᚕᚖagricoladbᚋentᚐDeckᚄ(ctx, field.Selections, res)
+	return ec.marshalODeck2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Revision_decks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -8664,7 +8654,7 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
-			it.Not, err = ec.unmarshalOCardSpecialColorWhereInput2ᚖagricoladbᚋentᚐCardSpecialColorWhereInput(ctx, v)
+			it.Not, err = ec.unmarshalOCardSpecialColorWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColorWhereInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8672,7 +8662,7 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
-			it.And, err = ec.unmarshalOCardSpecialColorWhereInput2ᚕᚖagricoladbᚋentᚐCardSpecialColorWhereInputᚄ(ctx, v)
+			it.And, err = ec.unmarshalOCardSpecialColorWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColorWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8680,7 +8670,7 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
-			it.Or, err = ec.unmarshalOCardSpecialColorWhereInput2ᚕᚖagricoladbᚋentᚐCardSpecialColorWhereInputᚄ(ctx, v)
+			it.Or, err = ec.unmarshalOCardSpecialColorWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColorWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9104,7 +9094,7 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardsWith"))
-			it.HasCardsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			it.HasCardsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9132,7 +9122,7 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
-			it.Not, err = ec.unmarshalOCardTypeWhereInput2ᚖagricoladbᚋentᚐCardTypeWhereInput(ctx, v)
+			it.Not, err = ec.unmarshalOCardTypeWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardTypeWhereInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9140,7 +9130,7 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
-			it.And, err = ec.unmarshalOCardTypeWhereInput2ᚕᚖagricoladbᚋentᚐCardTypeWhereInputᚄ(ctx, v)
+			it.And, err = ec.unmarshalOCardTypeWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardTypeWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9148,7 +9138,7 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
-			it.Or, err = ec.unmarshalOCardTypeWhereInput2ᚕᚖagricoladbᚋentᚐCardTypeWhereInputᚄ(ctx, v)
+			it.Or, err = ec.unmarshalOCardTypeWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardTypeWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9572,7 +9562,7 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardsWith"))
-			it.HasCardsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			it.HasCardsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9600,7 +9590,7 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
-			it.Not, err = ec.unmarshalOCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx, v)
+			it.Not, err = ec.unmarshalOCardWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9608,7 +9598,7 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
-			it.And, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			it.And, err = ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9616,7 +9606,7 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
-			it.Or, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			it.Or, err = ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11488,7 +11478,7 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRevisionWith"))
-			it.HasRevisionWith, err = ec.unmarshalORevisionWhereInput2ᚕᚖagricoladbᚋentᚐRevisionWhereInputᚄ(ctx, v)
+			it.HasRevisionWith, err = ec.unmarshalORevisionWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11504,7 +11494,7 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProductsWith"))
-			it.HasProductsWith, err = ec.unmarshalOProductWhereInput2ᚕᚖagricoladbᚋentᚐProductWhereInputᚄ(ctx, v)
+			it.HasProductsWith, err = ec.unmarshalOProductWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11520,7 +11510,7 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDeckWith"))
-			it.HasDeckWith, err = ec.unmarshalODeckWhereInput2ᚕᚖagricoladbᚋentᚐDeckWhereInputᚄ(ctx, v)
+			it.HasDeckWith, err = ec.unmarshalODeckWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11536,7 +11526,7 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardTypeWith"))
-			it.HasCardTypeWith, err = ec.unmarshalOCardTypeWhereInput2ᚕᚖagricoladbᚋentᚐCardTypeWhereInputᚄ(ctx, v)
+			it.HasCardTypeWith, err = ec.unmarshalOCardTypeWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardTypeWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11552,7 +11542,7 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardSpecialColorWith"))
-			it.HasCardSpecialColorWith, err = ec.unmarshalOCardSpecialColorWhereInput2ᚕᚖagricoladbᚋentᚐCardSpecialColorWhereInputᚄ(ctx, v)
+			it.HasCardSpecialColorWith, err = ec.unmarshalOCardSpecialColorWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColorWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11568,7 +11558,7 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasChildrenWith"))
-			it.HasChildrenWith, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			it.HasChildrenWith, err = ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11584,7 +11574,7 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAncestorsWith"))
-			it.HasAncestorsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			it.HasAncestorsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11612,7 +11602,7 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
-			it.Not, err = ec.unmarshalODeckWhereInput2ᚖagricoladbᚋentᚐDeckWhereInput(ctx, v)
+			it.Not, err = ec.unmarshalODeckWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckWhereInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11620,7 +11610,7 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
-			it.And, err = ec.unmarshalODeckWhereInput2ᚕᚖagricoladbᚋentᚐDeckWhereInputᚄ(ctx, v)
+			it.And, err = ec.unmarshalODeckWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11628,7 +11618,7 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
-			it.Or, err = ec.unmarshalODeckWhereInput2ᚕᚖagricoladbᚋentᚐDeckWhereInputᚄ(ctx, v)
+			it.Or, err = ec.unmarshalODeckWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12084,7 +12074,7 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardsWith"))
-			it.HasCardsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			it.HasCardsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12100,7 +12090,7 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRevisionWith"))
-			it.HasRevisionWith, err = ec.unmarshalORevisionWhereInput2ᚕᚖagricoladbᚋentᚐRevisionWhereInputᚄ(ctx, v)
+			it.HasRevisionWith, err = ec.unmarshalORevisionWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12128,7 +12118,7 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
-			it.Not, err = ec.unmarshalOProductWhereInput2ᚖagricoladbᚋentᚐProductWhereInput(ctx, v)
+			it.Not, err = ec.unmarshalOProductWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductWhereInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12136,7 +12126,7 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
-			it.And, err = ec.unmarshalOProductWhereInput2ᚕᚖagricoladbᚋentᚐProductWhereInputᚄ(ctx, v)
+			it.And, err = ec.unmarshalOProductWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12144,7 +12134,7 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
-			it.Or, err = ec.unmarshalOProductWhereInput2ᚕᚖagricoladbᚋentᚐProductWhereInputᚄ(ctx, v)
+			it.Or, err = ec.unmarshalOProductWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12592,7 +12582,7 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardsWith"))
-			it.HasCardsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			it.HasCardsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12608,7 +12598,7 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRevisionWith"))
-			it.HasRevisionWith, err = ec.unmarshalORevisionWhereInput2ᚕᚖagricoladbᚋentᚐRevisionWhereInputᚄ(ctx, v)
+			it.HasRevisionWith, err = ec.unmarshalORevisionWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12636,7 +12626,7 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
-			it.Not, err = ec.unmarshalORevisionWhereInput2ᚖagricoladbᚋentᚐRevisionWhereInput(ctx, v)
+			it.Not, err = ec.unmarshalORevisionWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionWhereInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12644,7 +12634,7 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
-			it.And, err = ec.unmarshalORevisionWhereInput2ᚕᚖagricoladbᚋentᚐRevisionWhereInputᚄ(ctx, v)
+			it.And, err = ec.unmarshalORevisionWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12652,7 +12642,7 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
-			it.Or, err = ec.unmarshalORevisionWhereInput2ᚕᚖagricoladbᚋentᚐRevisionWhereInputᚄ(ctx, v)
+			it.Or, err = ec.unmarshalORevisionWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -13076,7 +13066,7 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardsWith"))
-			it.HasCardsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx, v)
+			it.HasCardsWith, err = ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -13092,7 +13082,7 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProductsWith"))
-			it.HasProductsWith, err = ec.unmarshalOProductWhereInput2ᚕᚖagricoladbᚋentᚐProductWhereInputᚄ(ctx, v)
+			it.HasProductsWith, err = ec.unmarshalOProductWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -13108,7 +13098,7 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDecksWith"))
-			it.HasDecksWith, err = ec.unmarshalODeckWhereInput2ᚕᚖagricoladbᚋentᚐDeckWhereInputᚄ(ctx, v)
+			it.HasDecksWith, err = ec.unmarshalODeckWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -13950,7 +13940,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 	})
 
 	out := graphql.NewFieldSet(fields)
-	var invalids uint32
 	for i, field := range fields {
 		innerCtx := graphql.WithRootFieldContext(ctx, &graphql.RootFieldContext{
 			Object: field.Name,
@@ -13990,9 +13979,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_nodes(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
 				return res
 			}
 
@@ -14013,9 +13999,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_cards(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
 				return res
 			}
 
@@ -14036,9 +14019,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_cardSpecialColors(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
 				return res
 			}
 
@@ -14059,9 +14039,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_cardTypes(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
 				return res
 			}
 
@@ -14082,9 +14059,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_decks(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
 				return res
 			}
 
@@ -14105,9 +14079,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_products(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
 				return res
 			}
 
@@ -14128,9 +14099,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_revisions(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
 				return res
 			}
 
@@ -14158,9 +14126,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		}
 	}
 	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
 	return out
 }
 
@@ -14594,7 +14559,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNCard2ᚖagricoladbᚋentᚐCard(ctx context.Context, sel ast.SelectionSet, v *ent.Card) graphql.Marshaler {
+func (ec *executionContext) marshalNCard2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCard(ctx context.Context, sel ast.SelectionSet, v *ent.Card) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -14604,11 +14569,11 @@ func (ec *executionContext) marshalNCard2ᚖagricoladbᚋentᚐCard(ctx context.
 	return ec._Card(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCardConnection2agricoladbᚋentᚐCardConnection(ctx context.Context, sel ast.SelectionSet, v ent.CardConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNCardConnection2githubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardConnection(ctx context.Context, sel ast.SelectionSet, v ent.CardConnection) graphql.Marshaler {
 	return ec._CardConnection(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCardConnection2ᚖagricoladbᚋentᚐCardConnection(ctx context.Context, sel ast.SelectionSet, v *ent.CardConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNCardConnection2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardConnection(ctx context.Context, sel ast.SelectionSet, v *ent.CardConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -14618,7 +14583,7 @@ func (ec *executionContext) marshalNCardConnection2ᚖagricoladbᚋentᚐCardCon
 	return ec._CardConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCardSpecialColor2ᚕᚖagricoladbᚋentᚐCardSpecialColorᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.CardSpecialColor) graphql.Marshaler {
+func (ec *executionContext) marshalNCardSpecialColor2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColorᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.CardSpecialColor) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -14642,7 +14607,7 @@ func (ec *executionContext) marshalNCardSpecialColor2ᚕᚖagricoladbᚋentᚐCa
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNCardSpecialColor2ᚖagricoladbᚋentᚐCardSpecialColor(ctx, sel, v[i])
+			ret[i] = ec.marshalNCardSpecialColor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColor(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -14662,7 +14627,7 @@ func (ec *executionContext) marshalNCardSpecialColor2ᚕᚖagricoladbᚋentᚐCa
 	return ret
 }
 
-func (ec *executionContext) marshalNCardSpecialColor2ᚖagricoladbᚋentᚐCardSpecialColor(ctx context.Context, sel ast.SelectionSet, v *ent.CardSpecialColor) graphql.Marshaler {
+func (ec *executionContext) marshalNCardSpecialColor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColor(ctx context.Context, sel ast.SelectionSet, v *ent.CardSpecialColor) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -14672,12 +14637,12 @@ func (ec *executionContext) marshalNCardSpecialColor2ᚖagricoladbᚋentᚐCardS
 	return ec._CardSpecialColor(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNCardSpecialColorWhereInput2ᚖagricoladbᚋentᚐCardSpecialColorWhereInput(ctx context.Context, v interface{}) (*ent.CardSpecialColorWhereInput, error) {
+func (ec *executionContext) unmarshalNCardSpecialColorWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColorWhereInput(ctx context.Context, v interface{}) (*ent.CardSpecialColorWhereInput, error) {
 	res, err := ec.unmarshalInputCardSpecialColorWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNCardType2ᚕᚖagricoladbᚋentᚐCardTypeᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.CardType) graphql.Marshaler {
+func (ec *executionContext) marshalNCardType2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardTypeᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.CardType) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -14701,7 +14666,7 @@ func (ec *executionContext) marshalNCardType2ᚕᚖagricoladbᚋentᚐCardType�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNCardType2ᚖagricoladbᚋentᚐCardType(ctx, sel, v[i])
+			ret[i] = ec.marshalNCardType2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardType(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -14721,7 +14686,7 @@ func (ec *executionContext) marshalNCardType2ᚕᚖagricoladbᚋentᚐCardType�
 	return ret
 }
 
-func (ec *executionContext) marshalNCardType2ᚖagricoladbᚋentᚐCardType(ctx context.Context, sel ast.SelectionSet, v *ent.CardType) graphql.Marshaler {
+func (ec *executionContext) marshalNCardType2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardType(ctx context.Context, sel ast.SelectionSet, v *ent.CardType) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -14731,27 +14696,27 @@ func (ec *executionContext) marshalNCardType2ᚖagricoladbᚋentᚐCardType(ctx 
 	return ec._CardType(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNCardTypeWhereInput2ᚖagricoladbᚋentᚐCardTypeWhereInput(ctx context.Context, v interface{}) (*ent.CardTypeWhereInput, error) {
+func (ec *executionContext) unmarshalNCardTypeWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardTypeWhereInput(ctx context.Context, v interface{}) (*ent.CardTypeWhereInput, error) {
 	res, err := ec.unmarshalInputCardTypeWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx context.Context, v interface{}) (*ent.CardWhereInput, error) {
+func (ec *executionContext) unmarshalNCardWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInput(ctx context.Context, v interface{}) (*ent.CardWhereInput, error) {
 	res, err := ec.unmarshalInputCardWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCursor2agricoladbᚋentᚐCursor(ctx context.Context, v interface{}) (ent.Cursor, error) {
+func (ec *executionContext) unmarshalNCursor2githubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx context.Context, v interface{}) (ent.Cursor, error) {
 	var res ent.Cursor
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNCursor2agricoladbᚋentᚐCursor(ctx context.Context, sel ast.SelectionSet, v ent.Cursor) graphql.Marshaler {
+func (ec *executionContext) marshalNCursor2githubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx context.Context, sel ast.SelectionSet, v ent.Cursor) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) marshalNDeck2ᚕᚖagricoladbᚋentᚐDeckᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Deck) graphql.Marshaler {
+func (ec *executionContext) marshalNDeck2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Deck) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -14775,7 +14740,7 @@ func (ec *executionContext) marshalNDeck2ᚕᚖagricoladbᚋentᚐDeckᚄ(ctx co
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNDeck2ᚖagricoladbᚋentᚐDeck(ctx, sel, v[i])
+			ret[i] = ec.marshalNDeck2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeck(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -14795,7 +14760,7 @@ func (ec *executionContext) marshalNDeck2ᚕᚖagricoladbᚋentᚐDeckᚄ(ctx co
 	return ret
 }
 
-func (ec *executionContext) marshalNDeck2ᚖagricoladbᚋentᚐDeck(ctx context.Context, sel ast.SelectionSet, v *ent.Deck) graphql.Marshaler {
+func (ec *executionContext) marshalNDeck2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeck(ctx context.Context, sel ast.SelectionSet, v *ent.Deck) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -14805,7 +14770,7 @@ func (ec *executionContext) marshalNDeck2ᚖagricoladbᚋentᚐDeck(ctx context.
 	return ec._Deck(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNDeckWhereInput2ᚖagricoladbᚋentᚐDeckWhereInput(ctx context.Context, v interface{}) (*ent.DeckWhereInput, error) {
+func (ec *executionContext) unmarshalNDeckWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckWhereInput(ctx context.Context, v interface{}) (*ent.DeckWhereInput, error) {
 	res, err := ec.unmarshalInputDeckWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
@@ -14872,7 +14837,7 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalNNode2ᚕagricoladbᚋentᚐNoder(ctx context.Context, sel ast.SelectionSet, v []ent.Noder) graphql.Marshaler {
+func (ec *executionContext) marshalNNode2ᚕgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐNoder(ctx context.Context, sel ast.SelectionSet, v []ent.Noder) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -14896,7 +14861,7 @@ func (ec *executionContext) marshalNNode2ᚕagricoladbᚋentᚐNoder(ctx context
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalONode2agricoladbᚋentᚐNoder(ctx, sel, v[i])
+			ret[i] = ec.marshalONode2githubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐNoder(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -14910,11 +14875,11 @@ func (ec *executionContext) marshalNNode2ᚕagricoladbᚋentᚐNoder(ctx context
 	return ret
 }
 
-func (ec *executionContext) marshalNPageInfo2agricoladbᚋentᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v ent.PageInfo) graphql.Marshaler {
+func (ec *executionContext) marshalNPageInfo2githubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v ent.PageInfo) graphql.Marshaler {
 	return ec._PageInfo(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNProduct2ᚕᚖagricoladbᚋentᚐProductᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Product) graphql.Marshaler {
+func (ec *executionContext) marshalNProduct2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Product) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -14938,7 +14903,7 @@ func (ec *executionContext) marshalNProduct2ᚕᚖagricoladbᚋentᚐProductᚄ(
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNProduct2ᚖagricoladbᚋentᚐProduct(ctx, sel, v[i])
+			ret[i] = ec.marshalNProduct2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProduct(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -14958,7 +14923,7 @@ func (ec *executionContext) marshalNProduct2ᚕᚖagricoladbᚋentᚐProductᚄ(
 	return ret
 }
 
-func (ec *executionContext) marshalNProduct2ᚖagricoladbᚋentᚐProduct(ctx context.Context, sel ast.SelectionSet, v *ent.Product) graphql.Marshaler {
+func (ec *executionContext) marshalNProduct2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProduct(ctx context.Context, sel ast.SelectionSet, v *ent.Product) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -14968,12 +14933,12 @@ func (ec *executionContext) marshalNProduct2ᚖagricoladbᚋentᚐProduct(ctx co
 	return ec._Product(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNProductWhereInput2ᚖagricoladbᚋentᚐProductWhereInput(ctx context.Context, v interface{}) (*ent.ProductWhereInput, error) {
+func (ec *executionContext) unmarshalNProductWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductWhereInput(ctx context.Context, v interface{}) (*ent.ProductWhereInput, error) {
 	res, err := ec.unmarshalInputProductWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNRevision2ᚕᚖagricoladbᚋentᚐRevisionᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Revision) graphql.Marshaler {
+func (ec *executionContext) marshalNRevision2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Revision) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -14997,7 +14962,7 @@ func (ec *executionContext) marshalNRevision2ᚕᚖagricoladbᚋentᚐRevision�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNRevision2ᚖagricoladbᚋentᚐRevision(ctx, sel, v[i])
+			ret[i] = ec.marshalNRevision2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevision(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -15017,7 +14982,7 @@ func (ec *executionContext) marshalNRevision2ᚕᚖagricoladbᚋentᚐRevision�
 	return ret
 }
 
-func (ec *executionContext) marshalNRevision2ᚖagricoladbᚋentᚐRevision(ctx context.Context, sel ast.SelectionSet, v *ent.Revision) graphql.Marshaler {
+func (ec *executionContext) marshalNRevision2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevision(ctx context.Context, sel ast.SelectionSet, v *ent.Revision) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -15027,7 +14992,7 @@ func (ec *executionContext) marshalNRevision2ᚖagricoladbᚋentᚐRevision(ctx 
 	return ec._Revision(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNRevisionWhereInput2ᚖagricoladbᚋentᚐRevisionWhereInput(ctx context.Context, v interface{}) (*ent.RevisionWhereInput, error) {
+func (ec *executionContext) unmarshalNRevisionWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionWhereInput(ctx context.Context, v interface{}) (*ent.RevisionWhereInput, error) {
 	res, err := ec.unmarshalInputRevisionWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
@@ -15326,7 +15291,7 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Card) graphql.Marshaler {
+func (ec *executionContext) marshalOCard2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Card) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -15353,7 +15318,7 @@ func (ec *executionContext) marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx co
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNCard2ᚖagricoladbᚋentᚐCard(ctx, sel, v[i])
+			ret[i] = ec.marshalNCard2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCard(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -15373,14 +15338,14 @@ func (ec *executionContext) marshalOCard2ᚕᚖagricoladbᚋentᚐCardᚄ(ctx co
 	return ret
 }
 
-func (ec *executionContext) marshalOCard2ᚖagricoladbᚋentᚐCard(ctx context.Context, sel ast.SelectionSet, v *ent.Card) graphql.Marshaler {
+func (ec *executionContext) marshalOCard2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCard(ctx context.Context, sel ast.SelectionSet, v *ent.Card) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Card(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOCardEdge2ᚕᚖagricoladbᚋentᚐCardEdge(ctx context.Context, sel ast.SelectionSet, v []*ent.CardEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOCardEdge2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardEdge(ctx context.Context, sel ast.SelectionSet, v []*ent.CardEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -15407,7 +15372,7 @@ func (ec *executionContext) marshalOCardEdge2ᚕᚖagricoladbᚋentᚐCardEdge(c
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOCardEdge2ᚖagricoladbᚋentᚐCardEdge(ctx, sel, v[i])
+			ret[i] = ec.marshalOCardEdge2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -15421,21 +15386,21 @@ func (ec *executionContext) marshalOCardEdge2ᚕᚖagricoladbᚋentᚐCardEdge(c
 	return ret
 }
 
-func (ec *executionContext) marshalOCardEdge2ᚖagricoladbᚋentᚐCardEdge(ctx context.Context, sel ast.SelectionSet, v *ent.CardEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOCardEdge2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardEdge(ctx context.Context, sel ast.SelectionSet, v *ent.CardEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._CardEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOCardSpecialColor2ᚖagricoladbᚋentᚐCardSpecialColor(ctx context.Context, sel ast.SelectionSet, v *ent.CardSpecialColor) graphql.Marshaler {
+func (ec *executionContext) marshalOCardSpecialColor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColor(ctx context.Context, sel ast.SelectionSet, v *ent.CardSpecialColor) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._CardSpecialColor(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOCardSpecialColorWhereInput2ᚕᚖagricoladbᚋentᚐCardSpecialColorWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.CardSpecialColorWhereInput, error) {
+func (ec *executionContext) unmarshalOCardSpecialColorWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColorWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.CardSpecialColorWhereInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -15447,7 +15412,7 @@ func (ec *executionContext) unmarshalOCardSpecialColorWhereInput2ᚕᚖagricolad
 	res := make([]*ent.CardSpecialColorWhereInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCardSpecialColorWhereInput2ᚖagricoladbᚋentᚐCardSpecialColorWhereInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNCardSpecialColorWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColorWhereInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -15455,7 +15420,7 @@ func (ec *executionContext) unmarshalOCardSpecialColorWhereInput2ᚕᚖagricolad
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOCardSpecialColorWhereInput2ᚖagricoladbᚋentᚐCardSpecialColorWhereInput(ctx context.Context, v interface{}) (*ent.CardSpecialColorWhereInput, error) {
+func (ec *executionContext) unmarshalOCardSpecialColorWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColorWhereInput(ctx context.Context, v interface{}) (*ent.CardSpecialColorWhereInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -15463,7 +15428,7 @@ func (ec *executionContext) unmarshalOCardSpecialColorWhereInput2ᚖagricoladb�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalOCardTypeWhereInput2ᚕᚖagricoladbᚋentᚐCardTypeWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.CardTypeWhereInput, error) {
+func (ec *executionContext) unmarshalOCardTypeWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardTypeWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.CardTypeWhereInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -15475,7 +15440,7 @@ func (ec *executionContext) unmarshalOCardTypeWhereInput2ᚕᚖagricoladbᚋent�
 	res := make([]*ent.CardTypeWhereInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCardTypeWhereInput2ᚖagricoladbᚋentᚐCardTypeWhereInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNCardTypeWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardTypeWhereInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -15483,7 +15448,7 @@ func (ec *executionContext) unmarshalOCardTypeWhereInput2ᚕᚖagricoladbᚋent�
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOCardTypeWhereInput2ᚖagricoladbᚋentᚐCardTypeWhereInput(ctx context.Context, v interface{}) (*ent.CardTypeWhereInput, error) {
+func (ec *executionContext) unmarshalOCardTypeWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardTypeWhereInput(ctx context.Context, v interface{}) (*ent.CardTypeWhereInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -15491,7 +15456,7 @@ func (ec *executionContext) unmarshalOCardTypeWhereInput2ᚖagricoladbᚋentᚐC
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCardWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.CardWhereInput, error) {
+func (ec *executionContext) unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.CardWhereInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -15503,7 +15468,7 @@ func (ec *executionContext) unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCa
 	res := make([]*ent.CardWhereInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNCardWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -15511,7 +15476,7 @@ func (ec *executionContext) unmarshalOCardWhereInput2ᚕᚖagricoladbᚋentᚐCa
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOCardWhereInput2ᚖagricoladbᚋentᚐCardWhereInput(ctx context.Context, v interface{}) (*ent.CardWhereInput, error) {
+func (ec *executionContext) unmarshalOCardWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInput(ctx context.Context, v interface{}) (*ent.CardWhereInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -15519,7 +15484,7 @@ func (ec *executionContext) unmarshalOCardWhereInput2ᚖagricoladbᚋentᚐCardW
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx context.Context, v interface{}) (*ent.Cursor, error) {
+func (ec *executionContext) unmarshalOCursor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx context.Context, v interface{}) (*ent.Cursor, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -15528,14 +15493,14 @@ func (ec *executionContext) unmarshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx co
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOCursor2ᚖagricoladbᚋentᚐCursor(ctx context.Context, sel ast.SelectionSet, v *ent.Cursor) graphql.Marshaler {
+func (ec *executionContext) marshalOCursor2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCursor(ctx context.Context, sel ast.SelectionSet, v *ent.Cursor) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) marshalODeck2ᚕᚖagricoladbᚋentᚐDeckᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Deck) graphql.Marshaler {
+func (ec *executionContext) marshalODeck2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Deck) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -15562,7 +15527,7 @@ func (ec *executionContext) marshalODeck2ᚕᚖagricoladbᚋentᚐDeckᚄ(ctx co
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNDeck2ᚖagricoladbᚋentᚐDeck(ctx, sel, v[i])
+			ret[i] = ec.marshalNDeck2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeck(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -15582,14 +15547,14 @@ func (ec *executionContext) marshalODeck2ᚕᚖagricoladbᚋentᚐDeckᚄ(ctx co
 	return ret
 }
 
-func (ec *executionContext) marshalODeck2ᚖagricoladbᚋentᚐDeck(ctx context.Context, sel ast.SelectionSet, v *ent.Deck) graphql.Marshaler {
+func (ec *executionContext) marshalODeck2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeck(ctx context.Context, sel ast.SelectionSet, v *ent.Deck) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Deck(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalODeckWhereInput2ᚕᚖagricoladbᚋentᚐDeckWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.DeckWhereInput, error) {
+func (ec *executionContext) unmarshalODeckWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.DeckWhereInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -15601,7 +15566,7 @@ func (ec *executionContext) unmarshalODeckWhereInput2ᚕᚖagricoladbᚋentᚐDe
 	res := make([]*ent.DeckWhereInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNDeckWhereInput2ᚖagricoladbᚋentᚐDeckWhereInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNDeckWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckWhereInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -15609,7 +15574,7 @@ func (ec *executionContext) unmarshalODeckWhereInput2ᚕᚖagricoladbᚋentᚐDe
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalODeckWhereInput2ᚖagricoladbᚋentᚐDeckWhereInput(ctx context.Context, v interface{}) (*ent.DeckWhereInput, error) {
+func (ec *executionContext) unmarshalODeckWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckWhereInput(ctx context.Context, v interface{}) (*ent.DeckWhereInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -15745,14 +15710,14 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	return res
 }
 
-func (ec *executionContext) marshalONode2agricoladbᚋentᚐNoder(ctx context.Context, sel ast.SelectionSet, v ent.Noder) graphql.Marshaler {
+func (ec *executionContext) marshalONode2githubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐNoder(ctx context.Context, sel ast.SelectionSet, v ent.Noder) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Node(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOProduct2ᚕᚖagricoladbᚋentᚐProductᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Product) graphql.Marshaler {
+func (ec *executionContext) marshalOProduct2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Product) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -15779,7 +15744,7 @@ func (ec *executionContext) marshalOProduct2ᚕᚖagricoladbᚋentᚐProductᚄ(
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNProduct2ᚖagricoladbᚋentᚐProduct(ctx, sel, v[i])
+			ret[i] = ec.marshalNProduct2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProduct(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -15799,7 +15764,7 @@ func (ec *executionContext) marshalOProduct2ᚕᚖagricoladbᚋentᚐProductᚄ(
 	return ret
 }
 
-func (ec *executionContext) unmarshalOProductWhereInput2ᚕᚖagricoladbᚋentᚐProductWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.ProductWhereInput, error) {
+func (ec *executionContext) unmarshalOProductWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.ProductWhereInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -15811,7 +15776,7 @@ func (ec *executionContext) unmarshalOProductWhereInput2ᚕᚖagricoladbᚋent�
 	res := make([]*ent.ProductWhereInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNProductWhereInput2ᚖagricoladbᚋentᚐProductWhereInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNProductWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductWhereInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -15819,7 +15784,7 @@ func (ec *executionContext) unmarshalOProductWhereInput2ᚕᚖagricoladbᚋent�
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOProductWhereInput2ᚖagricoladbᚋentᚐProductWhereInput(ctx context.Context, v interface{}) (*ent.ProductWhereInput, error) {
+func (ec *executionContext) unmarshalOProductWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductWhereInput(ctx context.Context, v interface{}) (*ent.ProductWhereInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -15827,7 +15792,7 @@ func (ec *executionContext) unmarshalOProductWhereInput2ᚖagricoladbᚋentᚐPr
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalORevisionWhereInput2ᚕᚖagricoladbᚋentᚐRevisionWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.RevisionWhereInput, error) {
+func (ec *executionContext) unmarshalORevisionWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.RevisionWhereInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -15839,7 +15804,7 @@ func (ec *executionContext) unmarshalORevisionWhereInput2ᚕᚖagricoladbᚋent�
 	res := make([]*ent.RevisionWhereInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNRevisionWhereInput2ᚖagricoladbᚋentᚐRevisionWhereInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNRevisionWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionWhereInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -15847,7 +15812,7 @@ func (ec *executionContext) unmarshalORevisionWhereInput2ᚕᚖagricoladbᚋent�
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalORevisionWhereInput2ᚖagricoladbᚋentᚐRevisionWhereInput(ctx context.Context, v interface{}) (*ent.RevisionWhereInput, error) {
+func (ec *executionContext) unmarshalORevisionWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionWhereInput(ctx context.Context, v interface{}) (*ent.RevisionWhereInput, error) {
 	if v == nil {
 		return nil, nil
 	}
