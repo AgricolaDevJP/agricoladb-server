@@ -3,8 +3,6 @@
 package ent
 
 import (
-	"agricoladb/ent/card"
-	"agricoladb/ent/cardspecialcolor"
 	"context"
 	"errors"
 	"fmt"
@@ -12,6 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/card"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardspecialcolor"
 )
 
 // CardSpecialColorCreate is the builder for creating a CardSpecialColor entity.
@@ -84,49 +84,7 @@ func (cscc *CardSpecialColorCreate) Mutation() *CardSpecialColorMutation {
 
 // Save creates the CardSpecialColor in the database.
 func (cscc *CardSpecialColorCreate) Save(ctx context.Context) (*CardSpecialColor, error) {
-	var (
-		err  error
-		node *CardSpecialColor
-	)
-	if len(cscc.hooks) == 0 {
-		if err = cscc.check(); err != nil {
-			return nil, err
-		}
-		node, err = cscc.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*CardSpecialColorMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = cscc.check(); err != nil {
-				return nil, err
-			}
-			cscc.mutation = mutation
-			if node, err = cscc.sqlSave(ctx); err != nil {
-				return nil, err
-			}
-			mutation.id = &node.ID
-			mutation.done = true
-			return node, err
-		})
-		for i := len(cscc.hooks) - 1; i >= 0; i-- {
-			if cscc.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = cscc.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, cscc.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*CardSpecialColor)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from CardSpecialColorMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*CardSpecialColor, CardSpecialColorMutation](ctx, cscc.sqlSave, cscc.mutation, cscc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -165,6 +123,9 @@ func (cscc *CardSpecialColorCreate) check() error {
 }
 
 func (cscc *CardSpecialColorCreate) sqlSave(ctx context.Context) (*CardSpecialColor, error) {
+	if err := cscc.check(); err != nil {
+		return nil, err
+	}
 	_node, _spec := cscc.createSpec()
 	if err := sqlgraph.CreateNode(ctx, cscc.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
@@ -176,6 +137,8 @@ func (cscc *CardSpecialColorCreate) sqlSave(ctx context.Context) (*CardSpecialCo
 		id := _spec.ID.Value.(int64)
 		_node.ID = int(id)
 	}
+	cscc.mutation.id = &_node.ID
+	cscc.mutation.done = true
 	return _node, nil
 }
 

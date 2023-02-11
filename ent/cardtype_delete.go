@@ -3,14 +3,13 @@
 package ent
 
 import (
-	"agricoladb/ent/cardtype"
-	"agricoladb/ent/predicate"
 	"context"
-	"fmt"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardtype"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/predicate"
 )
 
 // CardTypeDelete is the builder for deleting a CardType entity.
@@ -28,34 +27,7 @@ func (ctd *CardTypeDelete) Where(ps ...predicate.CardType) *CardTypeDelete {
 
 // Exec executes the deletion query and returns how many vertices were deleted.
 func (ctd *CardTypeDelete) Exec(ctx context.Context) (int, error) {
-	var (
-		err      error
-		affected int
-	)
-	if len(ctd.hooks) == 0 {
-		affected, err = ctd.sqlExec(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*CardTypeMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			ctd.mutation = mutation
-			affected, err = ctd.sqlExec(ctx)
-			mutation.done = true
-			return affected, err
-		})
-		for i := len(ctd.hooks) - 1; i >= 0; i-- {
-			if ctd.hooks[i] == nil {
-				return 0, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = ctd.hooks[i](mut)
-		}
-		if _, err := mut.Mutate(ctx, ctd.mutation); err != nil {
-			return 0, err
-		}
-	}
-	return affected, err
+	return withHooks[int, CardTypeMutation](ctx, ctd.sqlExec, ctd.mutation, ctd.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
@@ -88,6 +60,7 @@ func (ctd *CardTypeDelete) sqlExec(ctx context.Context) (int, error) {
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
+	ctd.mutation.done = true
 	return affected, err
 }
 

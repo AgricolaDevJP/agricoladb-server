@@ -3,15 +3,15 @@
 package ent
 
 import (
-	"agricoladb/ent/card"
-	"agricoladb/ent/cardspecialcolor"
-	"agricoladb/ent/cardtype"
-	"agricoladb/ent/deck"
-	"agricoladb/ent/revision"
 	"fmt"
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/card"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardspecialcolor"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardtype"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/deck"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/revision"
 )
 
 // Card is the model entity for the Card schema.
@@ -452,44 +452,44 @@ func (c *Card) assignValues(columns []string, values []any) error {
 
 // QueryRevision queries the "revision" edge of the Card entity.
 func (c *Card) QueryRevision() *RevisionQuery {
-	return (&CardClient{config: c.config}).QueryRevision(c)
+	return NewCardClient(c.config).QueryRevision(c)
 }
 
 // QueryProducts queries the "products" edge of the Card entity.
 func (c *Card) QueryProducts() *ProductQuery {
-	return (&CardClient{config: c.config}).QueryProducts(c)
+	return NewCardClient(c.config).QueryProducts(c)
 }
 
 // QueryDeck queries the "deck" edge of the Card entity.
 func (c *Card) QueryDeck() *DeckQuery {
-	return (&CardClient{config: c.config}).QueryDeck(c)
+	return NewCardClient(c.config).QueryDeck(c)
 }
 
 // QueryCardType queries the "card_type" edge of the Card entity.
 func (c *Card) QueryCardType() *CardTypeQuery {
-	return (&CardClient{config: c.config}).QueryCardType(c)
+	return NewCardClient(c.config).QueryCardType(c)
 }
 
 // QueryCardSpecialColor queries the "card_special_color" edge of the Card entity.
 func (c *Card) QueryCardSpecialColor() *CardSpecialColorQuery {
-	return (&CardClient{config: c.config}).QueryCardSpecialColor(c)
+	return NewCardClient(c.config).QueryCardSpecialColor(c)
 }
 
 // QueryChildren queries the "children" edge of the Card entity.
 func (c *Card) QueryChildren() *CardQuery {
-	return (&CardClient{config: c.config}).QueryChildren(c)
+	return NewCardClient(c.config).QueryChildren(c)
 }
 
 // QueryAncestors queries the "ancestors" edge of the Card entity.
 func (c *Card) QueryAncestors() *CardQuery {
-	return (&CardClient{config: c.config}).QueryAncestors(c)
+	return NewCardClient(c.config).QueryAncestors(c)
 }
 
 // Update returns a builder for updating this Card.
 // Note that you need to call Card.Unwrap() before calling this method if this Card
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (c *Card) Update() *CardUpdateOne {
-	return (&CardClient{config: c.config}).UpdateOne(c)
+	return NewCardClient(c.config).UpdateOne(c)
 }
 
 // Unwrap unwraps the Card entity that was returned from a transaction after it was closed,

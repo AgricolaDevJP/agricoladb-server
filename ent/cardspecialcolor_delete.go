@@ -3,14 +3,13 @@
 package ent
 
 import (
-	"agricoladb/ent/cardspecialcolor"
-	"agricoladb/ent/predicate"
 	"context"
-	"fmt"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardspecialcolor"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/predicate"
 )
 
 // CardSpecialColorDelete is the builder for deleting a CardSpecialColor entity.
@@ -28,34 +27,7 @@ func (cscd *CardSpecialColorDelete) Where(ps ...predicate.CardSpecialColor) *Car
 
 // Exec executes the deletion query and returns how many vertices were deleted.
 func (cscd *CardSpecialColorDelete) Exec(ctx context.Context) (int, error) {
-	var (
-		err      error
-		affected int
-	)
-	if len(cscd.hooks) == 0 {
-		affected, err = cscd.sqlExec(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*CardSpecialColorMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			cscd.mutation = mutation
-			affected, err = cscd.sqlExec(ctx)
-			mutation.done = true
-			return affected, err
-		})
-		for i := len(cscd.hooks) - 1; i >= 0; i-- {
-			if cscd.hooks[i] == nil {
-				return 0, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = cscd.hooks[i](mut)
-		}
-		if _, err := mut.Mutate(ctx, cscd.mutation); err != nil {
-			return 0, err
-		}
-	}
-	return affected, err
+	return withHooks[int, CardSpecialColorMutation](ctx, cscd.sqlExec, cscd.mutation, cscd.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
@@ -88,6 +60,7 @@ func (cscd *CardSpecialColorDelete) sqlExec(ctx context.Context) (int, error) {
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
+	cscd.mutation.done = true
 	return affected, err
 }
 

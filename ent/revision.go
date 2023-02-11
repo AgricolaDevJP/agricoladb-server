@@ -3,11 +3,11 @@
 package ent
 
 import (
-	"agricoladb/ent/revision"
 	"fmt"
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/revision"
 )
 
 // Revision is the model entity for the Revision schema.
@@ -127,24 +127,24 @@ func (r *Revision) assignValues(columns []string, values []any) error {
 
 // QueryCards queries the "cards" edge of the Revision entity.
 func (r *Revision) QueryCards() *CardQuery {
-	return (&RevisionClient{config: r.config}).QueryCards(r)
+	return NewRevisionClient(r.config).QueryCards(r)
 }
 
 // QueryProducts queries the "products" edge of the Revision entity.
 func (r *Revision) QueryProducts() *ProductQuery {
-	return (&RevisionClient{config: r.config}).QueryProducts(r)
+	return NewRevisionClient(r.config).QueryProducts(r)
 }
 
 // QueryDecks queries the "decks" edge of the Revision entity.
 func (r *Revision) QueryDecks() *DeckQuery {
-	return (&RevisionClient{config: r.config}).QueryDecks(r)
+	return NewRevisionClient(r.config).QueryDecks(r)
 }
 
 // Update returns a builder for updating this Revision.
 // Note that you need to call Revision.Unwrap() before calling this method if this Revision
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (r *Revision) Update() *RevisionUpdateOne {
-	return (&RevisionClient{config: r.config}).UpdateOne(r)
+	return NewRevisionClient(r.config).UpdateOne(r)
 }
 
 // Unwrap unwraps the Revision entity that was returned from a transaction after it was closed,

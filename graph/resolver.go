@@ -1,6 +1,6 @@
 package graph
 
-import "agricoladb/ent"
+import "github.com/AgricolaDevJP/agricoladb-server/ent"
 
 // This file will not be regenerated automatically.
 //

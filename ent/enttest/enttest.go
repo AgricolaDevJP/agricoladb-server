@@ -3,14 +3,14 @@
 package enttest
 
 import (
-	"agricoladb/ent"
 	"context"
-	// required by schema hooks.
-	_ "agricoladb/ent/runtime"
 
-	"agricoladb/ent/migrate"
+	"github.com/AgricolaDevJP/agricoladb-server/ent"
+	// required by schema hooks.
+	_ "github.com/AgricolaDevJP/agricoladb-server/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/migrate"
 )
 
 type (

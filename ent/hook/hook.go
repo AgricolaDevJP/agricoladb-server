@@ -3,9 +3,10 @@
 package hook
 
 import (
-	"agricoladb/ent"
 	"context"
 	"fmt"
+
+	"github.com/AgricolaDevJP/agricoladb-server/ent"
 )
 
 // The CardFunc type is an adapter to allow the use of ordinary
@@ -14,11 +15,10 @@ type CardFunc func(context.Context, *ent.CardMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
 func (f CardFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.CardMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CardMutation", m)
+	if mv, ok := m.(*ent.CardMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CardMutation", m)
 }
 
 // The CardSpecialColorFunc type is an adapter to allow the use of ordinary
@@ -27,11 +27,10 @@ type CardSpecialColorFunc func(context.Context, *ent.CardSpecialColorMutation) (
 
 // Mutate calls f(ctx, m).
 func (f CardSpecialColorFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.CardSpecialColorMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CardSpecialColorMutation", m)
+	if mv, ok := m.(*ent.CardSpecialColorMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CardSpecialColorMutation", m)
 }
 
 // The CardTypeFunc type is an adapter to allow the use of ordinary
@@ -40,11 +39,10 @@ type CardTypeFunc func(context.Context, *ent.CardTypeMutation) (ent.Value, error
 
 // Mutate calls f(ctx, m).
 func (f CardTypeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.CardTypeMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CardTypeMutation", m)
+	if mv, ok := m.(*ent.CardTypeMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CardTypeMutation", m)
 }
 
 // The DeckFunc type is an adapter to allow the use of ordinary
@@ -53,11 +51,10 @@ type DeckFunc func(context.Context, *ent.DeckMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
 func (f DeckFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.DeckMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DeckMutation", m)
+	if mv, ok := m.(*ent.DeckMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DeckMutation", m)
 }
 
 // The ProductFunc type is an adapter to allow the use of ordinary
@@ -66,11 +63,10 @@ type ProductFunc func(context.Context, *ent.ProductMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
 func (f ProductFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.ProductMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProductMutation", m)
+	if mv, ok := m.(*ent.ProductMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProductMutation", m)
 }
 
 // The RevisionFunc type is an adapter to allow the use of ordinary
@@ -79,11 +75,10 @@ type RevisionFunc func(context.Context, *ent.RevisionMutation) (ent.Value, error
 
 // Mutate calls f(ctx, m).
 func (f RevisionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.RevisionMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RevisionMutation", m)
+	if mv, ok := m.(*ent.RevisionMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.RevisionMutation", m)
 }
 
 // Condition is a hook condition function.

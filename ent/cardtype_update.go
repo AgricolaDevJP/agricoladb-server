@@ -3,9 +3,6 @@
 package ent
 
 import (
-	"agricoladb/ent/card"
-	"agricoladb/ent/cardtype"
-	"agricoladb/ent/predicate"
 	"context"
 	"errors"
 	"fmt"
@@ -13,6 +10,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/card"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardtype"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/predicate"
 )
 
 // CardTypeUpdate is the builder for updating CardType entities.
@@ -111,34 +111,7 @@ func (ctu *CardTypeUpdate) RemoveCards(c ...*Card) *CardTypeUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ctu *CardTypeUpdate) Save(ctx context.Context) (int, error) {
-	var (
-		err      error
-		affected int
-	)
-	if len(ctu.hooks) == 0 {
-		affected, err = ctu.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*CardTypeMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			ctu.mutation = mutation
-			affected, err = ctu.sqlSave(ctx)
-			mutation.done = true
-			return affected, err
-		})
-		for i := len(ctu.hooks) - 1; i >= 0; i-- {
-			if ctu.hooks[i] == nil {
-				return 0, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = ctu.hooks[i](mut)
-		}
-		if _, err := mut.Mutate(ctx, ctu.mutation); err != nil {
-			return 0, err
-		}
-	}
-	return affected, err
+	return withHooks[int, CardTypeMutation](ctx, ctu.sqlSave, ctu.mutation, ctu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -255,6 +228,7 @@ func (ctu *CardTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
+	ctu.mutation.done = true
 	return n, nil
 }
 
@@ -356,40 +330,7 @@ func (ctuo *CardTypeUpdateOne) Select(field string, fields ...string) *CardTypeU
 
 // Save executes the query and returns the updated CardType entity.
 func (ctuo *CardTypeUpdateOne) Save(ctx context.Context) (*CardType, error) {
-	var (
-		err  error
-		node *CardType
-	)
-	if len(ctuo.hooks) == 0 {
-		node, err = ctuo.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*CardTypeMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			ctuo.mutation = mutation
-			node, err = ctuo.sqlSave(ctx)
-			mutation.done = true
-			return node, err
-		})
-		for i := len(ctuo.hooks) - 1; i >= 0; i-- {
-			if ctuo.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = ctuo.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, ctuo.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*CardType)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from CardTypeMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*CardType, CardTypeMutation](ctx, ctuo.sqlSave, ctuo.mutation, ctuo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -526,5 +467,6 @@ func (ctuo *CardTypeUpdateOne) sqlSave(ctx context.Context) (_node *CardType, er
 		}
 		return nil, err
 	}
+	ctuo.mutation.done = true
 	return _node, nil
 }

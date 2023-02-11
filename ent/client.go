@@ -8,14 +8,14 @@ import (
 	"fmt"
 	"log"
 
-	"agricoladb/ent/migrate"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/migrate"
 
-	"agricoladb/ent/card"
-	"agricoladb/ent/cardspecialcolor"
-	"agricoladb/ent/cardtype"
-	"agricoladb/ent/deck"
-	"agricoladb/ent/product"
-	"agricoladb/ent/revision"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/card"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardspecialcolor"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/cardtype"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/deck"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/product"
+	"github.com/AgricolaDevJP/agricoladb-server/ent/revision"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
@@ -45,7 +45,7 @@ type Client struct {
 
 // NewClient creates a new client configured with the given options.
 func NewClient(opts ...Option) *Client {
-	cfg := config{log: log.Println, hooks: &hooks{}}
+	cfg := config{log: log.Println, hooks: &hooks{}, inters: &inters{}}
 	cfg.options(opts...)
 	client := &Client{config: cfg}
 	client.init()
@@ -160,6 +160,37 @@ func (c *Client) Use(hooks ...Hook) {
 	c.Revision.Use(hooks...)
 }
 
+// Intercept adds the query interceptors to all the entity clients.
+// In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
+func (c *Client) Intercept(interceptors ...Interceptor) {
+	c.Card.Intercept(interceptors...)
+	c.CardSpecialColor.Intercept(interceptors...)
+	c.CardType.Intercept(interceptors...)
+	c.Deck.Intercept(interceptors...)
+	c.Product.Intercept(interceptors...)
+	c.Revision.Intercept(interceptors...)
+}
+
+// Mutate implements the ent.Mutator interface.
+func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
+	switch m := m.(type) {
+	case *CardMutation:
+		return c.Card.mutate(ctx, m)
+	case *CardSpecialColorMutation:
+		return c.CardSpecialColor.mutate(ctx, m)
+	case *CardTypeMutation:
+		return c.CardType.mutate(ctx, m)
+	case *DeckMutation:
+		return c.Deck.mutate(ctx, m)
+	case *ProductMutation:
+		return c.Product.mutate(ctx, m)
+	case *RevisionMutation:
+		return c.Revision.mutate(ctx, m)
+	default:
+		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
+	}
+}
+
 // CardClient is a client for the Card schema.
 type CardClient struct {
 	config
@@ -174,6 +205,12 @@ func NewCardClient(c config) *CardClient {
 // A call to `Use(f, g, h)` equals to `card.Hooks(f(g(h())))`.
 func (c *CardClient) Use(hooks ...Hook) {
 	c.hooks.Card = append(c.hooks.Card, hooks...)
+}
+
+// Use adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `card.Intercept(f(g(h())))`.
+func (c *CardClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Card = append(c.inters.Card, interceptors...)
 }
 
 // Create returns a builder for creating a Card entity.
@@ -228,6 +265,8 @@ func (c *CardClient) DeleteOneID(id int) *CardDeleteOne {
 func (c *CardClient) Query() *CardQuery {
 	return &CardQuery{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeCard},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -247,7 +286,7 @@ func (c *CardClient) GetX(ctx context.Context, id int) *Card {
 
 // QueryRevision queries the revision edge of a Card.
 func (c *CardClient) QueryRevision(ca *Card) *RevisionQuery {
-	query := &RevisionQuery{config: c.config}
+	query := (&RevisionClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ca.ID
 		step := sqlgraph.NewStep(
@@ -263,7 +302,7 @@ func (c *CardClient) QueryRevision(ca *Card) *RevisionQuery {
 
 // QueryProducts queries the products edge of a Card.
 func (c *CardClient) QueryProducts(ca *Card) *ProductQuery {
-	query := &ProductQuery{config: c.config}
+	query := (&ProductClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ca.ID
 		step := sqlgraph.NewStep(
@@ -279,7 +318,7 @@ func (c *CardClient) QueryProducts(ca *Card) *ProductQuery {
 
 // QueryDeck queries the deck edge of a Card.
 func (c *CardClient) QueryDeck(ca *Card) *DeckQuery {
-	query := &DeckQuery{config: c.config}
+	query := (&DeckClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ca.ID
 		step := sqlgraph.NewStep(
@@ -295,7 +334,7 @@ func (c *CardClient) QueryDeck(ca *Card) *DeckQuery {
 
 // QueryCardType queries the card_type edge of a Card.
 func (c *CardClient) QueryCardType(ca *Card) *CardTypeQuery {
-	query := &CardTypeQuery{config: c.config}
+	query := (&CardTypeClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ca.ID
 		step := sqlgraph.NewStep(
@@ -311,7 +350,7 @@ func (c *CardClient) QueryCardType(ca *Card) *CardTypeQuery {
 
 // QueryCardSpecialColor queries the card_special_color edge of a Card.
 func (c *CardClient) QueryCardSpecialColor(ca *Card) *CardSpecialColorQuery {
-	query := &CardSpecialColorQuery{config: c.config}
+	query := (&CardSpecialColorClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ca.ID
 		step := sqlgraph.NewStep(
@@ -327,7 +366,7 @@ func (c *CardClient) QueryCardSpecialColor(ca *Card) *CardSpecialColorQuery {
 
 // QueryChildren queries the children edge of a Card.
 func (c *CardClient) QueryChildren(ca *Card) *CardQuery {
-	query := &CardQuery{config: c.config}
+	query := (&CardClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ca.ID
 		step := sqlgraph.NewStep(
@@ -343,7 +382,7 @@ func (c *CardClient) QueryChildren(ca *Card) *CardQuery {
 
 // QueryAncestors queries the ancestors edge of a Card.
 func (c *CardClient) QueryAncestors(ca *Card) *CardQuery {
-	query := &CardQuery{config: c.config}
+	query := (&CardClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ca.ID
 		step := sqlgraph.NewStep(
@@ -362,6 +401,26 @@ func (c *CardClient) Hooks() []Hook {
 	return c.hooks.Card
 }
 
+// Interceptors returns the client interceptors.
+func (c *CardClient) Interceptors() []Interceptor {
+	return c.inters.Card
+}
+
+func (c *CardClient) mutate(ctx context.Context, m *CardMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CardCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CardUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CardUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CardDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Card mutation op: %q", m.Op())
+	}
+}
+
 // CardSpecialColorClient is a client for the CardSpecialColor schema.
 type CardSpecialColorClient struct {
 	config
@@ -376,6 +435,12 @@ func NewCardSpecialColorClient(c config) *CardSpecialColorClient {
 // A call to `Use(f, g, h)` equals to `cardspecialcolor.Hooks(f(g(h())))`.
 func (c *CardSpecialColorClient) Use(hooks ...Hook) {
 	c.hooks.CardSpecialColor = append(c.hooks.CardSpecialColor, hooks...)
+}
+
+// Use adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `cardspecialcolor.Intercept(f(g(h())))`.
+func (c *CardSpecialColorClient) Intercept(interceptors ...Interceptor) {
+	c.inters.CardSpecialColor = append(c.inters.CardSpecialColor, interceptors...)
 }
 
 // Create returns a builder for creating a CardSpecialColor entity.
@@ -430,6 +495,8 @@ func (c *CardSpecialColorClient) DeleteOneID(id int) *CardSpecialColorDeleteOne 
 func (c *CardSpecialColorClient) Query() *CardSpecialColorQuery {
 	return &CardSpecialColorQuery{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeCardSpecialColor},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -449,7 +516,7 @@ func (c *CardSpecialColorClient) GetX(ctx context.Context, id int) *CardSpecialC
 
 // QueryCards queries the cards edge of a CardSpecialColor.
 func (c *CardSpecialColorClient) QueryCards(csc *CardSpecialColor) *CardQuery {
-	query := &CardQuery{config: c.config}
+	query := (&CardClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := csc.ID
 		step := sqlgraph.NewStep(
@@ -468,6 +535,26 @@ func (c *CardSpecialColorClient) Hooks() []Hook {
 	return c.hooks.CardSpecialColor
 }
 
+// Interceptors returns the client interceptors.
+func (c *CardSpecialColorClient) Interceptors() []Interceptor {
+	return c.inters.CardSpecialColor
+}
+
+func (c *CardSpecialColorClient) mutate(ctx context.Context, m *CardSpecialColorMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CardSpecialColorCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CardSpecialColorUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CardSpecialColorUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CardSpecialColorDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown CardSpecialColor mutation op: %q", m.Op())
+	}
+}
+
 // CardTypeClient is a client for the CardType schema.
 type CardTypeClient struct {
 	config
@@ -482,6 +569,12 @@ func NewCardTypeClient(c config) *CardTypeClient {
 // A call to `Use(f, g, h)` equals to `cardtype.Hooks(f(g(h())))`.
 func (c *CardTypeClient) Use(hooks ...Hook) {
 	c.hooks.CardType = append(c.hooks.CardType, hooks...)
+}
+
+// Use adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `cardtype.Intercept(f(g(h())))`.
+func (c *CardTypeClient) Intercept(interceptors ...Interceptor) {
+	c.inters.CardType = append(c.inters.CardType, interceptors...)
 }
 
 // Create returns a builder for creating a CardType entity.
@@ -536,6 +629,8 @@ func (c *CardTypeClient) DeleteOneID(id int) *CardTypeDeleteOne {
 func (c *CardTypeClient) Query() *CardTypeQuery {
 	return &CardTypeQuery{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeCardType},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -555,7 +650,7 @@ func (c *CardTypeClient) GetX(ctx context.Context, id int) *CardType {
 
 // QueryCards queries the cards edge of a CardType.
 func (c *CardTypeClient) QueryCards(ct *CardType) *CardQuery {
-	query := &CardQuery{config: c.config}
+	query := (&CardClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := ct.ID
 		step := sqlgraph.NewStep(
@@ -574,6 +669,26 @@ func (c *CardTypeClient) Hooks() []Hook {
 	return c.hooks.CardType
 }
 
+// Interceptors returns the client interceptors.
+func (c *CardTypeClient) Interceptors() []Interceptor {
+	return c.inters.CardType
+}
+
+func (c *CardTypeClient) mutate(ctx context.Context, m *CardTypeMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CardTypeCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CardTypeUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CardTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CardTypeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown CardType mutation op: %q", m.Op())
+	}
+}
+
 // DeckClient is a client for the Deck schema.
 type DeckClient struct {
 	config
@@ -588,6 +703,12 @@ func NewDeckClient(c config) *DeckClient {
 // A call to `Use(f, g, h)` equals to `deck.Hooks(f(g(h())))`.
 func (c *DeckClient) Use(hooks ...Hook) {
 	c.hooks.Deck = append(c.hooks.Deck, hooks...)
+}
+
+// Use adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `deck.Intercept(f(g(h())))`.
+func (c *DeckClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Deck = append(c.inters.Deck, interceptors...)
 }
 
 // Create returns a builder for creating a Deck entity.
@@ -642,6 +763,8 @@ func (c *DeckClient) DeleteOneID(id int) *DeckDeleteOne {
 func (c *DeckClient) Query() *DeckQuery {
 	return &DeckQuery{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeDeck},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -661,7 +784,7 @@ func (c *DeckClient) GetX(ctx context.Context, id int) *Deck {
 
 // QueryCards queries the cards edge of a Deck.
 func (c *DeckClient) QueryCards(d *Deck) *CardQuery {
-	query := &CardQuery{config: c.config}
+	query := (&CardClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := d.ID
 		step := sqlgraph.NewStep(
@@ -677,7 +800,7 @@ func (c *DeckClient) QueryCards(d *Deck) *CardQuery {
 
 // QueryRevision queries the revision edge of a Deck.
 func (c *DeckClient) QueryRevision(d *Deck) *RevisionQuery {
-	query := &RevisionQuery{config: c.config}
+	query := (&RevisionClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := d.ID
 		step := sqlgraph.NewStep(
@@ -696,6 +819,26 @@ func (c *DeckClient) Hooks() []Hook {
 	return c.hooks.Deck
 }
 
+// Interceptors returns the client interceptors.
+func (c *DeckClient) Interceptors() []Interceptor {
+	return c.inters.Deck
+}
+
+func (c *DeckClient) mutate(ctx context.Context, m *DeckMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DeckCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DeckUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DeckUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DeckDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Deck mutation op: %q", m.Op())
+	}
+}
+
 // ProductClient is a client for the Product schema.
 type ProductClient struct {
 	config
@@ -710,6 +853,12 @@ func NewProductClient(c config) *ProductClient {
 // A call to `Use(f, g, h)` equals to `product.Hooks(f(g(h())))`.
 func (c *ProductClient) Use(hooks ...Hook) {
 	c.hooks.Product = append(c.hooks.Product, hooks...)
+}
+
+// Use adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `product.Intercept(f(g(h())))`.
+func (c *ProductClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Product = append(c.inters.Product, interceptors...)
 }
 
 // Create returns a builder for creating a Product entity.
@@ -764,6 +913,8 @@ func (c *ProductClient) DeleteOneID(id int) *ProductDeleteOne {
 func (c *ProductClient) Query() *ProductQuery {
 	return &ProductQuery{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeProduct},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -783,7 +934,7 @@ func (c *ProductClient) GetX(ctx context.Context, id int) *Product {
 
 // QueryCards queries the cards edge of a Product.
 func (c *ProductClient) QueryCards(pr *Product) *CardQuery {
-	query := &CardQuery{config: c.config}
+	query := (&CardClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pr.ID
 		step := sqlgraph.NewStep(
@@ -799,7 +950,7 @@ func (c *ProductClient) QueryCards(pr *Product) *CardQuery {
 
 // QueryRevision queries the revision edge of a Product.
 func (c *ProductClient) QueryRevision(pr *Product) *RevisionQuery {
-	query := &RevisionQuery{config: c.config}
+	query := (&RevisionClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pr.ID
 		step := sqlgraph.NewStep(
@@ -818,6 +969,26 @@ func (c *ProductClient) Hooks() []Hook {
 	return c.hooks.Product
 }
 
+// Interceptors returns the client interceptors.
+func (c *ProductClient) Interceptors() []Interceptor {
+	return c.inters.Product
+}
+
+func (c *ProductClient) mutate(ctx context.Context, m *ProductMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ProductCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ProductUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ProductUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ProductDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Product mutation op: %q", m.Op())
+	}
+}
+
 // RevisionClient is a client for the Revision schema.
 type RevisionClient struct {
 	config
@@ -832,6 +1003,12 @@ func NewRevisionClient(c config) *RevisionClient {
 // A call to `Use(f, g, h)` equals to `revision.Hooks(f(g(h())))`.
 func (c *RevisionClient) Use(hooks ...Hook) {
 	c.hooks.Revision = append(c.hooks.Revision, hooks...)
+}
+
+// Use adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `revision.Intercept(f(g(h())))`.
+func (c *RevisionClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Revision = append(c.inters.Revision, interceptors...)
 }
 
 // Create returns a builder for creating a Revision entity.
@@ -886,6 +1063,8 @@ func (c *RevisionClient) DeleteOneID(id int) *RevisionDeleteOne {
 func (c *RevisionClient) Query() *RevisionQuery {
 	return &RevisionQuery{
 		config: c.config,
+		ctx:    &QueryContext{Type: TypeRevision},
+		inters: c.Interceptors(),
 	}
 }
 
@@ -905,7 +1084,7 @@ func (c *RevisionClient) GetX(ctx context.Context, id int) *Revision {
 
 // QueryCards queries the cards edge of a Revision.
 func (c *RevisionClient) QueryCards(r *Revision) *CardQuery {
-	query := &CardQuery{config: c.config}
+	query := (&CardClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := r.ID
 		step := sqlgraph.NewStep(
@@ -921,7 +1100,7 @@ func (c *RevisionClient) QueryCards(r *Revision) *CardQuery {
 
 // QueryProducts queries the products edge of a Revision.
 func (c *RevisionClient) QueryProducts(r *Revision) *ProductQuery {
-	query := &ProductQuery{config: c.config}
+	query := (&ProductClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := r.ID
 		step := sqlgraph.NewStep(
@@ -937,7 +1116,7 @@ func (c *RevisionClient) QueryProducts(r *Revision) *ProductQuery {
 
 // QueryDecks queries the decks edge of a Revision.
 func (c *RevisionClient) QueryDecks(r *Revision) *DeckQuery {
-	query := &DeckQuery{config: c.config}
+	query := (&DeckClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := r.ID
 		step := sqlgraph.NewStep(
@@ -954,4 +1133,24 @@ func (c *RevisionClient) QueryDecks(r *Revision) *DeckQuery {
 // Hooks returns the client hooks.
 func (c *RevisionClient) Hooks() []Hook {
 	return c.hooks.Revision
+}
+
+// Interceptors returns the client interceptors.
+func (c *RevisionClient) Interceptors() []Interceptor {
+	return c.inters.Revision
+}
+
+func (c *RevisionClient) mutate(ctx context.Context, m *RevisionMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&RevisionCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&RevisionUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&RevisionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&RevisionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Revision mutation op: %q", m.Op())
+	}
 }

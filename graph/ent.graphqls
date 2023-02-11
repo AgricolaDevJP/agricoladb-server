@@ -643,7 +643,7 @@ input DeckWhereInput {
 An object with an ID.
 Follows the [Relay Global Object Identification Specification](https://relay.dev/graphql/objectidentification.htm)
 """
-interface Node @goModel(model: "agricoladb/ent.Noder") {
+interface Node @goModel(model: "github.com/AgricolaDevJP/agricoladb-server/ent.Noder") {
   """The id of the object."""
   id: ID!
 }
