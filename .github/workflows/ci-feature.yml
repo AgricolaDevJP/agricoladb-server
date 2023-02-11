@@ -55,3 +55,6 @@ jobs:
     needs: judge-execute
     if: needs.judge-execute.outputs.needs-test-integration == 'true'
     uses: ./.github/workflows/test-integration.yml
+
+  build-containers:
+    uses: ./.github/workflows/build-containers.yml
