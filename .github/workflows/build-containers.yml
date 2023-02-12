@@ -30,7 +30,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - id: meta-server
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: ghcr.io/agricoladevjp/agricoladb-server/server
           tags: |
@@ -47,7 +47,7 @@ jobs:
           labels: ${{ steps.meta-server.outputs.labels }}
           cache-to: type=gha,mode=max
       - id: meta-migration
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: ghcr.io/agricoladevjp/agricoladb-server/migration
           tags: |
