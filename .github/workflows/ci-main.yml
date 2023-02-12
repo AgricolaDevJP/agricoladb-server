@@ -27,3 +27,11 @@ jobs:
     uses: ./.github/workflows/build-containers.yml
     with:
       needs-push: true
+
+  build-binaries:
+    needs:
+      - test-go
+      - test-ent
+      - test-actions
+      - test-integration
+    uses: ./.github/workflows/build-binaries.yml
