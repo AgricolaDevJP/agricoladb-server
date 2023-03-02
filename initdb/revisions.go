@@ -2,15 +2,17 @@ package initdb
 
 import (
 	"context"
-	"os"
+	_ "embed"
 
 	"github.com/AgricolaDevJP/agricoladb-server/ent"
 
 	"github.com/jszwec/csvutil"
 )
 
+//go:embed "masterdata/agricoladb-master - revisions.csv"
+var RevisonsBytes []byte
+
 const (
-	RevisionsFileName = "agricoladb-master - revisions.csv"
 	RevisionsCapacity = 8
 )
 
@@ -21,14 +23,9 @@ type Revision struct {
 	NameEn string `csv:"name_en"`
 }
 
-func initRevisions(ctx context.Context, tx *ent.Tx, csvFilePath string) error {
-	bytes, err := os.ReadFile(csvFilePath)
-	if err != nil {
-		return err
-	}
-
+func initRevisions(ctx context.Context, tx *ent.Tx) error {
 	revisions := []*Revision{}
-	if err := csvutil.Unmarshal(bytes, &revisions); err != nil {
+	if err := csvutil.Unmarshal(RevisonsBytes, &revisions); err != nil {
 		return err
 	}
 

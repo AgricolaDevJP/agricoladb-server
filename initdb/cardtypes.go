@@ -2,15 +2,17 @@ package initdb
 
 import (
 	"context"
-	"os"
+	_ "embed"
 
 	"github.com/AgricolaDevJP/agricoladb-server/ent"
 
 	"github.com/jszwec/csvutil"
 )
 
+//go:embed "masterdata/agricoladb-master - card_types.csv"
+var cardTypesBytes []byte
+
 const (
-	CardTypesFileName = "agricoladb-master - card_types.csv"
 	CardTypesCapacity = 8
 )
 
@@ -21,14 +23,9 @@ type CardType struct {
 	NameEn string `csv:"name_en"`
 }
 
-func initCardTypes(ctx context.Context, tx *ent.Tx, csvFilePath string) error {
-	bytes, err := os.ReadFile(csvFilePath)
-	if err != nil {
-		return err
-	}
-
+func initCardTypes(ctx context.Context, tx *ent.Tx) error {
 	cardtypes := []*CardType{}
-	if err := csvutil.Unmarshal(bytes, &cardtypes); err != nil {
+	if err := csvutil.Unmarshal(cardTypesBytes, &cardtypes); err != nil {
 		return err
 	}
 

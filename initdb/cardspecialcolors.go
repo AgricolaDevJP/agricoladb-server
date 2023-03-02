@@ -2,15 +2,17 @@ package initdb
 
 import (
 	"context"
-	"os"
+	_ "embed"
 
 	"github.com/AgricolaDevJP/agricoladb-server/ent"
 
 	"github.com/jszwec/csvutil"
 )
 
+//go:embed "masterdata/agricoladb-master - card_special_colors.csv"
+var cardSpecialColorsBytes []byte
+
 const (
-	CardSpecialColorsFileName = "agricoladb-master - card_special_colors.csv"
 	CardSpecialColorsCapacity = 8
 )
 
@@ -21,14 +23,9 @@ type CardSpecialColor struct {
 	NameEn string `csv:"name_en"`
 }
 
-func initCardSpecialColors(ctx context.Context, tx *ent.Tx, csvFilePath string) error {
-	bytes, err := os.ReadFile(csvFilePath)
-	if err != nil {
-		return err
-	}
-
+func initCardSpecialColors(ctx context.Context, tx *ent.Tx) error {
 	cardSpecialColors := []*CardSpecialColor{}
-	if err := csvutil.Unmarshal(bytes, &cardSpecialColors); err != nil {
+	if err := csvutil.Unmarshal(cardSpecialColorsBytes, &cardSpecialColors); err != nil {
 		return err
 	}
 

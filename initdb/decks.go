@@ -2,15 +2,17 @@ package initdb
 
 import (
 	"context"
-	"os"
+	_ "embed"
 
 	"github.com/AgricolaDevJP/agricoladb-server/ent"
 
 	"github.com/jszwec/csvutil"
 )
 
+//go:embed "masterdata/agricoladb-master - decks.csv"
+var decksBytes []byte
+
 const (
-	DecksFileName = "agricoladb-master - decks.csv"
 	DecksCapacity = 64
 )
 
@@ -22,14 +24,9 @@ type Deck struct {
 	RevisionID int    `csv:"revision_id"`
 }
 
-func initDecks(ctx context.Context, tx *ent.Tx, csvFilePath string) error {
-	bytes, err := os.ReadFile(csvFilePath)
-	if err != nil {
-		return err
-	}
-
+func initDecks(ctx context.Context, tx *ent.Tx) error {
 	decks := []*Deck{}
-	if err := csvutil.Unmarshal(bytes, &decks); err != nil {
+	if err := csvutil.Unmarshal(decksBytes, &decks); err != nil {
 		return err
 	}
 

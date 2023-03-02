@@ -33,7 +33,7 @@ func main() {
 	}
 	defer client.Close()
 
-	g := initdb.NewGenerator(client, "./masterdata/", true)
+	g := initdb.NewGenerator(client, true)
 
 	if err := g.DropTablesIfNeed(); err != nil {
 		log.Fatalf("failed creating schema resources: %v", err)
