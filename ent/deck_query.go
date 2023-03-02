@@ -229,10 +229,12 @@ func (dq *DeckQuery) AllX(ctx context.Context) []*Deck {
 }
 
 // IDs executes the query and returns a list of Deck IDs.
-func (dq *DeckQuery) IDs(ctx context.Context) ([]int, error) {
-	var ids []int
+func (dq *DeckQuery) IDs(ctx context.Context) (ids []int, err error) {
+	if dq.ctx.Unique == nil && dq.path != nil {
+		dq.Unique(true)
+	}
 	ctx = setContextOp(ctx, dq.ctx, "IDs")
-	if err := dq.Select(deck.FieldID).Scan(ctx, &ids); err != nil {
+	if err = dq.Select(deck.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
@@ -531,20 +533,12 @@ func (dq *DeckQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (dq *DeckQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := &sqlgraph.QuerySpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   deck.Table,
-			Columns: deck.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: deck.FieldID,
-			},
-		},
-		From:   dq.sql,
-		Unique: true,
-	}
+	_spec := sqlgraph.NewQuerySpec(deck.Table, deck.Columns, sqlgraph.NewFieldSpec(deck.FieldID, field.TypeInt))
+	_spec.From = dq.sql
 	if unique := dq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
+	} else if dq.path != nil {
+		_spec.Unique = true
 	}
 	if fields := dq.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))

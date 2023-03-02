@@ -177,13 +177,7 @@ func (rc *RevisionCreate) sqlSave(ctx context.Context) (*Revision, error) {
 func (rc *RevisionCreate) createSpec() (*Revision, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Revision{config: rc.config}
-		_spec = &sqlgraph.CreateSpec{
-			Table: revision.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: revision.FieldID,
-			},
-		}
+		_spec = sqlgraph.NewCreateSpec(revision.Table, sqlgraph.NewFieldSpec(revision.FieldID, field.TypeInt))
 	)
 	_spec.OnConflict = rc.conflict
 	if id, ok := rc.mutation.ID(); ok {

@@ -199,9 +199,3 @@ func (d *Deck) appendNamedCards(name string, edges ...*Card) {
 
 // Decks is a parsable slice of Deck.
 type Decks []*Deck
-
-func (d Decks) config(cfg config) {
-	for _i := range d {
-		d[_i].config = cfg
-	}
-}

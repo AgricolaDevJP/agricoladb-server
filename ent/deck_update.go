@@ -148,16 +148,7 @@ func (du *DeckUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := du.check(); err != nil {
 		return n, err
 	}
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   deck.Table,
-			Columns: deck.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: deck.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(deck.Table, deck.Columns, sqlgraph.NewFieldSpec(deck.FieldID, field.TypeInt))
 	if ps := du.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -332,6 +323,12 @@ func (duo *DeckUpdateOne) RemoveCards(c ...*Card) *DeckUpdateOne {
 	return duo.RemoveCardIDs(ids...)
 }
 
+// Where appends a list predicates to the DeckUpdate builder.
+func (duo *DeckUpdateOne) Where(ps ...predicate.Deck) *DeckUpdateOne {
+	duo.mutation.Where(ps...)
+	return duo
+}
+
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
 func (duo *DeckUpdateOne) Select(field string, fields ...string) *DeckUpdateOne {
@@ -378,16 +375,7 @@ func (duo *DeckUpdateOne) sqlSave(ctx context.Context) (_node *Deck, err error) 
 	if err := duo.check(); err != nil {
 		return _node, err
 	}
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   deck.Table,
-			Columns: deck.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: deck.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(deck.Table, deck.Columns, sqlgraph.NewFieldSpec(deck.FieldID, field.TypeInt))
 	id, ok := duo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Deck.id" for update`)}

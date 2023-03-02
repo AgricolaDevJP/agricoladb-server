@@ -145,13 +145,7 @@ func (cscc *CardSpecialColorCreate) sqlSave(ctx context.Context) (*CardSpecialCo
 func (cscc *CardSpecialColorCreate) createSpec() (*CardSpecialColor, *sqlgraph.CreateSpec) {
 	var (
 		_node = &CardSpecialColor{config: cscc.config}
-		_spec = &sqlgraph.CreateSpec{
-			Table: cardspecialcolor.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: cardspecialcolor.FieldID,
-			},
-		}
+		_spec = sqlgraph.NewCreateSpec(cardspecialcolor.Table, sqlgraph.NewFieldSpec(cardspecialcolor.FieldID, field.TypeInt))
 	)
 	_spec.OnConflict = cscc.conflict
 	if id, ok := cscc.mutation.ID(); ok {

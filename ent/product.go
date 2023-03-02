@@ -212,9 +212,3 @@ func (pr *Product) appendNamedCards(name string, edges ...*Card) {
 
 // Products is a parsable slice of Product.
 type Products []*Product
-
-func (pr Products) config(cfg config) {
-	for _i := range pr {
-		pr[_i].config = cfg
-	}
-}
