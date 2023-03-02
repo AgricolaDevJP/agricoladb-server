@@ -9,5 +9,4 @@ RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o "agricoladb-server-migration" ./c
 FROM gcr.io/distroless/base-debian11
 
 COPY --from=builder /opt/app/agricoladb-server-migration /agricoladb-server-migration
-COPY ./masterdata/ /
 CMD ["/agricoladb-server-migration"]
