@@ -145,13 +145,7 @@ func (ctc *CardTypeCreate) sqlSave(ctx context.Context) (*CardType, error) {
 func (ctc *CardTypeCreate) createSpec() (*CardType, *sqlgraph.CreateSpec) {
 	var (
 		_node = &CardType{config: ctc.config}
-		_spec = &sqlgraph.CreateSpec{
-			Table: cardtype.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: cardtype.FieldID,
-			},
-		}
+		_spec = sqlgraph.NewCreateSpec(cardtype.Table, sqlgraph.NewFieldSpec(cardtype.FieldID, field.TypeInt))
 	)
 	_spec.OnConflict = ctc.conflict
 	if id, ok := ctc.mutation.ID(); ok {

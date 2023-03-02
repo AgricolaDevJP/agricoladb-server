@@ -163,13 +163,7 @@ func (dc *DeckCreate) sqlSave(ctx context.Context) (*Deck, error) {
 func (dc *DeckCreate) createSpec() (*Deck, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Deck{config: dc.config}
-		_spec = &sqlgraph.CreateSpec{
-			Table: deck.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: deck.FieldID,
-			},
-		}
+		_spec = sqlgraph.NewCreateSpec(deck.Table, sqlgraph.NewFieldSpec(deck.FieldID, field.TypeInt))
 	)
 	_spec.OnConflict = dc.conflict
 	if id, ok := dc.mutation.ID(); ok {

@@ -40,15 +40,7 @@ func (cscd *CardSpecialColorDelete) ExecX(ctx context.Context) int {
 }
 
 func (cscd *CardSpecialColorDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := &sqlgraph.DeleteSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table: cardspecialcolor.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: cardspecialcolor.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewDeleteSpec(cardspecialcolor.Table, sqlgraph.NewFieldSpec(cardspecialcolor.FieldID, field.TypeInt))
 	if ps := cscd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -69,6 +61,12 @@ type CardSpecialColorDeleteOne struct {
 	cscd *CardSpecialColorDelete
 }
 
+// Where appends a list predicates to the CardSpecialColorDelete builder.
+func (cscdo *CardSpecialColorDeleteOne) Where(ps ...predicate.CardSpecialColor) *CardSpecialColorDeleteOne {
+	cscdo.cscd.mutation.Where(ps...)
+	return cscdo
+}
+
 // Exec executes the deletion query.
 func (cscdo *CardSpecialColorDeleteOne) Exec(ctx context.Context) error {
 	n, err := cscdo.cscd.Exec(ctx)
@@ -84,5 +82,7 @@ func (cscdo *CardSpecialColorDeleteOne) Exec(ctx context.Context) error {
 
 // ExecX is like Exec, but panics if an error occurs.
 func (cscdo *CardSpecialColorDeleteOne) ExecX(ctx context.Context) {
-	cscdo.cscd.ExecX(ctx)
+	if err := cscdo.Exec(ctx); err != nil {
+		panic(err)
+	}
 }

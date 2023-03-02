@@ -167,9 +167,3 @@ func (csc *CardSpecialColor) appendNamedCards(name string, edges ...*Card) {
 
 // CardSpecialColors is a parsable slice of CardSpecialColor.
 type CardSpecialColors []*CardSpecialColor
-
-func (csc CardSpecialColors) config(cfg config) {
-	for _i := range csc {
-		csc[_i].config = cfg
-	}
-}

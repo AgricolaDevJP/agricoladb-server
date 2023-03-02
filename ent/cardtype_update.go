@@ -137,16 +137,7 @@ func (ctu *CardTypeUpdate) ExecX(ctx context.Context) {
 }
 
 func (ctu *CardTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   cardtype.Table,
-			Columns: cardtype.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: cardtype.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(cardtype.Table, cardtype.Columns, sqlgraph.NewFieldSpec(cardtype.FieldID, field.TypeInt))
 	if ps := ctu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -321,6 +312,12 @@ func (ctuo *CardTypeUpdateOne) RemoveCards(c ...*Card) *CardTypeUpdateOne {
 	return ctuo.RemoveCardIDs(ids...)
 }
 
+// Where appends a list predicates to the CardTypeUpdate builder.
+func (ctuo *CardTypeUpdateOne) Where(ps ...predicate.CardType) *CardTypeUpdateOne {
+	ctuo.mutation.Where(ps...)
+	return ctuo
+}
+
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
 func (ctuo *CardTypeUpdateOne) Select(field string, fields ...string) *CardTypeUpdateOne {
@@ -356,16 +353,7 @@ func (ctuo *CardTypeUpdateOne) ExecX(ctx context.Context) {
 }
 
 func (ctuo *CardTypeUpdateOne) sqlSave(ctx context.Context) (_node *CardType, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   cardtype.Table,
-			Columns: cardtype.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: cardtype.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(cardtype.Table, cardtype.Columns, sqlgraph.NewFieldSpec(cardtype.FieldID, field.TypeInt))
 	id, ok := ctuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "CardType.id" for update`)}

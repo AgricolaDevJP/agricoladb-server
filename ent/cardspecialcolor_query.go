@@ -205,10 +205,12 @@ func (cscq *CardSpecialColorQuery) AllX(ctx context.Context) []*CardSpecialColor
 }
 
 // IDs executes the query and returns a list of CardSpecialColor IDs.
-func (cscq *CardSpecialColorQuery) IDs(ctx context.Context) ([]int, error) {
-	var ids []int
+func (cscq *CardSpecialColorQuery) IDs(ctx context.Context) (ids []int, err error) {
+	if cscq.ctx.Unique == nil && cscq.path != nil {
+		cscq.Unique(true)
+	}
 	ctx = setContextOp(ctx, cscq.ctx, "IDs")
-	if err := cscq.Select(cardspecialcolor.FieldID).Scan(ctx, &ids); err != nil {
+	if err = cscq.Select(cardspecialcolor.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
@@ -459,20 +461,12 @@ func (cscq *CardSpecialColorQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (cscq *CardSpecialColorQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := &sqlgraph.QuerySpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   cardspecialcolor.Table,
-			Columns: cardspecialcolor.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: cardspecialcolor.FieldID,
-			},
-		},
-		From:   cscq.sql,
-		Unique: true,
-	}
+	_spec := sqlgraph.NewQuerySpec(cardspecialcolor.Table, cardspecialcolor.Columns, sqlgraph.NewFieldSpec(cardspecialcolor.FieldID, field.TypeInt))
+	_spec.From = cscq.sql
 	if unique := cscq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
+	} else if cscq.path != nil {
+		_spec.Unique = true
 	}
 	if fields := cscq.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))

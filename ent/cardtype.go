@@ -167,9 +167,3 @@ func (ct *CardType) appendNamedCards(name string, edges ...*Card) {
 
 // CardTypes is a parsable slice of CardType.
 type CardTypes []*CardType
-
-func (ct CardTypes) config(cfg config) {
-	for _i := range ct {
-		ct[_i].config = cfg
-	}
-}

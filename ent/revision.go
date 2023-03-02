@@ -249,9 +249,3 @@ func (r *Revision) appendNamedDecks(name string, edges ...*Deck) {
 
 // Revisions is a parsable slice of Revision.
 type Revisions []*Revision
-
-func (r Revisions) config(cfg config) {
-	for _i := range r {
-		r[_i].config = cfg
-	}
-}

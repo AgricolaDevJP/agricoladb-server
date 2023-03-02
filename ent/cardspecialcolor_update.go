@@ -137,16 +137,7 @@ func (cscu *CardSpecialColorUpdate) ExecX(ctx context.Context) {
 }
 
 func (cscu *CardSpecialColorUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   cardspecialcolor.Table,
-			Columns: cardspecialcolor.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: cardspecialcolor.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(cardspecialcolor.Table, cardspecialcolor.Columns, sqlgraph.NewFieldSpec(cardspecialcolor.FieldID, field.TypeInt))
 	if ps := cscu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -321,6 +312,12 @@ func (cscuo *CardSpecialColorUpdateOne) RemoveCards(c ...*Card) *CardSpecialColo
 	return cscuo.RemoveCardIDs(ids...)
 }
 
+// Where appends a list predicates to the CardSpecialColorUpdate builder.
+func (cscuo *CardSpecialColorUpdateOne) Where(ps ...predicate.CardSpecialColor) *CardSpecialColorUpdateOne {
+	cscuo.mutation.Where(ps...)
+	return cscuo
+}
+
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
 func (cscuo *CardSpecialColorUpdateOne) Select(field string, fields ...string) *CardSpecialColorUpdateOne {
@@ -356,16 +353,7 @@ func (cscuo *CardSpecialColorUpdateOne) ExecX(ctx context.Context) {
 }
 
 func (cscuo *CardSpecialColorUpdateOne) sqlSave(ctx context.Context) (_node *CardSpecialColor, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   cardspecialcolor.Table,
-			Columns: cardspecialcolor.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: cardspecialcolor.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(cardspecialcolor.Table, cardspecialcolor.Columns, sqlgraph.NewFieldSpec(cardspecialcolor.FieldID, field.TypeInt))
 	id, ok := cscuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "CardSpecialColor.id" for update`)}

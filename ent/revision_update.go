@@ -211,16 +211,7 @@ func (ru *RevisionUpdate) ExecX(ctx context.Context) {
 }
 
 func (ru *RevisionUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   revision.Table,
-			Columns: revision.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: revision.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(revision.Table, revision.Columns, sqlgraph.NewFieldSpec(revision.FieldID, field.TypeInt))
 	if ps := ru.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -575,6 +566,12 @@ func (ruo *RevisionUpdateOne) RemoveDecks(d ...*Deck) *RevisionUpdateOne {
 	return ruo.RemoveDeckIDs(ids...)
 }
 
+// Where appends a list predicates to the RevisionUpdate builder.
+func (ruo *RevisionUpdateOne) Where(ps ...predicate.Revision) *RevisionUpdateOne {
+	ruo.mutation.Where(ps...)
+	return ruo
+}
+
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
 func (ruo *RevisionUpdateOne) Select(field string, fields ...string) *RevisionUpdateOne {
@@ -610,16 +607,7 @@ func (ruo *RevisionUpdateOne) ExecX(ctx context.Context) {
 }
 
 func (ruo *RevisionUpdateOne) sqlSave(ctx context.Context) (_node *Revision, err error) {
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   revision.Table,
-			Columns: revision.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: revision.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(revision.Table, revision.Columns, sqlgraph.NewFieldSpec(revision.FieldID, field.TypeInt))
 	id, ok := ruo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Revision.id" for update`)}

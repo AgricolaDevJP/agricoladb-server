@@ -207,7 +207,7 @@ func (c *CardClient) Use(hooks ...Hook) {
 	c.hooks.Card = append(c.hooks.Card, hooks...)
 }
 
-// Use adds a list of query interceptors to the interceptors stack.
+// Intercept adds a list of query interceptors to the interceptors stack.
 // A call to `Intercept(f, g, h)` equals to `card.Intercept(f(g(h())))`.
 func (c *CardClient) Intercept(interceptors ...Interceptor) {
 	c.inters.Card = append(c.inters.Card, interceptors...)
@@ -437,7 +437,7 @@ func (c *CardSpecialColorClient) Use(hooks ...Hook) {
 	c.hooks.CardSpecialColor = append(c.hooks.CardSpecialColor, hooks...)
 }
 
-// Use adds a list of query interceptors to the interceptors stack.
+// Intercept adds a list of query interceptors to the interceptors stack.
 // A call to `Intercept(f, g, h)` equals to `cardspecialcolor.Intercept(f(g(h())))`.
 func (c *CardSpecialColorClient) Intercept(interceptors ...Interceptor) {
 	c.inters.CardSpecialColor = append(c.inters.CardSpecialColor, interceptors...)
@@ -571,7 +571,7 @@ func (c *CardTypeClient) Use(hooks ...Hook) {
 	c.hooks.CardType = append(c.hooks.CardType, hooks...)
 }
 
-// Use adds a list of query interceptors to the interceptors stack.
+// Intercept adds a list of query interceptors to the interceptors stack.
 // A call to `Intercept(f, g, h)` equals to `cardtype.Intercept(f(g(h())))`.
 func (c *CardTypeClient) Intercept(interceptors ...Interceptor) {
 	c.inters.CardType = append(c.inters.CardType, interceptors...)
@@ -705,7 +705,7 @@ func (c *DeckClient) Use(hooks ...Hook) {
 	c.hooks.Deck = append(c.hooks.Deck, hooks...)
 }
 
-// Use adds a list of query interceptors to the interceptors stack.
+// Intercept adds a list of query interceptors to the interceptors stack.
 // A call to `Intercept(f, g, h)` equals to `deck.Intercept(f(g(h())))`.
 func (c *DeckClient) Intercept(interceptors ...Interceptor) {
 	c.inters.Deck = append(c.inters.Deck, interceptors...)
@@ -855,7 +855,7 @@ func (c *ProductClient) Use(hooks ...Hook) {
 	c.hooks.Product = append(c.hooks.Product, hooks...)
 }
 
-// Use adds a list of query interceptors to the interceptors stack.
+// Intercept adds a list of query interceptors to the interceptors stack.
 // A call to `Intercept(f, g, h)` equals to `product.Intercept(f(g(h())))`.
 func (c *ProductClient) Intercept(interceptors ...Interceptor) {
 	c.inters.Product = append(c.inters.Product, interceptors...)
@@ -1005,7 +1005,7 @@ func (c *RevisionClient) Use(hooks ...Hook) {
 	c.hooks.Revision = append(c.hooks.Revision, hooks...)
 }
 
-// Use adds a list of query interceptors to the interceptors stack.
+// Intercept adds a list of query interceptors to the interceptors stack.
 // A call to `Intercept(f, g, h)` equals to `revision.Intercept(f(g(h())))`.
 func (c *RevisionClient) Intercept(interceptors ...Interceptor) {
 	c.inters.Revision = append(c.inters.Revision, interceptors...)

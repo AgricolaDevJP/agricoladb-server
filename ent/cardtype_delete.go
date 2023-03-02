@@ -40,15 +40,7 @@ func (ctd *CardTypeDelete) ExecX(ctx context.Context) int {
 }
 
 func (ctd *CardTypeDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := &sqlgraph.DeleteSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table: cardtype.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: cardtype.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewDeleteSpec(cardtype.Table, sqlgraph.NewFieldSpec(cardtype.FieldID, field.TypeInt))
 	if ps := ctd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -69,6 +61,12 @@ type CardTypeDeleteOne struct {
 	ctd *CardTypeDelete
 }
 
+// Where appends a list predicates to the CardTypeDelete builder.
+func (ctdo *CardTypeDeleteOne) Where(ps ...predicate.CardType) *CardTypeDeleteOne {
+	ctdo.ctd.mutation.Where(ps...)
+	return ctdo
+}
+
 // Exec executes the deletion query.
 func (ctdo *CardTypeDeleteOne) Exec(ctx context.Context) error {
 	n, err := ctdo.ctd.Exec(ctx)
@@ -84,5 +82,7 @@ func (ctdo *CardTypeDeleteOne) Exec(ctx context.Context) error {
 
 // ExecX is like Exec, but panics if an error occurs.
 func (ctdo *CardTypeDeleteOne) ExecX(ctx context.Context) {
-	ctdo.ctd.ExecX(ctx)
+	if err := ctdo.Exec(ctx); err != nil {
+		panic(err)
+	}
 }
