@@ -37,6 +37,10 @@ docker-start:
 docker-stop:
 	$(DOCKER_COMPOSE_LOCAL) down
 
+.PHONY: docker-ps
+docker-ps:
+	$(DOCKER_COMPOSE_LOCAL) ps
+
 .PHONY: docker-restart-server
 docker-restart-server:
 	$(DOCKER_COMPOSE_LOCAL) restart server
