@@ -1,9 +1,8 @@
-FROM golang:1.19-alpine
+FROM golang:1.20-bullseye
 
 ENV CGO_ENABLED 0
 WORKDIR /go/src/agricoladb-server
 
-RUN apk update && apk add git
 RUN go install github.com/cosmtrek/air@latest
 
 COPY go.mod go.sum ./
