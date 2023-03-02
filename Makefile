@@ -1,4 +1,4 @@
-DOCKER_COMPOSE_LOCAL := docker-compose -f docker-compose.local.yml
+DOCKER_COMPOSE_LOCAL := docker compose -f docker-compose.local.yml
 
 .PHONY: clean
 clean:
