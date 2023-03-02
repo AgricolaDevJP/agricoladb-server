@@ -42,3 +42,7 @@ jobs:
           max-attempts: 5
       - name: e2e test
         run: runn run ./e2e/**/*.yml
+      - name: stop server
+        if: always()
+        run: kill %1
+        shell: bash
