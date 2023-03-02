@@ -3,7 +3,6 @@ package initdb
 import (
 	"context"
 	"fmt"
-	"path/filepath"
 
 	"github.com/AgricolaDevJP/agricoladb-server/ent"
 	"github.com/AgricolaDevJP/agricoladb-server/ent/migrate"
@@ -11,14 +10,12 @@ import (
 
 type Generator struct {
 	client     *ent.Client
-	csvDir     string
 	forceFresh bool
 }
 
-func NewGenerator(client *ent.Client, csvDir string, forceFresh bool) *Generator {
+func NewGenerator(client *ent.Client, forceFresh bool) *Generator {
 	return &Generator{
 		client:     client,
-		csvDir:     csvDir,
 		forceFresh: forceFresh,
 	}
 }
@@ -34,28 +31,28 @@ func (g *Generator) GenerateWithContext(ctx context.Context) error {
 		return err
 	}
 
-	if err = initRevisions(ctx, tx, filepath.Join(g.csvDir, RevisionsFileName)); err != nil {
+	if err = initRevisions(ctx, tx); err != nil {
 		return rollback(tx, fmt.Errorf("failed initRevisions: %w", err))
 	}
-	if err = initProducts(ctx, tx, filepath.Join(g.csvDir, ProductsFileName)); err != nil {
+	if err = initProducts(ctx, tx); err != nil {
 		return rollback(tx, fmt.Errorf("failed initProducts: %w", err))
 	}
-	if err = initDecks(ctx, tx, filepath.Join(g.csvDir, DecksFileName)); err != nil {
+	if err = initDecks(ctx, tx); err != nil {
 		return rollback(tx, fmt.Errorf("failed initDecks: %w", err))
 	}
-	if err = initCardSpecialColors(ctx, tx, filepath.Join(g.csvDir, CardSpecialColorsFileName)); err != nil {
+	if err = initCardSpecialColors(ctx, tx); err != nil {
 		return rollback(tx, fmt.Errorf("failed initCardSpecialColors: %w", err))
 	}
-	if err = initCardTypes(ctx, tx, filepath.Join(g.csvDir, CardTypesFileName)); err != nil {
+	if err = initCardTypes(ctx, tx); err != nil {
 		return rollback(tx, fmt.Errorf("failed initCardTypes: %w", err))
 	}
-	if err = initCards(ctx, tx, filepath.Join(g.csvDir, CardsFileName)); err != nil {
+	if err = initCards(ctx, tx); err != nil {
 		return rollback(tx, fmt.Errorf("failed initCards: %w", err))
 	}
-	if err = initProductCards(ctx, tx, filepath.Join(g.csvDir, ProductCardsFileName)); err != nil {
+	if err = initProductCards(ctx, tx); err != nil {
 		return rollback(tx, fmt.Errorf("failed initProductCards: %w", err))
 	}
-	if err = initCardAncestors(ctx, tx, filepath.Join(g.csvDir, CardAncestorsFileName)); err != nil {
+	if err = initCardAncestors(ctx, tx); err != nil {
 		return rollback(tx, fmt.Errorf("failed initCardAncestors: %w", err))
 	}
 

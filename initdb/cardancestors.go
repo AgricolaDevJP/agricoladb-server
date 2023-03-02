@@ -2,8 +2,8 @@ package initdb
 
 import (
 	"context"
+	_ "embed"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/AgricolaDevJP/agricoladb-server/ent"
@@ -11,8 +11,10 @@ import (
 	"github.com/jszwec/csvutil"
 )
 
+//go:embed "masterdata/agricoladb-master - card_ancestors.csv"
+var cardAncestorsBytes []byte
+
 const (
-	CardAncestorsFileName             = "agricoladb-master - card_ancestors.csv"
 	CardAncestorsPlaceholdersCapacity = 512
 	CardAncestorsValuesCapacity       = CardAncestorsPlaceholdersCapacity * 2
 )
@@ -22,14 +24,9 @@ type CardAncestors struct {
 	ChildID int `csv:"child_id"`
 }
 
-func initCardAncestors(ctx context.Context, tx *ent.Tx, csvFilePath string) error {
-	bytes, err := os.ReadFile(csvFilePath)
-	if err != nil {
-		return err
-	}
-
+func initCardAncestors(ctx context.Context, tx *ent.Tx) error {
 	cardAncestors := []*CardAncestors{}
-	if err := csvutil.Unmarshal(bytes, &cardAncestors); err != nil {
+	if err := csvutil.Unmarshal(cardAncestorsBytes, &cardAncestors); err != nil {
 		return err
 	}
 
@@ -41,8 +38,7 @@ func initCardAncestors(ctx context.Context, tx *ent.Tx, csvFilePath string) erro
 		if i >= 500 {
 			placeholdersString := strings.Join(placeholders, ",")
 			query := fmt.Sprintf("INSERT INTO `card_ancestors` (`card_id`, `child_id`) VALUES %s ON DUPLICATE KEY UPDATE `card_id` = VALUES(`card_id`), `child_id` = VALUES(`child_id`)", placeholdersString)
-			_, err = tx.ExecContext(ctx, query, values...)
-			if err != nil {
+			if _, err := tx.ExecContext(ctx, query, values...); err != nil {
 				return err
 			}
 
@@ -58,8 +54,7 @@ func initCardAncestors(ctx context.Context, tx *ent.Tx, csvFilePath string) erro
 	if len(values) > 0 {
 		placeholdersString := strings.Join(placeholders, ",")
 		query := fmt.Sprintf("INSERT INTO `card_ancestors` (`card_id`, `child_id`) VALUES %s ON DUPLICATE KEY UPDATE `card_id` = VALUES(`card_id`), `child_id` = VALUES(`child_id`)", placeholdersString)
-		_, err = tx.ExecContext(ctx, query, values...)
-		if err != nil {
+		if _, err := tx.ExecContext(ctx, query, values...); err != nil {
 			return err
 		}
 	}

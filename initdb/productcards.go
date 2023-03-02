@@ -2,8 +2,8 @@ package initdb
 
 import (
 	"context"
+	_ "embed"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/AgricolaDevJP/agricoladb-server/ent"
@@ -11,8 +11,10 @@ import (
 	"github.com/jszwec/csvutil"
 )
 
+//go:embed "masterdata/agricoladb-master - product_cards.csv"
+var productCardsBytes []byte
+
 const (
-	ProductCardsFileName             = "agricoladb-master - product_cards.csv"
 	ProductCardsPlaceholdersCapacity = 512
 	ProductCardsValuesCapacity       = ProductCardsPlaceholdersCapacity * 2
 )
@@ -22,14 +24,9 @@ type ProductCards struct {
 	CardID    int `csv:"card_id"`
 }
 
-func initProductCards(ctx context.Context, tx *ent.Tx, csvFilePath string) error {
-	bytes, err := os.ReadFile(csvFilePath)
-	if err != nil {
-		return err
-	}
-
+func initProductCards(ctx context.Context, tx *ent.Tx) error {
 	productCards := []*ProductCards{}
-	if err := csvutil.Unmarshal(bytes, &productCards); err != nil {
+	if err := csvutil.Unmarshal(productCardsBytes, &productCards); err != nil {
 		return err
 	}
 
@@ -41,8 +38,7 @@ func initProductCards(ctx context.Context, tx *ent.Tx, csvFilePath string) error
 		if i >= 500 {
 			placeholdersString := strings.Join(placeholders, ",")
 			query := fmt.Sprintf("INSERT INTO `product_cards` (`product_id`, `card_id`) VALUES %s ON DUPLICATE KEY UPDATE `product_id` = VALUES(`product_id`), `card_id` = VALUES(`card_id`)", placeholdersString)
-			_, err = tx.ExecContext(ctx, query, values...)
-			if err != nil {
+			if _, err := tx.ExecContext(ctx, query, values...); err != nil {
 				return err
 			}
 
@@ -58,8 +54,7 @@ func initProductCards(ctx context.Context, tx *ent.Tx, csvFilePath string) error
 	if len(values) > 0 {
 		placeholdersString := strings.Join(placeholders, ",")
 		query := fmt.Sprintf("INSERT INTO `product_cards` (`product_id`, `card_id`) VALUES %s ON DUPLICATE KEY UPDATE `product_id` = VALUES(`product_id`), `card_id` = VALUES(`card_id`)", placeholdersString)
-		_, err = tx.ExecContext(ctx, query, values...)
-		if err != nil {
+		if _, err := tx.ExecContext(ctx, query, values...); err != nil {
 			return err
 		}
 	}
