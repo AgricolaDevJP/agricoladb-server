@@ -1,4 +1,4 @@
-DOCKER_COMPOSE_LOCAL := docker-compose -f docker-compose.local.yml
+DOCKER_COMPOSE_LOCAL := docker compose -f docker-compose.local.yml
 
 .PHONY: clean
 clean:
@@ -36,6 +36,10 @@ docker-start:
 .PHONY: docker-stop
 docker-stop:
 	$(DOCKER_COMPOSE_LOCAL) down
+
+.PHONY: docker-ps
+docker-ps:
+	$(DOCKER_COMPOSE_LOCAL) ps
 
 .PHONY: docker-restart-server
 docker-restart-server:
