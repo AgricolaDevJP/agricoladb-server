@@ -11,7 +11,7 @@ steps:
             application/json:
               query: |
                 query {
-                  cards(where: { literalID: \"A100\", revisionID: 2 }) {
+                  cards(where: { literalID: "A100", revisionID: 2 }) {
                     edges {
                       node {
                         id
