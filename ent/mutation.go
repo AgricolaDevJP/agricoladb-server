@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"sync"
 
+	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
 	"github.com/AgricolaDevJP/agricoladb-server/ent/card"
 	"github.com/AgricolaDevJP/agricoladb-server/ent/cardspecialcolor"
 	"github.com/AgricolaDevJP/agricoladb-server/ent/cardtype"
@@ -15,9 +17,6 @@ import (
 	"github.com/AgricolaDevJP/agricoladb-server/ent/predicate"
 	"github.com/AgricolaDevJP/agricoladb-server/ent/product"
 	"github.com/AgricolaDevJP/agricoladb-server/ent/revision"
-
-	"entgo.io/ent"
-	"entgo.io/ent/dialect/sql"
 )
 
 const (

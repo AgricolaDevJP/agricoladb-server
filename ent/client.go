@@ -10,6 +10,10 @@ import (
 
 	"github.com/AgricolaDevJP/agricoladb-server/ent/migrate"
 
+	"entgo.io/ent"
+	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/AgricolaDevJP/agricoladb-server/ent/card"
 	"github.com/AgricolaDevJP/agricoladb-server/ent/cardspecialcolor"
 	"github.com/AgricolaDevJP/agricoladb-server/ent/cardtype"
@@ -17,9 +21,7 @@ import (
 	"github.com/AgricolaDevJP/agricoladb-server/ent/product"
 	"github.com/AgricolaDevJP/agricoladb-server/ent/revision"
 
-	"entgo.io/ent/dialect"
-	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
+	stdsql "database/sql"
 )
 
 // Client is the client that holds all ent builders.
@@ -60,6 +62,55 @@ func (c *Client) init() {
 	c.Deck = NewDeckClient(c.config)
 	c.Product = NewProductClient(c.config)
 	c.Revision = NewRevisionClient(c.config)
+}
+
+type (
+	// config is the configuration for the client and its builder.
+	config struct {
+		// driver used for executing database requests.
+		driver dialect.Driver
+		// debug enable a debug logging.
+		debug bool
+		// log used for logging on debug mode.
+		log func(...any)
+		// hooks to execute on mutations.
+		hooks *hooks
+		// interceptors to execute on queries.
+		inters *inters
+	}
+	// Option function to configure the client.
+	Option func(*config)
+)
+
+// options applies the options on the config object.
+func (c *config) options(opts ...Option) {
+	for _, opt := range opts {
+		opt(c)
+	}
+	if c.debug {
+		c.driver = dialect.Debug(c.driver, c.log)
+	}
+}
+
+// Debug enables debug logging on the ent.Driver.
+func Debug() Option {
+	return func(c *config) {
+		c.debug = true
+	}
+}
+
+// Log sets the logging function for debug mode.
+func Log(fn func(...any)) Option {
+	return func(c *config) {
+		c.log = fn
+	}
+}
+
+// Driver configures the client driver.
+func Driver(driver dialect.Driver) Option {
+	return func(c *config) {
+		c.driver = driver
+	}
 }
 
 // Open opens a database/sql.DB specified by the driver name and
@@ -152,23 +203,21 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.Card.Use(hooks...)
-	c.CardSpecialColor.Use(hooks...)
-	c.CardType.Use(hooks...)
-	c.Deck.Use(hooks...)
-	c.Product.Use(hooks...)
-	c.Revision.Use(hooks...)
+	for _, n := range []interface{ Use(...Hook) }{
+		c.Card, c.CardSpecialColor, c.CardType, c.Deck, c.Product, c.Revision,
+	} {
+		n.Use(hooks...)
+	}
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
-	c.Card.Intercept(interceptors...)
-	c.CardSpecialColor.Intercept(interceptors...)
-	c.CardType.Intercept(interceptors...)
-	c.Deck.Intercept(interceptors...)
-	c.Product.Intercept(interceptors...)
-	c.Revision.Intercept(interceptors...)
+	for _, n := range []interface{ Intercept(...Interceptor) }{
+		c.Card, c.CardSpecialColor, c.CardType, c.Deck, c.Product, c.Revision,
+	} {
+		n.Intercept(interceptors...)
+	}
 }
 
 // Mutate implements the ent.Mutator interface.
@@ -1153,4 +1202,38 @@ func (c *RevisionClient) mutate(ctx context.Context, m *RevisionMutation) (Value
 	default:
 		return nil, fmt.Errorf("ent: unknown Revision mutation op: %q", m.Op())
 	}
+}
+
+// hooks and interceptors per client, for fast access.
+type (
+	hooks struct {
+		Card, CardSpecialColor, CardType, Deck, Product, Revision []ent.Hook
+	}
+	inters struct {
+		Card, CardSpecialColor, CardType, Deck, Product, Revision []ent.Interceptor
+	}
+)
+
+// ExecContext allows calling the underlying ExecContext method of the driver if it is supported by it.
+// See, database/sql#DB.ExecContext for more information.
+func (c *config) ExecContext(ctx context.Context, query string, args ...any) (stdsql.Result, error) {
+	ex, ok := c.driver.(interface {
+		ExecContext(context.Context, string, ...any) (stdsql.Result, error)
+	})
+	if !ok {
+		return nil, fmt.Errorf("Driver.ExecContext is not supported")
+	}
+	return ex.ExecContext(ctx, query, args...)
+}
+
+// QueryContext allows calling the underlying QueryContext method of the driver if it is supported by it.
+// See, database/sql#DB.QueryContext for more information.
+func (c *config) QueryContext(ctx context.Context, query string, args ...any) (*stdsql.Rows, error) {
+	q, ok := c.driver.(interface {
+		QueryContext(context.Context, string, ...any) (*stdsql.Rows, error)
+	})
+	if !ok {
+		return nil, fmt.Errorf("Driver.QueryContext is not supported")
+	}
+	return q.QueryContext(ctx, query, args...)
 }
