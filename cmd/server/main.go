@@ -19,7 +19,7 @@ import (
 
 const (
 	defaultPort   = "8080"
-	maxComplexity = 7
+	maxComplexity = 8
 )
 
 type config struct {
