@@ -9,9 +9,9 @@ steps:
         post:
           body:
             application/json:
-              query: "
+              query: |
                 query {
-  	              cards(where: { literalID: \"A100\", revisionID: 2 }) {
+                  cards(where: { literalID: "A100", revisionID: 2 }) {
                     edges {
                       node {
                         id
@@ -59,8 +59,8 @@ steps:
                         products {
                           nameJa
                         }
-					              ancestors {
-          	              revision {
+                        ancestors {
+                          revision {
                             key
                           }
                           literalID
@@ -75,7 +75,6 @@ steps:
                     }
                   }
                 }
-              "
     test: |
       current.res.status == 200 &&
       current.res.body.data.cards.edges[0].node.literalID == "A100" &&

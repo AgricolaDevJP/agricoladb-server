@@ -1,9 +1,9 @@
-desc: get cards of AG1
+desc: get cards of AG2
 runners:
   req:
     endpoint: http://localhost:8080
 steps:
-  get_cards_ag1:
+  get_cards_ag2:
     req:
       /graphql:
         post:
@@ -11,7 +11,7 @@ steps:
             application/json:
               query: |
                 query {
-                  cards(where: {revisionID: 1}, first: 20) {
+                  cards(where: {revisionID: 2}, first: 20) {
                     edges {
                       node {
                         literalID
@@ -27,5 +27,5 @@ steps:
       current.res.status == 200 &&
       current.res.body.data.cards.edges[0].node.literalID == "1" &&
       current.res.body.data.cards.edges[0].node.nameJa == "かまど" &&
-      current.res.body.data.cards.edges[0].node.revision.key == "AG1" &&
+      current.res.body.data.cards.edges[0].node.revision.key == "AG2" &&
       len(current.res.body.data.cards.edges) == 20

@@ -11,12 +11,16 @@ import (
 	"github.com/AgricolaDevJP/agricoladb-server/graph/generated"
 
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/caarlos0/env/v6"
 	"github.com/go-sql-driver/mysql"
 )
 
-const defaultPort = "8080"
+const (
+	defaultPort   = "8080"
+	maxComplexity = 100
+)
 
 type config struct {
 	DBHost     string `env:"DB_HOST" envDefault:"localhost"`
@@ -47,6 +51,7 @@ func main() {
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
 		Client: client,
 	}}))
+	srv.Use(extension.FixedComplexityLimit(maxComplexity))
 
 	http.Handle("/", playground.Handler("AgricolaDB playground", "/graphql"))
 	http.Handle("/graphql", srv)
