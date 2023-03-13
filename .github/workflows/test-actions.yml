@@ -13,6 +13,6 @@ jobs:
         shell: bash
       - name: add problem matcher
         run: echo "::add-matcher::.github/actionlint-matcher.json"
-      - name: run actonlint
+      - name: run actionlint
         run: ./actionlint
         shell: bash
