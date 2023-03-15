@@ -28,13 +28,10 @@ jobs:
           cache: true
       - name: install dependencies
         run: go mod download
-      - id: get-latest-runn-version
-        name: get latest runn version
-        run: |
-          gh release list --repo k1LoW/runn --limit 5 | grep Latest | awk '{print $3}' | sed -e 's/v//' -e 's/^/RUNN_VERSION=/' >> "$GITHUB_ENV"
       - name: install runn
         run: |
-          curl -o runn.deb -L https://github.com/k1LoW/runn/releases/download/v${{ env.RUNN_VERSION }}/runn_v${{ env.RUNN_VERSION }}-1_amd64.deb
+          runn_url=$(gh release view --repo k1LoW/runn --json assets --jq '.assets[] | select(.contentType == "application/vnd.debian.binary-package") | .url')
+          curl -o runn.deb -L "$runn_url"
           sudo dpkg -i runn.deb
       - name: execute migration
         run: go run cmd/migration/main.go
