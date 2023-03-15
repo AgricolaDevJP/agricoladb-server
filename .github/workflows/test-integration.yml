@@ -29,7 +29,10 @@ jobs:
       - name: install dependencies
         run: go mod download
       - name: install runn
-        run: go install github.com/k1LoW/runn/cmd/runn@latest
+        run: |
+          export RUNN_VERSION=X.X.X
+          curl -o runn.deb -L https://github.com/k1LoW/runn/releases/download/v$RUNN_VERSION/runn_$RUNN_VERSION-1_amd64.deb
+          sudo dpkg -i runn.deb
       - name: execute migration
         run: go run cmd/migration/main.go
       - name: run server
