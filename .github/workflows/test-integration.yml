@@ -28,9 +28,12 @@ jobs:
           cache: true
       - name: install dependencies
         run: go mod download
+      - id: get-latest-runn-version
+        name: get latest runn version
+        run: |
+          gh release list --repo k1LoW/runn --limit 5 | grep Latest | awk '{print $3}' | sed -e 's/v//' -e 's/^/RUNN_VERSION=/' >> "$GITHUB_ENV"
       - name: install runn
         run: |
-          export RUNN_VERSION=X.X.X
           curl -o runn.deb -L https://github.com/k1LoW/runn/releases/download/v$RUNN_VERSION/runn_$RUNN_VERSION-1_amd64.deb
           sudo dpkg -i runn.deb
       - name: execute migration
