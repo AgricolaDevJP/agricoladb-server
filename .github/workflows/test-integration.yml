@@ -34,7 +34,7 @@ jobs:
           gh release list --repo k1LoW/runn --limit 5 | grep Latest | awk '{print $3}' | sed -e 's/v//' -e 's/^/RUNN_VERSION=/' >> "$GITHUB_ENV"
       - name: install runn
         run: |
-          curl -o runn.deb -L https://github.com/k1LoW/runn/releases/download/v$RUNN_VERSION/runn_$RUNN_VERSION-1_amd64.deb
+          curl -o runn.deb -L "https://github.com/k1LoW/runn/releases/download/v$RUNN_VERSION/runn_$RUNN_VERSION-1_amd64.deb"
           sudo dpkg -i runn.deb
       - name: execute migration
         run: go run cmd/migration/main.go
