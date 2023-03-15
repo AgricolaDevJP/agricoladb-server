@@ -172,10 +172,7 @@ func (cscc *CardSpecialColorCreate) createSpec() (*CardSpecialColor, *sqlgraph.C
 			Columns: []string{cardspecialcolor.CardsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: card.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(card.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
