@@ -16,7 +16,7 @@ jobs:
           MYSQL_PASSWORD: password
           MYSQL_DATABASE: agricoladb
           MYSQL_ROOT_PASSWORD: passw0rd
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=5s --health-retries=10
     env:
       DB_USER: user
       DB_PASSWORD: password
@@ -29,7 +29,12 @@ jobs:
       - name: install dependencies
         run: go mod download
       - name: install runn
-        run: go install github.com/k1LoW/runn/cmd/runn@latest
+        run: |
+          runn_url=$(gh release view --repo k1LoW/runn --json assets --jq '.assets[] | select(.contentType == "application/vnd.debian.binary-package") | .url')
+          curl -o runn.deb -L "$runn_url"
+          sudo dpkg -i runn.deb
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: execute migration
         run: go run cmd/migration/main.go
       - name: run server
