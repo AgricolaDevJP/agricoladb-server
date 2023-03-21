@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	entgo.io/ent v0.11.10
-	github.com/99designs/gqlgen v0.17.26
+	github.com/99designs/gqlgen v0.17.27
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/jszwec/csvutil v1.8.0
 	github.com/vektah/gqlparser/v2 v2.5.1
