@@ -37,7 +37,7 @@ func initProductCards(ctx context.Context, tx *ent.Tx) error {
 		// flush chunk
 		if i >= 500 {
 			placeholdersString := strings.Join(placeholders, ",")
-			query := fmt.Sprintf("INSERT INTO `product_cards` (`product_id`, `card_id`) VALUES %s ON DUPLICATE KEY UPDATE `product_id` = VALUES(`product_id`), `card_id` = VALUES(`card_id`)", placeholdersString)
+			query := fmt.Sprintf("INSERT INTO `product_cards` (`product_id`, `card_id`) VALUES %s", placeholdersString)
 			if _, err := tx.ExecContext(ctx, query, values...); err != nil {
 				return err
 			}
@@ -53,7 +53,7 @@ func initProductCards(ctx context.Context, tx *ent.Tx) error {
 
 	if len(values) > 0 {
 		placeholdersString := strings.Join(placeholders, ",")
-		query := fmt.Sprintf("INSERT INTO `product_cards` (`product_id`, `card_id`) VALUES %s ON DUPLICATE KEY UPDATE `product_id` = VALUES(`product_id`), `card_id` = VALUES(`card_id`)", placeholdersString)
+		query := fmt.Sprintf("INSERT INTO `product_cards` (`product_id`, `card_id`) VALUES %s", placeholdersString)
 		if _, err := tx.ExecContext(ctx, query, values...); err != nil {
 			return err
 		}

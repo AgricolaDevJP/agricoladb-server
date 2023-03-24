@@ -69,7 +69,7 @@ func (g *Generator) DropTablesIfNeedWithContext(ctx context.Context) error {
 		fmt.Println("skip fresh")
 		return nil
 	}
-	if _, err := g.client.ExecContext(ctx, "set foreign_key_checks = 0"); err != nil {
+	if _, err := g.client.ExecContext(ctx, "PRAGMA foreign_keys = OFF;"); err != nil {
 		return err
 	}
 	for _, table := range migrate.Tables {
@@ -78,7 +78,7 @@ func (g *Generator) DropTablesIfNeedWithContext(ctx context.Context) error {
 			return err
 		}
 	}
-	if _, err := g.client.ExecContext(ctx, "set foreign_key_checks = 1"); err != nil {
+	if _, err := g.client.ExecContext(ctx, "PRAGMA foreign_keys = ON;"); err != nil {
 		return err
 	}
 	return nil
