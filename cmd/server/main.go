@@ -2,19 +2,18 @@ package main
 
 import (
 	"log"
-	"net"
 	"net/http"
 	"os"
 
+	"entgo.io/ent/dialect"
 	"github.com/AgricolaDevJP/agricoladb-server/ent"
 	"github.com/AgricolaDevJP/agricoladb-server/graph"
 	"github.com/AgricolaDevJP/agricoladb-server/graph/generated"
+	"github.com/AgricolaDevJP/agricoladb-server/sqlite"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/caarlos0/env/v6"
-	"github.com/go-sql-driver/mysql"
 )
 
 const (
@@ -22,24 +21,15 @@ const (
 	maxComplexity = 100
 )
 
-type config struct {
-	DBHost     string `env:"DB_HOST" envDefault:"localhost"`
-	DBPort     string `env:"DB_PORT" envDefault:"3306"`
-	DBUser     string `env:"DB_USER"`
-	DBPassword string `env:"DB_PASSWORD"`
-	DBName     string `env:"DB_NAME" envDefault:"agricoladb"`
+func init() {
+	sqlite.Init()
 }
 
 func main() {
-	cfg := config{}
-	if err := env.Parse(&cfg); err != nil {
-		log.Fatalf("%v", err)
-	}
-
 	// ent client
-	client, err := ent.Open("mysql", cfg.getDSN())
+	client, err := ent.Open(dialect.SQLite, "file:agricoladb.sqlite?cache=shared")
 	if err != nil {
-		log.Fatalf("failed opening connection to mysql: %v", err)
+		log.Fatalf("failed opening connection to sqlite: %v", err)
 	}
 	defer client.Close()
 
@@ -58,14 +48,4 @@ func main() {
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
-}
-
-func (c *config) getDSN() string {
-	mc := mysql.NewConfig()
-	mc.DBName = c.DBName
-	mc.User = c.DBUser
-	mc.Passwd = c.DBPassword
-	mc.Addr = net.JoinHostPort(c.DBHost, c.DBPort)
-	mc.Net = "tcp"
-	return mc.FormatDSN()
 }

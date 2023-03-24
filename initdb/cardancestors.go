@@ -37,7 +37,7 @@ func initCardAncestors(ctx context.Context, tx *ent.Tx) error {
 		// flush chunk
 		if i >= 500 {
 			placeholdersString := strings.Join(placeholders, ",")
-			query := fmt.Sprintf("INSERT INTO `card_ancestors` (`card_id`, `child_id`) VALUES %s ON DUPLICATE KEY UPDATE `card_id` = VALUES(`card_id`), `child_id` = VALUES(`child_id`)", placeholdersString)
+			query := fmt.Sprintf("INSERT INTO `card_ancestors` (`card_id`, `child_id`) VALUES %s", placeholdersString)
 			if _, err := tx.ExecContext(ctx, query, values...); err != nil {
 				return err
 			}
@@ -53,7 +53,7 @@ func initCardAncestors(ctx context.Context, tx *ent.Tx) error {
 
 	if len(values) > 0 {
 		placeholdersString := strings.Join(placeholders, ",")
-		query := fmt.Sprintf("INSERT INTO `card_ancestors` (`card_id`, `child_id`) VALUES %s ON DUPLICATE KEY UPDATE `card_id` = VALUES(`card_id`), `child_id` = VALUES(`child_id`)", placeholdersString)
+		query := fmt.Sprintf("INSERT INTO `card_ancestors` (`card_id`, `child_id`) VALUES %s", placeholdersString)
 		if _, err := tx.ExecContext(ctx, query, values...); err != nil {
 			return err
 		}
