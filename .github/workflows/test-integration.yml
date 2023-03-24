@@ -6,20 +6,6 @@ on:
 jobs:
   e2e-test:
     runs-on: ubuntu-latest
-    services:
-      db:
-        image: mariadb:10.10
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_USER: user
-          MYSQL_PASSWORD: password
-          MYSQL_DATABASE: agricoladb
-          MYSQL_ROOT_PASSWORD: passw0rd
-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=5s --health-retries=10
-    env:
-      DB_USER: user
-      DB_PASSWORD: password
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v4
