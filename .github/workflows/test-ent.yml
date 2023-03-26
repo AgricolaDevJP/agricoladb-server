@@ -6,9 +6,12 @@ on:
 jobs:
   codegen-check:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v4
         with:
-          go-version-file: go.mod
+          go-version-file: src/go.mod
       - uses: ent/contrib/ci@master

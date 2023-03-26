@@ -5,9 +5,10 @@ WORKDIR /go/src/agricoladb-server
 
 RUN go install github.com/cosmtrek/air@latest
 
-COPY go.mod go.sum ./
-RUN go mod download
+# COPY src/go.mod src/go.sum ./
+# RUN go mod download
+
+# COPY src/ ./
 
 EXPOSE 8080
-
 CMD ["air", "-c", ".air.toml"]
