@@ -5,7 +5,7 @@
 <br />
 
 ![release](https://img.shields.io/github/v/release/AgricolaDevJP/agricoladb-server)
-![go-version](https://img.shields.io/github/go-mod/go-version/AgricolaDevJP/agricoladb-server)
+![go-version](https://img.shields.io/github/go-mod/go-version/AgricolaDevJP/agricoladb-server?filename=src%2Fgo.mod)
 [![ci-main](https://github.com/AgricolaDevJP/agricoladb-server/actions/workflows/ci-main.yml/badge.svg)](https://github.com/AgricolaDevJP/agricoladb-server/actions/workflows/ci-main.yml)
 
 <br />
