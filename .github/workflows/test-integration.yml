@@ -21,9 +21,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: execute migration
-        run: go run cmd/migration/main.go
+        run: cd src; go run cmd/migration/main.go
       - name: run server
-        run: go run cmd/server/main.go &
+        run: cd src; go run cmd/server/main.go &
         shell: bash
       - name: server health check
         uses: jtalk/url-health-check-action@v3

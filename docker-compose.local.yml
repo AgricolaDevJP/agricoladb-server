@@ -9,4 +9,4 @@ services:
     ports:
       - 8080:8080
     volumes:       
-      - ./:/go/src/agricoladb-server
+      - ./src:/go/src/agricoladb-server

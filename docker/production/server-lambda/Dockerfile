@@ -5,10 +5,10 @@ RUN yum install -y golang
 WORKDIR /opt/app
 
 RUN go env -w GOPROXY=direct
-ADD go.mod go.sum ./
+ADD go.mod go.sum ./src/
 RUN go mod download
 
-ADD ./ ./
+ADD src .
 RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o agricoladb-server ./cmd/server-lambda
 RUN CGO_ENABLED=0 go run ./cmd/migration
 
