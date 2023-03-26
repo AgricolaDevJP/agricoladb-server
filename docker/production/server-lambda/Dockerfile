@@ -5,7 +5,7 @@ RUN yum install -y golang
 WORKDIR /opt/app
 
 RUN go env -w GOPROXY=direct
-ADD go.mod go.sum ./src/
+ADD src/go.mod src/go.sum ./
 RUN go mod download
 
 ADD src .
