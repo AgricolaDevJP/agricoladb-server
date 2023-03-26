@@ -6,9 +6,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: src
     steps:
       - uses: actions/checkout@v3
         with:
@@ -22,6 +19,7 @@ jobs:
           distribution: goreleaser
           version: latest
           args: build --clean --snapshot
+          workdir: src
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: upload assets migration_linux_amd64_v1
