@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-resource "aws_iam_role" "iam_for_lambda" {
+resource "aws_iam_role" "server" {
   name               = "agricoladb-server-lambda-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
@@ -18,33 +18,29 @@ data "aws_iam_policy" "lambda_basic_execution" {
   arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
-  role       = aws_iam_role.iam_for_lambda.name
+resource "aws_iam_role_policy_attachment" "this" {
+  role       = aws_iam_role.server.name
   policy_arn = data.aws_iam_policy.lambda_basic_execution.arn
 }
 
 resource "aws_lambda_function" "server" {
   function_name = "agricoladb-server"
   package_type  = "Image"
-  image_uri     = "${aws_ecr_repository.this.repository_url}:latest"
-  role          = aws_iam_role.iam_for_lambda.arn
-  architectures = ["arm64"]
-  memory_size   = 512
+  image_uri     = "${aws_ecr_repository.server_lambda.repository_url}:latest"
+  role          = aws_iam_role.server.arn
 
   lifecycle {
     ignore_changes = [
-      image_uri,
+      architectures,
+      memory_size,
     ]
   }
 }
 
-resource "aws_lambda_permission" "apigw" {
+resource "aws_lambda_permission" "api" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.server.function_name
   principal     = "apigateway.amazonaws.com"
-
-  # The /*/* portion grants access from any method on any resource
-  # within the API Gateway "REST API".
-  source_arn = "${aws_api_gateway_rest_api.this.execution_arn}/*/*"
+  source_arn    = "${aws_apigatewayv2_api.api.execution_arn}/*/*"
 }
