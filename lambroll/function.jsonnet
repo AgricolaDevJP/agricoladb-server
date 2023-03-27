@@ -1,12 +1,13 @@
 {
   FunctionName: '{{ tfstate `aws_lambda_function.server.function_name` }}',
-  MemorySize: 512,
+  MemorySize: 256,
   Architectures: [
-    'x86_64'
+    'arm64'
   ],
+  Timeout: 7,
   Role: '{{ tfstate `aws_iam_role.server.arn` }}',
   PackageType: 'Image',
   Code: {
     ImageUri: '{{ tfstate `aws_lambda_function.server.image_uri` }}'
-  }
+  },
 }
