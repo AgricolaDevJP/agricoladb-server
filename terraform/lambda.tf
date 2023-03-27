@@ -28,8 +28,6 @@ resource "aws_lambda_function" "server" {
   package_type  = "Image"
   image_uri     = "${aws_ecr_repository.server_lambda.repository_url}:latest"
   role          = aws_iam_role.server.arn
-  # architectures = ["x86_64"]
-  # memory_size   = 512
 
   lifecycle {
     ignore_changes = [
