@@ -21,7 +21,7 @@ func init() {
 }
 
 func main() {
-	client, err := ent.Open(dialect.SQLite, "file:agricoladb.sqlite?cache=shared")
+	client, err := ent.Open(dialect.SQLite, "file:/agricoladb.sqlite?cache=shared&mode=ro")
 	if err != nil {
 		log.Fatalf("failed opening connection to sqlite: %v", err)
 	}
@@ -33,5 +33,5 @@ func main() {
 	server := handler.NewDefaultServer(schema)
 	http.Handle("/", playground.Handler("GraphQL playground", "/graphql"))
 	http.Handle("/graphql", server)
-	lambda.Start(httpadapter.New(http.DefaultServeMux).ProxyWithContext)
+	lambda.Start(httpadapter.NewV2(http.DefaultServeMux).ProxyWithContext)
 }
