@@ -7,7 +7,6 @@ COPY src/go.mod src/go.sum ./
 RUN go mod download
 
 COPY src/ .
-RUN ls -a
 RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o agricoladb-server ./cmd/server-lambda
 RUN CGO_ENABLED=0 go run ./cmd/migration
 

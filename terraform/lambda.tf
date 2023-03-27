@@ -33,6 +33,7 @@ resource "aws_lambda_function" "server" {
     ignore_changes = [
       architectures,
       memory_size,
+      timeout,
     ]
   }
 }
