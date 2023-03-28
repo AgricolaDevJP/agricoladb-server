@@ -3,6 +3,10 @@ name: test-terraform
 on:
   workflow_call:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   plan:
     runs-on: ubuntu-latest
@@ -12,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: terraform version
-        run: echo "TF_VERSION=$(cat .terraform-version)" >> $GITHUB_ENV
+        run: echo "TF_VERSION=$(cat .terraform-version)" >> "$GITHUB_ENV"
       - uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: ${{ env.TF_VERSION }}
@@ -35,7 +39,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: terraform version
-        run: echo "TF_VERSION=$(cat .terraform-version)" >> $GITHUB_ENV
+        run: echo "TF_VERSION=$(cat .terraform-version)" >> "$GITHUB_ENV"
       - uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: ${{ env.TF_VERSION }}
