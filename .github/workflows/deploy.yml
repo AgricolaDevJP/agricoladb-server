@@ -1,4 +1,4 @@
-name: deploy-lambda
+name: deploy
 
 on:
   workflow_call:
@@ -7,9 +7,14 @@ permissions:
   id-token: write
   contents: read
 
+concurrency:
+  group: production
+
 jobs:
-  deploy:
+  deploy-lambda:
     runs-on: ubuntu-latest
+    environment:
+      name: production-lambda
     steps:
       - uses: actions/checkout@v3
       - uses: aws-actions/configure-aws-credentials@v2
