@@ -7,15 +7,12 @@ terraform {
   }
 
   backend "s3" {
-    bucket                  = "agricoladevjp-terraform-states"
-    region                  = "ap-northeast-1"
-    key                     = "AgricolaDevJP/agricoladb-server/terraform_states.tfstate"
-    shared_credentials_file = "~/.aws/credentials"
-    profile                 = "AgricolaDevJP-admin"
+    bucket = "agricoladevjp-terraform-states"
+    region = "ap-northeast-1"
+    key    = "AgricolaDevJP/agricoladb-server/terraform_states.tfstate"
   }
 }
 
 provider "aws" {
-  region  = "ap-northeast-1"
-  profile = "AgricolaDevJP-admin"
+  region = "ap-northeast-1"
 }
