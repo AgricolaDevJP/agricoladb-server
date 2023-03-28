@@ -16,9 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-  deploy-lambda:
+  deploy:
     needs: push-ecr
     runs-on: ubuntu-latest
+    environment:
+      name: production
     steps:
       - uses: actions/checkout@v3
       - uses: aws-actions/configure-aws-credentials@v2
