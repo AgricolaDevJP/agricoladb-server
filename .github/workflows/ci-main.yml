@@ -18,11 +18,13 @@ jobs:
   test-integration:
     uses: ./.github/workflows/test-integration.yml
 
+  test-terraform:
+    uses: ./.github/workflows/test-terraform.yml
+
   build-containers:
     needs:
       - test-go
       - test-ent
-      - test-actions
       - test-integration
     uses: ./.github/workflows/build-containers.yml
     with:
@@ -32,6 +34,5 @@ jobs:
     needs:
       - test-go
       - test-ent
-      - test-actions
       - test-integration
     uses: ./.github/workflows/build-binaries.yml
