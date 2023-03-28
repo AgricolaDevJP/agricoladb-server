@@ -1,0 +1,38 @@
+name: deploy
+
+on:
+  workflow_call:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: production
+
+jobs:
+  push-ecr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+  deploy:
+    needs: push-ecr
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::131551699606:role/agricoladb-server-github-actions-role
+          aws-region: ap-northeast-1
+      - uses: fujiwara/lambroll@v0
+        with:
+          version: v0.14.2
+      - name: deploy Lambda
+        run: |
+          lambroll --function ./function.jsonnet --region=ap-northeast-1 \
+          --tfstate s3://agricoladevjp-terraform-states/AgricolaDevJP/agricoladb-server/terraform_states.tfstate \
+          deploy
+        working-directory: lambroll
