@@ -10,6 +10,7 @@ jobs:
       needs-test-ent: ${{ steps.needs-test-ent.outputs.any_changed }}
       needs-test-actions: ${{ steps.needs-test-actions.outputs.any_changed }}
       needs-test-integration: "true"
+      needs-test-terraform: ${{ steps.needs-test-terraform.outputs.any_changed }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -36,6 +37,11 @@ jobs:
           files: |
             .github/workflows/*.yml
             .github/actionlint-matcher.json
+      - id: needs-test-terraform
+        uses: tj-actions/changed-files@v35
+        with:
+          files: |
+            terraform/**/*
 
   test-go:
     needs: judge-execute
@@ -56,3 +62,8 @@ jobs:
     needs: judge-execute
     if: needs.judge-execute.outputs.needs-test-integration == 'true'
     uses: ./.github/workflows/test-integration.yml
+
+  test-terraform:
+    needs: judge-execute
+    if: needs.judge-execute.outputs.needs-test-terraform == 'true'
+    uses: ./.github/workflows/test-terraform.yml
