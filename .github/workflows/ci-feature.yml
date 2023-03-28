@@ -70,3 +70,5 @@ jobs:
 
   deploy:
     uses: ./.github/workflows/deploy.yml
+    environment:
+      name: production

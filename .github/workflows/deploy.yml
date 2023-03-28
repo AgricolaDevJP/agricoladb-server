@@ -11,10 +11,14 @@ concurrency:
   group: production
 
 jobs:
-  deploy-lambda:
+  push-ecr:
     runs-on: ubuntu-latest
-    environment:
-      name: production-lambda
+    steps:
+      - uses: actions/checkout@v3
+
+  deploy-lambda:
+    needs: push-ecr
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: aws-actions/configure-aws-credentials@v2
