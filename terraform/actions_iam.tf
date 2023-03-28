@@ -54,3 +54,18 @@ resource "aws_iam_role_policy_attachment" "actions_role_policy_apigateway" {
   role       = aws_iam_role.actions_role.id
   policy_arn = "arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator"
 }
+
+resource "aws_iam_role_policy_attachment" "actions_role_policy_iam" {
+  role       = aws_iam_role.actions_role.id
+  policy_arn = "arn:aws:iam::aws:policy/IAMFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "actions_role_policy_ecr" {
+  role       = aws_iam_role.actions_role.id
+  policy_arn = "arn:aws:iam::aws:policy/AmazonElasticContainerRegistryPublicFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "actions_role_policy_logs" {
+  role       = aws_iam_role.actions_role.id
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+}
