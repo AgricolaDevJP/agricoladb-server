@@ -13,6 +13,7 @@ jobs:
       - uses: actions/setup-go@v4
         with:
           go-version-file: src/go.mod
+          cache-dependency-path: src/go.sum
       - name: release by goreleaser
         uses: goreleaser/goreleaser-action@v4
         with:
