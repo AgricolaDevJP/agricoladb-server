@@ -22,12 +22,13 @@ jobs:
       - name: set up QEMU
         uses: docker/setup-qemu-action@v2
         with:
-          platforms: linux/arm64
+          platforms: linux/arm64/v8
       - name: set up Docker Buildx
         uses: docker/setup-buildx-action@v2
         with:
-          platforms: linux/arm64
-      - name: Login to Amazon ECR
+          platforms: linux/arm64/v8
+      - id: login-ecr
+        name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
       - name: build image
         uses: docker/build-push-action@v4
@@ -35,7 +36,7 @@ jobs:
           push: true
           context: .
           file: ./docker/production/server-lambda/Dockerfile
-          tags: 131551699606.dkr.ecr.ap-northeast-1.amazonaws.com/agricoladb-server-lambda:latest
+          tags: ${{ steps.login-ecr.outputs.registry }}/agricoladb-server-lambda:latest
           cache-to: type=gha,mode=max
 
   deploy:
