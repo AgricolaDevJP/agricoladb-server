@@ -67,26 +67,5 @@ resource "aws_iam_role_policy_attachment" "actions_role_policy_logs" {
 
 resource "aws_iam_role_policy_attachment" "actions_role_policy_ecr" {
   role       = aws_iam_role.actions_role.id
-  policy_arn = "arn:aws:iam::aws:policy/AmazonElasticContainerRegistryPublicFullAccess"
-}
-
-data "aws_iam_policy_document" "actions_role_policy_ecr" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "ecr:Describe*",
-      "ecr:Get*",
-      "ecr:List*",
-      "ecr:Create*",
-      "ecr:Delete*",
-      "ecr:Batch*",
-    ]
-    resources = ["*"]
-  }
-}
-
-resource "aws_iam_role_policy" "actions_role_policy_ecr" {
-  name   = "agricoladb-server-github-actions-ecr-policy"
-  role   = aws_iam_role.actions_role.id
-  policy = data.aws_iam_policy_document.actions_role_policy_ecr.json
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
 }
