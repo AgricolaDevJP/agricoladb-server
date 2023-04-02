@@ -67,6 +67,3 @@ jobs:
     needs: judge-execute
     if: needs.judge-execute.outputs.needs-test-terraform == 'true'
     uses: ./.github/workflows/test-terraform.yml
-
-  deploy:
-    uses: ./.github/workflows/deploy.yml
