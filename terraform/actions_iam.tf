@@ -69,3 +69,8 @@ resource "aws_iam_role_policy_attachment" "actions_role_policy_ecr" {
   role       = aws_iam_role.actions_role.id
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
 }
+
+resource "aws_iam_role_policy_attachment" "actions_role_policy_acn" {
+  role       = aws_iam_role.actions_role.id
+  policy_arn = "arn:aws:iam::aws:policy/AWSCertificateManagerReadOnly"
+}

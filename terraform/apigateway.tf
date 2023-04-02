@@ -3,6 +3,20 @@ resource "aws_apigatewayv2_api" "api" {
   protocol_type = "HTTP"
 }
 
+data "aws_acm_certificate" "api" {
+  domain = "api.db.agricolajp.dev"
+}
+
+resource "aws_apigatewayv2_domain_name" "api" {
+  domain_name = "api.db.agricolajp.dev"
+
+  domain_name_configuration {
+    certificate_arn = data.aws_acm_certificate.api.arn
+    endpoint_type   = "REGIONAL"
+    security_policy = "TLS_1_2"
+  }
+}
+
 resource "aws_apigatewayv2_integration" "server" {
   api_id                 = aws_apigatewayv2_api.api.id
   integration_type       = "AWS_PROXY"
