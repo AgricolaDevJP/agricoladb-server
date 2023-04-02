@@ -3,20 +3,6 @@ resource "aws_apigatewayv2_api" "api" {
   protocol_type = "HTTP"
 }
 
-data "aws_acm_certificate" "api" {
-  domain = "api.db.agricolajp.dev"
-}
-
-resource "aws_apigatewayv2_domain_name" "api" {
-  domain_name = "api.db.agricolajp.dev"
-
-  domain_name_configuration {
-    certificate_arn = data.aws_acm_certificate.api.arn
-    endpoint_type   = "REGIONAL"
-    security_policy = "TLS_1_2"
-  }
-}
-
 resource "aws_apigatewayv2_integration" "server" {
   api_id                 = aws_apigatewayv2_api.api.id
   integration_type       = "AWS_PROXY"
@@ -50,4 +36,41 @@ resource "aws_apigatewayv2_stage" "default" {
     throttling_burst_limit = 100
     throttling_rate_limit  = 30
   }
+}
+
+
+data "aws_acm_certificate" "api" {
+  domain = "api.db.agricolajp.dev"
+}
+
+resource "aws_apigatewayv2_domain_name" "api" {
+  domain_name = "api.db.agricolajp.dev"
+
+  domain_name_configuration {
+    certificate_arn = data.aws_acm_certificate.api.arn
+    endpoint_type   = "REGIONAL"
+    security_policy = "TLS_1_2"
+  }
+}
+
+data "aws_route53_zone" "agricolajp_dev" {
+  name = "agricolajp.dev"
+}
+
+resource "aws_route53_record" "api" {
+  name    = aws_apigatewayv2_domain_name.api.domain_name
+  type    = "A"
+  zone_id = data.aws_route53_zone.agricolajp_dev.zone_id
+
+  alias {
+    name                   = aws_apigatewayv2_domain_name.api.domain_name_configuration[0].target_domain_name
+    zone_id                = aws_apigatewayv2_domain_name.api.domain_name_configuration[0].hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_apigatewayv2_api_mapping" "api" {
+  api_id      = aws_apigatewayv2_api.api.id
+  domain_name = aws_apigatewayv2_domain_name.api.domain_name
+  stage       = aws_apigatewayv2_stage.default.name
 }
