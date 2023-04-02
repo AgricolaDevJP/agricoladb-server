@@ -37,6 +37,7 @@ jobs:
           context: .
           file: ./docker/production/server-lambda/Dockerfile
           provenance: false
+          platforms: linux/arm64/v8
           tags: ${{ steps.login-ecr.outputs.registry }}/agricoladb-server-lambda:latest
           cache-to: type=gha,mode=max
 
