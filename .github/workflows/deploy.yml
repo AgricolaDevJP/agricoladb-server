@@ -46,6 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
+      url: https://api.db.agricolajp.dev
     steps:
       - uses: actions/checkout@v3
       - uses: aws-actions/configure-aws-credentials@v2
