@@ -35,3 +35,6 @@ jobs:
       - test-actions
       - test-integration
     uses: ./.github/workflows/build-release-binaries.yml
+
+  deploy:
+    uses: ./.github/workflows/deploy.yml
