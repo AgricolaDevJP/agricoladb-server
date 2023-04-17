@@ -3,7 +3,7 @@ module github.com/AgricolaDevJP/agricoladb-server
 go 1.20
 
 require (
-	entgo.io/ent v0.11.10
+	entgo.io/ent v0.12.1
 	github.com/99designs/gqlgen v0.17.27
 	github.com/aws/aws-lambda-go v1.39.1
 	github.com/awslabs/aws-lambda-go-api-proxy v0.14.0
@@ -15,7 +15,7 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.9.2-0.20230303073438-03a4779a6338 // indirect
+	ariga.io/atlas v0.10.0 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
@@ -53,7 +53,7 @@ require (
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	golang.org/x/mod v0.8.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
-	golang.org/x/text v0.7.0 // indirect
+	golang.org/x/text v0.8.0 // indirect
 	golang.org/x/tools v0.6.1-0.20230222164832-25d2519c8696 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	modernc.org/sqlite v1.21.1
