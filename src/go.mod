@@ -4,12 +4,12 @@ go 1.20
 
 require (
 	entgo.io/ent v0.11.10
-	github.com/99designs/gqlgen v0.17.27
+	github.com/99designs/gqlgen v0.17.32
 	github.com/aws/aws-lambda-go v1.39.1
 	github.com/awslabs/aws-lambda-go-api-proxy v0.14.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/jszwec/csvutil v1.8.0
-	github.com/vektah/gqlparser/v2 v2.5.1
+	github.com/vektah/gqlparser/v2 v2.5.2-0.20230422221642-25e09f9d292d
 	github.com/vmihailenco/msgpack/v5 v5.3.5
 	golang.org/x/sync v0.1.0
 )
