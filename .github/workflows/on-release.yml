@@ -1,4 +1,4 @@
-name: ci-release
+name: on release
 
 on:
   push:
@@ -7,16 +7,16 @@ on:
 
 jobs:
   test-go:
-    uses: ./.github/workflows/test-go.yml
+    uses: ./.github/workflows/wf-test-go.yml
 
   test-ent:
-    uses: ./.github/workflows/test-ent.yml
+    uses: ./.github/workflows/wf-test-ent.yml
 
   test-actions:
-    uses: ./.github/workflows/test-actions.yml
+    uses: ./.github/workflows/wf-test-actions.yml
 
   test-integration:
-    uses: ./.github/workflows/test-integration.yml
+    uses: ./.github/workflows/wf-test-integration.yml
 
   build-containers:
     needs:
@@ -24,7 +24,7 @@ jobs:
       - test-ent
       - test-actions
       - test-integration
-    uses: ./.github/workflows/build-containers.yml
+    uses: ./.github/workflows/wf-build-containers.yml
     with:
       needs-push: true
 
@@ -34,7 +34,7 @@ jobs:
       - test-ent
       - test-actions
       - test-integration
-    uses: ./.github/workflows/build-release-binaries.yml
+    uses: ./.github/workflows/wf-build-release-binaries.yml
 
   deploy:
-    uses: ./.github/workflows/deploy.yml
+    uses: ./.github/workflows/wf-deploy.yml

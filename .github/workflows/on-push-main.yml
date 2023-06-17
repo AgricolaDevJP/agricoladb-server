@@ -1,0 +1,38 @@
+name: on push main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-go:
+    uses: ./.github/workflows/wf-test-go.yml
+
+  test-ent:
+    uses: ./.github/workflows/wf-test-ent.yml
+
+  test-actions:
+    uses: ./.github/workflows/wf-test-actions.yml
+
+  test-integration:
+    uses: ./.github/workflows/wf-test-integration.yml
+
+  test-terraform:
+    uses: ./.github/workflows/wf-test-terraform.yml
+
+  build-containers:
+    needs:
+      - test-go
+      - test-ent
+      - test-integration
+    uses: ./.github/workflows/wf-build-containers.yml
+    with:
+      needs-push: true
+
+  build-binaries:
+    needs:
+      - test-go
+      - test-ent
+      - test-integration
+    uses: ./.github/workflows/wf-build-binaries.yml

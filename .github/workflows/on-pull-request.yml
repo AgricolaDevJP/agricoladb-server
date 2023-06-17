@@ -1,4 +1,4 @@
-name: ci-feature
+name: on pull request
 
 on:
   pull_request:
@@ -46,24 +46,24 @@ jobs:
   test-go:
     needs: judge-execute
     if: needs.judge-execute.outputs.needs-test-go == 'true'
-    uses: ./.github/workflows/test-go.yml
+    uses: ./.github/workflows/wf-test-go.yml
 
   test-ent:
     needs: judge-execute
     if: needs.judge-execute.outputs.needs-test-ent == 'true'
-    uses: ./.github/workflows/test-ent.yml
+    uses: ./.github/workflows/wf-test-ent.yml
 
   test-actions:
     needs: judge-execute
     if: needs.judge-execute.outputs.needs-test-actions == 'true'
-    uses: ./.github/workflows/test-actions.yml
+    uses: ./.github/workflows/wf-test-actions.yml
 
   test-integration:
     needs: judge-execute
     if: needs.judge-execute.outputs.needs-test-integration == 'true'
-    uses: ./.github/workflows/test-integration.yml
+    uses: ./.github/workflows/wf-test-integration.yml
 
   test-terraform:
     needs: judge-execute
     if: needs.judge-execute.outputs.needs-test-terraform == 'true'
-    uses: ./.github/workflows/test-terraform.yml
+    uses: ./.github/workflows/wf-test-terraform.yml
