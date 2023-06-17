@@ -10,7 +10,6 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/jszwec/csvutil v1.8.0
 	github.com/vektah/gqlparser/v2 v2.5.3
-	github.com/vmihailenco/msgpack/v5 v5.3.5
 	golang.org/x/sync v0.2.0
 )
 
@@ -29,6 +28,7 @@ require (
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/mitchellh/go-wordwrap v0.0.0-20150314170334-ad45545899c7 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
+	github.com/vmihailenco/msgpack/v5 v5.3.5 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/zclconf/go-cty v1.8.0 // indirect
 	golang.org/x/exp v0.0.0-20221230185412-738e83a70c30 // indirect

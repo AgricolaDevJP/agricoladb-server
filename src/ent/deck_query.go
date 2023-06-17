@@ -21,7 +21,7 @@ import (
 type DeckQuery struct {
 	config
 	ctx            *QueryContext
-	order          []OrderFunc
+	order          []deck.OrderOption
 	inters         []Interceptor
 	predicates     []predicate.Deck
 	withCards      *CardQuery
@@ -60,7 +60,7 @@ func (dq *DeckQuery) Unique(unique bool) *DeckQuery {
 }
 
 // Order specifies how the records should be ordered.
-func (dq *DeckQuery) Order(o ...OrderFunc) *DeckQuery {
+func (dq *DeckQuery) Order(o ...deck.OrderOption) *DeckQuery {
 	dq.order = append(dq.order, o...)
 	return dq
 }
@@ -298,7 +298,7 @@ func (dq *DeckQuery) Clone() *DeckQuery {
 	return &DeckQuery{
 		config:       dq.config,
 		ctx:          dq.ctx.Clone(),
-		order:        append([]OrderFunc{}, dq.order...),
+		order:        append([]deck.OrderOption{}, dq.order...),
 		inters:       append([]Interceptor{}, dq.inters...),
 		predicates:   append([]predicate.Deck{}, dq.predicates...),
 		withCards:    dq.withCards.Clone(),
@@ -473,8 +473,11 @@ func (dq *DeckQuery) loadCards(ctx context.Context, query *CardQuery, nodes []*D
 			init(nodes[i])
 		}
 	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(card.FieldDeckID)
+	}
 	query.Where(predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.InValues(deck.CardsColumn, fks...))
+		s.Where(sql.InValues(s.C(deck.CardsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -484,7 +487,7 @@ func (dq *DeckQuery) loadCards(ctx context.Context, query *CardQuery, nodes []*D
 		fk := n.DeckID
 		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "deck_id" returned %v for node %v`, fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "deck_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -547,6 +550,9 @@ func (dq *DeckQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != deck.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if dq.withRevision != nil {
+			_spec.Node.AddColumnOnce(deck.FieldRevisionID)
 		}
 	}
 	if ps := dq.predicates; len(ps) > 0 {

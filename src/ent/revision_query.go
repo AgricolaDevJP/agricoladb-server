@@ -22,7 +22,7 @@ import (
 type RevisionQuery struct {
 	config
 	ctx               *QueryContext
-	order             []OrderFunc
+	order             []revision.OrderOption
 	inters            []Interceptor
 	predicates        []predicate.Revision
 	withCards         *CardQuery
@@ -64,7 +64,7 @@ func (rq *RevisionQuery) Unique(unique bool) *RevisionQuery {
 }
 
 // Order specifies how the records should be ordered.
-func (rq *RevisionQuery) Order(o ...OrderFunc) *RevisionQuery {
+func (rq *RevisionQuery) Order(o ...revision.OrderOption) *RevisionQuery {
 	rq.order = append(rq.order, o...)
 	return rq
 }
@@ -324,7 +324,7 @@ func (rq *RevisionQuery) Clone() *RevisionQuery {
 	return &RevisionQuery{
 		config:       rq.config,
 		ctx:          rq.ctx.Clone(),
-		order:        append([]OrderFunc{}, rq.order...),
+		order:        append([]revision.OrderOption{}, rq.order...),
 		inters:       append([]Interceptor{}, rq.inters...),
 		predicates:   append([]predicate.Revision{}, rq.predicates...),
 		withCards:    rq.withCards.Clone(),
@@ -534,8 +534,11 @@ func (rq *RevisionQuery) loadCards(ctx context.Context, query *CardQuery, nodes 
 			init(nodes[i])
 		}
 	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(card.FieldRevisionID)
+	}
 	query.Where(predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.InValues(revision.CardsColumn, fks...))
+		s.Where(sql.InValues(s.C(revision.CardsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -545,7 +548,7 @@ func (rq *RevisionQuery) loadCards(ctx context.Context, query *CardQuery, nodes 
 		fk := n.RevisionID
 		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "revision_id" returned %v for node %v`, fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "revision_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -561,8 +564,11 @@ func (rq *RevisionQuery) loadProducts(ctx context.Context, query *ProductQuery, 
 			init(nodes[i])
 		}
 	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(product.FieldRevisionID)
+	}
 	query.Where(predicate.Product(func(s *sql.Selector) {
-		s.Where(sql.InValues(revision.ProductsColumn, fks...))
+		s.Where(sql.InValues(s.C(revision.ProductsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -572,7 +578,7 @@ func (rq *RevisionQuery) loadProducts(ctx context.Context, query *ProductQuery, 
 		fk := n.RevisionID
 		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "revision_id" returned %v for node %v`, fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "revision_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -588,8 +594,11 @@ func (rq *RevisionQuery) loadDecks(ctx context.Context, query *DeckQuery, nodes 
 			init(nodes[i])
 		}
 	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(deck.FieldRevisionID)
+	}
 	query.Where(predicate.Deck(func(s *sql.Selector) {
-		s.Where(sql.InValues(revision.DecksColumn, fks...))
+		s.Where(sql.InValues(s.C(revision.DecksColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -599,7 +608,7 @@ func (rq *RevisionQuery) loadDecks(ctx context.Context, query *DeckQuery, nodes 
 		fk := n.RevisionID
 		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "revision_id" returned %v for node %v`, fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "revision_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}

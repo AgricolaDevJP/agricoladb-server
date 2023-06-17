@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/AgricolaDevJP/agricoladb-server/ent/card"
 	"github.com/AgricolaDevJP/agricoladb-server/ent/cardspecialcolor"
@@ -89,7 +90,8 @@ type Card struct {
 	HasHiringFareIcon bool `json:"has_hiring_fare_icon,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CardQuery when eager-loading is set.
-	Edges CardEdges `json:"edges"`
+	Edges        CardEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // CardEdges holds the relations/edges for other nodes in the graph.
@@ -210,7 +212,7 @@ func (*Card) scanValues(columns []string) ([]any, error) {
 		case card.FieldLiteralID, card.FieldPrintedID, card.FieldPlayAgricolaCardID, card.FieldNameJa, card.FieldNameEn, card.FieldPrerequisite, card.FieldCost, card.FieldDescription, card.FieldNote, card.FieldSpecialVictoryPoint:
 			values[i] = new(sql.NullString)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type Card", columns[i])
+			values[i] = new(sql.UnknownType)
 		}
 	}
 	return values, nil
@@ -445,9 +447,17 @@ func (c *Card) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.HasHiringFareIcon = value.Bool
 			}
+		default:
+			c.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
+}
+
+// Value returns the ent.Value that was dynamically selected and assigned to the Card.
+// This includes values selected through modifiers, order, etc.
+func (c *Card) Value(name string) (ent.Value, error) {
+	return c.selectValues.Get(name)
 }
 
 // QueryRevision queries the "revision" edge of the Card entity.

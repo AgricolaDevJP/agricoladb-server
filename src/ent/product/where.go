@@ -322,11 +322,7 @@ func HasCards() predicate.Product {
 // HasCardsWith applies the HasEdge predicate on the "cards" edge with a given conditions (other predicates).
 func HasCardsWith(preds ...predicate.Card) predicate.Product {
 	return predicate.Product(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(CardsInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, CardsTable, CardsPrimaryKey...),
-		)
+		step := newCardsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -349,11 +345,7 @@ func HasRevision() predicate.Product {
 // HasRevisionWith applies the HasEdge predicate on the "revision" edge with a given conditions (other predicates).
 func HasRevisionWith(preds ...predicate.Revision) predicate.Product {
 	return predicate.Product(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(RevisionInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, RevisionTable, RevisionColumn),
-		)
+		step := newRevisionStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/AgricolaDevJP/agricoladb-server/ent/cardtype"
 )
@@ -23,7 +24,8 @@ type CardType struct {
 	NameEn string `json:"name_en,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CardTypeQuery when eager-loading is set.
-	Edges CardTypeEdges `json:"edges"`
+	Edges        CardTypeEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // CardTypeEdges holds the relations/edges for other nodes in the graph.
@@ -58,7 +60,7 @@ func (*CardType) scanValues(columns []string) ([]any, error) {
 		case cardtype.FieldKey, cardtype.FieldNameJa, cardtype.FieldNameEn:
 			values[i] = new(sql.NullString)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type CardType", columns[i])
+			values[i] = new(sql.UnknownType)
 		}
 	}
 	return values, nil
@@ -96,9 +98,17 @@ func (ct *CardType) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ct.NameEn = value.String
 			}
+		default:
+			ct.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
+}
+
+// Value returns the ent.Value that was dynamically selected and assigned to the CardType.
+// This includes values selected through modifiers, order, etc.
+func (ct *CardType) Value(name string) (ent.Value, error) {
+	return ct.selectValues.Get(name)
 }
 
 // QueryCards queries the "cards" edge of the CardType entity.

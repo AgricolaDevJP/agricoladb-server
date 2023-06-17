@@ -84,7 +84,7 @@ func (cscc *CardSpecialColorCreate) Mutation() *CardSpecialColorMutation {
 
 // Save creates the CardSpecialColor in the database.
 func (cscc *CardSpecialColorCreate) Save(ctx context.Context) (*CardSpecialColor, error) {
-	return withHooks[*CardSpecialColor, CardSpecialColorMutation](ctx, cscc.sqlSave, cscc.mutation, cscc.hooks)
+	return withHooks(ctx, cscc.sqlSave, cscc.mutation, cscc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -418,8 +418,8 @@ func (csccb *CardSpecialColorCreateBulk) Save(ctx context.Context) ([]*CardSpeci
 					return nil, err
 				}
 				builder.mutation = mutation
-				nodes[i], specs[i] = builder.createSpec()
 				var err error
+				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
 					_, err = mutators[i+1].Mutate(root, csccb.builders[i+1].mutation)
 				} else {

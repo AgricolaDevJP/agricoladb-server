@@ -2,6 +2,11 @@
 
 package card
 
+import (
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+)
+
 const (
 	// Label holds the string label denoting the card type in the database.
 	Label = "card"
@@ -195,3 +200,300 @@ var (
 	// LiteralIDValidator is a validator for the "literal_id" field. It is called by the builders before save.
 	LiteralIDValidator func(string) error
 )
+
+// OrderOption defines the ordering options for the Card queries.
+type OrderOption func(*sql.Selector)
+
+// ByID orders the results by the id field.
+func ByID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByLiteralID orders the results by the literal_id field.
+func ByLiteralID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLiteralID, opts...).ToFunc()
+}
+
+// ByRevisionID orders the results by the revision_id field.
+func ByRevisionID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevisionID, opts...).ToFunc()
+}
+
+// ByPrintedID orders the results by the printed_id field.
+func ByPrintedID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPrintedID, opts...).ToFunc()
+}
+
+// ByPlayAgricolaCardID orders the results by the play_agricola_card_id field.
+func ByPlayAgricolaCardID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPlayAgricolaCardID, opts...).ToFunc()
+}
+
+// ByDeckID orders the results by the deck_id field.
+func ByDeckID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDeckID, opts...).ToFunc()
+}
+
+// ByCardTypeID orders the results by the card_type_id field.
+func ByCardTypeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCardTypeID, opts...).ToFunc()
+}
+
+// ByCardSpecialColorID orders the results by the card_special_color_id field.
+func ByCardSpecialColorID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCardSpecialColorID, opts...).ToFunc()
+}
+
+// ByNameJa orders the results by the name_ja field.
+func ByNameJa(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNameJa, opts...).ToFunc()
+}
+
+// ByNameEn orders the results by the name_en field.
+func ByNameEn(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNameEn, opts...).ToFunc()
+}
+
+// ByMinPlayersNumber orders the results by the min_players_number field.
+func ByMinPlayersNumber(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMinPlayersNumber, opts...).ToFunc()
+}
+
+// ByPrerequisite orders the results by the prerequisite field.
+func ByPrerequisite(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPrerequisite, opts...).ToFunc()
+}
+
+// ByCost orders the results by the cost field.
+func ByCost(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCost, opts...).ToFunc()
+}
+
+// ByDescription orders the results by the description field.
+func ByDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByNote orders the results by the note field.
+func ByNote(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNote, opts...).ToFunc()
+}
+
+// ByIsOfficialJa orders the results by the is_official_ja field.
+func ByIsOfficialJa(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsOfficialJa, opts...).ToFunc()
+}
+
+// ByVictoryPoint orders the results by the victory_point field.
+func ByVictoryPoint(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldVictoryPoint, opts...).ToFunc()
+}
+
+// BySpecialVictoryPoint orders the results by the special_victory_point field.
+func BySpecialVictoryPoint(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSpecialVictoryPoint, opts...).ToFunc()
+}
+
+// ByHasArrow orders the results by the has_arrow field.
+func ByHasArrow(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasArrow, opts...).ToFunc()
+}
+
+// ByHasBonusPointIcon orders the results by the has_bonus_point_icon field.
+func ByHasBonusPointIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasBonusPointIcon, opts...).ToFunc()
+}
+
+// ByHasNegativeBonusPointIcon orders the results by the has_negative_bonus_point_icon field.
+func ByHasNegativeBonusPointIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasNegativeBonusPointIcon, opts...).ToFunc()
+}
+
+// ByHasPanIcon orders the results by the has_pan_icon field.
+func ByHasPanIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasPanIcon, opts...).ToFunc()
+}
+
+// ByHasBreadIcon orders the results by the has_bread_icon field.
+func ByHasBreadIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasBreadIcon, opts...).ToFunc()
+}
+
+// ByHasFarmPlannerIcon orders the results by the has_farm_planner_icon field.
+func ByHasFarmPlannerIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasFarmPlannerIcon, opts...).ToFunc()
+}
+
+// ByHasActionsBoosterIcon orders the results by the has_actions_booster_icon field.
+func ByHasActionsBoosterIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasActionsBoosterIcon, opts...).ToFunc()
+}
+
+// ByHasPointsProviderIcon orders the results by the has_points_provider_icon field.
+func ByHasPointsProviderIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasPointsProviderIcon, opts...).ToFunc()
+}
+
+// ByHasGoodsProviderIcon orders the results by the has_goods_provider_icon field.
+func ByHasGoodsProviderIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasGoodsProviderIcon, opts...).ToFunc()
+}
+
+// ByHasFoodProviderIcon orders the results by the has_food_provider_icon field.
+func ByHasFoodProviderIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasFoodProviderIcon, opts...).ToFunc()
+}
+
+// ByHasCropProviderIcon orders the results by the has_crop_provider_icon field.
+func ByHasCropProviderIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasCropProviderIcon, opts...).ToFunc()
+}
+
+// ByHasBuildingResourceProviderIcon orders the results by the has_building_resource_provider_icon field.
+func ByHasBuildingResourceProviderIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasBuildingResourceProviderIcon, opts...).ToFunc()
+}
+
+// ByHasLivestockProviderIcon orders the results by the has_livestock_provider_icon field.
+func ByHasLivestockProviderIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasLivestockProviderIcon, opts...).ToFunc()
+}
+
+// ByHasCutPeatIcon orders the results by the has_cut_peat_icon field.
+func ByHasCutPeatIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasCutPeatIcon, opts...).ToFunc()
+}
+
+// ByHasFellTreesIcon orders the results by the has_fell_trees_icon field.
+func ByHasFellTreesIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasFellTreesIcon, opts...).ToFunc()
+}
+
+// ByHasSlashAndBurnIcon orders the results by the has_slash_and_burn_icon field.
+func ByHasSlashAndBurnIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasSlashAndBurnIcon, opts...).ToFunc()
+}
+
+// ByHasHiringFareIcon orders the results by the has_hiring_fare_icon field.
+func ByHasHiringFareIcon(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasHiringFareIcon, opts...).ToFunc()
+}
+
+// ByRevisionField orders the results by revision field.
+func ByRevisionField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRevisionStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByProductsCount orders the results by products count.
+func ByProductsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProductsStep(), opts...)
+	}
+}
+
+// ByProducts orders the results by products terms.
+func ByProducts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProductsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDeckField orders the results by deck field.
+func ByDeckField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDeckStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByCardTypeField orders the results by card_type field.
+func ByCardTypeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCardTypeStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByCardSpecialColorField orders the results by card_special_color field.
+func ByCardSpecialColorField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCardSpecialColorStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByChildrenCount orders the results by children count.
+func ByChildrenCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newChildrenStep(), opts...)
+	}
+}
+
+// ByChildren orders the results by children terms.
+func ByChildren(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newChildrenStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAncestorsCount orders the results by ancestors count.
+func ByAncestorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAncestorsStep(), opts...)
+	}
+}
+
+// ByAncestors orders the results by ancestors terms.
+func ByAncestors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAncestorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newRevisionStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RevisionInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, RevisionTable, RevisionColumn),
+	)
+}
+func newProductsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProductsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProductsTable, ProductsPrimaryKey...),
+	)
+}
+func newDeckStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DeckInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, DeckTable, DeckColumn),
+	)
+}
+func newCardTypeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CardTypeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, CardTypeTable, CardTypeColumn),
+	)
+}
+func newCardSpecialColorStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CardSpecialColorInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, CardSpecialColorTable, CardSpecialColorColumn),
+	)
+}
+func newChildrenStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ChildrenTable, ChildrenPrimaryKey...),
+	)
+}
+func newAncestorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, AncestorsTable, AncestorsPrimaryKey...),
+	)
+}

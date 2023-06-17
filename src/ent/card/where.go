@@ -1357,11 +1357,7 @@ func HasRevision() predicate.Card {
 // HasRevisionWith applies the HasEdge predicate on the "revision" edge with a given conditions (other predicates).
 func HasRevisionWith(preds ...predicate.Revision) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(RevisionInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, RevisionTable, RevisionColumn),
-		)
+		step := newRevisionStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1384,11 +1380,7 @@ func HasProducts() predicate.Card {
 // HasProductsWith applies the HasEdge predicate on the "products" edge with a given conditions (other predicates).
 func HasProductsWith(preds ...predicate.Product) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(ProductsInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ProductsTable, ProductsPrimaryKey...),
-		)
+		step := newProductsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1411,11 +1403,7 @@ func HasDeck() predicate.Card {
 // HasDeckWith applies the HasEdge predicate on the "deck" edge with a given conditions (other predicates).
 func HasDeckWith(preds ...predicate.Deck) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(DeckInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, DeckTable, DeckColumn),
-		)
+		step := newDeckStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1438,11 +1426,7 @@ func HasCardType() predicate.Card {
 // HasCardTypeWith applies the HasEdge predicate on the "card_type" edge with a given conditions (other predicates).
 func HasCardTypeWith(preds ...predicate.CardType) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(CardTypeInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, CardTypeTable, CardTypeColumn),
-		)
+		step := newCardTypeStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1465,11 +1449,7 @@ func HasCardSpecialColor() predicate.Card {
 // HasCardSpecialColorWith applies the HasEdge predicate on the "card_special_color" edge with a given conditions (other predicates).
 func HasCardSpecialColorWith(preds ...predicate.CardSpecialColor) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(CardSpecialColorInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, CardSpecialColorTable, CardSpecialColorColumn),
-		)
+		step := newCardSpecialColorStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1492,11 +1472,7 @@ func HasChildren() predicate.Card {
 // HasChildrenWith applies the HasEdge predicate on the "children" edge with a given conditions (other predicates).
 func HasChildrenWith(preds ...predicate.Card) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ChildrenTable, ChildrenPrimaryKey...),
-		)
+		step := newChildrenStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1519,11 +1495,7 @@ func HasAncestors() predicate.Card {
 // HasAncestorsWith applies the HasEdge predicate on the "ancestors" edge with a given conditions (other predicates).
 func HasAncestorsWith(preds ...predicate.Card) predicate.Card {
 	return predicate.Card(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, AncestorsTable, AncestorsPrimaryKey...),
-		)
+		step := newAncestorsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -111,7 +111,7 @@ func (du *DeckUpdate) RemoveCards(c ...*Card) *DeckUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (du *DeckUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks[int, DeckMutation](ctx, du.sqlSave, du.mutation, du.hooks)
+	return withHooks(ctx, du.sqlSave, du.mutation, du.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -329,7 +329,7 @@ func (duo *DeckUpdateOne) Select(field string, fields ...string) *DeckUpdateOne 
 
 // Save executes the query and returns the updated Deck entity.
 func (duo *DeckUpdateOne) Save(ctx context.Context) (*Deck, error) {
-	return withHooks[*Deck, DeckMutation](ctx, duo.sqlSave, duo.mutation, duo.hooks)
+	return withHooks(ctx, duo.sqlSave, duo.mutation, duo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.

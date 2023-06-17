@@ -27,7 +27,7 @@ func (ctd *CardTypeDelete) Where(ps ...predicate.CardType) *CardTypeDelete {
 
 // Exec executes the deletion query and returns how many vertices were deleted.
 func (ctd *CardTypeDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks[int, CardTypeMutation](ctx, ctd.sqlExec, ctd.mutation, ctd.hooks)
+	return withHooks(ctx, ctd.sqlExec, ctd.mutation, ctd.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.

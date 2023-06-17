@@ -85,7 +85,7 @@ func (csc *CardSpecialColor) Cards(
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := csc.Edges.totalCount[0][alias]
 	if nodes, err := csc.NamedCards(alias); err == nil || hasTotalCount {
-		pager, err := newCardPager(opts)
+		pager, err := newCardPager(opts, last != nil)
 		if err != nil {
 			return nil, err
 		}
@@ -105,7 +105,7 @@ func (ct *CardType) Cards(
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := ct.Edges.totalCount[0][alias]
 	if nodes, err := ct.NamedCards(alias); err == nil || hasTotalCount {
-		pager, err := newCardPager(opts)
+		pager, err := newCardPager(opts, last != nil)
 		if err != nil {
 			return nil, err
 		}
@@ -125,7 +125,7 @@ func (d *Deck) Cards(
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := d.Edges.totalCount[0][alias]
 	if nodes, err := d.NamedCards(alias); err == nil || hasTotalCount {
-		pager, err := newCardPager(opts)
+		pager, err := newCardPager(opts, last != nil)
 		if err != nil {
 			return nil, err
 		}
@@ -153,7 +153,7 @@ func (pr *Product) Cards(
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := pr.Edges.totalCount[0][alias]
 	if nodes, err := pr.NamedCards(alias); err == nil || hasTotalCount {
-		pager, err := newCardPager(opts)
+		pager, err := newCardPager(opts, last != nil)
 		if err != nil {
 			return nil, err
 		}
@@ -181,7 +181,7 @@ func (r *Revision) Cards(
 	alias := graphql.GetFieldContext(ctx).Field.Alias
 	totalCount, hasTotalCount := r.Edges.totalCount[0][alias]
 	if nodes, err := r.NamedCards(alias); err == nil || hasTotalCount {
-		pager, err := newCardPager(opts)
+		pager, err := newCardPager(opts, last != nil)
 		if err != nil {
 			return nil, err
 		}

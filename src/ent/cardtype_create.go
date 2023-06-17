@@ -84,7 +84,7 @@ func (ctc *CardTypeCreate) Mutation() *CardTypeMutation {
 
 // Save creates the CardType in the database.
 func (ctc *CardTypeCreate) Save(ctx context.Context) (*CardType, error) {
-	return withHooks[*CardType, CardTypeMutation](ctx, ctc.sqlSave, ctc.mutation, ctc.hooks)
+	return withHooks(ctx, ctc.sqlSave, ctc.mutation, ctc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -418,8 +418,8 @@ func (ctcb *CardTypeCreateBulk) Save(ctx context.Context) ([]*CardType, error) {
 					return nil, err
 				}
 				builder.mutation = mutation
-				nodes[i], specs[i] = builder.createSpec()
 				var err error
+				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
 					_, err = mutators[i+1].Mutate(root, ctcb.builders[i+1].mutation)
 				} else {

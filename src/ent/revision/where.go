@@ -297,11 +297,7 @@ func HasCards() predicate.Revision {
 // HasCardsWith applies the HasEdge predicate on the "cards" edge with a given conditions (other predicates).
 func HasCardsWith(preds ...predicate.Card) predicate.Revision {
 	return predicate.Revision(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(CardsInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, CardsTable, CardsColumn),
-		)
+		step := newCardsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -324,11 +320,7 @@ func HasProducts() predicate.Revision {
 // HasProductsWith applies the HasEdge predicate on the "products" edge with a given conditions (other predicates).
 func HasProductsWith(preds ...predicate.Product) predicate.Revision {
 	return predicate.Revision(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(ProductsInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, ProductsTable, ProductsColumn),
-		)
+		step := newProductsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -351,11 +343,7 @@ func HasDecks() predicate.Revision {
 // HasDecksWith applies the HasEdge predicate on the "decks" edge with a given conditions (other predicates).
 func HasDecksWith(preds ...predicate.Deck) predicate.Revision {
 	return predicate.Revision(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(DecksInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, DecksTable, DecksColumn),
-		)
+		step := newDecksStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

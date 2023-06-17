@@ -111,7 +111,7 @@ func (cscu *CardSpecialColorUpdate) RemoveCards(c ...*Card) *CardSpecialColorUpd
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (cscu *CardSpecialColorUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks[int, CardSpecialColorMutation](ctx, cscu.sqlSave, cscu.mutation, cscu.hooks)
+	return withHooks(ctx, cscu.sqlSave, cscu.mutation, cscu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -318,7 +318,7 @@ func (cscuo *CardSpecialColorUpdateOne) Select(field string, fields ...string) *
 
 // Save executes the query and returns the updated CardSpecialColor entity.
 func (cscuo *CardSpecialColorUpdateOne) Save(ctx context.Context) (*CardSpecialColor, error) {
-	return withHooks[*CardSpecialColor, CardSpecialColorMutation](ctx, cscuo.sqlSave, cscuo.mutation, cscuo.hooks)
+	return withHooks(ctx, cscuo.sqlSave, cscuo.mutation, cscuo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
