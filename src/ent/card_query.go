@@ -24,7 +24,7 @@ import (
 type CardQuery struct {
 	config
 	ctx                  *QueryContext
-	order                []OrderFunc
+	order                []card.OrderOption
 	inters               []Interceptor
 	predicates           []predicate.Card
 	withRevision         *RevisionQuery
@@ -70,7 +70,7 @@ func (cq *CardQuery) Unique(unique bool) *CardQuery {
 }
 
 // Order specifies how the records should be ordered.
-func (cq *CardQuery) Order(o ...OrderFunc) *CardQuery {
+func (cq *CardQuery) Order(o ...card.OrderOption) *CardQuery {
 	cq.order = append(cq.order, o...)
 	return cq
 }
@@ -418,7 +418,7 @@ func (cq *CardQuery) Clone() *CardQuery {
 	return &CardQuery{
 		config:               cq.config,
 		ctx:                  cq.ctx.Clone(),
-		order:                append([]OrderFunc{}, cq.order...),
+		order:                append([]card.OrderOption{}, cq.order...),
 		inters:               append([]Interceptor{}, cq.inters...),
 		predicates:           append([]predicate.Card{}, cq.predicates...),
 		withRevision:         cq.withRevision.Clone(),
@@ -1021,6 +1021,18 @@ func (cq *CardQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != card.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if cq.withRevision != nil {
+			_spec.Node.AddColumnOnce(card.FieldRevisionID)
+		}
+		if cq.withDeck != nil {
+			_spec.Node.AddColumnOnce(card.FieldDeckID)
+		}
+		if cq.withCardType != nil {
+			_spec.Node.AddColumnOnce(card.FieldCardTypeID)
+		}
+		if cq.withCardSpecialColor != nil {
+			_spec.Node.AddColumnOnce(card.FieldCardSpecialColorID)
 		}
 	}
 	if ps := cq.predicates; len(ps) > 0 {

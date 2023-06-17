@@ -29,9 +29,14 @@ func (c *CardQuery) CollectFields(ctx context.Context, satisfies ...string) (*Ca
 	return c, nil
 }
 
-func (c *CardQuery) collectField(ctx context.Context, op *graphql.OperationContext, field graphql.CollectedField, path []string, satisfies ...string) error {
+func (c *CardQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
-	for _, field := range graphql.CollectFields(op, field.Selections, satisfies) {
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(card.Columns))
+		selectedFields = []string{card.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 		case "revision":
 			var (
@@ -39,17 +44,21 @@ func (c *CardQuery) collectField(ctx context.Context, op *graphql.OperationConte
 				path  = append(path, alias)
 				query = (&RevisionClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
 				return err
 			}
 			c.withRevision = query
+			if _, ok := fieldSeen[card.FieldRevisionID]; !ok {
+				selectedFields = append(selectedFields, card.FieldRevisionID)
+				fieldSeen[card.FieldRevisionID] = struct{}{}
+			}
 		case "products":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&ProductClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
 				return err
 			}
 			c.WithNamedProducts(alias, func(wq *ProductQuery) {
@@ -61,37 +70,49 @@ func (c *CardQuery) collectField(ctx context.Context, op *graphql.OperationConte
 				path  = append(path, alias)
 				query = (&DeckClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
 				return err
 			}
 			c.withDeck = query
+			if _, ok := fieldSeen[card.FieldDeckID]; !ok {
+				selectedFields = append(selectedFields, card.FieldDeckID)
+				fieldSeen[card.FieldDeckID] = struct{}{}
+			}
 		case "cardType":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&CardTypeClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
 				return err
 			}
 			c.withCardType = query
+			if _, ok := fieldSeen[card.FieldCardTypeID]; !ok {
+				selectedFields = append(selectedFields, card.FieldCardTypeID)
+				fieldSeen[card.FieldCardTypeID] = struct{}{}
+			}
 		case "cardSpecialColor":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&CardSpecialColorClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
 				return err
 			}
 			c.withCardSpecialColor = query
+			if _, ok := fieldSeen[card.FieldCardSpecialColorID]; !ok {
+				selectedFields = append(selectedFields, card.FieldCardSpecialColorID)
+				fieldSeen[card.FieldCardSpecialColorID] = struct{}{}
+			}
 		case "children":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&CardClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
 				return err
 			}
 			c.WithNamedChildren(alias, func(wq *CardQuery) {
@@ -103,13 +124,190 @@ func (c *CardQuery) collectField(ctx context.Context, op *graphql.OperationConte
 				path  = append(path, alias)
 				query = (&CardClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
 				return err
 			}
 			c.WithNamedAncestors(alias, func(wq *CardQuery) {
 				*wq = *query
 			})
+		case "literalID":
+			if _, ok := fieldSeen[card.FieldLiteralID]; !ok {
+				selectedFields = append(selectedFields, card.FieldLiteralID)
+				fieldSeen[card.FieldLiteralID] = struct{}{}
+			}
+		case "revisionID":
+			if _, ok := fieldSeen[card.FieldRevisionID]; !ok {
+				selectedFields = append(selectedFields, card.FieldRevisionID)
+				fieldSeen[card.FieldRevisionID] = struct{}{}
+			}
+		case "printedID":
+			if _, ok := fieldSeen[card.FieldPrintedID]; !ok {
+				selectedFields = append(selectedFields, card.FieldPrintedID)
+				fieldSeen[card.FieldPrintedID] = struct{}{}
+			}
+		case "playAgricolaCardID":
+			if _, ok := fieldSeen[card.FieldPlayAgricolaCardID]; !ok {
+				selectedFields = append(selectedFields, card.FieldPlayAgricolaCardID)
+				fieldSeen[card.FieldPlayAgricolaCardID] = struct{}{}
+			}
+		case "deckID":
+			if _, ok := fieldSeen[card.FieldDeckID]; !ok {
+				selectedFields = append(selectedFields, card.FieldDeckID)
+				fieldSeen[card.FieldDeckID] = struct{}{}
+			}
+		case "cardTypeID":
+			if _, ok := fieldSeen[card.FieldCardTypeID]; !ok {
+				selectedFields = append(selectedFields, card.FieldCardTypeID)
+				fieldSeen[card.FieldCardTypeID] = struct{}{}
+			}
+		case "cardSpecialColorID":
+			if _, ok := fieldSeen[card.FieldCardSpecialColorID]; !ok {
+				selectedFields = append(selectedFields, card.FieldCardSpecialColorID)
+				fieldSeen[card.FieldCardSpecialColorID] = struct{}{}
+			}
+		case "nameJa":
+			if _, ok := fieldSeen[card.FieldNameJa]; !ok {
+				selectedFields = append(selectedFields, card.FieldNameJa)
+				fieldSeen[card.FieldNameJa] = struct{}{}
+			}
+		case "nameEn":
+			if _, ok := fieldSeen[card.FieldNameEn]; !ok {
+				selectedFields = append(selectedFields, card.FieldNameEn)
+				fieldSeen[card.FieldNameEn] = struct{}{}
+			}
+		case "minPlayersNumber":
+			if _, ok := fieldSeen[card.FieldMinPlayersNumber]; !ok {
+				selectedFields = append(selectedFields, card.FieldMinPlayersNumber)
+				fieldSeen[card.FieldMinPlayersNumber] = struct{}{}
+			}
+		case "prerequisite":
+			if _, ok := fieldSeen[card.FieldPrerequisite]; !ok {
+				selectedFields = append(selectedFields, card.FieldPrerequisite)
+				fieldSeen[card.FieldPrerequisite] = struct{}{}
+			}
+		case "cost":
+			if _, ok := fieldSeen[card.FieldCost]; !ok {
+				selectedFields = append(selectedFields, card.FieldCost)
+				fieldSeen[card.FieldCost] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[card.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, card.FieldDescription)
+				fieldSeen[card.FieldDescription] = struct{}{}
+			}
+		case "note":
+			if _, ok := fieldSeen[card.FieldNote]; !ok {
+				selectedFields = append(selectedFields, card.FieldNote)
+				fieldSeen[card.FieldNote] = struct{}{}
+			}
+		case "isOfficialJa":
+			if _, ok := fieldSeen[card.FieldIsOfficialJa]; !ok {
+				selectedFields = append(selectedFields, card.FieldIsOfficialJa)
+				fieldSeen[card.FieldIsOfficialJa] = struct{}{}
+			}
+		case "victoryPoint":
+			if _, ok := fieldSeen[card.FieldVictoryPoint]; !ok {
+				selectedFields = append(selectedFields, card.FieldVictoryPoint)
+				fieldSeen[card.FieldVictoryPoint] = struct{}{}
+			}
+		case "specialVictoryPoint":
+			if _, ok := fieldSeen[card.FieldSpecialVictoryPoint]; !ok {
+				selectedFields = append(selectedFields, card.FieldSpecialVictoryPoint)
+				fieldSeen[card.FieldSpecialVictoryPoint] = struct{}{}
+			}
+		case "hasArrow":
+			if _, ok := fieldSeen[card.FieldHasArrow]; !ok {
+				selectedFields = append(selectedFields, card.FieldHasArrow)
+				fieldSeen[card.FieldHasArrow] = struct{}{}
+			}
+		case "hasBonusPointIcon":
+			if _, ok := fieldSeen[card.FieldHasBonusPointIcon]; !ok {
+				selectedFields = append(selectedFields, card.FieldHasBonusPointIcon)
+				fieldSeen[card.FieldHasBonusPointIcon] = struct{}{}
+			}
+		case "hasNegativeBonusPointIcon":
+			if _, ok := fieldSeen[card.FieldHasNegativeBonusPointIcon]; !ok {
+				selectedFields = append(selectedFields, card.FieldHasNegativeBonusPointIcon)
+				fieldSeen[card.FieldHasNegativeBonusPointIcon] = struct{}{}
+			}
+		case "hasPanIcon":
+			if _, ok := fieldSeen[card.FieldHasPanIcon]; !ok {
+				selectedFields = append(selectedFields, card.FieldHasPanIcon)
+				fieldSeen[card.FieldHasPanIcon] = struct{}{}
+			}
+		case "hasBreadIcon":
+			if _, ok := fieldSeen[card.FieldHasBreadIcon]; !ok {
+				selectedFields = append(selectedFields, card.FieldHasBreadIcon)
+				fieldSeen[card.FieldHasBreadIcon] = struct{}{}
+			}
+		case "hasFarmPlannerIcon":
+			if _, ok := fieldSeen[card.FieldHasFarmPlannerIcon]; !ok {
+				selectedFields = append(selectedFields, card.FieldHasFarmPlannerIcon)
+				fieldSeen[card.FieldHasFarmPlannerIcon] = struct{}{}
+			}
+		case "hasActionsBoosterIcon":
+			if _, ok := fieldSeen[card.FieldHasActionsBoosterIcon]; !ok {
+				selectedFields = append(selectedFields, card.FieldHasActionsBoosterIcon)
+				fieldSeen[card.FieldHasActionsBoosterIcon] = struct{}{}
+			}
+		case "hasPointsProviderIcon":
+			if _, ok := fieldSeen[card.FieldHasPointsProviderIcon]; !ok {
+				selectedFields = append(selectedFields, card.FieldHasPointsProviderIcon)
+				fieldSeen[card.FieldHasPointsProviderIcon] = struct{}{}
+			}
+		case "hasGoodsProviderIcon":
+			if _, ok := fieldSeen[card.FieldHasGoodsProviderIcon]; !ok {
+				selectedFields = append(selectedFields, card.FieldHasGoodsProviderIcon)
+				fieldSeen[card.FieldHasGoodsProviderIcon] = struct{}{}
+			}
+		case "hasFoodProviderIcon":
+			if _, ok := fieldSeen[card.FieldHasFoodProviderIcon]; !ok {
+				selectedFields = append(selectedFields, card.FieldHasFoodProviderIcon)
+				fieldSeen[card.FieldHasFoodProviderIcon] = struct{}{}
+			}
+		case "hasCropProviderIcon":
+			if _, ok := fieldSeen[card.FieldHasCropProviderIcon]; !ok {
+				selectedFields = append(selectedFields, card.FieldHasCropProviderIcon)
+				fieldSeen[card.FieldHasCropProviderIcon] = struct{}{}
+			}
+		case "hasBuildingResourceProviderIcon":
+			if _, ok := fieldSeen[card.FieldHasBuildingResourceProviderIcon]; !ok {
+				selectedFields = append(selectedFields, card.FieldHasBuildingResourceProviderIcon)
+				fieldSeen[card.FieldHasBuildingResourceProviderIcon] = struct{}{}
+			}
+		case "hasLivestockProviderIcon":
+			if _, ok := fieldSeen[card.FieldHasLivestockProviderIcon]; !ok {
+				selectedFields = append(selectedFields, card.FieldHasLivestockProviderIcon)
+				fieldSeen[card.FieldHasLivestockProviderIcon] = struct{}{}
+			}
+		case "hasCutPeatIcon":
+			if _, ok := fieldSeen[card.FieldHasCutPeatIcon]; !ok {
+				selectedFields = append(selectedFields, card.FieldHasCutPeatIcon)
+				fieldSeen[card.FieldHasCutPeatIcon] = struct{}{}
+			}
+		case "hasFellTreesIcon":
+			if _, ok := fieldSeen[card.FieldHasFellTreesIcon]; !ok {
+				selectedFields = append(selectedFields, card.FieldHasFellTreesIcon)
+				fieldSeen[card.FieldHasFellTreesIcon] = struct{}{}
+			}
+		case "hasSlashAndBurnIcon":
+			if _, ok := fieldSeen[card.FieldHasSlashAndBurnIcon]; !ok {
+				selectedFields = append(selectedFields, card.FieldHasSlashAndBurnIcon)
+				fieldSeen[card.FieldHasSlashAndBurnIcon] = struct{}{}
+			}
+		case "hasHiringFareIcon":
+			if _, ok := fieldSeen[card.FieldHasHiringFareIcon]; !ok {
+				selectedFields = append(selectedFields, card.FieldHasHiringFareIcon)
+				fieldSeen[card.FieldHasHiringFareIcon] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
 		}
+	}
+	if !unknownSeen {
+		c.Select(selectedFields...)
 	}
 	return nil
 }
@@ -120,7 +318,7 @@ type cardPaginateArgs struct {
 	opts          []CardPaginateOption
 }
 
-func newCardPaginateArgs(rv map[string]interface{}) *cardPaginateArgs {
+func newCardPaginateArgs(rv map[string]any) *cardPaginateArgs {
 	args := &cardPaginateArgs{}
 	if rv == nil {
 		return args
@@ -155,9 +353,14 @@ func (csc *CardSpecialColorQuery) CollectFields(ctx context.Context, satisfies .
 	return csc, nil
 }
 
-func (csc *CardSpecialColorQuery) collectField(ctx context.Context, op *graphql.OperationContext, field graphql.CollectedField, path []string, satisfies ...string) error {
+func (csc *CardSpecialColorQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
-	for _, field := range graphql.CollectFields(op, field.Selections, satisfies) {
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(cardspecialcolor.Columns))
+		selectedFields = []string{cardspecialcolor.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 		case "cards":
 			var (
@@ -169,7 +372,7 @@ func (csc *CardSpecialColorQuery) collectField(ctx context.Context, op *graphql.
 			if err := validateFirstLast(args.first, args.last); err != nil {
 				return fmt.Errorf("validate first and last in path %q: %w", path, err)
 			}
-			pager, err := newCardPager(args.opts)
+			pager, err := newCardPager(args.opts, args.last != nil)
 			if err != nil {
 				return fmt.Errorf("create new pager in path %q: %w", path, err)
 			}
@@ -191,7 +394,7 @@ func (csc *CardSpecialColorQuery) collectField(ctx context.Context, op *graphql.
 							Count  int `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(cardspecialcolor.CardsColumn, ids...))
+							s.Where(sql.InValues(s.C(cardspecialcolor.CardsColumn), ids...))
 						})
 						if err := query.GroupBy(cardspecialcolor.CardsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
@@ -225,24 +428,47 @@ func (csc *CardSpecialColorQuery) collectField(ctx context.Context, op *graphql.
 			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
 				continue
 			}
-
-			query = pager.applyCursors(query, args.after, args.before)
-			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				modify := limitRows(cardspecialcolor.CardsColumn, limit, pager.orderExpr(args.last != nil))
-				query.modifiers = append(query.modifiers, modify)
-			} else {
-				query = pager.applyOrder(query, args.last != nil)
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
 			}
 			path = append(path, edgesField, nodeField)
 			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, op, *field, path, satisfies...); err != nil {
+				if err := query.collectField(ctx, opCtx, *field, path, mayAddCondition(satisfies, "Card")...); err != nil {
 					return err
 				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				modify := limitRows(cardspecialcolor.CardsColumn, limit, pager.orderExpr(query))
+				query.modifiers = append(query.modifiers, modify)
+			} else {
+				query = pager.applyOrder(query)
 			}
 			csc.WithNamedCards(alias, func(wq *CardQuery) {
 				*wq = *query
 			})
+		case "key":
+			if _, ok := fieldSeen[cardspecialcolor.FieldKey]; !ok {
+				selectedFields = append(selectedFields, cardspecialcolor.FieldKey)
+				fieldSeen[cardspecialcolor.FieldKey] = struct{}{}
+			}
+		case "nameJa":
+			if _, ok := fieldSeen[cardspecialcolor.FieldNameJa]; !ok {
+				selectedFields = append(selectedFields, cardspecialcolor.FieldNameJa)
+				fieldSeen[cardspecialcolor.FieldNameJa] = struct{}{}
+			}
+		case "nameEn":
+			if _, ok := fieldSeen[cardspecialcolor.FieldNameEn]; !ok {
+				selectedFields = append(selectedFields, cardspecialcolor.FieldNameEn)
+				fieldSeen[cardspecialcolor.FieldNameEn] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
 		}
+	}
+	if !unknownSeen {
+		csc.Select(selectedFields...)
 	}
 	return nil
 }
@@ -253,7 +479,7 @@ type cardspecialcolorPaginateArgs struct {
 	opts          []CardSpecialColorPaginateOption
 }
 
-func newCardSpecialColorPaginateArgs(rv map[string]interface{}) *cardspecialcolorPaginateArgs {
+func newCardSpecialColorPaginateArgs(rv map[string]any) *cardspecialcolorPaginateArgs {
 	args := &cardspecialcolorPaginateArgs{}
 	if rv == nil {
 		return args
@@ -288,9 +514,14 @@ func (ct *CardTypeQuery) CollectFields(ctx context.Context, satisfies ...string)
 	return ct, nil
 }
 
-func (ct *CardTypeQuery) collectField(ctx context.Context, op *graphql.OperationContext, field graphql.CollectedField, path []string, satisfies ...string) error {
+func (ct *CardTypeQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
-	for _, field := range graphql.CollectFields(op, field.Selections, satisfies) {
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(cardtype.Columns))
+		selectedFields = []string{cardtype.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 		case "cards":
 			var (
@@ -302,7 +533,7 @@ func (ct *CardTypeQuery) collectField(ctx context.Context, op *graphql.Operation
 			if err := validateFirstLast(args.first, args.last); err != nil {
 				return fmt.Errorf("validate first and last in path %q: %w", path, err)
 			}
-			pager, err := newCardPager(args.opts)
+			pager, err := newCardPager(args.opts, args.last != nil)
 			if err != nil {
 				return fmt.Errorf("create new pager in path %q: %w", path, err)
 			}
@@ -324,7 +555,7 @@ func (ct *CardTypeQuery) collectField(ctx context.Context, op *graphql.Operation
 							Count  int `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(cardtype.CardsColumn, ids...))
+							s.Where(sql.InValues(s.C(cardtype.CardsColumn), ids...))
 						})
 						if err := query.GroupBy(cardtype.CardsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
@@ -358,24 +589,47 @@ func (ct *CardTypeQuery) collectField(ctx context.Context, op *graphql.Operation
 			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
 				continue
 			}
-
-			query = pager.applyCursors(query, args.after, args.before)
-			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				modify := limitRows(cardtype.CardsColumn, limit, pager.orderExpr(args.last != nil))
-				query.modifiers = append(query.modifiers, modify)
-			} else {
-				query = pager.applyOrder(query, args.last != nil)
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
 			}
 			path = append(path, edgesField, nodeField)
 			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, op, *field, path, satisfies...); err != nil {
+				if err := query.collectField(ctx, opCtx, *field, path, mayAddCondition(satisfies, "Card")...); err != nil {
 					return err
 				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				modify := limitRows(cardtype.CardsColumn, limit, pager.orderExpr(query))
+				query.modifiers = append(query.modifiers, modify)
+			} else {
+				query = pager.applyOrder(query)
 			}
 			ct.WithNamedCards(alias, func(wq *CardQuery) {
 				*wq = *query
 			})
+		case "key":
+			if _, ok := fieldSeen[cardtype.FieldKey]; !ok {
+				selectedFields = append(selectedFields, cardtype.FieldKey)
+				fieldSeen[cardtype.FieldKey] = struct{}{}
+			}
+		case "nameJa":
+			if _, ok := fieldSeen[cardtype.FieldNameJa]; !ok {
+				selectedFields = append(selectedFields, cardtype.FieldNameJa)
+				fieldSeen[cardtype.FieldNameJa] = struct{}{}
+			}
+		case "nameEn":
+			if _, ok := fieldSeen[cardtype.FieldNameEn]; !ok {
+				selectedFields = append(selectedFields, cardtype.FieldNameEn)
+				fieldSeen[cardtype.FieldNameEn] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
 		}
+	}
+	if !unknownSeen {
+		ct.Select(selectedFields...)
 	}
 	return nil
 }
@@ -386,7 +640,7 @@ type cardtypePaginateArgs struct {
 	opts          []CardTypePaginateOption
 }
 
-func newCardTypePaginateArgs(rv map[string]interface{}) *cardtypePaginateArgs {
+func newCardTypePaginateArgs(rv map[string]any) *cardtypePaginateArgs {
 	args := &cardtypePaginateArgs{}
 	if rv == nil {
 		return args
@@ -421,9 +675,14 @@ func (d *DeckQuery) CollectFields(ctx context.Context, satisfies ...string) (*De
 	return d, nil
 }
 
-func (d *DeckQuery) collectField(ctx context.Context, op *graphql.OperationContext, field graphql.CollectedField, path []string, satisfies ...string) error {
+func (d *DeckQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
-	for _, field := range graphql.CollectFields(op, field.Selections, satisfies) {
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(deck.Columns))
+		selectedFields = []string{deck.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 		case "cards":
 			var (
@@ -435,7 +694,7 @@ func (d *DeckQuery) collectField(ctx context.Context, op *graphql.OperationConte
 			if err := validateFirstLast(args.first, args.last); err != nil {
 				return fmt.Errorf("validate first and last in path %q: %w", path, err)
 			}
-			pager, err := newCardPager(args.opts)
+			pager, err := newCardPager(args.opts, args.last != nil)
 			if err != nil {
 				return fmt.Errorf("create new pager in path %q: %w", path, err)
 			}
@@ -457,7 +716,7 @@ func (d *DeckQuery) collectField(ctx context.Context, op *graphql.OperationConte
 							Count  int `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(deck.CardsColumn, ids...))
+							s.Where(sql.InValues(s.C(deck.CardsColumn), ids...))
 						})
 						if err := query.GroupBy(deck.CardsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
@@ -491,19 +750,20 @@ func (d *DeckQuery) collectField(ctx context.Context, op *graphql.OperationConte
 			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
 				continue
 			}
-
-			query = pager.applyCursors(query, args.after, args.before)
-			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				modify := limitRows(deck.CardsColumn, limit, pager.orderExpr(args.last != nil))
-				query.modifiers = append(query.modifiers, modify)
-			} else {
-				query = pager.applyOrder(query, args.last != nil)
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
 			}
 			path = append(path, edgesField, nodeField)
 			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, op, *field, path, satisfies...); err != nil {
+				if err := query.collectField(ctx, opCtx, *field, path, mayAddCondition(satisfies, "Card")...); err != nil {
 					return err
 				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				modify := limitRows(deck.CardsColumn, limit, pager.orderExpr(query))
+				query.modifiers = append(query.modifiers, modify)
+			} else {
+				query = pager.applyOrder(query)
 			}
 			d.WithNamedCards(alias, func(wq *CardQuery) {
 				*wq = *query
@@ -514,11 +774,42 @@ func (d *DeckQuery) collectField(ctx context.Context, op *graphql.OperationConte
 				path  = append(path, alias)
 				query = (&RevisionClient{config: d.config}).Query()
 			)
-			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
 				return err
 			}
 			d.withRevision = query
+			if _, ok := fieldSeen[deck.FieldRevisionID]; !ok {
+				selectedFields = append(selectedFields, deck.FieldRevisionID)
+				fieldSeen[deck.FieldRevisionID] = struct{}{}
+			}
+		case "key":
+			if _, ok := fieldSeen[deck.FieldKey]; !ok {
+				selectedFields = append(selectedFields, deck.FieldKey)
+				fieldSeen[deck.FieldKey] = struct{}{}
+			}
+		case "revisionID":
+			if _, ok := fieldSeen[deck.FieldRevisionID]; !ok {
+				selectedFields = append(selectedFields, deck.FieldRevisionID)
+				fieldSeen[deck.FieldRevisionID] = struct{}{}
+			}
+		case "nameJa":
+			if _, ok := fieldSeen[deck.FieldNameJa]; !ok {
+				selectedFields = append(selectedFields, deck.FieldNameJa)
+				fieldSeen[deck.FieldNameJa] = struct{}{}
+			}
+		case "nameEn":
+			if _, ok := fieldSeen[deck.FieldNameEn]; !ok {
+				selectedFields = append(selectedFields, deck.FieldNameEn)
+				fieldSeen[deck.FieldNameEn] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
 		}
+	}
+	if !unknownSeen {
+		d.Select(selectedFields...)
 	}
 	return nil
 }
@@ -529,7 +820,7 @@ type deckPaginateArgs struct {
 	opts          []DeckPaginateOption
 }
 
-func newDeckPaginateArgs(rv map[string]interface{}) *deckPaginateArgs {
+func newDeckPaginateArgs(rv map[string]any) *deckPaginateArgs {
 	args := &deckPaginateArgs{}
 	if rv == nil {
 		return args
@@ -564,9 +855,14 @@ func (pr *ProductQuery) CollectFields(ctx context.Context, satisfies ...string) 
 	return pr, nil
 }
 
-func (pr *ProductQuery) collectField(ctx context.Context, op *graphql.OperationContext, field graphql.CollectedField, path []string, satisfies ...string) error {
+func (pr *ProductQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
-	for _, field := range graphql.CollectFields(op, field.Selections, satisfies) {
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(product.Columns))
+		selectedFields = []string{product.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 		case "cards":
 			var (
@@ -578,7 +874,7 @@ func (pr *ProductQuery) collectField(ctx context.Context, op *graphql.OperationC
 			if err := validateFirstLast(args.first, args.last); err != nil {
 				return fmt.Errorf("validate first and last in path %q: %w", path, err)
 			}
-			pager, err := newCardPager(args.opts)
+			pager, err := newCardPager(args.opts, args.last != nil)
 			if err != nil {
 				return fmt.Errorf("create new pager in path %q: %w", path, err)
 			}
@@ -638,19 +934,20 @@ func (pr *ProductQuery) collectField(ctx context.Context, op *graphql.OperationC
 			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
 				continue
 			}
-
-			query = pager.applyCursors(query, args.after, args.before)
-			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				modify := limitRows(product.CardsPrimaryKey[0], limit, pager.orderExpr(args.last != nil))
-				query.modifiers = append(query.modifiers, modify)
-			} else {
-				query = pager.applyOrder(query, args.last != nil)
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
 			}
 			path = append(path, edgesField, nodeField)
 			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, op, *field, path, satisfies...); err != nil {
+				if err := query.collectField(ctx, opCtx, *field, path, mayAddCondition(satisfies, "Card")...); err != nil {
 					return err
 				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				modify := limitRows(product.CardsPrimaryKey[0], limit, pager.orderExpr(query))
+				query.modifiers = append(query.modifiers, modify)
+			} else {
+				query = pager.applyOrder(query)
 			}
 			pr.WithNamedCards(alias, func(wq *CardQuery) {
 				*wq = *query
@@ -661,11 +958,47 @@ func (pr *ProductQuery) collectField(ctx context.Context, op *graphql.OperationC
 				path  = append(path, alias)
 				query = (&RevisionClient{config: pr.config}).Query()
 			)
-			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
 				return err
 			}
 			pr.withRevision = query
+			if _, ok := fieldSeen[product.FieldRevisionID]; !ok {
+				selectedFields = append(selectedFields, product.FieldRevisionID)
+				fieldSeen[product.FieldRevisionID] = struct{}{}
+			}
+		case "revisionID":
+			if _, ok := fieldSeen[product.FieldRevisionID]; !ok {
+				selectedFields = append(selectedFields, product.FieldRevisionID)
+				fieldSeen[product.FieldRevisionID] = struct{}{}
+			}
+		case "isOfficialJa":
+			if _, ok := fieldSeen[product.FieldIsOfficialJa]; !ok {
+				selectedFields = append(selectedFields, product.FieldIsOfficialJa)
+				fieldSeen[product.FieldIsOfficialJa] = struct{}{}
+			}
+		case "nameJa":
+			if _, ok := fieldSeen[product.FieldNameJa]; !ok {
+				selectedFields = append(selectedFields, product.FieldNameJa)
+				fieldSeen[product.FieldNameJa] = struct{}{}
+			}
+		case "nameEn":
+			if _, ok := fieldSeen[product.FieldNameEn]; !ok {
+				selectedFields = append(selectedFields, product.FieldNameEn)
+				fieldSeen[product.FieldNameEn] = struct{}{}
+			}
+		case "publishedYear":
+			if _, ok := fieldSeen[product.FieldPublishedYear]; !ok {
+				selectedFields = append(selectedFields, product.FieldPublishedYear)
+				fieldSeen[product.FieldPublishedYear] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
 		}
+	}
+	if !unknownSeen {
+		pr.Select(selectedFields...)
 	}
 	return nil
 }
@@ -676,7 +1009,7 @@ type productPaginateArgs struct {
 	opts          []ProductPaginateOption
 }
 
-func newProductPaginateArgs(rv map[string]interface{}) *productPaginateArgs {
+func newProductPaginateArgs(rv map[string]any) *productPaginateArgs {
 	args := &productPaginateArgs{}
 	if rv == nil {
 		return args
@@ -711,9 +1044,14 @@ func (r *RevisionQuery) CollectFields(ctx context.Context, satisfies ...string) 
 	return r, nil
 }
 
-func (r *RevisionQuery) collectField(ctx context.Context, op *graphql.OperationContext, field graphql.CollectedField, path []string, satisfies ...string) error {
+func (r *RevisionQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
-	for _, field := range graphql.CollectFields(op, field.Selections, satisfies) {
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(revision.Columns))
+		selectedFields = []string{revision.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 		case "cards":
 			var (
@@ -725,7 +1063,7 @@ func (r *RevisionQuery) collectField(ctx context.Context, op *graphql.OperationC
 			if err := validateFirstLast(args.first, args.last); err != nil {
 				return fmt.Errorf("validate first and last in path %q: %w", path, err)
 			}
-			pager, err := newCardPager(args.opts)
+			pager, err := newCardPager(args.opts, args.last != nil)
 			if err != nil {
 				return fmt.Errorf("create new pager in path %q: %w", path, err)
 			}
@@ -747,7 +1085,7 @@ func (r *RevisionQuery) collectField(ctx context.Context, op *graphql.OperationC
 							Count  int `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(revision.CardsColumn, ids...))
+							s.Where(sql.InValues(s.C(revision.CardsColumn), ids...))
 						})
 						if err := query.GroupBy(revision.CardsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
@@ -781,19 +1119,20 @@ func (r *RevisionQuery) collectField(ctx context.Context, op *graphql.OperationC
 			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
 				continue
 			}
-
-			query = pager.applyCursors(query, args.after, args.before)
-			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				modify := limitRows(revision.CardsColumn, limit, pager.orderExpr(args.last != nil))
-				query.modifiers = append(query.modifiers, modify)
-			} else {
-				query = pager.applyOrder(query, args.last != nil)
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
 			}
 			path = append(path, edgesField, nodeField)
 			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, op, *field, path, satisfies...); err != nil {
+				if err := query.collectField(ctx, opCtx, *field, path, mayAddCondition(satisfies, "Card")...); err != nil {
 					return err
 				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				modify := limitRows(revision.CardsColumn, limit, pager.orderExpr(query))
+				query.modifiers = append(query.modifiers, modify)
+			} else {
+				query = pager.applyOrder(query)
 			}
 			r.WithNamedCards(alias, func(wq *CardQuery) {
 				*wq = *query
@@ -804,7 +1143,7 @@ func (r *RevisionQuery) collectField(ctx context.Context, op *graphql.OperationC
 				path  = append(path, alias)
 				query = (&ProductClient{config: r.config}).Query()
 			)
-			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
 				return err
 			}
 			r.WithNamedProducts(alias, func(wq *ProductQuery) {
@@ -816,13 +1155,35 @@ func (r *RevisionQuery) collectField(ctx context.Context, op *graphql.OperationC
 				path  = append(path, alias)
 				query = (&DeckClient{config: r.config}).Query()
 			)
-			if err := query.collectField(ctx, op, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
 				return err
 			}
 			r.WithNamedDecks(alias, func(wq *DeckQuery) {
 				*wq = *query
 			})
+		case "key":
+			if _, ok := fieldSeen[revision.FieldKey]; !ok {
+				selectedFields = append(selectedFields, revision.FieldKey)
+				fieldSeen[revision.FieldKey] = struct{}{}
+			}
+		case "nameJa":
+			if _, ok := fieldSeen[revision.FieldNameJa]; !ok {
+				selectedFields = append(selectedFields, revision.FieldNameJa)
+				fieldSeen[revision.FieldNameJa] = struct{}{}
+			}
+		case "nameEn":
+			if _, ok := fieldSeen[revision.FieldNameEn]; !ok {
+				selectedFields = append(selectedFields, revision.FieldNameEn)
+				fieldSeen[revision.FieldNameEn] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
 		}
+	}
+	if !unknownSeen {
+		r.Select(selectedFields...)
 	}
 	return nil
 }
@@ -833,7 +1194,7 @@ type revisionPaginateArgs struct {
 	opts          []RevisionPaginateOption
 }
 
-func newRevisionPaginateArgs(rv map[string]interface{}) *revisionPaginateArgs {
+func newRevisionPaginateArgs(rv map[string]any) *revisionPaginateArgs {
 	args := &revisionPaginateArgs{}
 	if rv == nil {
 		return args
@@ -867,35 +1228,18 @@ const (
 	whereField     = "where"
 )
 
-func fieldArgs(ctx context.Context, whereInput interface{}, path ...string) map[string]interface{} {
-	fc := graphql.GetFieldContext(ctx)
-	if fc == nil {
+func fieldArgs(ctx context.Context, whereInput any, path ...string) map[string]any {
+	field := collectedField(ctx, path...)
+	if field == nil || field.Arguments == nil {
 		return nil
 	}
 	oc := graphql.GetOperationContext(ctx)
-	for _, name := range path {
-		var field *graphql.CollectedField
-		for _, f := range graphql.CollectFields(oc, fc.Field.Selections, nil) {
-			if f.Alias == name {
-				field = &f
-				break
-			}
-		}
-		if field == nil {
-			return nil
-		}
-		cf, err := fc.Child(ctx, *field)
-		if err != nil {
-			args := field.ArgumentMap(oc.Variables)
-			return unmarshalArgs(ctx, whereInput, args)
-		}
-		fc = cf
-	}
-	return fc.Args
+	args := field.ArgumentMap(oc.Variables)
+	return unmarshalArgs(ctx, whereInput, args)
 }
 
 // unmarshalArgs allows extracting the field arguments from their raw representation.
-func unmarshalArgs(ctx context.Context, whereInput interface{}, args map[string]interface{}) map[string]interface{} {
+func unmarshalArgs(ctx context.Context, whereInput any, args map[string]any) map[string]any {
 	for _, k := range []string{firstField, lastField} {
 		v, ok := args[k]
 		if !ok {
@@ -946,4 +1290,18 @@ func limitRows(partitionBy string, limit int, orderBy ...sql.Querier) func(s *sq
 			Where(sql.LTE(t.C("row_number"), limit)).
 			Prefix(with)
 	}
+}
+
+// mayAddCondition appends another type condition to the satisfies list
+// if condition is enabled (Node/Nodes) and it does not exist in the list.
+func mayAddCondition(satisfies []string, typeCond string) []string {
+	if len(satisfies) == 0 {
+		return satisfies
+	}
+	for _, s := range satisfies {
+		if typeCond == s {
+			return satisfies
+		}
+	}
+	return append(satisfies, typeCond)
 }

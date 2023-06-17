@@ -96,7 +96,7 @@ func (dc *DeckCreate) Mutation() *DeckMutation {
 
 // Save creates the Deck in the database.
 func (dc *DeckCreate) Save(ctx context.Context) (*Deck, error) {
-	return withHooks[*Deck, DeckMutation](ctx, dc.sqlSave, dc.mutation, dc.hooks)
+	return withHooks(ctx, dc.sqlSave, dc.mutation, dc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -456,8 +456,8 @@ func (dcb *DeckCreateBulk) Save(ctx context.Context) ([]*Deck, error) {
 					return nil, err
 				}
 				builder.mutation = mutation
-				nodes[i], specs[i] = builder.createSpec()
 				var err error
+				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
 					_, err = mutators[i+1].Mutate(root, dcb.builders[i+1].mutation)
 				} else {

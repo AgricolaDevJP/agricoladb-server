@@ -21,7 +21,7 @@ import (
 type ProductQuery struct {
 	config
 	ctx            *QueryContext
-	order          []OrderFunc
+	order          []product.OrderOption
 	inters         []Interceptor
 	predicates     []predicate.Product
 	withCards      *CardQuery
@@ -60,7 +60,7 @@ func (pq *ProductQuery) Unique(unique bool) *ProductQuery {
 }
 
 // Order specifies how the records should be ordered.
-func (pq *ProductQuery) Order(o ...OrderFunc) *ProductQuery {
+func (pq *ProductQuery) Order(o ...product.OrderOption) *ProductQuery {
 	pq.order = append(pq.order, o...)
 	return pq
 }
@@ -298,7 +298,7 @@ func (pq *ProductQuery) Clone() *ProductQuery {
 	return &ProductQuery{
 		config:       pq.config,
 		ctx:          pq.ctx.Clone(),
-		order:        append([]OrderFunc{}, pq.order...),
+		order:        append([]product.OrderOption{}, pq.order...),
 		inters:       append([]Interceptor{}, pq.inters...),
 		predicates:   append([]predicate.Product{}, pq.predicates...),
 		withCards:    pq.withCards.Clone(),
@@ -581,6 +581,9 @@ func (pq *ProductQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != product.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if pq.withRevision != nil {
+			_spec.Node.AddColumnOnce(product.FieldRevisionID)
 		}
 	}
 	if ps := pq.predicates; len(ps) > 0 {

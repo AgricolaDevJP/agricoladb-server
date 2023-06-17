@@ -20,7 +20,7 @@ import (
 type CardSpecialColorQuery struct {
 	config
 	ctx            *QueryContext
-	order          []OrderFunc
+	order          []cardspecialcolor.OrderOption
 	inters         []Interceptor
 	predicates     []predicate.CardSpecialColor
 	withCards      *CardQuery
@@ -58,7 +58,7 @@ func (cscq *CardSpecialColorQuery) Unique(unique bool) *CardSpecialColorQuery {
 }
 
 // Order specifies how the records should be ordered.
-func (cscq *CardSpecialColorQuery) Order(o ...OrderFunc) *CardSpecialColorQuery {
+func (cscq *CardSpecialColorQuery) Order(o ...cardspecialcolor.OrderOption) *CardSpecialColorQuery {
 	cscq.order = append(cscq.order, o...)
 	return cscq
 }
@@ -274,7 +274,7 @@ func (cscq *CardSpecialColorQuery) Clone() *CardSpecialColorQuery {
 	return &CardSpecialColorQuery{
 		config:     cscq.config,
 		ctx:        cscq.ctx.Clone(),
-		order:      append([]OrderFunc{}, cscq.order...),
+		order:      append([]cardspecialcolor.OrderOption{}, cscq.order...),
 		inters:     append([]Interceptor{}, cscq.inters...),
 		predicates: append([]predicate.CardSpecialColor{}, cscq.predicates...),
 		withCards:  cscq.withCards.Clone(),
@@ -430,8 +430,11 @@ func (cscq *CardSpecialColorQuery) loadCards(ctx context.Context, query *CardQue
 			init(nodes[i])
 		}
 	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(card.FieldCardSpecialColorID)
+	}
 	query.Where(predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.InValues(cardspecialcolor.CardsColumn, fks...))
+		s.Where(sql.InValues(s.C(cardspecialcolor.CardsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -441,7 +444,7 @@ func (cscq *CardSpecialColorQuery) loadCards(ctx context.Context, query *CardQue
 		fk := n.CardSpecialColorID
 		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "card_special_color_id" returned %v for node %v`, fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "card_special_color_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}

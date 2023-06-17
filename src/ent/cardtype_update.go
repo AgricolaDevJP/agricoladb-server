@@ -111,7 +111,7 @@ func (ctu *CardTypeUpdate) RemoveCards(c ...*Card) *CardTypeUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ctu *CardTypeUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks[int, CardTypeMutation](ctx, ctu.sqlSave, ctu.mutation, ctu.hooks)
+	return withHooks(ctx, ctu.sqlSave, ctu.mutation, ctu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -318,7 +318,7 @@ func (ctuo *CardTypeUpdateOne) Select(field string, fields ...string) *CardTypeU
 
 // Save executes the query and returns the updated CardType entity.
 func (ctuo *CardTypeUpdateOne) Save(ctx context.Context) (*CardType, error) {
-	return withHooks[*CardType, CardTypeMutation](ctx, ctuo.sqlSave, ctuo.mutation, ctuo.hooks)
+	return withHooks(ctx, ctuo.sqlSave, ctuo.mutation, ctuo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.

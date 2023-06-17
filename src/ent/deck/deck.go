@@ -2,6 +2,11 @@
 
 package deck
 
+import (
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+)
+
 const (
 	// Label holds the string label denoting the deck type in the database.
 	Label = "deck"
@@ -60,3 +65,66 @@ var (
 	// KeyValidator is a validator for the "key" field. It is called by the builders before save.
 	KeyValidator func(string) error
 )
+
+// OrderOption defines the ordering options for the Deck queries.
+type OrderOption func(*sql.Selector)
+
+// ByID orders the results by the id field.
+func ByID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByKey orders the results by the key field.
+func ByKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldKey, opts...).ToFunc()
+}
+
+// ByRevisionID orders the results by the revision_id field.
+func ByRevisionID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRevisionID, opts...).ToFunc()
+}
+
+// ByNameJa orders the results by the name_ja field.
+func ByNameJa(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNameJa, opts...).ToFunc()
+}
+
+// ByNameEn orders the results by the name_en field.
+func ByNameEn(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNameEn, opts...).ToFunc()
+}
+
+// ByCardsCount orders the results by cards count.
+func ByCardsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCardsStep(), opts...)
+	}
+}
+
+// ByCards orders the results by cards terms.
+func ByCards(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCardsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByRevisionField orders the results by revision field.
+func ByRevisionField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRevisionStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newCardsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CardsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CardsTable, CardsColumn),
+	)
+}
+func newRevisionStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RevisionInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, RevisionTable, RevisionColumn),
+	)
+}

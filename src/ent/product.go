@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/AgricolaDevJP/agricoladb-server/ent/product"
 	"github.com/AgricolaDevJP/agricoladb-server/ent/revision"
@@ -28,7 +29,8 @@ type Product struct {
 	PublishedYear int `json:"published_year,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProductQuery when eager-loading is set.
-	Edges ProductEdges `json:"edges"`
+	Edges        ProductEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // ProductEdges holds the relations/edges for other nodes in the graph.
@@ -80,7 +82,7 @@ func (*Product) scanValues(columns []string) ([]any, error) {
 		case product.FieldNameJa, product.FieldNameEn:
 			values[i] = new(sql.NullString)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type Product", columns[i])
+			values[i] = new(sql.UnknownType)
 		}
 	}
 	return values, nil
@@ -130,9 +132,17 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.PublishedYear = int(value.Int64)
 			}
+		default:
+			pr.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
+}
+
+// Value returns the ent.Value that was dynamically selected and assigned to the Product.
+// This includes values selected through modifiers, order, etc.
+func (pr *Product) Value(name string) (ent.Value, error) {
+	return pr.selectValues.Get(name)
 }
 
 // QueryCards queries the "cards" edge of the Product entity.

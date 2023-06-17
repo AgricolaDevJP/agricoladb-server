@@ -20,7 +20,7 @@ import (
 type CardTypeQuery struct {
 	config
 	ctx            *QueryContext
-	order          []OrderFunc
+	order          []cardtype.OrderOption
 	inters         []Interceptor
 	predicates     []predicate.CardType
 	withCards      *CardQuery
@@ -58,7 +58,7 @@ func (ctq *CardTypeQuery) Unique(unique bool) *CardTypeQuery {
 }
 
 // Order specifies how the records should be ordered.
-func (ctq *CardTypeQuery) Order(o ...OrderFunc) *CardTypeQuery {
+func (ctq *CardTypeQuery) Order(o ...cardtype.OrderOption) *CardTypeQuery {
 	ctq.order = append(ctq.order, o...)
 	return ctq
 }
@@ -274,7 +274,7 @@ func (ctq *CardTypeQuery) Clone() *CardTypeQuery {
 	return &CardTypeQuery{
 		config:     ctq.config,
 		ctx:        ctq.ctx.Clone(),
-		order:      append([]OrderFunc{}, ctq.order...),
+		order:      append([]cardtype.OrderOption{}, ctq.order...),
 		inters:     append([]Interceptor{}, ctq.inters...),
 		predicates: append([]predicate.CardType{}, ctq.predicates...),
 		withCards:  ctq.withCards.Clone(),
@@ -430,8 +430,11 @@ func (ctq *CardTypeQuery) loadCards(ctx context.Context, query *CardQuery, nodes
 			init(nodes[i])
 		}
 	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(card.FieldCardTypeID)
+	}
 	query.Where(predicate.Card(func(s *sql.Selector) {
-		s.Where(sql.InValues(cardtype.CardsColumn, fks...))
+		s.Where(sql.InValues(s.C(cardtype.CardsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -441,7 +444,7 @@ func (ctq *CardTypeQuery) loadCards(ctx context.Context, query *CardQuery, nodes
 		fk := n.CardTypeID
 		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "card_type_id" returned %v for node %v`, fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "card_type_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}

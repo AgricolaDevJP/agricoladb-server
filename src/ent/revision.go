@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/AgricolaDevJP/agricoladb-server/ent/revision"
 )
@@ -23,7 +24,8 @@ type Revision struct {
 	NameEn string `json:"name_en,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RevisionQuery when eager-loading is set.
-	Edges RevisionEdges `json:"edges"`
+	Edges        RevisionEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // RevisionEdges holds the relations/edges for other nodes in the graph.
@@ -82,7 +84,7 @@ func (*Revision) scanValues(columns []string) ([]any, error) {
 		case revision.FieldKey, revision.FieldNameJa, revision.FieldNameEn:
 			values[i] = new(sql.NullString)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type Revision", columns[i])
+			values[i] = new(sql.UnknownType)
 		}
 	}
 	return values, nil
@@ -120,9 +122,17 @@ func (r *Revision) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				r.NameEn = value.String
 			}
+		default:
+			r.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
+}
+
+// Value returns the ent.Value that was dynamically selected and assigned to the Revision.
+// This includes values selected through modifiers, order, etc.
+func (r *Revision) Value(name string) (ent.Value, error) {
+	return r.selectValues.Get(name)
 }
 
 // QueryCards queries the "cards" edge of the Revision entity.

@@ -27,7 +27,7 @@ func (cscd *CardSpecialColorDelete) Where(ps ...predicate.CardSpecialColor) *Car
 
 // Exec executes the deletion query and returns how many vertices were deleted.
 func (cscd *CardSpecialColorDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks[int, CardSpecialColorMutation](ctx, cscd.sqlExec, cscd.mutation, cscd.hooks)
+	return withHooks(ctx, cscd.sqlExec, cscd.mutation, cscd.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
