@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	entgo.io/ent v0.12.3
-	github.com/99designs/gqlgen v0.17.33
+	github.com/99designs/gqlgen v0.17.34
 	github.com/aws/aws-lambda-go v1.41.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.14.0
 	github.com/hashicorp/go-multierror v1.1.1
