@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - id: needs-test-go
-        uses: tj-actions/changed-files@v37
+        uses: tj-actions/changed-files@v39
         with:
           files: |
             .github/workflows/test-go.yml
@@ -24,7 +24,7 @@ jobs:
             src/go.sum
             src/initdb/masterdata/*.csv
       - id: needs-test-ent
-        uses: tj-actions/changed-files@v37
+        uses: tj-actions/changed-files@v39
         with:
           files: |
             .github/workflows/test-ent.yml
@@ -32,13 +32,13 @@ jobs:
             src/go.mod
             src/go.sum
       - id: needs-test-actions
-        uses: tj-actions/changed-files@v37
+        uses: tj-actions/changed-files@v39
         with:
           files: |
             .github/workflows/*.yml
             .github/actionlint-matcher.json
       - id: needs-test-terraform
-        uses: tj-actions/changed-files@v37
+        uses: tj-actions/changed-files@v39
         with:
           files: |
             terraform/**/*
