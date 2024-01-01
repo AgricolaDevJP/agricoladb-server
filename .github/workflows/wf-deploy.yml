@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: aws-actions/configure-aws-credentials@v2
+      - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::131551699606:role/agricoladb-server-github-actions-role
           aws-region: ap-northeast-1
@@ -49,7 +49,7 @@ jobs:
       url: https://api.db.agricolajp.dev
     steps:
       - uses: actions/checkout@v4
-      - uses: aws-actions/configure-aws-credentials@v2
+      - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::131551699606:role/agricoladb-server-github-actions-role
           aws-region: ap-northeast-1
