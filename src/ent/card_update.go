@@ -97,6 +97,14 @@ func (cu *CardUpdate) SetCardTypeID(i int) *CardUpdate {
 	return cu
 }
 
+// SetNillableCardTypeID sets the "card_type_id" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableCardTypeID(i *int) *CardUpdate {
+	if i != nil {
+		cu.SetCardTypeID(*i)
+	}
+	return cu
+}
+
 // SetCardSpecialColorID sets the "card_special_color_id" field.
 func (cu *CardUpdate) SetCardSpecialColorID(i int) *CardUpdate {
 	cu.mutation.SetCardSpecialColorID(i)
@@ -270,6 +278,14 @@ func (cu *CardUpdate) SetIsOfficialJa(b bool) *CardUpdate {
 	return cu
 }
 
+// SetNillableIsOfficialJa sets the "is_official_ja" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableIsOfficialJa(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetIsOfficialJa(*b)
+	}
+	return cu
+}
+
 // SetVictoryPoint sets the "victory_point" field.
 func (cu *CardUpdate) SetVictoryPoint(i int) *CardUpdate {
 	cu.mutation.ResetVictoryPoint()
@@ -323,9 +339,25 @@ func (cu *CardUpdate) SetHasArrow(b bool) *CardUpdate {
 	return cu
 }
 
+// SetNillableHasArrow sets the "has_arrow" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableHasArrow(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetHasArrow(*b)
+	}
+	return cu
+}
+
 // SetHasBonusPointIcon sets the "has_bonus_point_icon" field.
 func (cu *CardUpdate) SetHasBonusPointIcon(b bool) *CardUpdate {
 	cu.mutation.SetHasBonusPointIcon(b)
+	return cu
+}
+
+// SetNillableHasBonusPointIcon sets the "has_bonus_point_icon" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableHasBonusPointIcon(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetHasBonusPointIcon(*b)
+	}
 	return cu
 }
 
@@ -335,9 +367,25 @@ func (cu *CardUpdate) SetHasNegativeBonusPointIcon(b bool) *CardUpdate {
 	return cu
 }
 
+// SetNillableHasNegativeBonusPointIcon sets the "has_negative_bonus_point_icon" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableHasNegativeBonusPointIcon(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetHasNegativeBonusPointIcon(*b)
+	}
+	return cu
+}
+
 // SetHasPanIcon sets the "has_pan_icon" field.
 func (cu *CardUpdate) SetHasPanIcon(b bool) *CardUpdate {
 	cu.mutation.SetHasPanIcon(b)
+	return cu
+}
+
+// SetNillableHasPanIcon sets the "has_pan_icon" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableHasPanIcon(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetHasPanIcon(*b)
+	}
 	return cu
 }
 
@@ -347,9 +395,25 @@ func (cu *CardUpdate) SetHasBreadIcon(b bool) *CardUpdate {
 	return cu
 }
 
+// SetNillableHasBreadIcon sets the "has_bread_icon" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableHasBreadIcon(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetHasBreadIcon(*b)
+	}
+	return cu
+}
+
 // SetHasFarmPlannerIcon sets the "has_farm_planner_icon" field.
 func (cu *CardUpdate) SetHasFarmPlannerIcon(b bool) *CardUpdate {
 	cu.mutation.SetHasFarmPlannerIcon(b)
+	return cu
+}
+
+// SetNillableHasFarmPlannerIcon sets the "has_farm_planner_icon" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableHasFarmPlannerIcon(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetHasFarmPlannerIcon(*b)
+	}
 	return cu
 }
 
@@ -359,9 +423,25 @@ func (cu *CardUpdate) SetHasActionsBoosterIcon(b bool) *CardUpdate {
 	return cu
 }
 
+// SetNillableHasActionsBoosterIcon sets the "has_actions_booster_icon" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableHasActionsBoosterIcon(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetHasActionsBoosterIcon(*b)
+	}
+	return cu
+}
+
 // SetHasPointsProviderIcon sets the "has_points_provider_icon" field.
 func (cu *CardUpdate) SetHasPointsProviderIcon(b bool) *CardUpdate {
 	cu.mutation.SetHasPointsProviderIcon(b)
+	return cu
+}
+
+// SetNillableHasPointsProviderIcon sets the "has_points_provider_icon" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableHasPointsProviderIcon(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetHasPointsProviderIcon(*b)
+	}
 	return cu
 }
 
@@ -371,9 +451,25 @@ func (cu *CardUpdate) SetHasGoodsProviderIcon(b bool) *CardUpdate {
 	return cu
 }
 
+// SetNillableHasGoodsProviderIcon sets the "has_goods_provider_icon" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableHasGoodsProviderIcon(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetHasGoodsProviderIcon(*b)
+	}
+	return cu
+}
+
 // SetHasFoodProviderIcon sets the "has_food_provider_icon" field.
 func (cu *CardUpdate) SetHasFoodProviderIcon(b bool) *CardUpdate {
 	cu.mutation.SetHasFoodProviderIcon(b)
+	return cu
+}
+
+// SetNillableHasFoodProviderIcon sets the "has_food_provider_icon" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableHasFoodProviderIcon(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetHasFoodProviderIcon(*b)
+	}
 	return cu
 }
 
@@ -383,9 +479,25 @@ func (cu *CardUpdate) SetHasCropProviderIcon(b bool) *CardUpdate {
 	return cu
 }
 
+// SetNillableHasCropProviderIcon sets the "has_crop_provider_icon" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableHasCropProviderIcon(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetHasCropProviderIcon(*b)
+	}
+	return cu
+}
+
 // SetHasBuildingResourceProviderIcon sets the "has_building_resource_provider_icon" field.
 func (cu *CardUpdate) SetHasBuildingResourceProviderIcon(b bool) *CardUpdate {
 	cu.mutation.SetHasBuildingResourceProviderIcon(b)
+	return cu
+}
+
+// SetNillableHasBuildingResourceProviderIcon sets the "has_building_resource_provider_icon" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableHasBuildingResourceProviderIcon(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetHasBuildingResourceProviderIcon(*b)
+	}
 	return cu
 }
 
@@ -395,9 +507,25 @@ func (cu *CardUpdate) SetHasLivestockProviderIcon(b bool) *CardUpdate {
 	return cu
 }
 
+// SetNillableHasLivestockProviderIcon sets the "has_livestock_provider_icon" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableHasLivestockProviderIcon(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetHasLivestockProviderIcon(*b)
+	}
+	return cu
+}
+
 // SetHasCutPeatIcon sets the "has_cut_peat_icon" field.
 func (cu *CardUpdate) SetHasCutPeatIcon(b bool) *CardUpdate {
 	cu.mutation.SetHasCutPeatIcon(b)
+	return cu
+}
+
+// SetNillableHasCutPeatIcon sets the "has_cut_peat_icon" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableHasCutPeatIcon(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetHasCutPeatIcon(*b)
+	}
 	return cu
 }
 
@@ -407,15 +535,39 @@ func (cu *CardUpdate) SetHasFellTreesIcon(b bool) *CardUpdate {
 	return cu
 }
 
+// SetNillableHasFellTreesIcon sets the "has_fell_trees_icon" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableHasFellTreesIcon(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetHasFellTreesIcon(*b)
+	}
+	return cu
+}
+
 // SetHasSlashAndBurnIcon sets the "has_slash_and_burn_icon" field.
 func (cu *CardUpdate) SetHasSlashAndBurnIcon(b bool) *CardUpdate {
 	cu.mutation.SetHasSlashAndBurnIcon(b)
 	return cu
 }
 
+// SetNillableHasSlashAndBurnIcon sets the "has_slash_and_burn_icon" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableHasSlashAndBurnIcon(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetHasSlashAndBurnIcon(*b)
+	}
+	return cu
+}
+
 // SetHasHiringFareIcon sets the "has_hiring_fare_icon" field.
 func (cu *CardUpdate) SetHasHiringFareIcon(b bool) *CardUpdate {
 	cu.mutation.SetHasHiringFareIcon(b)
+	return cu
+}
+
+// SetNillableHasHiringFareIcon sets the "has_hiring_fare_icon" field if the given value is not nil.
+func (cu *CardUpdate) SetNillableHasHiringFareIcon(b *bool) *CardUpdate {
+	if b != nil {
+		cu.SetHasHiringFareIcon(*b)
+	}
 	return cu
 }
 
@@ -1049,6 +1201,14 @@ func (cuo *CardUpdateOne) SetCardTypeID(i int) *CardUpdateOne {
 	return cuo
 }
 
+// SetNillableCardTypeID sets the "card_type_id" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableCardTypeID(i *int) *CardUpdateOne {
+	if i != nil {
+		cuo.SetCardTypeID(*i)
+	}
+	return cuo
+}
+
 // SetCardSpecialColorID sets the "card_special_color_id" field.
 func (cuo *CardUpdateOne) SetCardSpecialColorID(i int) *CardUpdateOne {
 	cuo.mutation.SetCardSpecialColorID(i)
@@ -1222,6 +1382,14 @@ func (cuo *CardUpdateOne) SetIsOfficialJa(b bool) *CardUpdateOne {
 	return cuo
 }
 
+// SetNillableIsOfficialJa sets the "is_official_ja" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableIsOfficialJa(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetIsOfficialJa(*b)
+	}
+	return cuo
+}
+
 // SetVictoryPoint sets the "victory_point" field.
 func (cuo *CardUpdateOne) SetVictoryPoint(i int) *CardUpdateOne {
 	cuo.mutation.ResetVictoryPoint()
@@ -1275,9 +1443,25 @@ func (cuo *CardUpdateOne) SetHasArrow(b bool) *CardUpdateOne {
 	return cuo
 }
 
+// SetNillableHasArrow sets the "has_arrow" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableHasArrow(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetHasArrow(*b)
+	}
+	return cuo
+}
+
 // SetHasBonusPointIcon sets the "has_bonus_point_icon" field.
 func (cuo *CardUpdateOne) SetHasBonusPointIcon(b bool) *CardUpdateOne {
 	cuo.mutation.SetHasBonusPointIcon(b)
+	return cuo
+}
+
+// SetNillableHasBonusPointIcon sets the "has_bonus_point_icon" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableHasBonusPointIcon(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetHasBonusPointIcon(*b)
+	}
 	return cuo
 }
 
@@ -1287,9 +1471,25 @@ func (cuo *CardUpdateOne) SetHasNegativeBonusPointIcon(b bool) *CardUpdateOne {
 	return cuo
 }
 
+// SetNillableHasNegativeBonusPointIcon sets the "has_negative_bonus_point_icon" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableHasNegativeBonusPointIcon(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetHasNegativeBonusPointIcon(*b)
+	}
+	return cuo
+}
+
 // SetHasPanIcon sets the "has_pan_icon" field.
 func (cuo *CardUpdateOne) SetHasPanIcon(b bool) *CardUpdateOne {
 	cuo.mutation.SetHasPanIcon(b)
+	return cuo
+}
+
+// SetNillableHasPanIcon sets the "has_pan_icon" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableHasPanIcon(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetHasPanIcon(*b)
+	}
 	return cuo
 }
 
@@ -1299,9 +1499,25 @@ func (cuo *CardUpdateOne) SetHasBreadIcon(b bool) *CardUpdateOne {
 	return cuo
 }
 
+// SetNillableHasBreadIcon sets the "has_bread_icon" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableHasBreadIcon(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetHasBreadIcon(*b)
+	}
+	return cuo
+}
+
 // SetHasFarmPlannerIcon sets the "has_farm_planner_icon" field.
 func (cuo *CardUpdateOne) SetHasFarmPlannerIcon(b bool) *CardUpdateOne {
 	cuo.mutation.SetHasFarmPlannerIcon(b)
+	return cuo
+}
+
+// SetNillableHasFarmPlannerIcon sets the "has_farm_planner_icon" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableHasFarmPlannerIcon(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetHasFarmPlannerIcon(*b)
+	}
 	return cuo
 }
 
@@ -1311,9 +1527,25 @@ func (cuo *CardUpdateOne) SetHasActionsBoosterIcon(b bool) *CardUpdateOne {
 	return cuo
 }
 
+// SetNillableHasActionsBoosterIcon sets the "has_actions_booster_icon" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableHasActionsBoosterIcon(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetHasActionsBoosterIcon(*b)
+	}
+	return cuo
+}
+
 // SetHasPointsProviderIcon sets the "has_points_provider_icon" field.
 func (cuo *CardUpdateOne) SetHasPointsProviderIcon(b bool) *CardUpdateOne {
 	cuo.mutation.SetHasPointsProviderIcon(b)
+	return cuo
+}
+
+// SetNillableHasPointsProviderIcon sets the "has_points_provider_icon" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableHasPointsProviderIcon(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetHasPointsProviderIcon(*b)
+	}
 	return cuo
 }
 
@@ -1323,9 +1555,25 @@ func (cuo *CardUpdateOne) SetHasGoodsProviderIcon(b bool) *CardUpdateOne {
 	return cuo
 }
 
+// SetNillableHasGoodsProviderIcon sets the "has_goods_provider_icon" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableHasGoodsProviderIcon(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetHasGoodsProviderIcon(*b)
+	}
+	return cuo
+}
+
 // SetHasFoodProviderIcon sets the "has_food_provider_icon" field.
 func (cuo *CardUpdateOne) SetHasFoodProviderIcon(b bool) *CardUpdateOne {
 	cuo.mutation.SetHasFoodProviderIcon(b)
+	return cuo
+}
+
+// SetNillableHasFoodProviderIcon sets the "has_food_provider_icon" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableHasFoodProviderIcon(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetHasFoodProviderIcon(*b)
+	}
 	return cuo
 }
 
@@ -1335,9 +1583,25 @@ func (cuo *CardUpdateOne) SetHasCropProviderIcon(b bool) *CardUpdateOne {
 	return cuo
 }
 
+// SetNillableHasCropProviderIcon sets the "has_crop_provider_icon" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableHasCropProviderIcon(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetHasCropProviderIcon(*b)
+	}
+	return cuo
+}
+
 // SetHasBuildingResourceProviderIcon sets the "has_building_resource_provider_icon" field.
 func (cuo *CardUpdateOne) SetHasBuildingResourceProviderIcon(b bool) *CardUpdateOne {
 	cuo.mutation.SetHasBuildingResourceProviderIcon(b)
+	return cuo
+}
+
+// SetNillableHasBuildingResourceProviderIcon sets the "has_building_resource_provider_icon" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableHasBuildingResourceProviderIcon(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetHasBuildingResourceProviderIcon(*b)
+	}
 	return cuo
 }
 
@@ -1347,9 +1611,25 @@ func (cuo *CardUpdateOne) SetHasLivestockProviderIcon(b bool) *CardUpdateOne {
 	return cuo
 }
 
+// SetNillableHasLivestockProviderIcon sets the "has_livestock_provider_icon" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableHasLivestockProviderIcon(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetHasLivestockProviderIcon(*b)
+	}
+	return cuo
+}
+
 // SetHasCutPeatIcon sets the "has_cut_peat_icon" field.
 func (cuo *CardUpdateOne) SetHasCutPeatIcon(b bool) *CardUpdateOne {
 	cuo.mutation.SetHasCutPeatIcon(b)
+	return cuo
+}
+
+// SetNillableHasCutPeatIcon sets the "has_cut_peat_icon" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableHasCutPeatIcon(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetHasCutPeatIcon(*b)
+	}
 	return cuo
 }
 
@@ -1359,15 +1639,39 @@ func (cuo *CardUpdateOne) SetHasFellTreesIcon(b bool) *CardUpdateOne {
 	return cuo
 }
 
+// SetNillableHasFellTreesIcon sets the "has_fell_trees_icon" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableHasFellTreesIcon(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetHasFellTreesIcon(*b)
+	}
+	return cuo
+}
+
 // SetHasSlashAndBurnIcon sets the "has_slash_and_burn_icon" field.
 func (cuo *CardUpdateOne) SetHasSlashAndBurnIcon(b bool) *CardUpdateOne {
 	cuo.mutation.SetHasSlashAndBurnIcon(b)
 	return cuo
 }
 
+// SetNillableHasSlashAndBurnIcon sets the "has_slash_and_burn_icon" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableHasSlashAndBurnIcon(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetHasSlashAndBurnIcon(*b)
+	}
+	return cuo
+}
+
 // SetHasHiringFareIcon sets the "has_hiring_fare_icon" field.
 func (cuo *CardUpdateOne) SetHasHiringFareIcon(b bool) *CardUpdateOne {
 	cuo.mutation.SetHasHiringFareIcon(b)
+	return cuo
+}
+
+// SetNillableHasHiringFareIcon sets the "has_hiring_fare_icon" field if the given value is not nil.
+func (cuo *CardUpdateOne) SetNillableHasHiringFareIcon(b *bool) *CardUpdateOne {
+	if b != nil {
+		cuo.SetHasHiringFareIcon(*b)
+	}
 	return cuo
 }
 

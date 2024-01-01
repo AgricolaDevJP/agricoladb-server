@@ -1639,6 +1639,7 @@ func (m *CardMutation) ResetHasHiringFareIcon() {
 // ClearRevision clears the "revision" edge to the Revision entity.
 func (m *CardMutation) ClearRevision() {
 	m.clearedrevision = true
+	m.clearedFields[card.FieldRevisionID] = struct{}{}
 }
 
 // RevisionCleared reports if the "revision" edge to the Revision entity was cleared.
@@ -1719,6 +1720,7 @@ func (m *CardMutation) ResetProducts() {
 // ClearDeck clears the "deck" edge to the Deck entity.
 func (m *CardMutation) ClearDeck() {
 	m.cleareddeck = true
+	m.clearedFields[card.FieldDeckID] = struct{}{}
 }
 
 // DeckCleared reports if the "deck" edge to the Deck entity was cleared.
@@ -1745,6 +1747,7 @@ func (m *CardMutation) ResetDeck() {
 // ClearCardType clears the "card_type" edge to the CardType entity.
 func (m *CardMutation) ClearCardType() {
 	m.clearedcard_type = true
+	m.clearedFields[card.FieldCardTypeID] = struct{}{}
 }
 
 // CardTypeCleared reports if the "card_type" edge to the CardType entity was cleared.
@@ -1771,6 +1774,7 @@ func (m *CardMutation) ResetCardType() {
 // ClearCardSpecialColor clears the "card_special_color" edge to the CardSpecialColor entity.
 func (m *CardMutation) ClearCardSpecialColor() {
 	m.clearedcard_special_color = true
+	m.clearedFields[card.FieldCardSpecialColorID] = struct{}{}
 }
 
 // CardSpecialColorCleared reports if the "card_special_color" edge to the CardSpecialColor entity was cleared.
@@ -4409,6 +4413,7 @@ func (m *DeckMutation) ResetCards() {
 // ClearRevision clears the "revision" edge to the Revision entity.
 func (m *DeckMutation) ClearRevision() {
 	m.clearedrevision = true
+	m.clearedFields[deck.FieldRevisionID] = struct{}{}
 }
 
 // RevisionCleared reports if the "revision" edge to the Revision entity was cleared.
@@ -5157,6 +5162,7 @@ func (m *ProductMutation) ResetCards() {
 // ClearRevision clears the "revision" edge to the Revision entity.
 func (m *ProductMutation) ClearRevision() {
 	m.clearedrevision = true
+	m.clearedFields[product.FieldRevisionID] = struct{}{}
 }
 
 // RevisionCleared reports if the "revision" edge to the Revision entity was cleared.
