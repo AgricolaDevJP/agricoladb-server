@@ -13,7 +13,7 @@ jobs:
       needs-test-terraform: ${{ steps.needs-test-terraform.outputs.any_changed }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - id: needs-test-go
         uses: tj-actions/changed-files@v37
         with:
