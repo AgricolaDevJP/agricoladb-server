@@ -20,7 +20,7 @@ jobs:
           role-to-assume: arn:aws:iam::131551699606:role/agricoladb-server-github-actions-role
           aws-region: ap-northeast-1
       - name: set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
         with:
           platforms: linux/arm64/v8
       - name: set up Docker Buildx
