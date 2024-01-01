@@ -14,7 +14,7 @@ jobs:
   push-ecr:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: arn:aws:iam::131551699606:role/agricoladb-server-github-actions-role
@@ -48,7 +48,7 @@ jobs:
       name: production
       url: https://api.db.agricolajp.dev
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: arn:aws:iam::131551699606:role/agricoladb-server-github-actions-role
