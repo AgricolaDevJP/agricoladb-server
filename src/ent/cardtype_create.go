@@ -397,12 +397,16 @@ func (u *CardTypeUpsertOne) IDX(ctx context.Context) int {
 // CardTypeCreateBulk is the builder for creating many CardType entities in bulk.
 type CardTypeCreateBulk struct {
 	config
+	err      error
 	builders []*CardTypeCreate
 	conflict []sql.ConflictOption
 }
 
 // Save creates the CardType entities in the database.
 func (ctcb *CardTypeCreateBulk) Save(ctx context.Context) ([]*CardType, error) {
+	if ctcb.err != nil {
+		return nil, ctcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(ctcb.builders))
 	nodes := make([]*CardType, len(ctcb.builders))
 	mutators := make([]Mutator, len(ctcb.builders))
@@ -617,6 +621,9 @@ func (u *CardTypeUpsertBulk) ClearNameEn() *CardTypeUpsertBulk {
 
 // Exec executes the query.
 func (u *CardTypeUpsertBulk) Exec(ctx context.Context) error {
+	if u.create.err != nil {
+		return u.create.err
+	}
 	for i, b := range u.create.builders {
 		if len(b.conflict) != 0 {
 			return fmt.Errorf("ent: OnConflict was set for builder %d. Set it on the CardTypeCreateBulk instead", i)

@@ -34,6 +34,14 @@ func (pu *ProductUpdate) SetIsOfficialJa(b bool) *ProductUpdate {
 	return pu
 }
 
+// SetNillableIsOfficialJa sets the "is_official_ja" field if the given value is not nil.
+func (pu *ProductUpdate) SetNillableIsOfficialJa(b *bool) *ProductUpdate {
+	if b != nil {
+		pu.SetIsOfficialJa(*b)
+	}
+	return pu
+}
+
 // SetNameJa sets the "name_ja" field.
 func (pu *ProductUpdate) SetNameJa(s string) *ProductUpdate {
 	pu.mutation.SetNameJa(s)
@@ -281,6 +289,14 @@ type ProductUpdateOne struct {
 // SetIsOfficialJa sets the "is_official_ja" field.
 func (puo *ProductUpdateOne) SetIsOfficialJa(b bool) *ProductUpdateOne {
 	puo.mutation.SetIsOfficialJa(b)
+	return puo
+}
+
+// SetNillableIsOfficialJa sets the "is_official_ja" field if the given value is not nil.
+func (puo *ProductUpdateOne) SetNillableIsOfficialJa(b *bool) *ProductUpdateOne {
+	if b != nil {
+		puo.SetIsOfficialJa(*b)
+	}
 	return puo
 }
 
