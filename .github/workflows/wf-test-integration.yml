@@ -14,7 +14,7 @@ jobs:
           cache-dependency-path: src/go.sum
       - name: install runn
         run: |
-          runn_url=$(gh release view --repo k1LoW/runn --json assets --jq '.assets[] | select(.contentType == "application/vnd.debian.binary-package") | .url')
+          runn_url=$(gh release view --repo k1LoW/runn --json assets --jq '.assets[] | select(.contentType == "application/vnd.debian.binary-package" and (.name | endswith("amd64.deb"))) | .url')
           curl -o runn.deb -L "$runn_url"
           sudo dpkg -i runn.deb
         env:
