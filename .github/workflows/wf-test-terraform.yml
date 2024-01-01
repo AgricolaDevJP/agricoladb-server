@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: terraform version
         run: echo "TF_VERSION=$(cat .terraform-version)" >> "$GITHUB_ENV"
-      - uses: hashicorp/setup-terraform@v2
+      - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
       - uses: aws-actions/configure-aws-credentials@v4
@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: terraform version
         run: echo "TF_VERSION=$(cat .terraform-version)" >> "$GITHUB_ENV"
-      - uses: hashicorp/setup-terraform@v2
+      - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
       - name: terraform format
