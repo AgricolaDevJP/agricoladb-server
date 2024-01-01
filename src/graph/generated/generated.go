@@ -24,6 +24,7 @@ import (
 // NewExecutableSchema creates an ExecutableSchema from the ResolverRoot interface.
 func NewExecutableSchema(cfg Config) graphql.ExecutableSchema {
 	return &executableSchema{
+		schema:     cfg.Schema,
 		resolvers:  cfg.Resolvers,
 		directives: cfg.Directives,
 		complexity: cfg.Complexity,
@@ -31,6 +32,7 @@ func NewExecutableSchema(cfg Config) graphql.ExecutableSchema {
 }
 
 type Config struct {
+	Schema     *ast.Schema
 	Resolvers  ResolverRoot
 	Directives DirectiveRoot
 	Complexity ComplexityRoot
@@ -178,12 +180,16 @@ type QueryResolver interface {
 }
 
 type executableSchema struct {
+	schema     *ast.Schema
 	resolvers  ResolverRoot
 	directives DirectiveRoot
 	complexity ComplexityRoot
 }
 
 func (e *executableSchema) Schema() *ast.Schema {
+	if e.schema != nil {
+		return e.schema
+	}
 	return parsedSchema
 }
 
@@ -954,14 +960,14 @@ func (ec *executionContext) introspectSchema() (*introspection.Schema, error) {
 	if ec.DisableIntrospection {
 		return nil, errors.New("introspection disabled")
 	}
-	return introspection.WrapSchema(parsedSchema), nil
+	return introspection.WrapSchema(ec.Schema()), nil
 }
 
 func (ec *executionContext) introspectType(name string) (*introspection.Type, error) {
 	if ec.DisableIntrospection {
 		return nil, errors.New("introspection disabled")
 	}
-	return introspection.WrapTypeFromDef(parsedSchema, parsedSchema.Types[name]), nil
+	return introspection.WrapTypeFromDef(ec.Schema(), ec.Schema().Types[name]), nil
 }
 
 var sources = []*ast.Source{
@@ -8699,8 +8705,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 		}
 		switch k {
 		case "not":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
 			data, err := ec.unmarshalOCardSpecialColorWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColorWhereInput(ctx, v)
 			if err != nil {
@@ -8708,8 +8712,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.Not = data
 		case "and":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
 			data, err := ec.unmarshalOCardSpecialColorWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColorWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -8717,8 +8719,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.And = data
 		case "or":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
 			data, err := ec.unmarshalOCardSpecialColorWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColorWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -8726,8 +8726,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.Or = data
 		case "id":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -8735,8 +8733,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.ID = data
 		case "idNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -8744,8 +8740,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.IDNEQ = data
 		case "idIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -8753,8 +8747,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.IDIn = data
 		case "idNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -8762,8 +8754,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.IDNotIn = data
 		case "idGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -8771,8 +8761,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.IDGT = data
 		case "idGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -8780,8 +8768,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.IDGTE = data
 		case "idLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -8789,8 +8775,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.IDLT = data
 		case "idLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -8798,8 +8782,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.IDLTE = data
 		case "key":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("key"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8807,8 +8789,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.Key = data
 		case "keyNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8816,8 +8796,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.KeyNEQ = data
 		case "keyIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -8825,8 +8803,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.KeyIn = data
 		case "keyNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -8834,8 +8810,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.KeyNotIn = data
 		case "keyGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8843,8 +8817,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.KeyGT = data
 		case "keyGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8852,8 +8824,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.KeyGTE = data
 		case "keyLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8861,8 +8831,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.KeyLT = data
 		case "keyLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8870,8 +8838,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.KeyLTE = data
 		case "keyContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8879,8 +8845,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.KeyContains = data
 		case "keyHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8888,8 +8852,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.KeyHasPrefix = data
 		case "keyHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8897,8 +8859,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.KeyHasSuffix = data
 		case "keyEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8906,8 +8866,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.KeyEqualFold = data
 		case "keyContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8915,8 +8873,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.KeyContainsFold = data
 		case "nameJa":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJa"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8924,8 +8880,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameJa = data
 		case "nameJaNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8933,8 +8887,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameJaNEQ = data
 		case "nameJaIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -8942,8 +8894,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameJaIn = data
 		case "nameJaNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -8951,8 +8901,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameJaNotIn = data
 		case "nameJaGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8960,8 +8908,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameJaGT = data
 		case "nameJaGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8969,8 +8915,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameJaGTE = data
 		case "nameJaLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8978,8 +8922,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameJaLT = data
 		case "nameJaLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8987,8 +8929,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameJaLTE = data
 		case "nameJaContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -8996,8 +8936,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameJaContains = data
 		case "nameJaHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9005,8 +8943,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameJaHasPrefix = data
 		case "nameJaHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9014,8 +8950,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameJaHasSuffix = data
 		case "nameJaIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -9023,8 +8957,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameJaIsNil = data
 		case "nameJaNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -9032,8 +8964,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameJaNotNil = data
 		case "nameJaEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9041,8 +8971,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameJaEqualFold = data
 		case "nameJaContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9050,8 +8978,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameJaContainsFold = data
 		case "nameEn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEn"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9059,8 +8985,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameEn = data
 		case "nameEnNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9068,8 +8992,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameEnNEQ = data
 		case "nameEnIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -9077,8 +8999,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameEnIn = data
 		case "nameEnNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -9086,8 +9006,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameEnNotIn = data
 		case "nameEnGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9095,8 +9013,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameEnGT = data
 		case "nameEnGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9104,8 +9020,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameEnGTE = data
 		case "nameEnLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9113,8 +9027,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameEnLT = data
 		case "nameEnLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9122,8 +9034,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameEnLTE = data
 		case "nameEnContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9131,8 +9041,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameEnContains = data
 		case "nameEnHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9140,8 +9048,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameEnHasPrefix = data
 		case "nameEnHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9149,8 +9055,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameEnHasSuffix = data
 		case "nameEnIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -9158,8 +9062,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameEnIsNil = data
 		case "nameEnNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -9167,8 +9069,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameEnNotNil = data
 		case "nameEnEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9176,8 +9076,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameEnEqualFold = data
 		case "nameEnContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9185,8 +9083,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.NameEnContainsFold = data
 		case "hasCards":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCards"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -9194,8 +9090,6 @@ func (ec *executionContext) unmarshalInputCardSpecialColorWhereInput(ctx context
 			}
 			it.HasCards = data
 		case "hasCardsWith":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardsWith"))
 			data, err := ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -9223,8 +9117,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 		}
 		switch k {
 		case "not":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
 			data, err := ec.unmarshalOCardTypeWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardTypeWhereInput(ctx, v)
 			if err != nil {
@@ -9232,8 +9124,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.Not = data
 		case "and":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
 			data, err := ec.unmarshalOCardTypeWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardTypeWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -9241,8 +9131,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.And = data
 		case "or":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
 			data, err := ec.unmarshalOCardTypeWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardTypeWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -9250,8 +9138,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.Or = data
 		case "id":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -9259,8 +9145,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.ID = data
 		case "idNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -9268,8 +9152,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.IDNEQ = data
 		case "idIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -9277,8 +9159,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.IDIn = data
 		case "idNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -9286,8 +9166,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.IDNotIn = data
 		case "idGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -9295,8 +9173,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.IDGT = data
 		case "idGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -9304,8 +9180,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.IDGTE = data
 		case "idLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -9313,8 +9187,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.IDLT = data
 		case "idLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -9322,8 +9194,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.IDLTE = data
 		case "key":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("key"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9331,8 +9201,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.Key = data
 		case "keyNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9340,8 +9208,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.KeyNEQ = data
 		case "keyIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -9349,8 +9215,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.KeyIn = data
 		case "keyNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -9358,8 +9222,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.KeyNotIn = data
 		case "keyGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9367,8 +9229,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.KeyGT = data
 		case "keyGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9376,8 +9236,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.KeyGTE = data
 		case "keyLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9385,8 +9243,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.KeyLT = data
 		case "keyLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9394,8 +9250,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.KeyLTE = data
 		case "keyContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9403,8 +9257,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.KeyContains = data
 		case "keyHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9412,8 +9264,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.KeyHasPrefix = data
 		case "keyHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9421,8 +9271,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.KeyHasSuffix = data
 		case "keyEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9430,8 +9278,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.KeyEqualFold = data
 		case "keyContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9439,8 +9285,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.KeyContainsFold = data
 		case "nameJa":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJa"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9448,8 +9292,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameJa = data
 		case "nameJaNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9457,8 +9299,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameJaNEQ = data
 		case "nameJaIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -9466,8 +9306,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameJaIn = data
 		case "nameJaNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -9475,8 +9313,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameJaNotIn = data
 		case "nameJaGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9484,8 +9320,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameJaGT = data
 		case "nameJaGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9493,8 +9327,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameJaGTE = data
 		case "nameJaLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9502,8 +9334,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameJaLT = data
 		case "nameJaLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9511,8 +9341,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameJaLTE = data
 		case "nameJaContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9520,8 +9348,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameJaContains = data
 		case "nameJaHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9529,8 +9355,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameJaHasPrefix = data
 		case "nameJaHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9538,8 +9362,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameJaHasSuffix = data
 		case "nameJaIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -9547,8 +9369,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameJaIsNil = data
 		case "nameJaNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -9556,8 +9376,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameJaNotNil = data
 		case "nameJaEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9565,8 +9383,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameJaEqualFold = data
 		case "nameJaContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9574,8 +9390,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameJaContainsFold = data
 		case "nameEn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEn"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9583,8 +9397,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameEn = data
 		case "nameEnNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9592,8 +9404,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameEnNEQ = data
 		case "nameEnIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -9601,8 +9411,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameEnIn = data
 		case "nameEnNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -9610,8 +9418,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameEnNotIn = data
 		case "nameEnGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9619,8 +9425,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameEnGT = data
 		case "nameEnGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9628,8 +9432,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameEnGTE = data
 		case "nameEnLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9637,8 +9439,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameEnLT = data
 		case "nameEnLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9646,8 +9446,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameEnLTE = data
 		case "nameEnContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9655,8 +9453,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameEnContains = data
 		case "nameEnHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9664,8 +9460,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameEnHasPrefix = data
 		case "nameEnHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9673,8 +9467,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameEnHasSuffix = data
 		case "nameEnIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -9682,8 +9474,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameEnIsNil = data
 		case "nameEnNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -9691,8 +9481,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameEnNotNil = data
 		case "nameEnEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9700,8 +9488,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameEnEqualFold = data
 		case "nameEnContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9709,8 +9495,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.NameEnContainsFold = data
 		case "hasCards":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCards"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -9718,8 +9502,6 @@ func (ec *executionContext) unmarshalInputCardTypeWhereInput(ctx context.Context
 			}
 			it.HasCards = data
 		case "hasCardsWith":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardsWith"))
 			data, err := ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -9747,8 +9529,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 		}
 		switch k {
 		case "not":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
 			data, err := ec.unmarshalOCardWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInput(ctx, v)
 			if err != nil {
@@ -9756,8 +9536,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.Not = data
 		case "and":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
 			data, err := ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -9765,8 +9543,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.And = data
 		case "or":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
 			data, err := ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -9774,8 +9550,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.Or = data
 		case "id":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -9783,8 +9557,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.ID = data
 		case "idNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -9792,8 +9564,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.IDNEQ = data
 		case "idIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -9801,8 +9571,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.IDIn = data
 		case "idNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -9810,8 +9578,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.IDNotIn = data
 		case "idGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -9819,8 +9585,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.IDGT = data
 		case "idGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -9828,8 +9592,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.IDGTE = data
 		case "idLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -9837,8 +9599,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.IDLT = data
 		case "idLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -9846,8 +9606,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.IDLTE = data
 		case "literalID":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9855,8 +9613,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.LiteralID = data
 		case "literalIDNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9864,8 +9620,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.LiteralIDNEQ = data
 		case "literalIDIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -9873,8 +9627,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.LiteralIDIn = data
 		case "literalIDNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -9882,8 +9634,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.LiteralIDNotIn = data
 		case "literalIDGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9891,8 +9641,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.LiteralIDGT = data
 		case "literalIDGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9900,8 +9648,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.LiteralIDGTE = data
 		case "literalIDLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9909,8 +9655,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.LiteralIDLT = data
 		case "literalIDLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9918,8 +9662,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.LiteralIDLTE = data
 		case "literalIDContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9927,8 +9669,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.LiteralIDContains = data
 		case "literalIDHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9936,8 +9676,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.LiteralIDHasPrefix = data
 		case "literalIDHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9945,8 +9683,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.LiteralIDHasSuffix = data
 		case "literalIDEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9954,8 +9690,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.LiteralIDEqualFold = data
 		case "literalIDContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("literalIDContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -9963,8 +9697,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.LiteralIDContainsFold = data
 		case "revisionID":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionID"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -9972,8 +9704,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.RevisionID = data
 		case "revisionIDNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDNEQ"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -9981,8 +9711,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.RevisionIDNEQ = data
 		case "revisionIDIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -9990,8 +9718,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.RevisionIDIn = data
 		case "revisionIDNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDNotIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -9999,8 +9725,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.RevisionIDNotIn = data
 		case "printedID":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10008,8 +9732,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrintedID = data
 		case "printedIDNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10017,8 +9739,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrintedIDNEQ = data
 		case "printedIDIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -10026,8 +9746,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrintedIDIn = data
 		case "printedIDNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -10035,8 +9753,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrintedIDNotIn = data
 		case "printedIDGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10044,8 +9760,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrintedIDGT = data
 		case "printedIDGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10053,8 +9767,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrintedIDGTE = data
 		case "printedIDLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10062,8 +9774,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrintedIDLT = data
 		case "printedIDLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10071,8 +9781,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrintedIDLTE = data
 		case "printedIDContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10080,8 +9788,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrintedIDContains = data
 		case "printedIDHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10089,8 +9795,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrintedIDHasPrefix = data
 		case "printedIDHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10098,8 +9802,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrintedIDHasSuffix = data
 		case "printedIDIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -10107,8 +9809,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrintedIDIsNil = data
 		case "printedIDNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -10116,8 +9816,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrintedIDNotNil = data
 		case "printedIDEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10125,8 +9823,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrintedIDEqualFold = data
 		case "printedIDContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("printedIDContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10134,8 +9830,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrintedIDContainsFold = data
 		case "playAgricolaCardID":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10143,8 +9837,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PlayAgricolaCardID = data
 		case "playAgricolaCardIDNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10152,8 +9844,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PlayAgricolaCardIDNEQ = data
 		case "playAgricolaCardIDIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -10161,8 +9851,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PlayAgricolaCardIDIn = data
 		case "playAgricolaCardIDNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -10170,8 +9858,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PlayAgricolaCardIDNotIn = data
 		case "playAgricolaCardIDGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10179,8 +9865,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PlayAgricolaCardIDGT = data
 		case "playAgricolaCardIDGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10188,8 +9872,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PlayAgricolaCardIDGTE = data
 		case "playAgricolaCardIDLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10197,8 +9879,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PlayAgricolaCardIDLT = data
 		case "playAgricolaCardIDLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10206,8 +9886,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PlayAgricolaCardIDLTE = data
 		case "playAgricolaCardIDContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10215,8 +9893,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PlayAgricolaCardIDContains = data
 		case "playAgricolaCardIDHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10224,8 +9900,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PlayAgricolaCardIDHasPrefix = data
 		case "playAgricolaCardIDHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10233,8 +9907,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PlayAgricolaCardIDHasSuffix = data
 		case "playAgricolaCardIDIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -10242,8 +9914,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PlayAgricolaCardIDIsNil = data
 		case "playAgricolaCardIDNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -10251,8 +9921,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PlayAgricolaCardIDNotNil = data
 		case "playAgricolaCardIDEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10260,8 +9928,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PlayAgricolaCardIDEqualFold = data
 		case "playAgricolaCardIDContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("playAgricolaCardIDContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10269,8 +9935,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PlayAgricolaCardIDContainsFold = data
 		case "deckID":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deckID"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -10278,8 +9942,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DeckID = data
 		case "deckIDNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deckIDNEQ"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -10287,8 +9949,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DeckIDNEQ = data
 		case "deckIDIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deckIDIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -10296,8 +9956,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DeckIDIn = data
 		case "deckIDNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deckIDNotIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -10305,8 +9963,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DeckIDNotIn = data
 		case "deckIDIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deckIDIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -10314,8 +9970,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DeckIDIsNil = data
 		case "deckIDNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deckIDNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -10323,8 +9977,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DeckIDNotNil = data
 		case "cardTypeID":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardTypeID"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -10332,8 +9984,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CardTypeID = data
 		case "cardTypeIDNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardTypeIDNEQ"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -10341,8 +9991,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CardTypeIDNEQ = data
 		case "cardTypeIDIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardTypeIDIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -10350,8 +9998,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CardTypeIDIn = data
 		case "cardTypeIDNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardTypeIDNotIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -10359,8 +10005,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CardTypeIDNotIn = data
 		case "cardSpecialColorID":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardSpecialColorID"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -10368,8 +10012,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CardSpecialColorID = data
 		case "cardSpecialColorIDNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardSpecialColorIDNEQ"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -10377,8 +10019,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CardSpecialColorIDNEQ = data
 		case "cardSpecialColorIDIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardSpecialColorIDIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -10386,8 +10026,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CardSpecialColorIDIn = data
 		case "cardSpecialColorIDNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardSpecialColorIDNotIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -10395,8 +10033,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CardSpecialColorIDNotIn = data
 		case "cardSpecialColorIDIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardSpecialColorIDIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -10404,8 +10040,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CardSpecialColorIDIsNil = data
 		case "cardSpecialColorIDNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardSpecialColorIDNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -10413,8 +10047,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CardSpecialColorIDNotNil = data
 		case "nameJa":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJa"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10422,8 +10054,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameJa = data
 		case "nameJaNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10431,8 +10061,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameJaNEQ = data
 		case "nameJaIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -10440,8 +10068,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameJaIn = data
 		case "nameJaNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -10449,8 +10075,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameJaNotIn = data
 		case "nameJaGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10458,8 +10082,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameJaGT = data
 		case "nameJaGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10467,8 +10089,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameJaGTE = data
 		case "nameJaLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10476,8 +10096,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameJaLT = data
 		case "nameJaLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10485,8 +10103,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameJaLTE = data
 		case "nameJaContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10494,8 +10110,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameJaContains = data
 		case "nameJaHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10503,8 +10117,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameJaHasPrefix = data
 		case "nameJaHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10512,8 +10124,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameJaHasSuffix = data
 		case "nameJaIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -10521,8 +10131,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameJaIsNil = data
 		case "nameJaNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -10530,8 +10138,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameJaNotNil = data
 		case "nameJaEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10539,8 +10145,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameJaEqualFold = data
 		case "nameJaContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10548,8 +10152,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameJaContainsFold = data
 		case "nameEn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEn"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10557,8 +10159,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameEn = data
 		case "nameEnNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10566,8 +10166,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameEnNEQ = data
 		case "nameEnIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -10575,8 +10173,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameEnIn = data
 		case "nameEnNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -10584,8 +10180,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameEnNotIn = data
 		case "nameEnGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10593,8 +10187,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameEnGT = data
 		case "nameEnGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10602,8 +10194,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameEnGTE = data
 		case "nameEnLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10611,8 +10201,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameEnLT = data
 		case "nameEnLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10620,8 +10208,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameEnLTE = data
 		case "nameEnContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10629,8 +10215,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameEnContains = data
 		case "nameEnHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10638,8 +10222,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameEnHasPrefix = data
 		case "nameEnHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10647,8 +10229,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameEnHasSuffix = data
 		case "nameEnIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -10656,8 +10236,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameEnIsNil = data
 		case "nameEnNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -10665,8 +10243,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameEnNotNil = data
 		case "nameEnEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10674,8 +10250,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameEnEqualFold = data
 		case "nameEnContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10683,8 +10257,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NameEnContainsFold = data
 		case "minPlayersNumber":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumber"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -10692,8 +10264,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.MinPlayersNumber = data
 		case "minPlayersNumberNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberNEQ"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -10701,8 +10271,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.MinPlayersNumberNEQ = data
 		case "minPlayersNumberIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberIn"))
 			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -10710,8 +10278,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.MinPlayersNumberIn = data
 		case "minPlayersNumberNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberNotIn"))
 			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -10719,8 +10285,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.MinPlayersNumberNotIn = data
 		case "minPlayersNumberGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberGT"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -10728,8 +10292,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.MinPlayersNumberGT = data
 		case "minPlayersNumberGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberGTE"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -10737,8 +10299,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.MinPlayersNumberGTE = data
 		case "minPlayersNumberLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberLT"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -10746,8 +10306,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.MinPlayersNumberLT = data
 		case "minPlayersNumberLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberLTE"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -10755,8 +10313,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.MinPlayersNumberLTE = data
 		case "minPlayersNumberIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -10764,8 +10320,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.MinPlayersNumberIsNil = data
 		case "minPlayersNumberNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("minPlayersNumberNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -10773,8 +10327,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.MinPlayersNumberNotNil = data
 		case "prerequisite":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisite"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10782,8 +10334,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.Prerequisite = data
 		case "prerequisiteNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10791,8 +10341,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrerequisiteNEQ = data
 		case "prerequisiteIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -10800,8 +10348,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrerequisiteIn = data
 		case "prerequisiteNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -10809,8 +10355,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrerequisiteNotIn = data
 		case "prerequisiteGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10818,8 +10362,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrerequisiteGT = data
 		case "prerequisiteGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10827,8 +10369,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrerequisiteGTE = data
 		case "prerequisiteLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10836,8 +10376,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrerequisiteLT = data
 		case "prerequisiteLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10845,8 +10383,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrerequisiteLTE = data
 		case "prerequisiteContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10854,8 +10390,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrerequisiteContains = data
 		case "prerequisiteHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10863,8 +10397,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrerequisiteHasPrefix = data
 		case "prerequisiteHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10872,8 +10404,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrerequisiteHasSuffix = data
 		case "prerequisiteIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -10881,8 +10411,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrerequisiteIsNil = data
 		case "prerequisiteNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -10890,8 +10418,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrerequisiteNotNil = data
 		case "prerequisiteEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10899,8 +10425,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrerequisiteEqualFold = data
 		case "prerequisiteContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("prerequisiteContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10908,8 +10432,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.PrerequisiteContainsFold = data
 		case "cost":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cost"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10917,8 +10439,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.Cost = data
 		case "costNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10926,8 +10446,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CostNEQ = data
 		case "costIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -10935,8 +10453,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CostIn = data
 		case "costNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -10944,8 +10460,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CostNotIn = data
 		case "costGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10953,8 +10467,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CostGT = data
 		case "costGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10962,8 +10474,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CostGTE = data
 		case "costLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10971,8 +10481,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CostLT = data
 		case "costLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10980,8 +10488,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CostLTE = data
 		case "costContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10989,8 +10495,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CostContains = data
 		case "costHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -10998,8 +10502,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CostHasPrefix = data
 		case "costHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11007,8 +10509,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CostHasSuffix = data
 		case "costIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -11016,8 +10516,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CostIsNil = data
 		case "costNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -11025,8 +10523,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CostNotNil = data
 		case "costEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11034,8 +10530,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CostEqualFold = data
 		case "costContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("costContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11043,8 +10537,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.CostContainsFold = data
 		case "description":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11052,8 +10544,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.Description = data
 		case "descriptionNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11061,8 +10551,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DescriptionNEQ = data
 		case "descriptionIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -11070,8 +10558,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DescriptionIn = data
 		case "descriptionNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -11079,8 +10565,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DescriptionNotIn = data
 		case "descriptionGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11088,8 +10572,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DescriptionGT = data
 		case "descriptionGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11097,8 +10579,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DescriptionGTE = data
 		case "descriptionLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11106,8 +10586,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DescriptionLT = data
 		case "descriptionLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11115,8 +10593,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DescriptionLTE = data
 		case "descriptionContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11124,8 +10600,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DescriptionContains = data
 		case "descriptionHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11133,8 +10607,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DescriptionHasPrefix = data
 		case "descriptionHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11142,8 +10614,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DescriptionHasSuffix = data
 		case "descriptionIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -11151,8 +10621,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DescriptionIsNil = data
 		case "descriptionNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -11160,8 +10628,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DescriptionNotNil = data
 		case "descriptionEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11169,8 +10635,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DescriptionEqualFold = data
 		case "descriptionContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11178,8 +10642,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.DescriptionContainsFold = data
 		case "note":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("note"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11187,8 +10649,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.Note = data
 		case "noteNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11196,8 +10656,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NoteNEQ = data
 		case "noteIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -11205,8 +10663,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NoteIn = data
 		case "noteNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -11214,8 +10670,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NoteNotIn = data
 		case "noteGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11223,8 +10677,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NoteGT = data
 		case "noteGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11232,8 +10684,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NoteGTE = data
 		case "noteLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11241,8 +10691,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NoteLT = data
 		case "noteLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11250,8 +10698,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NoteLTE = data
 		case "noteContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11259,8 +10705,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NoteContains = data
 		case "noteHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11268,8 +10712,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NoteHasPrefix = data
 		case "noteHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11277,8 +10719,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NoteHasSuffix = data
 		case "noteIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -11286,8 +10726,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NoteIsNil = data
 		case "noteNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -11295,8 +10733,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NoteNotNil = data
 		case "noteEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11304,8 +10740,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NoteEqualFold = data
 		case "noteContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11313,8 +10747,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.NoteContainsFold = data
 		case "isOfficialJa":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isOfficialJa"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11322,8 +10754,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.IsOfficialJa = data
 		case "isOfficialJaNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isOfficialJaNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11331,8 +10761,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.IsOfficialJaNEQ = data
 		case "victoryPoint":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPoint"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -11340,8 +10768,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.VictoryPoint = data
 		case "victoryPointNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointNEQ"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -11349,8 +10775,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.VictoryPointNEQ = data
 		case "victoryPointIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointIn"))
 			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -11358,8 +10782,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.VictoryPointIn = data
 		case "victoryPointNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointNotIn"))
 			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -11367,8 +10789,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.VictoryPointNotIn = data
 		case "victoryPointGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointGT"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -11376,8 +10796,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.VictoryPointGT = data
 		case "victoryPointGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointGTE"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -11385,8 +10803,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.VictoryPointGTE = data
 		case "victoryPointLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointLT"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -11394,8 +10810,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.VictoryPointLT = data
 		case "victoryPointLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointLTE"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -11403,8 +10817,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.VictoryPointLTE = data
 		case "victoryPointIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -11412,8 +10824,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.VictoryPointIsNil = data
 		case "victoryPointNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("victoryPointNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -11421,8 +10831,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.VictoryPointNotNil = data
 		case "specialVictoryPoint":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("specialVictoryPoint"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11430,8 +10838,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.SpecialVictoryPoint = data
 		case "specialVictoryPointNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("specialVictoryPointNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11439,8 +10845,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.SpecialVictoryPointNEQ = data
 		case "specialVictoryPointIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("specialVictoryPointIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -11448,8 +10852,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.SpecialVictoryPointIn = data
 		case "specialVictoryPointNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("specialVictoryPointNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -11457,8 +10859,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.SpecialVictoryPointNotIn = data
 		case "specialVictoryPointGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("specialVictoryPointGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11466,8 +10866,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.SpecialVictoryPointGT = data
 		case "specialVictoryPointGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("specialVictoryPointGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11475,8 +10873,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.SpecialVictoryPointGTE = data
 		case "specialVictoryPointLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("specialVictoryPointLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11484,8 +10880,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.SpecialVictoryPointLT = data
 		case "specialVictoryPointLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("specialVictoryPointLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11493,8 +10887,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.SpecialVictoryPointLTE = data
 		case "specialVictoryPointContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("specialVictoryPointContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11502,8 +10894,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.SpecialVictoryPointContains = data
 		case "specialVictoryPointHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("specialVictoryPointHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11511,8 +10901,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.SpecialVictoryPointHasPrefix = data
 		case "specialVictoryPointHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("specialVictoryPointHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11520,8 +10908,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.SpecialVictoryPointHasSuffix = data
 		case "specialVictoryPointIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("specialVictoryPointIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -11529,8 +10915,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.SpecialVictoryPointIsNil = data
 		case "specialVictoryPointNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("specialVictoryPointNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -11538,8 +10922,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.SpecialVictoryPointNotNil = data
 		case "specialVictoryPointEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("specialVictoryPointEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11547,8 +10929,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.SpecialVictoryPointEqualFold = data
 		case "specialVictoryPointContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("specialVictoryPointContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -11556,8 +10936,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.SpecialVictoryPointContainsFold = data
 		case "hasArrow":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasArrow"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11565,8 +10943,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasArrow = data
 		case "hasArrowNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasArrowNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11574,8 +10950,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasArrowNEQ = data
 		case "hasBonusPointIcon":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBonusPointIcon"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11583,8 +10957,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasBonusPointIcon = data
 		case "hasBonusPointIconNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBonusPointIconNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11592,8 +10964,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasBonusPointIconNEQ = data
 		case "hasNegativeBonusPointIcon":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasNegativeBonusPointIcon"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11601,8 +10971,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasNegativeBonusPointIcon = data
 		case "hasNegativeBonusPointIconNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasNegativeBonusPointIconNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11610,8 +10978,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasNegativeBonusPointIconNEQ = data
 		case "hasPanIcon":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPanIcon"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11619,8 +10985,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasPanIcon = data
 		case "hasPanIconNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPanIconNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11628,8 +10992,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasPanIconNEQ = data
 		case "hasBreadIcon":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBreadIcon"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11637,8 +10999,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasBreadIcon = data
 		case "hasBreadIconNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBreadIconNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11646,8 +11006,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasBreadIconNEQ = data
 		case "hasFarmPlannerIcon":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFarmPlannerIcon"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11655,8 +11013,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasFarmPlannerIcon = data
 		case "hasFarmPlannerIconNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFarmPlannerIconNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11664,8 +11020,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasFarmPlannerIconNEQ = data
 		case "hasActionsBoosterIcon":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasActionsBoosterIcon"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11673,8 +11027,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasActionsBoosterIcon = data
 		case "hasActionsBoosterIconNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasActionsBoosterIconNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11682,8 +11034,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasActionsBoosterIconNEQ = data
 		case "hasPointsProviderIcon":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPointsProviderIcon"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11691,8 +11041,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasPointsProviderIcon = data
 		case "hasPointsProviderIconNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPointsProviderIconNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11700,8 +11048,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasPointsProviderIconNEQ = data
 		case "hasGoodsProviderIcon":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasGoodsProviderIcon"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11709,8 +11055,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasGoodsProviderIcon = data
 		case "hasGoodsProviderIconNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasGoodsProviderIconNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11718,8 +11062,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasGoodsProviderIconNEQ = data
 		case "hasFoodProviderIcon":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFoodProviderIcon"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11727,8 +11069,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasFoodProviderIcon = data
 		case "hasFoodProviderIconNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFoodProviderIconNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11736,8 +11076,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasFoodProviderIconNEQ = data
 		case "hasCropProviderIcon":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCropProviderIcon"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11745,8 +11083,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasCropProviderIcon = data
 		case "hasCropProviderIconNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCropProviderIconNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11754,8 +11090,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasCropProviderIconNEQ = data
 		case "hasBuildingResourceProviderIcon":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBuildingResourceProviderIcon"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11763,8 +11097,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasBuildingResourceProviderIcon = data
 		case "hasBuildingResourceProviderIconNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBuildingResourceProviderIconNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11772,8 +11104,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasBuildingResourceProviderIconNEQ = data
 		case "hasLivestockProviderIcon":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLivestockProviderIcon"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11781,8 +11111,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasLivestockProviderIcon = data
 		case "hasLivestockProviderIconNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLivestockProviderIconNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11790,8 +11118,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasLivestockProviderIconNEQ = data
 		case "hasCutPeatIcon":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCutPeatIcon"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11799,8 +11125,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasCutPeatIcon = data
 		case "hasCutPeatIconNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCutPeatIconNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11808,8 +11132,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasCutPeatIconNEQ = data
 		case "hasFellTreesIcon":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFellTreesIcon"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11817,8 +11139,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasFellTreesIcon = data
 		case "hasFellTreesIconNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFellTreesIconNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11826,8 +11146,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasFellTreesIconNEQ = data
 		case "hasSlashAndBurnIcon":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSlashAndBurnIcon"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11835,8 +11153,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasSlashAndBurnIcon = data
 		case "hasSlashAndBurnIconNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSlashAndBurnIconNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11844,8 +11160,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasSlashAndBurnIconNEQ = data
 		case "hasHiringFareIcon":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasHiringFareIcon"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11853,8 +11167,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasHiringFareIcon = data
 		case "hasHiringFareIconNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasHiringFareIconNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11862,8 +11174,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasHiringFareIconNEQ = data
 		case "hasRevision":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRevision"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11871,8 +11181,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasRevision = data
 		case "hasRevisionWith":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRevisionWith"))
 			data, err := ec.unmarshalORevisionWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -11880,8 +11188,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasRevisionWith = data
 		case "hasProducts":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProducts"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11889,8 +11195,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasProducts = data
 		case "hasProductsWith":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProductsWith"))
 			data, err := ec.unmarshalOProductWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -11898,8 +11202,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasProductsWith = data
 		case "hasDeck":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDeck"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11907,8 +11209,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasDeck = data
 		case "hasDeckWith":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDeckWith"))
 			data, err := ec.unmarshalODeckWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -11916,8 +11216,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasDeckWith = data
 		case "hasCardType":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardType"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11925,8 +11223,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasCardType = data
 		case "hasCardTypeWith":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardTypeWith"))
 			data, err := ec.unmarshalOCardTypeWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardTypeWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -11934,8 +11230,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasCardTypeWith = data
 		case "hasCardSpecialColor":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardSpecialColor"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11943,8 +11237,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasCardSpecialColor = data
 		case "hasCardSpecialColorWith":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardSpecialColorWith"))
 			data, err := ec.unmarshalOCardSpecialColorWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardSpecialColorWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -11952,8 +11244,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasCardSpecialColorWith = data
 		case "hasChildren":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasChildren"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11961,8 +11251,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasChildren = data
 		case "hasChildrenWith":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasChildrenWith"))
 			data, err := ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -11970,8 +11258,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasChildrenWith = data
 		case "hasAncestors":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAncestors"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -11979,8 +11265,6 @@ func (ec *executionContext) unmarshalInputCardWhereInput(ctx context.Context, ob
 			}
 			it.HasAncestors = data
 		case "hasAncestorsWith":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAncestorsWith"))
 			data, err := ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -12008,8 +11292,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 		}
 		switch k {
 		case "not":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
 			data, err := ec.unmarshalODeckWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckWhereInput(ctx, v)
 			if err != nil {
@@ -12017,8 +11299,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.Not = data
 		case "and":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
 			data, err := ec.unmarshalODeckWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -12026,8 +11306,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.And = data
 		case "or":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
 			data, err := ec.unmarshalODeckWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -12035,8 +11313,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.Or = data
 		case "id":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -12044,8 +11320,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.ID = data
 		case "idNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -12053,8 +11327,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.IDNEQ = data
 		case "idIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -12062,8 +11334,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.IDIn = data
 		case "idNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -12071,8 +11341,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.IDNotIn = data
 		case "idGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -12080,8 +11348,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.IDGT = data
 		case "idGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -12089,8 +11355,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.IDGTE = data
 		case "idLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -12098,8 +11362,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.IDLT = data
 		case "idLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -12107,8 +11369,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.IDLTE = data
 		case "key":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("key"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12116,8 +11376,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.Key = data
 		case "keyNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12125,8 +11383,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.KeyNEQ = data
 		case "keyIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -12134,8 +11390,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.KeyIn = data
 		case "keyNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -12143,8 +11397,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.KeyNotIn = data
 		case "keyGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12152,8 +11404,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.KeyGT = data
 		case "keyGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12161,8 +11411,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.KeyGTE = data
 		case "keyLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12170,8 +11418,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.KeyLT = data
 		case "keyLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12179,8 +11425,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.KeyLTE = data
 		case "keyContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12188,8 +11432,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.KeyContains = data
 		case "keyHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12197,8 +11439,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.KeyHasPrefix = data
 		case "keyHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12206,8 +11446,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.KeyHasSuffix = data
 		case "keyEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12215,8 +11453,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.KeyEqualFold = data
 		case "keyContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12224,8 +11460,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.KeyContainsFold = data
 		case "revisionID":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionID"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -12233,8 +11467,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.RevisionID = data
 		case "revisionIDNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDNEQ"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -12242,8 +11474,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.RevisionIDNEQ = data
 		case "revisionIDIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -12251,8 +11481,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.RevisionIDIn = data
 		case "revisionIDNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDNotIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -12260,8 +11488,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.RevisionIDNotIn = data
 		case "nameJa":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJa"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12269,8 +11495,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameJa = data
 		case "nameJaNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12278,8 +11502,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameJaNEQ = data
 		case "nameJaIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -12287,8 +11509,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameJaIn = data
 		case "nameJaNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -12296,8 +11516,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameJaNotIn = data
 		case "nameJaGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12305,8 +11523,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameJaGT = data
 		case "nameJaGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12314,8 +11530,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameJaGTE = data
 		case "nameJaLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12323,8 +11537,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameJaLT = data
 		case "nameJaLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12332,8 +11544,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameJaLTE = data
 		case "nameJaContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12341,8 +11551,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameJaContains = data
 		case "nameJaHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12350,8 +11558,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameJaHasPrefix = data
 		case "nameJaHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12359,8 +11565,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameJaHasSuffix = data
 		case "nameJaIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -12368,8 +11572,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameJaIsNil = data
 		case "nameJaNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -12377,8 +11579,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameJaNotNil = data
 		case "nameJaEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12386,8 +11586,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameJaEqualFold = data
 		case "nameJaContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12395,8 +11593,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameJaContainsFold = data
 		case "nameEn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEn"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12404,8 +11600,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameEn = data
 		case "nameEnNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12413,8 +11607,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameEnNEQ = data
 		case "nameEnIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -12422,8 +11614,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameEnIn = data
 		case "nameEnNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -12431,8 +11621,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameEnNotIn = data
 		case "nameEnGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12440,8 +11628,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameEnGT = data
 		case "nameEnGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12449,8 +11635,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameEnGTE = data
 		case "nameEnLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12458,8 +11642,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameEnLT = data
 		case "nameEnLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12467,8 +11649,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameEnLTE = data
 		case "nameEnContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12476,8 +11656,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameEnContains = data
 		case "nameEnHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12485,8 +11663,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameEnHasPrefix = data
 		case "nameEnHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12494,8 +11670,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameEnHasSuffix = data
 		case "nameEnIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -12503,8 +11677,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameEnIsNil = data
 		case "nameEnNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -12512,8 +11684,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameEnNotNil = data
 		case "nameEnEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12521,8 +11691,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameEnEqualFold = data
 		case "nameEnContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12530,8 +11698,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.NameEnContainsFold = data
 		case "hasCards":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCards"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -12539,8 +11705,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.HasCards = data
 		case "hasCardsWith":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardsWith"))
 			data, err := ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -12548,8 +11712,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.HasCardsWith = data
 		case "hasRevision":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRevision"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -12557,8 +11719,6 @@ func (ec *executionContext) unmarshalInputDeckWhereInput(ctx context.Context, ob
 			}
 			it.HasRevision = data
 		case "hasRevisionWith":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRevisionWith"))
 			data, err := ec.unmarshalORevisionWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -12586,8 +11746,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 		}
 		switch k {
 		case "not":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
 			data, err := ec.unmarshalOProductWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductWhereInput(ctx, v)
 			if err != nil {
@@ -12595,8 +11753,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.Not = data
 		case "and":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
 			data, err := ec.unmarshalOProductWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -12604,8 +11760,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.And = data
 		case "or":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
 			data, err := ec.unmarshalOProductWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -12613,8 +11767,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.Or = data
 		case "id":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -12622,8 +11774,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.ID = data
 		case "idNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -12631,8 +11781,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.IDNEQ = data
 		case "idIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -12640,8 +11788,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.IDIn = data
 		case "idNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -12649,8 +11795,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.IDNotIn = data
 		case "idGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -12658,8 +11802,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.IDGT = data
 		case "idGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -12667,8 +11809,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.IDGTE = data
 		case "idLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -12676,8 +11816,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.IDLT = data
 		case "idLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -12685,8 +11823,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.IDLTE = data
 		case "revisionID":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionID"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -12694,8 +11830,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.RevisionID = data
 		case "revisionIDNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDNEQ"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -12703,8 +11837,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.RevisionIDNEQ = data
 		case "revisionIDIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -12712,8 +11844,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.RevisionIDIn = data
 		case "revisionIDNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionIDNotIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -12721,8 +11851,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.RevisionIDNotIn = data
 		case "isOfficialJa":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isOfficialJa"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -12730,8 +11858,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.IsOfficialJa = data
 		case "isOfficialJaNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isOfficialJaNEQ"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -12739,8 +11865,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.IsOfficialJaNEQ = data
 		case "nameJa":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJa"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12748,8 +11872,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameJa = data
 		case "nameJaNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12757,8 +11879,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameJaNEQ = data
 		case "nameJaIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -12766,8 +11886,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameJaIn = data
 		case "nameJaNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -12775,8 +11893,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameJaNotIn = data
 		case "nameJaGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12784,8 +11900,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameJaGT = data
 		case "nameJaGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12793,8 +11907,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameJaGTE = data
 		case "nameJaLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12802,8 +11914,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameJaLT = data
 		case "nameJaLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12811,8 +11921,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameJaLTE = data
 		case "nameJaContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12820,8 +11928,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameJaContains = data
 		case "nameJaHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12829,8 +11935,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameJaHasPrefix = data
 		case "nameJaHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12838,8 +11942,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameJaHasSuffix = data
 		case "nameJaIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -12847,8 +11949,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameJaIsNil = data
 		case "nameJaNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -12856,8 +11956,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameJaNotNil = data
 		case "nameJaEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12865,8 +11963,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameJaEqualFold = data
 		case "nameJaContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12874,8 +11970,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameJaContainsFold = data
 		case "nameEn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEn"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12883,8 +11977,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameEn = data
 		case "nameEnNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12892,8 +11984,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameEnNEQ = data
 		case "nameEnIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -12901,8 +11991,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameEnIn = data
 		case "nameEnNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -12910,8 +11998,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameEnNotIn = data
 		case "nameEnGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12919,8 +12005,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameEnGT = data
 		case "nameEnGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12928,8 +12012,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameEnGTE = data
 		case "nameEnLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12937,8 +12019,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameEnLT = data
 		case "nameEnLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12946,8 +12026,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameEnLTE = data
 		case "nameEnContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12955,8 +12033,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameEnContains = data
 		case "nameEnHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12964,8 +12040,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameEnHasPrefix = data
 		case "nameEnHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -12973,8 +12047,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameEnHasSuffix = data
 		case "nameEnIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -12982,8 +12054,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameEnIsNil = data
 		case "nameEnNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -12991,8 +12061,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameEnNotNil = data
 		case "nameEnEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13000,8 +12068,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameEnEqualFold = data
 		case "nameEnContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13009,8 +12075,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.NameEnContainsFold = data
 		case "publishedYear":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYear"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -13018,8 +12082,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.PublishedYear = data
 		case "publishedYearNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearNEQ"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -13027,8 +12089,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.PublishedYearNEQ = data
 		case "publishedYearIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearIn"))
 			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -13036,8 +12096,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.PublishedYearIn = data
 		case "publishedYearNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearNotIn"))
 			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -13045,8 +12103,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.PublishedYearNotIn = data
 		case "publishedYearGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearGT"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -13054,8 +12110,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.PublishedYearGT = data
 		case "publishedYearGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearGTE"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -13063,8 +12117,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.PublishedYearGTE = data
 		case "publishedYearLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearLT"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -13072,8 +12124,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.PublishedYearLT = data
 		case "publishedYearLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearLTE"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
@@ -13081,8 +12131,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.PublishedYearLTE = data
 		case "publishedYearIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -13090,8 +12138,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.PublishedYearIsNil = data
 		case "publishedYearNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publishedYearNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -13099,8 +12145,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.PublishedYearNotNil = data
 		case "hasCards":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCards"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -13108,8 +12152,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.HasCards = data
 		case "hasCardsWith":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardsWith"))
 			data, err := ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -13117,8 +12159,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.HasCardsWith = data
 		case "hasRevision":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRevision"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -13126,8 +12166,6 @@ func (ec *executionContext) unmarshalInputProductWhereInput(ctx context.Context,
 			}
 			it.HasRevision = data
 		case "hasRevisionWith":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRevisionWith"))
 			data, err := ec.unmarshalORevisionWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -13155,8 +12193,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 		}
 		switch k {
 		case "not":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
 			data, err := ec.unmarshalORevisionWhereInput2ᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionWhereInput(ctx, v)
 			if err != nil {
@@ -13164,8 +12200,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.Not = data
 		case "and":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
 			data, err := ec.unmarshalORevisionWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -13173,8 +12207,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.And = data
 		case "or":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
 			data, err := ec.unmarshalORevisionWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐRevisionWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -13182,8 +12214,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.Or = data
 		case "id":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -13191,8 +12221,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.ID = data
 		case "idNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -13200,8 +12228,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.IDNEQ = data
 		case "idIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -13209,8 +12235,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.IDIn = data
 		case "idNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
 			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
 			if err != nil {
@@ -13218,8 +12242,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.IDNotIn = data
 		case "idGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -13227,8 +12249,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.IDGT = data
 		case "idGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -13236,8 +12256,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.IDGTE = data
 		case "idLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -13245,8 +12263,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.IDLT = data
 		case "idLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
 			if err != nil {
@@ -13254,8 +12270,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.IDLTE = data
 		case "key":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("key"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13263,8 +12277,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.Key = data
 		case "keyNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13272,8 +12284,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.KeyNEQ = data
 		case "keyIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -13281,8 +12291,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.KeyIn = data
 		case "keyNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -13290,8 +12298,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.KeyNotIn = data
 		case "keyGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13299,8 +12305,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.KeyGT = data
 		case "keyGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13308,8 +12312,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.KeyGTE = data
 		case "keyLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13317,8 +12319,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.KeyLT = data
 		case "keyLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13326,8 +12326,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.KeyLTE = data
 		case "keyContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13335,8 +12333,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.KeyContains = data
 		case "keyHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13344,8 +12340,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.KeyHasPrefix = data
 		case "keyHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13353,8 +12347,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.KeyHasSuffix = data
 		case "keyEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13362,8 +12354,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.KeyEqualFold = data
 		case "keyContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("keyContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13371,8 +12361,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.KeyContainsFold = data
 		case "nameJa":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJa"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13380,8 +12368,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameJa = data
 		case "nameJaNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13389,8 +12375,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameJaNEQ = data
 		case "nameJaIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -13398,8 +12382,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameJaIn = data
 		case "nameJaNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -13407,8 +12389,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameJaNotIn = data
 		case "nameJaGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13416,8 +12396,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameJaGT = data
 		case "nameJaGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13425,8 +12403,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameJaGTE = data
 		case "nameJaLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13434,8 +12410,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameJaLT = data
 		case "nameJaLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13443,8 +12417,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameJaLTE = data
 		case "nameJaContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13452,8 +12424,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameJaContains = data
 		case "nameJaHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13461,8 +12431,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameJaHasPrefix = data
 		case "nameJaHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13470,8 +12438,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameJaHasSuffix = data
 		case "nameJaIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -13479,8 +12445,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameJaIsNil = data
 		case "nameJaNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -13488,8 +12452,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameJaNotNil = data
 		case "nameJaEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13497,8 +12459,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameJaEqualFold = data
 		case "nameJaContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameJaContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13506,8 +12466,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameJaContainsFold = data
 		case "nameEn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEn"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13515,8 +12473,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameEn = data
 		case "nameEnNEQ":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNEQ"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13524,8 +12480,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameEnNEQ = data
 		case "nameEnIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -13533,8 +12487,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameEnIn = data
 		case "nameEnNotIn":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotIn"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
 			if err != nil {
@@ -13542,8 +12494,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameEnNotIn = data
 		case "nameEnGT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13551,8 +12501,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameEnGT = data
 		case "nameEnGTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnGTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13560,8 +12508,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameEnGTE = data
 		case "nameEnLT":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLT"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13569,8 +12515,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameEnLT = data
 		case "nameEnLTE":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnLTE"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13578,8 +12522,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameEnLTE = data
 		case "nameEnContains":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContains"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13587,8 +12529,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameEnContains = data
 		case "nameEnHasPrefix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasPrefix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13596,8 +12536,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameEnHasPrefix = data
 		case "nameEnHasSuffix":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13605,8 +12543,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameEnHasSuffix = data
 		case "nameEnIsNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnIsNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -13614,8 +12550,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameEnIsNil = data
 		case "nameEnNotNil":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnNotNil"))
 			data, err := ec.unmarshalOBoolean2bool(ctx, v)
 			if err != nil {
@@ -13623,8 +12557,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameEnNotNil = data
 		case "nameEnEqualFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnEqualFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13632,8 +12564,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameEnEqualFold = data
 		case "nameEnContainsFold":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEnContainsFold"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
@@ -13641,8 +12571,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.NameEnContainsFold = data
 		case "hasCards":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCards"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -13650,8 +12578,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.HasCards = data
 		case "hasCardsWith":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCardsWith"))
 			data, err := ec.unmarshalOCardWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐCardWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -13659,8 +12585,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.HasCardsWith = data
 		case "hasProducts":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProducts"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -13668,8 +12592,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.HasProducts = data
 		case "hasProductsWith":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasProductsWith"))
 			data, err := ec.unmarshalOProductWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐProductWhereInputᚄ(ctx, v)
 			if err != nil {
@@ -13677,8 +12599,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.HasProductsWith = data
 		case "hasDecks":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDecks"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
@@ -13686,8 +12606,6 @@ func (ec *executionContext) unmarshalInputRevisionWhereInput(ctx context.Context
 			}
 			it.HasDecks = data
 		case "hasDecksWith":
-			var err error
-
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasDecksWith"))
 			data, err := ec.unmarshalODeckWhereInput2ᚕᚖgithubᚗcomᚋAgricolaDevJPᚋagricoladbᚑserverᚋentᚐDeckWhereInputᚄ(ctx, v)
 			if err != nil {
