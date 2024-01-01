@@ -397,12 +397,16 @@ func (u *CardSpecialColorUpsertOne) IDX(ctx context.Context) int {
 // CardSpecialColorCreateBulk is the builder for creating many CardSpecialColor entities in bulk.
 type CardSpecialColorCreateBulk struct {
 	config
+	err      error
 	builders []*CardSpecialColorCreate
 	conflict []sql.ConflictOption
 }
 
 // Save creates the CardSpecialColor entities in the database.
 func (csccb *CardSpecialColorCreateBulk) Save(ctx context.Context) ([]*CardSpecialColor, error) {
+	if csccb.err != nil {
+		return nil, csccb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(csccb.builders))
 	nodes := make([]*CardSpecialColor, len(csccb.builders))
 	mutators := make([]Mutator, len(csccb.builders))
@@ -617,6 +621,9 @@ func (u *CardSpecialColorUpsertBulk) ClearNameEn() *CardSpecialColorUpsertBulk {
 
 // Exec executes the query.
 func (u *CardSpecialColorUpsertBulk) Exec(ctx context.Context) error {
+	if u.create.err != nil {
+		return u.create.err
+	}
 	for i, b := range u.create.builders {
 		if len(b.conflict) != 0 {
 			return fmt.Errorf("ent: OnConflict was set for builder %d. Set it on the CardSpecialColorCreateBulk instead", i)

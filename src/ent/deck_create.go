@@ -435,12 +435,16 @@ func (u *DeckUpsertOne) IDX(ctx context.Context) int {
 // DeckCreateBulk is the builder for creating many Deck entities in bulk.
 type DeckCreateBulk struct {
 	config
+	err      error
 	builders []*DeckCreate
 	conflict []sql.ConflictOption
 }
 
 // Save creates the Deck entities in the database.
 func (dcb *DeckCreateBulk) Save(ctx context.Context) ([]*Deck, error) {
+	if dcb.err != nil {
+		return nil, dcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(dcb.builders))
 	nodes := make([]*Deck, len(dcb.builders))
 	mutators := make([]Mutator, len(dcb.builders))
@@ -658,6 +662,9 @@ func (u *DeckUpsertBulk) ClearNameEn() *DeckUpsertBulk {
 
 // Exec executes the query.
 func (u *DeckUpsertBulk) Exec(ctx context.Context) error {
+	if u.create.err != nil {
+		return u.create.err
+	}
 	for i, b := range u.create.builders {
 		if len(b.conflict) != 0 {
 			return fmt.Errorf("ent: OnConflict was set for builder %d. Set it on the DeckCreateBulk instead", i)
