@@ -29,7 +29,7 @@ jobs:
           platforms: linux/arm64/v8
       - id: login-ecr
         name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
       - name: build image
         uses: docker/build-push-action@v4
         with:
