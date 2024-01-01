@@ -10,8 +10,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v4
         with:
-          go-version-file: src/go.mod
-          cache-dependency-path: src/go.sum
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
       - name: install runn
         run: |
           runn_url=$(gh release view --repo k1LoW/runn --json assets --jq '.assets[] | select(.contentType == "application/vnd.debian.binary-package" and (.name | endswith("amd64.deb"))) | .url')
@@ -21,13 +21,10 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: install dependencies
         run: go mod download
-        working-directory: src
       - name: execute migration
         run: go run cmd/migration/main.go
-        working-directory: src
       - name: run server
         run: go run cmd/server/main.go &
-        working-directory: src
         shell: bash
       - name: server health check
         uses: jtalk/url-health-check-action@v3
