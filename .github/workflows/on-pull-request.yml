@@ -20,17 +20,17 @@ jobs:
           files: |
             .github/workflows/test-go.yml
             **/*.go
-            src/go.mod
-            src/go.sum
-            src/initdb/masterdata/*.csv
+            go.mod
+            go.sum
+            initdb/masterdata/*.csv
       - id: needs-test-ent
         uses: tj-actions/changed-files@v41
         with:
           files: |
             .github/workflows/test-ent.yml
-            src/ent/**/*
-            src/go.mod
-            src/go.sum
+            ent/**/*
+            go.mod
+            go.sum
       - id: needs-test-actions
         uses: tj-actions/changed-files@v41
         with:

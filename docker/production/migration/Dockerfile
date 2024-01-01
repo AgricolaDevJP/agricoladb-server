@@ -2,7 +2,7 @@ FROM golang:1.20-bullseye as builder
 
 WORKDIR /opt/app
 
-COPY src .
+COPY . .
 RUN go mod download
 RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o "agricoladb-server-migration" ./cmd/migration
 
