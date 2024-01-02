@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -17,7 +18,8 @@ import (
 )
 
 const (
-	defaultPort   = "8080"
+	defaultPort   = "8000"
+	defaultDBPath = "agricoladb.sqlite"
 	maxComplexity = 100
 )
 
@@ -26,17 +28,22 @@ func init() {
 }
 
 func main() {
-	// ent client
-	client, err := ent.Open(dialect.SQLite, "file:agricoladb.sqlite?cache=shared")
-	if err != nil {
-		log.Fatalf("failed opening connection to sqlite: %v", err)
-	}
-	defer client.Close()
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
 	}
+
+	dbPath := os.Getenv("DB_PATH")
+	if dbPath == "" {
+		dbPath = defaultDBPath
+	}
+	dsn := fmt.Sprintf("file:%s?cache=shared&mode=ro", dbPath)
+
+	client, err := ent.Open(dialect.SQLite, dsn)
+	if err != nil {
+		log.Fatalf("failed opening connection to sqlite: %v", err)
+	}
+	defer client.Close()
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
 		Client: client,
