@@ -29,6 +29,12 @@ resource "aws_lambda_function" "server" {
   image_uri     = "${aws_ecr_repository.server_lambda.repository_url}:latest"
   role          = aws_iam_role.server.arn
 
+  environment {
+    variables = {
+      ALLOWED_ORIGINS = "http://localhost:4321,https://db.agricolajp.dev"
+    }
+  }
+
   lifecycle {
     ignore_changes = [
       architectures,
