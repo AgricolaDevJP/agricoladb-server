@@ -1,11 +1,6 @@
 resource "aws_apigatewayv2_api" "api" {
   name          = "agricoladb-api"
   protocol_type = "HTTP"
-  cors_configuration {
-    allow_credentials = true
-    allow_methods     = ["GET", "POST", "OPTIONS"]
-    allow_origins     = ["http://localhost:4321", "https://db.agricolajp.dev"]
-  }
 }
 
 resource "aws_apigatewayv2_integration" "server" {

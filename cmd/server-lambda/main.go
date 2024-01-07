@@ -10,6 +10,7 @@ import (
 	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
 	"github.com/caarlos0/env/v10"
 	"github.com/go-chi/chi"
+	"github.com/rs/cors"
 
 	"github.com/AgricolaDevJP/agricoladb-server/ent"
 	"github.com/AgricolaDevJP/agricoladb-server/graph"
@@ -22,7 +23,8 @@ func init() {
 }
 
 type config struct {
-	Port string `env:"PORT" envDefault:"8000"`
+	Port           string   `env:"PORT" envDefault:"8000"`
+	AllowedOrigins []string `env:"ALLOWED_ORIGINS" envSeparator:","`
 }
 
 func main() {
@@ -43,6 +45,10 @@ func main() {
 	server := handler.NewDefaultServer(schema)
 
 	router := chi.NewRouter()
+	router.Use(cors.New(cors.Options{
+		AllowedOrigins:   cfg.AllowedOrigins,
+		AllowCredentials: true,
+	}).Handler)
 
 	router.Handle("/", playground.Handler("GraphQL playground", "/graphql"))
 	router.Handle("/graphql", server)
