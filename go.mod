@@ -7,6 +7,8 @@ require (
 	github.com/99designs/gqlgen v0.17.42
 	github.com/aws/aws-lambda-go v1.43.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.0
+	github.com/go-chi/chi/v5 v5.0.10
+	github.com/go-chi/httplog/v2 v2.0.8
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/jszwec/csvutil v1.9.0
 	github.com/vektah/gqlparser/v2 v2.5.10
@@ -48,10 +50,11 @@ require (
 	entgo.io/contrib v0.4.5
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/caarlos0/env/v10 v10.0.0
+	github.com/cbrewster/slog-env v0.1.1
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
-	github.com/go-chi/chi v1.5.5
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
+	github.com/phsym/console-slog v0.3.0
 	github.com/rs/cors v1.10.1
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/urfave/cli/v2 v2.25.5 // indirect

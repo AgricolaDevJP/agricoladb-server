@@ -2,12 +2,15 @@ package main
 
 import (
 	"log"
+	"log/slog"
+	"os"
 
 	"entgo.io/ent/dialect"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
 	"github.com/caarlos0/env/v10"
-	"github.com/go-chi/chi"
+	slogenv "github.com/cbrewster/slog-env"
+	"github.com/go-chi/chi/v5"
 
 	"github.com/AgricolaDevJP/agricoladb-server/ent"
 	"github.com/AgricolaDevJP/agricoladb-server/internal/server"
@@ -30,10 +33,17 @@ func main() {
 		log.Fatalf("%+v\n", err)
 	}
 
+	logger := slog.New(
+		// refer to GO_LOG env
+		slogenv.NewHandler(slog.NewJSONHandler(os.Stderr, nil)),
+	)
+	slog.SetDefault(logger)
+
 	dns := "file:/agricoladb.sqlite?cache=shared&mode=ro"
 	client, err := ent.Open(dialect.SQLite, dns)
 	if err != nil {
-		log.Fatalf("failed opening connection to sqlite: %v", err)
+		slog.Error("failed opening connection to sqlite", err)
+		os.Exit(1)
 	}
 	defer client.Close()
 

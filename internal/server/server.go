@@ -1,7 +1,9 @@
 package server
 
 import (
+	"log/slog"
 	"net/http"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
@@ -9,8 +11,9 @@ import (
 	"github.com/AgricolaDevJP/agricoladb-server/ent"
 	"github.com/AgricolaDevJP/agricoladb-server/graph"
 	"github.com/AgricolaDevJP/agricoladb-server/graph/generated"
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/httplog/v2"
 	"github.com/rs/cors"
 )
 
@@ -21,6 +24,21 @@ type Server struct {
 }
 
 func (s *Server) Install(r *chi.Mux) {
+	httpLogger := &httplog.Logger{
+		Logger: slog.Default(),
+		Options: httplog.Options{
+			LogLevel:         slog.LevelDebug,
+			RequestHeaders:   true,
+			MessageFieldName: "message",
+			QuietDownRoutes: []string{
+				"/robots.txt",
+				"/favicon.ico",
+			},
+			QuietDownPeriod: 10 * time.Second,
+		},
+	}
+
+	r.Use(httplog.RequestLogger(httpLogger))
 	r.Use(middleware.Recoverer)
 	r.Use(cors.New(cors.Options{
 		AllowedOrigins:   s.AllowedOrigins,
