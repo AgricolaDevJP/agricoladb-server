@@ -14,12 +14,12 @@ import (
 
 // Node is the resolver for the node field.
 func (r *queryResolver) Node(ctx context.Context, id int) (ent.Noder, error) {
-	return r.Client.Noder(ctx, id)
+	return r.Client.Noder(ctx, id, ent.WithNodeType(getTypeFromID))
 }
 
 // Nodes is the resolver for the nodes field.
 func (r *queryResolver) Nodes(ctx context.Context, ids []int) ([]ent.Noder, error) {
-	return r.Client.Noders(ctx, ids)
+	return r.Client.Noders(ctx, ids, ent.WithNodeType(getTypeFromID))
 }
 
 // Cards is the resolver for the cards field.

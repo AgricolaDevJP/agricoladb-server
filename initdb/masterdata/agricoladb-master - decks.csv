@@ -1,34 +1,34 @@
 id,key,name_ja,name_en,revision_id
-1,AG1_E,Eデッキ,E-Deck,1
-2,AG1_I,Iデッキ,I-Deck,1
-3,AG1_K,Kデッキ,K-Deck,1
-4,AG1_Z,Zデッキ,Z-Deck,1
-5,AG1_X,Xデッキ,X-Deck,1
-6,AG1_O,Öデッキ,Ö-Deck,1
-7,AG1_moor_E,Eデッキ (泥沼からの出発),E-Deck (Farmers of the Moor),1
-8,AG1_moor_F,Fデッキ (泥沼からの出発),F-Deck (Farmers of the Moor),1
-9,AG1_CZ,Czデッキ,Cz-Deck,1
-10,AG1_G,Gデッキ,G-Deck,1
-11,AG1_LF,🌲デッキ,Forest-Deck,1
-12,AG1_alpha,αデッキ,Alpha-Deck,1
-13,AG1_beta,βデッキ,Beta-Deck,1
-14,AG1_gamma,γデッキ,Gamma-Deck,1
-15,AG1_delta,δデッキ,Delta-Deck,1
-16,AG1_epsilon,εデッキ,Epsilon-Deck,1
-17,AG1_NL,NLデッキ,NL-Deck,1
-18,AG1_WA,WAデッキ,WA-Deck,1
-19,AG1_FL,FLデッキ,FL-Deck,1
-20,AG1_P,πデッキ,Pi-Deck,1
-21,AG1_BI,BIデッキ,BI-Deck,1
-22,AG1_FR,FRデッキ,FR-Deck,1
-23,AG2_A,Aデッキ,A-Deck,2
-24,AG2_B,Bデッキ,B-Deck,2
-25,AG2_C,Cデッキ,C-Deck,2
-26,AG2_D,Dデッキ,D-Deck,2
-27,AG2_M,Mデッキ,M-Deck,2
-28,AG2_X,Xデッキ,X-Deck,2
-29,AG2_LF,🌲デッキ,Forest-Deck,2
-9001,AG1_L,Lデッキ,L-Deck,1
-9002,AG2_L,Lデッキ (リバイズドエディション),L-Deck (Revised Edition),2
-9011,AG1_misc,その他,Misc,1
-9012,AG2_misc,その他 (リバイズドエディション),Misc (Revised Edition),2
+20001,AG1_E,Eデッキ,E-Deck,1
+20002,AG1_I,Iデッキ,I-Deck,1
+20003,AG1_K,Kデッキ,K-Deck,1
+20004,AG1_Z,Zデッキ,Z-Deck,1
+20005,AG1_X,Xデッキ,X-Deck,1
+20006,AG1_O,Öデッキ,Ö-Deck,1
+20007,AG1_moor_E,Eデッキ (泥沼からの出発),E-Deck (Farmers of the Moor),1
+20008,AG1_moor_F,Fデッキ (泥沼からの出発),F-Deck (Farmers of the Moor),1
+20009,AG1_CZ,Czデッキ,Cz-Deck,1
+20010,AG1_G,Gデッキ,G-Deck,1
+20011,AG1_LF,🌲デッキ,Forest-Deck,1
+20012,AG1_alpha,αデッキ,Alpha-Deck,1
+20013,AG1_beta,βデッキ,Beta-Deck,1
+20014,AG1_gamma,γデッキ,Gamma-Deck,1
+20015,AG1_delta,δデッキ,Delta-Deck,1
+20016,AG1_epsilon,εデッキ,Epsilon-Deck,1
+20017,AG1_NL,NLデッキ,NL-Deck,1
+20018,AG1_WA,WAデッキ,WA-Deck,1
+20019,AG1_FL,FLデッキ,FL-Deck,1
+20020,AG1_P,πデッキ,Pi-Deck,1
+20021,AG1_BI,BIデッキ,BI-Deck,1
+20022,AG1_FR,FRデッキ,FR-Deck,1
+20023,AG2_A,Aデッキ,A-Deck,2
+20024,AG2_B,Bデッキ,B-Deck,2
+20025,AG2_C,Cデッキ,C-Deck,2
+20026,AG2_D,Dデッキ,D-Deck,2
+20027,AG2_M,Mデッキ,M-Deck,2
+20028,AG2_X,Xデッキ,X-Deck,2
+20029,AG2_LF,🌲デッキ,Forest-Deck,2
+29001,AG1_L,Lデッキ,L-Deck,1
+29002,AG2_L,Lデッキ (リバイズドエディション),L-Deck (Revised Edition),2
+29011,AG1_misc,その他,Misc,1
+29012,AG2_misc,その他 (リバイズドエディション),Misc (Revised Edition),2
