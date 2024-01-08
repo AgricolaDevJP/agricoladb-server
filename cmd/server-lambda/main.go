@@ -10,7 +10,7 @@ import (
 	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
 	"github.com/caarlos0/env/v10"
 	slogenv "github.com/cbrewster/slog-env"
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 
 	"github.com/AgricolaDevJP/agricoladb-server/ent"
 	"github.com/AgricolaDevJP/agricoladb-server/internal/server"

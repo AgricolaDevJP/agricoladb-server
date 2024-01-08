@@ -13,7 +13,7 @@ import (
 	"github.com/AgricolaDevJP/agricoladb-server/sqlite"
 	"github.com/caarlos0/env/v10"
 	slogenv "github.com/cbrewster/slog-env"
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"github.com/phsym/console-slog"
 )
 
