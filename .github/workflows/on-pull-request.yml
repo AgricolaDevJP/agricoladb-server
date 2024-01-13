@@ -67,3 +67,8 @@ jobs:
     needs: judge-execute
     if: needs.judge-execute.outputs.needs-test-terraform == 'true'
     uses: ./.github/workflows/wf-test-terraform.yml
+
+  build-containers:
+    uses: ./.github/workflows/wf-build-containers.yml
+    with:
+      needs-push: false
