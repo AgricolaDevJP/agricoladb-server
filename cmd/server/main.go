@@ -66,7 +66,7 @@ func main() {
 	s.Install(router)
 
 	slog.Info(fmt.Sprintf("connect to http://localhost:%s/ for GraphQL playground", cfg.Port))
-	if err := http.ListenAndServe("localhost:"+cfg.Port, router); err != nil {
+	if err := http.ListenAndServe(":"+cfg.Port, router); err != nil {
 		slog.Error("failed starting server", err)
 		os.Exit(1)
 	}
