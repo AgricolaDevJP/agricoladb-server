@@ -19,7 +19,7 @@ jobs:
         uses: tj-actions/changed-files@v41
         with:
           files: |
-            .github/workflows/test-go.yml
+            .github/workflows/wf-test-go.yml
             **/*.go
             go.mod
             go.sum
@@ -28,7 +28,7 @@ jobs:
         uses: tj-actions/changed-files@v41
         with:
           files: |
-            .github/workflows/test-ent.yml
+            .github/workflows/wf-test-ent.yml
             ent/**/*
             go.mod
             go.sum
@@ -47,7 +47,7 @@ jobs:
         uses: tj-actions/changed-files@v41
         with:
           files: |
-            .github/workflows/build-containers.yml
+            .github/workflows/wf-build-containers.yml
             **/*.go
             go.mod
             go.sum
