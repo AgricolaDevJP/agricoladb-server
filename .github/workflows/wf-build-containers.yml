@@ -42,6 +42,7 @@ jobs:
         with:
           push: ${{ inputs.needs-push }}
           context: .
+          platforms: linux/amd64,linux/arm64/v8
           file: ./docker/production/server/Dockerfile
           tags: ${{ steps.meta-server.outputs.tags }}
           labels: ${{ steps.meta-server.outputs.labels }}
