@@ -11,6 +11,7 @@ jobs:
       needs-test-actions: ${{ steps.needs-test-actions.outputs.any_changed }}
       needs-test-integration: "true"
       needs-test-terraform: ${{ steps.needs-test-terraform.outputs.any_changed }}
+      needs-test-docker: ${{ steps.needs-test-docker.outputs.any_changed }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,6 +43,16 @@ jobs:
         with:
           files: |
             terraform/**/*
+      - id: needs-test-docker
+        uses: tj-actions/changed-files@v41
+        with:
+          files: |
+            .github/workflows/build-containers.yml
+            **/*.go
+            go.mod
+            go.sum
+            initdb/masterdata/*.csv
+            docker/production/server/Dockerfile
 
   test-go:
     needs: judge-execute
@@ -68,7 +79,9 @@ jobs:
     if: needs.judge-execute.outputs.needs-test-terraform == 'true'
     uses: ./.github/workflows/wf-test-terraform.yml
 
-  build-containers:
+  test-docker:
+    needs: judge-execute
+    if: needs.judge-execute.outputs.needs-test-docker == 'true'
     uses: ./.github/workflows/wf-build-containers.yml
     with:
       needs-push: false
