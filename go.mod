@@ -8,7 +8,7 @@ require (
 	github.com/aws/aws-lambda-go v1.44.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.0
 	github.com/go-chi/chi/v5 v5.0.11
-	github.com/go-chi/httplog/v2 v2.0.8
+	github.com/go-chi/httplog/v2 v2.0.9
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/jszwec/csvutil v1.9.0
 	github.com/vektah/gqlparser/v2 v2.5.10
