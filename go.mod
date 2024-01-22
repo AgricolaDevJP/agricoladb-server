@@ -11,7 +11,7 @@ require (
 	github.com/go-chi/httplog/v2 v2.0.9
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/jszwec/csvutil v1.9.0
-	github.com/vektah/gqlparser/v2 v2.5.10
+	github.com/vektah/gqlparser/v2 v2.5.11
 	golang.org/x/sync v0.6.0
 )
 
