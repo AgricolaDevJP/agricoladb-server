@@ -5,7 +5,7 @@ go 1.21
 require (
 	entgo.io/ent v0.12.5
 	github.com/99designs/gqlgen v0.17.42
-	github.com/aws/aws-lambda-go v1.44.0
+	github.com/aws/aws-lambda-go v1.45.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.0
 	github.com/go-chi/chi/v5 v5.0.11
 	github.com/go-chi/httplog/v2 v2.0.9
