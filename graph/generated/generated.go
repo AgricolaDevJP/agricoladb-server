@@ -1017,20 +1017,34 @@ type Card implements Node {
   children: [Card!]
   ancestors: [Card!]
 }
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type CardConnection {
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [CardEdge]
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
-  """Identifies the total count of items in the connection."""
+  """
+  Identifies the total count of items in the connection.
+  """
   totalCount: Int!
 }
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type CardEdge {
-  """The item at the end of the edge."""
+  """
+  The item at the end of the edge.
+  """
   node: Card
-  """A cursor for use in pagination."""
+  """
+  A cursor for use in pagination.
+  """
   cursor: Cursor!
 }
 type CardSpecialColor implements Node {
@@ -1039,19 +1053,29 @@ type CardSpecialColor implements Node {
   nameJa: String
   nameEn: String
   cards(
-    """Returns the elements in the list that come after the specified cursor."""
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
     after: Cursor
 
-    """Returns the first _n_ elements from the list."""
+    """
+    Returns the first _n_ elements from the list.
+    """
     first: Int
 
-    """Returns the elements in the list that come before the specified cursor."""
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
     before: Cursor
 
-    """Returns the last _n_ elements from the list."""
+    """
+    Returns the last _n_ elements from the list.
+    """
     last: Int
 
-    """Filtering options for Cards returned from the connection."""
+    """
+    Filtering options for Cards returned from the connection.
+    """
     where: CardWhereInput
   ): CardConnection!
 }
@@ -1063,7 +1087,9 @@ input CardSpecialColorWhereInput {
   not: CardSpecialColorWhereInput
   and: [CardSpecialColorWhereInput!]
   or: [CardSpecialColorWhereInput!]
-  """id field predicates"""
+  """
+  id field predicates
+  """
   id: ID
   idNEQ: ID
   idIn: [ID!]
@@ -1072,7 +1098,9 @@ input CardSpecialColorWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
-  """key field predicates"""
+  """
+  key field predicates
+  """
   key: String
   keyNEQ: String
   keyIn: [String!]
@@ -1086,7 +1114,9 @@ input CardSpecialColorWhereInput {
   keyHasSuffix: String
   keyEqualFold: String
   keyContainsFold: String
-  """name_ja field predicates"""
+  """
+  name_ja field predicates
+  """
   nameJa: String
   nameJaNEQ: String
   nameJaIn: [String!]
@@ -1102,7 +1132,9 @@ input CardSpecialColorWhereInput {
   nameJaNotNil: Boolean
   nameJaEqualFold: String
   nameJaContainsFold: String
-  """name_en field predicates"""
+  """
+  name_en field predicates
+  """
   nameEn: String
   nameEnNEQ: String
   nameEnIn: [String!]
@@ -1118,7 +1150,9 @@ input CardSpecialColorWhereInput {
   nameEnNotNil: Boolean
   nameEnEqualFold: String
   nameEnContainsFold: String
-  """cards edge predicates"""
+  """
+  cards edge predicates
+  """
   hasCards: Boolean
   hasCardsWith: [CardWhereInput!]
 }
@@ -1128,19 +1162,29 @@ type CardType implements Node {
   nameJa: String
   nameEn: String
   cards(
-    """Returns the elements in the list that come after the specified cursor."""
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
     after: Cursor
 
-    """Returns the first _n_ elements from the list."""
+    """
+    Returns the first _n_ elements from the list.
+    """
     first: Int
 
-    """Returns the elements in the list that come before the specified cursor."""
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
     before: Cursor
 
-    """Returns the last _n_ elements from the list."""
+    """
+    Returns the last _n_ elements from the list.
+    """
     last: Int
 
-    """Filtering options for Cards returned from the connection."""
+    """
+    Filtering options for Cards returned from the connection.
+    """
     where: CardWhereInput
   ): CardConnection!
 }
@@ -1152,7 +1196,9 @@ input CardTypeWhereInput {
   not: CardTypeWhereInput
   and: [CardTypeWhereInput!]
   or: [CardTypeWhereInput!]
-  """id field predicates"""
+  """
+  id field predicates
+  """
   id: ID
   idNEQ: ID
   idIn: [ID!]
@@ -1161,7 +1207,9 @@ input CardTypeWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
-  """key field predicates"""
+  """
+  key field predicates
+  """
   key: String
   keyNEQ: String
   keyIn: [String!]
@@ -1175,7 +1223,9 @@ input CardTypeWhereInput {
   keyHasSuffix: String
   keyEqualFold: String
   keyContainsFold: String
-  """name_ja field predicates"""
+  """
+  name_ja field predicates
+  """
   nameJa: String
   nameJaNEQ: String
   nameJaIn: [String!]
@@ -1191,7 +1241,9 @@ input CardTypeWhereInput {
   nameJaNotNil: Boolean
   nameJaEqualFold: String
   nameJaContainsFold: String
-  """name_en field predicates"""
+  """
+  name_en field predicates
+  """
   nameEn: String
   nameEnNEQ: String
   nameEnIn: [String!]
@@ -1207,7 +1259,9 @@ input CardTypeWhereInput {
   nameEnNotNil: Boolean
   nameEnEqualFold: String
   nameEnContainsFold: String
-  """cards edge predicates"""
+  """
+  cards edge predicates
+  """
   hasCards: Boolean
   hasCardsWith: [CardWhereInput!]
 }
@@ -1219,7 +1273,9 @@ input CardWhereInput {
   not: CardWhereInput
   and: [CardWhereInput!]
   or: [CardWhereInput!]
-  """id field predicates"""
+  """
+  id field predicates
+  """
   id: ID
   idNEQ: ID
   idIn: [ID!]
@@ -1228,7 +1284,9 @@ input CardWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
-  """literal_id field predicates"""
+  """
+  literal_id field predicates
+  """
   literalID: String
   literalIDNEQ: String
   literalIDIn: [String!]
@@ -1242,12 +1300,16 @@ input CardWhereInput {
   literalIDHasSuffix: String
   literalIDEqualFold: String
   literalIDContainsFold: String
-  """revision_id field predicates"""
+  """
+  revision_id field predicates
+  """
   revisionID: ID
   revisionIDNEQ: ID
   revisionIDIn: [ID!]
   revisionIDNotIn: [ID!]
-  """printed_id field predicates"""
+  """
+  printed_id field predicates
+  """
   printedID: String
   printedIDNEQ: String
   printedIDIn: [String!]
@@ -1263,7 +1325,9 @@ input CardWhereInput {
   printedIDNotNil: Boolean
   printedIDEqualFold: String
   printedIDContainsFold: String
-  """play_agricola_card_id field predicates"""
+  """
+  play_agricola_card_id field predicates
+  """
   playAgricolaCardID: String
   playAgricolaCardIDNEQ: String
   playAgricolaCardIDIn: [String!]
@@ -1279,26 +1343,34 @@ input CardWhereInput {
   playAgricolaCardIDNotNil: Boolean
   playAgricolaCardIDEqualFold: String
   playAgricolaCardIDContainsFold: String
-  """deck_id field predicates"""
+  """
+  deck_id field predicates
+  """
   deckID: ID
   deckIDNEQ: ID
   deckIDIn: [ID!]
   deckIDNotIn: [ID!]
   deckIDIsNil: Boolean
   deckIDNotNil: Boolean
-  """card_type_id field predicates"""
+  """
+  card_type_id field predicates
+  """
   cardTypeID: ID
   cardTypeIDNEQ: ID
   cardTypeIDIn: [ID!]
   cardTypeIDNotIn: [ID!]
-  """card_special_color_id field predicates"""
+  """
+  card_special_color_id field predicates
+  """
   cardSpecialColorID: ID
   cardSpecialColorIDNEQ: ID
   cardSpecialColorIDIn: [ID!]
   cardSpecialColorIDNotIn: [ID!]
   cardSpecialColorIDIsNil: Boolean
   cardSpecialColorIDNotNil: Boolean
-  """name_ja field predicates"""
+  """
+  name_ja field predicates
+  """
   nameJa: String
   nameJaNEQ: String
   nameJaIn: [String!]
@@ -1314,7 +1386,9 @@ input CardWhereInput {
   nameJaNotNil: Boolean
   nameJaEqualFold: String
   nameJaContainsFold: String
-  """name_en field predicates"""
+  """
+  name_en field predicates
+  """
   nameEn: String
   nameEnNEQ: String
   nameEnIn: [String!]
@@ -1330,7 +1404,9 @@ input CardWhereInput {
   nameEnNotNil: Boolean
   nameEnEqualFold: String
   nameEnContainsFold: String
-  """min_players_number field predicates"""
+  """
+  min_players_number field predicates
+  """
   minPlayersNumber: Int
   minPlayersNumberNEQ: Int
   minPlayersNumberIn: [Int!]
@@ -1341,7 +1417,9 @@ input CardWhereInput {
   minPlayersNumberLTE: Int
   minPlayersNumberIsNil: Boolean
   minPlayersNumberNotNil: Boolean
-  """prerequisite field predicates"""
+  """
+  prerequisite field predicates
+  """
   prerequisite: String
   prerequisiteNEQ: String
   prerequisiteIn: [String!]
@@ -1357,7 +1435,9 @@ input CardWhereInput {
   prerequisiteNotNil: Boolean
   prerequisiteEqualFold: String
   prerequisiteContainsFold: String
-  """cost field predicates"""
+  """
+  cost field predicates
+  """
   cost: String
   costNEQ: String
   costIn: [String!]
@@ -1373,7 +1453,9 @@ input CardWhereInput {
   costNotNil: Boolean
   costEqualFold: String
   costContainsFold: String
-  """description field predicates"""
+  """
+  description field predicates
+  """
   description: String
   descriptionNEQ: String
   descriptionIn: [String!]
@@ -1389,7 +1471,9 @@ input CardWhereInput {
   descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
-  """note field predicates"""
+  """
+  note field predicates
+  """
   note: String
   noteNEQ: String
   noteIn: [String!]
@@ -1405,10 +1489,14 @@ input CardWhereInput {
   noteNotNil: Boolean
   noteEqualFold: String
   noteContainsFold: String
-  """is_official_ja field predicates"""
+  """
+  is_official_ja field predicates
+  """
   isOfficialJa: Boolean
   isOfficialJaNEQ: Boolean
-  """victory_point field predicates"""
+  """
+  victory_point field predicates
+  """
   victoryPoint: Int
   victoryPointNEQ: Int
   victoryPointIn: [Int!]
@@ -1419,7 +1507,9 @@ input CardWhereInput {
   victoryPointLTE: Int
   victoryPointIsNil: Boolean
   victoryPointNotNil: Boolean
-  """special_victory_point field predicates"""
+  """
+  special_victory_point field predicates
+  """
   specialVictoryPoint: String
   specialVictoryPointNEQ: String
   specialVictoryPointIn: [String!]
@@ -1435,76 +1525,124 @@ input CardWhereInput {
   specialVictoryPointNotNil: Boolean
   specialVictoryPointEqualFold: String
   specialVictoryPointContainsFold: String
-  """has_arrow field predicates"""
+  """
+  has_arrow field predicates
+  """
   hasArrow: Boolean
   hasArrowNEQ: Boolean
-  """has_bonus_point_icon field predicates"""
+  """
+  has_bonus_point_icon field predicates
+  """
   hasBonusPointIcon: Boolean
   hasBonusPointIconNEQ: Boolean
-  """has_negative_bonus_point_icon field predicates"""
+  """
+  has_negative_bonus_point_icon field predicates
+  """
   hasNegativeBonusPointIcon: Boolean
   hasNegativeBonusPointIconNEQ: Boolean
-  """has_pan_icon field predicates"""
+  """
+  has_pan_icon field predicates
+  """
   hasPanIcon: Boolean
   hasPanIconNEQ: Boolean
-  """has_bread_icon field predicates"""
+  """
+  has_bread_icon field predicates
+  """
   hasBreadIcon: Boolean
   hasBreadIconNEQ: Boolean
-  """has_farm_planner_icon field predicates"""
+  """
+  has_farm_planner_icon field predicates
+  """
   hasFarmPlannerIcon: Boolean
   hasFarmPlannerIconNEQ: Boolean
-  """has_actions_booster_icon field predicates"""
+  """
+  has_actions_booster_icon field predicates
+  """
   hasActionsBoosterIcon: Boolean
   hasActionsBoosterIconNEQ: Boolean
-  """has_points_provider_icon field predicates"""
+  """
+  has_points_provider_icon field predicates
+  """
   hasPointsProviderIcon: Boolean
   hasPointsProviderIconNEQ: Boolean
-  """has_goods_provider_icon field predicates"""
+  """
+  has_goods_provider_icon field predicates
+  """
   hasGoodsProviderIcon: Boolean
   hasGoodsProviderIconNEQ: Boolean
-  """has_food_provider_icon field predicates"""
+  """
+  has_food_provider_icon field predicates
+  """
   hasFoodProviderIcon: Boolean
   hasFoodProviderIconNEQ: Boolean
-  """has_crop_provider_icon field predicates"""
+  """
+  has_crop_provider_icon field predicates
+  """
   hasCropProviderIcon: Boolean
   hasCropProviderIconNEQ: Boolean
-  """has_building_resource_provider_icon field predicates"""
+  """
+  has_building_resource_provider_icon field predicates
+  """
   hasBuildingResourceProviderIcon: Boolean
   hasBuildingResourceProviderIconNEQ: Boolean
-  """has_livestock_provider_icon field predicates"""
+  """
+  has_livestock_provider_icon field predicates
+  """
   hasLivestockProviderIcon: Boolean
   hasLivestockProviderIconNEQ: Boolean
-  """has_cut_peat_icon field predicates"""
+  """
+  has_cut_peat_icon field predicates
+  """
   hasCutPeatIcon: Boolean
   hasCutPeatIconNEQ: Boolean
-  """has_fell_trees_icon field predicates"""
+  """
+  has_fell_trees_icon field predicates
+  """
   hasFellTreesIcon: Boolean
   hasFellTreesIconNEQ: Boolean
-  """has_slash_and_burn_icon field predicates"""
+  """
+  has_slash_and_burn_icon field predicates
+  """
   hasSlashAndBurnIcon: Boolean
   hasSlashAndBurnIconNEQ: Boolean
-  """has_hiring_fare_icon field predicates"""
+  """
+  has_hiring_fare_icon field predicates
+  """
   hasHiringFareIcon: Boolean
   hasHiringFareIconNEQ: Boolean
-  """revision edge predicates"""
+  """
+  revision edge predicates
+  """
   hasRevision: Boolean
   hasRevisionWith: [RevisionWhereInput!]
-  """products edge predicates"""
+  """
+  products edge predicates
+  """
   hasProducts: Boolean
   hasProductsWith: [ProductWhereInput!]
-  """deck edge predicates"""
+  """
+  deck edge predicates
+  """
   hasDeck: Boolean
   hasDeckWith: [DeckWhereInput!]
-  """card_type edge predicates"""
+  """
+  card_type edge predicates
+  """
   hasCardType: Boolean
   hasCardTypeWith: [CardTypeWhereInput!]
-  """card_special_color edge predicates"""
+  """
+  card_special_color edge predicates
+  """
   hasCardSpecialColor: Boolean
   hasCardSpecialColorWith: [CardSpecialColorWhereInput!]
-  """children edge predicates"""
+  """
+  children edge predicates
+  """
   hasChildren: Boolean
   hasChildrenWith: [CardWhereInput!]
-  """ancestors edge predicates"""
+  """
+  ancestors edge predicates
+  """
   hasAncestors: Boolean
   hasAncestorsWith: [CardWhereInput!]
 }
@@ -1520,19 +1658,29 @@ type Deck implements Node {
   nameJa: String
   nameEn: String
   cards(
-    """Returns the elements in the list that come after the specified cursor."""
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
     after: Cursor
 
-    """Returns the first _n_ elements from the list."""
+    """
+    Returns the first _n_ elements from the list.
+    """
     first: Int
 
-    """Returns the elements in the list that come before the specified cursor."""
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
     before: Cursor
 
-    """Returns the last _n_ elements from the list."""
+    """
+    Returns the last _n_ elements from the list.
+    """
     last: Int
 
-    """Filtering options for Cards returned from the connection."""
+    """
+    Filtering options for Cards returned from the connection.
+    """
     where: CardWhereInput
   ): CardConnection!
   revision: Revision!
@@ -1545,7 +1693,9 @@ input DeckWhereInput {
   not: DeckWhereInput
   and: [DeckWhereInput!]
   or: [DeckWhereInput!]
-  """id field predicates"""
+  """
+  id field predicates
+  """
   id: ID
   idNEQ: ID
   idIn: [ID!]
@@ -1554,7 +1704,9 @@ input DeckWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
-  """key field predicates"""
+  """
+  key field predicates
+  """
   key: String
   keyNEQ: String
   keyIn: [String!]
@@ -1568,12 +1720,16 @@ input DeckWhereInput {
   keyHasSuffix: String
   keyEqualFold: String
   keyContainsFold: String
-  """revision_id field predicates"""
+  """
+  revision_id field predicates
+  """
   revisionID: ID
   revisionIDNEQ: ID
   revisionIDIn: [ID!]
   revisionIDNotIn: [ID!]
-  """name_ja field predicates"""
+  """
+  name_ja field predicates
+  """
   nameJa: String
   nameJaNEQ: String
   nameJaIn: [String!]
@@ -1589,7 +1745,9 @@ input DeckWhereInput {
   nameJaNotNil: Boolean
   nameJaEqualFold: String
   nameJaContainsFold: String
-  """name_en field predicates"""
+  """
+  name_en field predicates
+  """
   nameEn: String
   nameEnNEQ: String
   nameEnIn: [String!]
@@ -1605,10 +1763,14 @@ input DeckWhereInput {
   nameEnNotNil: Boolean
   nameEnEqualFold: String
   nameEnContainsFold: String
-  """cards edge predicates"""
+  """
+  cards edge predicates
+  """
   hasCards: Boolean
   hasCardsWith: [CardWhereInput!]
-  """revision edge predicates"""
+  """
+  revision edge predicates
+  """
   hasRevision: Boolean
   hasRevisionWith: [RevisionWhereInput!]
 }
@@ -1617,14 +1779,22 @@ An object with an ID.
 Follows the [Relay Global Object Identification Specification](https://relay.dev/graphql/objectidentification.htm)
 """
 interface Node @goModel(model: "github.com/AgricolaDevJP/agricoladb-server/ent.Noder") {
-  """The id of the object."""
+  """
+  The id of the object.
+  """
   id: ID!
 }
-"""Possible directions in which to order a list of items when provided an ` + "`" + `orderBy` + "`" + ` argument."""
+"""
+Possible directions in which to order a list of items when provided an ` + "`" + `orderBy` + "`" + ` argument.
+"""
 enum OrderDirection {
-  """Specifies an ascending order for a given ` + "`" + `orderBy` + "`" + ` argument."""
+  """
+  Specifies an ascending order for a given ` + "`" + `orderBy` + "`" + ` argument.
+  """
   ASC
-  """Specifies a descending order for a given ` + "`" + `orderBy` + "`" + ` argument."""
+  """
+  Specifies a descending order for a given ` + "`" + `orderBy` + "`" + ` argument.
+  """
   DESC
 }
 """
@@ -1632,13 +1802,21 @@ Information about pagination in a connection.
 https://relay.dev/graphql/connections.htm#sec-undefined.PageInfo
 """
 type PageInfo {
-  """When paginating forwards, are there more items?"""
+  """
+  When paginating forwards, are there more items?
+  """
   hasNextPage: Boolean!
-  """When paginating backwards, are there more items?"""
+  """
+  When paginating backwards, are there more items?
+  """
   hasPreviousPage: Boolean!
-  """When paginating backwards, the cursor to continue."""
+  """
+  When paginating backwards, the cursor to continue.
+  """
   startCursor: Cursor
-  """When paginating forwards, the cursor to continue."""
+  """
+  When paginating forwards, the cursor to continue.
+  """
   endCursor: Cursor
 }
 type Product implements Node {
@@ -1649,19 +1827,29 @@ type Product implements Node {
   nameEn: String
   publishedYear: Int
   cards(
-    """Returns the elements in the list that come after the specified cursor."""
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
     after: Cursor
 
-    """Returns the first _n_ elements from the list."""
+    """
+    Returns the first _n_ elements from the list.
+    """
     first: Int
 
-    """Returns the elements in the list that come before the specified cursor."""
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
     before: Cursor
 
-    """Returns the last _n_ elements from the list."""
+    """
+    Returns the last _n_ elements from the list.
+    """
     last: Int
 
-    """Filtering options for Cards returned from the connection."""
+    """
+    Filtering options for Cards returned from the connection.
+    """
     where: CardWhereInput
   ): CardConnection!
   revision: Revision!
@@ -1674,7 +1862,9 @@ input ProductWhereInput {
   not: ProductWhereInput
   and: [ProductWhereInput!]
   or: [ProductWhereInput!]
-  """id field predicates"""
+  """
+  id field predicates
+  """
   id: ID
   idNEQ: ID
   idIn: [ID!]
@@ -1683,15 +1873,21 @@ input ProductWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
-  """revision_id field predicates"""
+  """
+  revision_id field predicates
+  """
   revisionID: ID
   revisionIDNEQ: ID
   revisionIDIn: [ID!]
   revisionIDNotIn: [ID!]
-  """is_official_ja field predicates"""
+  """
+  is_official_ja field predicates
+  """
   isOfficialJa: Boolean
   isOfficialJaNEQ: Boolean
-  """name_ja field predicates"""
+  """
+  name_ja field predicates
+  """
   nameJa: String
   nameJaNEQ: String
   nameJaIn: [String!]
@@ -1707,7 +1903,9 @@ input ProductWhereInput {
   nameJaNotNil: Boolean
   nameJaEqualFold: String
   nameJaContainsFold: String
-  """name_en field predicates"""
+  """
+  name_en field predicates
+  """
   nameEn: String
   nameEnNEQ: String
   nameEnIn: [String!]
@@ -1723,7 +1921,9 @@ input ProductWhereInput {
   nameEnNotNil: Boolean
   nameEnEqualFold: String
   nameEnContainsFold: String
-  """published_year field predicates"""
+  """
+  published_year field predicates
+  """
   publishedYear: Int
   publishedYearNEQ: Int
   publishedYearIn: [Int!]
@@ -1734,38 +1934,60 @@ input ProductWhereInput {
   publishedYearLTE: Int
   publishedYearIsNil: Boolean
   publishedYearNotNil: Boolean
-  """cards edge predicates"""
+  """
+  cards edge predicates
+  """
   hasCards: Boolean
   hasCardsWith: [CardWhereInput!]
-  """revision edge predicates"""
+  """
+  revision edge predicates
+  """
   hasRevision: Boolean
   hasRevisionWith: [RevisionWhereInput!]
 }
 type Query {
-  """Fetches an object given its ID."""
+  """
+  Fetches an object given its ID.
+  """
   node(
-    """ID of the object."""
+    """
+    ID of the object.
+    """
     id: ID!
   ): Node
-  """Lookup nodes by a list of IDs."""
+  """
+  Lookup nodes by a list of IDs.
+  """
   nodes(
-    """The list of node IDs."""
+    """
+    The list of node IDs.
+    """
     ids: [ID!]!
   ): [Node]!
   cards(
-    """Returns the elements in the list that come after the specified cursor."""
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
     after: Cursor
 
-    """Returns the first _n_ elements from the list."""
+    """
+    Returns the first _n_ elements from the list.
+    """
     first: Int
 
-    """Returns the elements in the list that come before the specified cursor."""
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
     before: Cursor
 
-    """Returns the last _n_ elements from the list."""
+    """
+    Returns the last _n_ elements from the list.
+    """
     last: Int
 
-    """Filtering options for Cards returned from the connection."""
+    """
+    Filtering options for Cards returned from the connection.
+    """
     where: CardWhereInput
   ): CardConnection!
   cardSpecialColors: [CardSpecialColor!]!
@@ -1780,19 +2002,29 @@ type Revision implements Node {
   nameJa: String
   nameEn: String
   cards(
-    """Returns the elements in the list that come after the specified cursor."""
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
     after: Cursor
 
-    """Returns the first _n_ elements from the list."""
+    """
+    Returns the first _n_ elements from the list.
+    """
     first: Int
 
-    """Returns the elements in the list that come before the specified cursor."""
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
     before: Cursor
 
-    """Returns the last _n_ elements from the list."""
+    """
+    Returns the last _n_ elements from the list.
+    """
     last: Int
 
-    """Filtering options for Cards returned from the connection."""
+    """
+    Filtering options for Cards returned from the connection.
+    """
     where: CardWhereInput
   ): CardConnection!
   products: [Product!]
@@ -1806,7 +2038,9 @@ input RevisionWhereInput {
   not: RevisionWhereInput
   and: [RevisionWhereInput!]
   or: [RevisionWhereInput!]
-  """id field predicates"""
+  """
+  id field predicates
+  """
   id: ID
   idNEQ: ID
   idIn: [ID!]
@@ -1815,7 +2049,9 @@ input RevisionWhereInput {
   idGTE: ID
   idLT: ID
   idLTE: ID
-  """key field predicates"""
+  """
+  key field predicates
+  """
   key: String
   keyNEQ: String
   keyIn: [String!]
@@ -1829,7 +2065,9 @@ input RevisionWhereInput {
   keyHasSuffix: String
   keyEqualFold: String
   keyContainsFold: String
-  """name_ja field predicates"""
+  """
+  name_ja field predicates
+  """
   nameJa: String
   nameJaNEQ: String
   nameJaIn: [String!]
@@ -1845,7 +2083,9 @@ input RevisionWhereInput {
   nameJaNotNil: Boolean
   nameJaEqualFold: String
   nameJaContainsFold: String
-  """name_en field predicates"""
+  """
+  name_en field predicates
+  """
   nameEn: String
   nameEnNEQ: String
   nameEnIn: [String!]
@@ -1861,13 +2101,19 @@ input RevisionWhereInput {
   nameEnNotNil: Boolean
   nameEnEqualFold: String
   nameEnContainsFold: String
-  """cards edge predicates"""
+  """
+  cards edge predicates
+  """
   hasCards: Boolean
   hasCardsWith: [CardWhereInput!]
-  """products edge predicates"""
+  """
+  products edge predicates
+  """
   hasProducts: Boolean
   hasProductsWith: [ProductWhereInput!]
-  """decks edge predicates"""
+  """
+  decks edge predicates
+  """
   hasDecks: Boolean
   hasDecksWith: [DeckWhereInput!]
 }
