@@ -1,6 +1,6 @@
 module github.com/AgricolaDevJP/agricoladb-server
 
-go 1.21
+go 1.22.0
 
 require (
 	entgo.io/ent v0.13.0
