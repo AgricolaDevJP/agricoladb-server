@@ -55,7 +55,7 @@ jobs:
           aws-region: ap-northeast-1
       - uses: fujiwara/lambroll@v1
         with:
-          version: v0.14.2
+          version: v1.0.1
       - name: deploy Lambda
         run: |
           lambroll --function ./function.jsonnet --region=ap-northeast-1 \
