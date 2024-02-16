@@ -1,5 +1,5 @@
 # rpm-based image may be better for al2023
-FROM --platform=$BUILDPLATFORM golang:1.21-bookworm as builder
+FROM --platform=$BUILDPLATFORM golang:1.22-bookworm as builder
 ARG TARGETARCH
 
 WORKDIR /opt/app
