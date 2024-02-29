@@ -7,7 +7,7 @@ require (
 	github.com/99designs/gqlgen v0.17.43
 	github.com/aws/aws-lambda-go v1.46.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.1
-	github.com/go-chi/chi/v5 v5.0.11
+	github.com/go-chi/chi/v5 v5.0.12
 	github.com/go-chi/httplog/v2 v2.0.9
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/jszwec/csvutil v1.10.0
