@@ -56,3 +56,5 @@ models:
   Node:
     model:
       - github.com/AgricolaDevJP/agricoladb-server/ent.Noder
+
+omit_gqlgen_version_in_file_notice: true
