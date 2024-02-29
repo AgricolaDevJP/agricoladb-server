@@ -32,6 +32,7 @@ jobs:
             ent/**/*
             go.mod
             go.sum
+            gqlgen.yml
       - id: needs-test-actions
         uses: tj-actions/changed-files@v42
         with:
