@@ -1,4 +1,4 @@
-name: generate-go
+name: dispatch generate go
 on:
   workflow_dispatch:
 

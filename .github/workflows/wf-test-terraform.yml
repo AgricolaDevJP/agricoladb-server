@@ -16,10 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: terraform version
-        run: echo "TF_VERSION=$(cat .terraform-version)" >> "$GITHUB_ENV"
+        id: tf-version
+        run: echo "version=$(cat .terraform-version)" >> "$GITHUB_OUTPUT"
       - uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: ${{ env.TF_VERSION }}
+          terraform_version: ${{ steps.tf-version.outputs.version }}
       - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::131551699606:role/agricoladb-server-github-actions-role
@@ -39,9 +40,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: terraform version
-        run: echo "TF_VERSION=$(cat .terraform-version)" >> "$GITHUB_ENV"
+        id: tf-version
+        run: echo "version=$(cat .terraform-version)" >> "$GITHUB_OUTPUT"
       - uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: ${{ env.TF_VERSION }}
+          terraform_version: ${{ steps.tf-version.outputs.version }}
       - name: terraform format
         run: terraform fmt -check
