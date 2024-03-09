@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "assume_role" {
 }
 
 resource "aws_iam_role" "server" {
-  name               = "agricoladb-server-lambda-role"
+  name               = "${var.name}-lambda-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
@@ -24,16 +24,19 @@ resource "aws_iam_role_policy_attachment" "this" {
 }
 
 resource "aws_lambda_function" "server" {
-  function_name = "agricoladb-server"
-  package_type  = "Image"
-  image_uri     = "${aws_ecr_repository.server_lambda.repository_url}:latest"
+  function_name = var.name
+  package_type  = "Zip"
   role          = aws_iam_role.server.arn
+  architectures = [var.lambda_architecture]
+  filename      = "./agricoladb-server-lambda.zip"
+  handler       = "main"
+  memory_size   = 256
+  timeout       = 7
+  runtime       = "provided.al2023"
 
   environment {
     variables = {
-      ALLOWED_ORIGINS = "http://localhost:4321,https://db.agricolajp.dev,https://*.agricoladb-viewer.pages.dev"
-      GO_ENV          = "production"
-      GO_LOG          = "warn"
+      ALLOWED_ORIGINS = join(",", var.allowed_origins)
     }
   }
 
@@ -44,6 +47,10 @@ resource "aws_lambda_function" "server" {
       timeout,
     ]
   }
+
+  depends_on = [
+    terraform_data.server_lambda_archive
+  ]
 }
 
 resource "aws_lambda_permission" "api" {
