@@ -20,12 +20,13 @@ jobs:
       - name: Generate codes
         run: go generate ./...
       - name: Check diff
+        id: diff
         run: |
           git add -N .
           git diff --name-only --exit-code
         continue-on-error: true
       - name: Commit & Push
-        if: failure()
+        if: steps.diff.outcome == 'failure'
         run: |
           set -x
           git config user.name github-actions[bot]
