@@ -18,5 +18,6 @@ COPY --from=builder /opt/app/agricoladb.sqlite /agricoladb.sqlite
 
 ENV PORT 8000
 EXPOSE $PORT
+ENV DB_PATH /agricoladb.sqlite
 
 ENTRYPOINT ["/agricoladb-server"]

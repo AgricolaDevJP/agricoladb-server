@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"log/slog"
 	"os"
@@ -23,6 +24,7 @@ func init() {
 
 type config struct {
 	Port           string   `env:"PORT" envDefault:"8000"`
+	DBPath         string   `env:"DB_PATH" envDefault:"agricoladb.sqlite"`
 	AllowedOrigins []string `env:"ALLOWED_ORIGINS" envSeparator:","`
 	MaxComplexity  int      `env:"MAX_COMPLEXITY" envDefault:"100"`
 }
@@ -39,7 +41,7 @@ func main() {
 	)
 	slog.SetDefault(logger)
 
-	dns := "file:/agricoladb.sqlite?cache=shared&mode=ro"
+	dns := fmt.Sprintf("file:%s?cache=shared&mode=ro", cfg.DBPath)
 	client, err := ent.Open(dialect.SQLite, dns)
 	if err != nil {
 		slog.Error("failed opening connection to sqlite", err)
