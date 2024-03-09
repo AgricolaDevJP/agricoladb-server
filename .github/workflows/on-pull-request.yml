@@ -43,6 +43,7 @@ jobs:
         uses: tj-actions/changed-files@v42
         with:
           files: |
+            .github/workflows/wf-test-terraform.yml
             terraform/**/*
       - id: needs-test-docker
         uses: tj-actions/changed-files@v42
