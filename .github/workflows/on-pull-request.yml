@@ -96,3 +96,4 @@ jobs:
     needs: judge-execute
     if: needs.judge-execute.outputs.needs-generate-go == 'true'
     uses: ./.github/workflows/wf-generate-go.yml
+    secrets: inherit
