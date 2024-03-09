@@ -12,6 +12,7 @@ jobs:
       needs-test-integration: "true"
       needs-test-terraform: ${{ steps.needs-test-terraform.outputs.any_changed }}
       needs-test-docker: ${{ steps.needs-test-docker.outputs.any_changed }}
+      needs-build-binaries: ${{ steps.needs-build-binaries.outputs.any_changed }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -55,6 +56,16 @@ jobs:
             go.sum
             initdb/masterdata/*.csv
             docker/production/server/Dockerfile
+      - id: needs-build-binaries
+        uses: tj-actions/changed-files@v42
+        with:
+          files: |
+            .github/workflows/wf-build-binaries.yml
+            **/*.go
+            go.mod
+            go.sum
+            initdb/masterdata/*.csv
+            .goreleaser.yaml
 
   test-go:
     needs: judge-execute
@@ -87,3 +98,8 @@ jobs:
     uses: ./.github/workflows/wf-build-containers.yml
     with:
       needs-push: false
+
+  build-binaries:
+    needs: judge-execute
+    if: needs.judge-execute.outputs.needs-build-binaries == 'true'
+    uses: ./.github/workflows/wf-build-binaries.yml

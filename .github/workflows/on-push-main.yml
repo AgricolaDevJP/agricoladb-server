@@ -22,17 +22,9 @@ jobs:
     uses: ./.github/workflows/wf-test-terraform.yml
 
   build-containers:
-    needs:
-      - test-go
-      - test-ent
-      - test-integration
     uses: ./.github/workflows/wf-build-containers.yml
     with:
-      needs-push: true
+      needs-push: false
 
   build-binaries:
-    needs:
-      - test-go
-      - test-ent
-      - test-integration
     uses: ./.github/workflows/wf-build-binaries.yml

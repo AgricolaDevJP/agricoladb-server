@@ -1,9 +1,12 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+
 # This is an example .goreleaser.yml file with some sensible defaults.
 # Make sure to check the documentation at https://goreleaser.com
 before:
   hooks:
     # You may remove this if you don't use go modules.
     - go mod tidy
+    - go run ./cmd/migration
 builds:
   - id: server
     main: ./cmd/server
@@ -17,24 +20,25 @@ builds:
       - arm64
     ldflags:
       - -s -w
-  - id: migration
-    main: ./cmd/migration
-    binary: agricoladb-server-migration
+  - id: server-lambda
+    main: ./cmd/server-lambda
+    binary: bootstrap
     env:
       - CGO_ENABLED=0
     goos:
       - linux
     goarch:
-      - amd64
       - arm64
-    ldflags:
-      - -s -w
+      - amd64
 
 archives:
-  - format: tar.gz
+  - id: server
+    builds:
+      - server
+    format: tar.gz
     # this name template makes the OS and Arch compatible with the results of uname.
     name_template: >-
-      {{ .ProjectName }}_
+      agricoladb-server_
       {{- title .Os }}_
       {{- if eq .Arch "amd64" }}x86_64
       {{- else if eq .Arch "386" }}i386
@@ -44,6 +48,22 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
+    files:
+      - LICENSE*
+      - README*
+      - agricoladb.sqlite
+  - id: server-lambda
+    builds:
+      - server-lambda
+    format: zip
+    name_template: >-
+      agricoladb-server-lambda_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    files:
+      - agricoladb.sqlite
 checksum:
   name_template: "checksums.txt"
 snapshot:
