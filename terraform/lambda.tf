@@ -31,7 +31,9 @@ resource "aws_lambda_function" "server" {
 
   environment {
     variables = {
-      ALLOWED_ORIGINS = "http://localhost:4321,https://db.agricolajp.dev"
+      ALLOWED_ORIGINS = "http://localhost:4321,https://db.agricolajp.dev,https://*.agricoladb-viewer.pages.dev"
+      GO_ENV          = "production"
+      GO_LOG          = "warn"
     }
   }
 
