@@ -124,12 +124,10 @@ type CardEdges struct {
 // RevisionOrErr returns the Revision value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CardEdges) RevisionOrErr() (*Revision, error) {
-	if e.loadedTypes[0] {
-		if e.Revision == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: revision.Label}
-		}
+	if e.Revision != nil {
 		return e.Revision, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: revision.Label}
 	}
 	return nil, &NotLoadedError{edge: "revision"}
 }
@@ -146,12 +144,10 @@ func (e CardEdges) ProductsOrErr() ([]*Product, error) {
 // DeckOrErr returns the Deck value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CardEdges) DeckOrErr() (*Deck, error) {
-	if e.loadedTypes[2] {
-		if e.Deck == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: deck.Label}
-		}
+	if e.Deck != nil {
 		return e.Deck, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: deck.Label}
 	}
 	return nil, &NotLoadedError{edge: "deck"}
 }
@@ -159,12 +155,10 @@ func (e CardEdges) DeckOrErr() (*Deck, error) {
 // CardTypeOrErr returns the CardType value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CardEdges) CardTypeOrErr() (*CardType, error) {
-	if e.loadedTypes[3] {
-		if e.CardType == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: cardtype.Label}
-		}
+	if e.CardType != nil {
 		return e.CardType, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: cardtype.Label}
 	}
 	return nil, &NotLoadedError{edge: "card_type"}
 }
@@ -172,12 +166,10 @@ func (e CardEdges) CardTypeOrErr() (*CardType, error) {
 // CardSpecialColorOrErr returns the CardSpecialColor value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CardEdges) CardSpecialColorOrErr() (*CardSpecialColor, error) {
-	if e.loadedTypes[4] {
-		if e.CardSpecialColor == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: cardspecialcolor.Label}
-		}
+	if e.CardSpecialColor != nil {
 		return e.CardSpecialColor, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: cardspecialcolor.Label}
 	}
 	return nil, &NotLoadedError{edge: "card_special_color"}
 }
