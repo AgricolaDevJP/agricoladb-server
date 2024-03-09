@@ -8,30 +8,6 @@ permissions:
   contents: read
 
 jobs:
-  plan:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: terraform
-    steps:
-      - uses: actions/checkout@v4
-      - name: terraform version
-        id: tf-version
-        run: echo "version=$(cat .terraform-version)" >> "$GITHUB_OUTPUT"
-      - uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: ${{ steps.tf-version.outputs.version }}
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::131551699606:role/agricoladb-server-github-actions-role
-          aws-region: ap-northeast-1
-      - name: terraform init
-        run: terraform init -lockfile=readonly
-      - name: terraform validate
-        run: terraform validate
-      - name: terraform plan
-        run: terraform plan -input=false
-
   format:
     runs-on: ubuntu-latest
     defaults:
@@ -39,11 +15,6 @@ jobs:
         working-directory: terraform
     steps:
       - uses: actions/checkout@v4
-      - name: terraform version
-        id: tf-version
-        run: echo "version=$(cat .terraform-version)" >> "$GITHUB_OUTPUT"
       - uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: ${{ steps.tf-version.outputs.version }}
       - name: terraform format
         run: terraform fmt -check

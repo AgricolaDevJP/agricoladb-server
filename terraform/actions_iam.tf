@@ -24,7 +24,8 @@ data "aws_iam_policy_document" "assume_actions_role" {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
       values = [
-        "repo:AgricolaDevJP/agricoladb-server:*"
+        "repo:AgricolaDevJP/agricoladb-server:*",
+        "repo:AgricolaDevJP/housemaster:*"
       ]
     }
   }
