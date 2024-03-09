@@ -60,12 +60,10 @@ func (e ProductEdges) CardsOrErr() ([]*Card, error) {
 // RevisionOrErr returns the Revision value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ProductEdges) RevisionOrErr() (*Revision, error) {
-	if e.loadedTypes[1] {
-		if e.Revision == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: revision.Label}
-		}
+	if e.Revision != nil {
 		return e.Revision, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: revision.Label}
 	}
 	return nil, &NotLoadedError{edge: "revision"}
 }
