@@ -12,6 +12,7 @@ jobs:
       needs-test-integration: "true"
       needs-test-terraform: ${{ steps.needs-test-terraform.outputs.any_changed }}
       needs-test-docker: ${{ steps.needs-test-docker.outputs.any_changed }}
+      needs-generate-go: ${{ steps.metadata.outputs.dependency-names == 'entgo.io/ent' || steps.metadata.outputs.dependency-names == 'github.com/99designs/gqlgen' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -54,6 +55,10 @@ jobs:
             go.sum
             initdb/masterdata/*.csv
             docker/production/server/Dockerfile
+      - name: Dependabot metadata
+        id: metadata
+        if: github.actor == 'dependabot[bot]'
+        uses: dependabot/fetch-metadata@v1
 
   test-go:
     needs: judge-execute
@@ -86,3 +91,8 @@ jobs:
     uses: ./.github/workflows/wf-build-containers.yml
     with:
       needs-push: false
+
+  generate-go:
+    needs: judge-execute
+    if: needs.judge-execute.outputs.needs-generate-go == 'true'
+    uses: ./.github/workflows/wf-generate-go.yml
