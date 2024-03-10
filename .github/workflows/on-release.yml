@@ -35,6 +35,3 @@ jobs:
       - test-actions
       - test-integration
     uses: ./.github/workflows/wf-build-release-binaries.yml
-
-  deploy:
-    uses: ./.github/workflows/wf-deploy.yml
