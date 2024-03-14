@@ -9,12 +9,11 @@ import (
 
 	"entgo.io/ent/dialect"
 	"github.com/AgricolaDevJP/agricoladb-server/ent"
+	"github.com/AgricolaDevJP/agricoladb-server/internal/logger"
 	"github.com/AgricolaDevJP/agricoladb-server/internal/server"
 	"github.com/AgricolaDevJP/agricoladb-server/sqlite"
 	"github.com/caarlos0/env/v10"
-	slogenv "github.com/cbrewster/slog-env"
 	"github.com/go-chi/chi/v5"
-	"github.com/phsym/console-slog"
 )
 
 func init() {
@@ -35,18 +34,9 @@ func main() {
 		log.Fatalf("%+v\n", err)
 	}
 
-	var logger *slog.Logger
-	if cfg.GoEnv == "production" {
-		logger = slog.New(
-			// refer to GO_LOG env
-			slogenv.NewHandler(slog.NewJSONHandler(os.Stderr, nil)),
-		)
-	} else {
-		logger = slog.New(
-			// refer to GO_LOG env
-			slogenv.NewHandler(console.NewHandler(os.Stderr, nil)),
-		)
-	}
+	logger := logger.NewLogger(&logger.LoggerOption{
+		UseConsoleHandler: cfg.GoEnv != "production",
+	})
 	slog.SetDefault(logger)
 
 	dsn := fmt.Sprintf("file:%s?cache=shared&mode=ro", cfg.DBPath)

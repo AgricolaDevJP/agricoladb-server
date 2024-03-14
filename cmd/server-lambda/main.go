@@ -7,15 +7,14 @@ import (
 	"os"
 
 	"entgo.io/ent/dialect"
+	"github.com/AgricolaDevJP/agricoladb-server/ent"
+	"github.com/AgricolaDevJP/agricoladb-server/internal/logger"
+	"github.com/AgricolaDevJP/agricoladb-server/internal/server"
+	"github.com/AgricolaDevJP/agricoladb-server/sqlite"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
 	"github.com/caarlos0/env/v10"
-	slogenv "github.com/cbrewster/slog-env"
 	"github.com/go-chi/chi/v5"
-
-	"github.com/AgricolaDevJP/agricoladb-server/ent"
-	"github.com/AgricolaDevJP/agricoladb-server/internal/server"
-	"github.com/AgricolaDevJP/agricoladb-server/sqlite"
 )
 
 func init() {
@@ -35,10 +34,7 @@ func main() {
 		log.Fatalf("%+v\n", err)
 	}
 
-	logger := slog.New(
-		// refer to GO_LOG env
-		slogenv.NewHandler(slog.NewJSONHandler(os.Stderr, nil)),
-	)
+	logger := logger.NewLogger(&logger.LoggerOption{})
 	slog.SetDefault(logger)
 
 	dns := fmt.Sprintf("file:%s?cache=shared&mode=ro", cfg.DBPath)
