@@ -44,6 +44,7 @@ func (s *Server) Install(r *chi.Mux) {
 		AllowedOrigins:   s.AllowedOrigins,
 		AllowCredentials: true,
 	}).Handler)
+	r.Use(middleware.Compress(5))
 
 	r.Handle("/", s.handlerIndex())
 	r.Handle("/graphql", s.handleGraphql())
