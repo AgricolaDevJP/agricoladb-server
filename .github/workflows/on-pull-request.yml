@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: needs-test-go
-        uses: tj-actions/changed-files@v43
+        uses: tj-actions/changed-files@v44
         with:
           files: |
             .github/workflows/wf-test-go.yml
@@ -26,7 +26,7 @@ jobs:
             go.sum
             initdb/masterdata/*.csv
       - id: needs-test-ent
-        uses: tj-actions/changed-files@v43
+        uses: tj-actions/changed-files@v44
         with:
           files: |
             .github/workflows/wf-test-ent.yml
@@ -35,19 +35,19 @@ jobs:
             go.sum
             gqlgen.yml
       - id: needs-test-actions
-        uses: tj-actions/changed-files@v43
+        uses: tj-actions/changed-files@v44
         with:
           files: |
             .github/workflows/*.yml
             .github/actionlint-matcher.json
       - id: needs-test-terraform
-        uses: tj-actions/changed-files@v43
+        uses: tj-actions/changed-files@v44
         with:
           files: |
             .github/workflows/wf-test-terraform.yml
             terraform/**/*
       - id: needs-test-docker
-        uses: tj-actions/changed-files@v43
+        uses: tj-actions/changed-files@v44
         with:
           files: |
             .github/workflows/wf-build-containers.yml
@@ -57,7 +57,7 @@ jobs:
             initdb/masterdata/*.csv
             docker/production/server/Dockerfile
       - id: needs-build-binaries
-        uses: tj-actions/changed-files@v43
+        uses: tj-actions/changed-files@v44
         with:
           files: |
             .github/workflows/wf-build-binaries.yml
