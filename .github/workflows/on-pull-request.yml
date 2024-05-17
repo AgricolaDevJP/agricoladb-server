@@ -51,10 +51,6 @@ jobs:
         with:
           files: |
             .github/workflows/wf-build-containers.yml
-            **/*.go
-            go.mod
-            go.sum
-            initdb/masterdata/*.csv
             docker/production/server/Dockerfile
       - id: needs-build-binaries
         uses: tj-actions/changed-files@v43
