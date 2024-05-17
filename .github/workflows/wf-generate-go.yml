@@ -19,8 +19,7 @@ jobs:
           private-key: ${{ secrets.AGRICOLADEVJP_BOT_PRIVATE_KEY }}
       - uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
-          cache-dependency-path: go.sum
+          go-version-file: 1.22
       - name: Generate codes
         run: go generate ./...
       - name: Check changes

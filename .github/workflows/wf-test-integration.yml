@@ -10,8 +10,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
-          cache-dependency-path: go.sum
+          go-version-file: 1.22
       - name: install runn
         uses: k1LoW/gh-setup@v1
         with:
