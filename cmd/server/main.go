@@ -42,7 +42,7 @@ func main() {
 	dsn := fmt.Sprintf("file:%s?cache=shared&mode=ro", cfg.DBPath)
 	client, err := ent.Open(dialect.SQLite, dsn)
 	if err != nil {
-		slog.Error("failed opening connection to sqlite", err)
+		slog.Error("failed opening connection to sqlite", slog.Any("error", err))
 		os.Exit(1)
 	}
 	defer client.Close()
@@ -57,7 +57,7 @@ func main() {
 
 	slog.Info(fmt.Sprintf("connect to http://localhost:%s/ for GraphQL playground", cfg.Port))
 	if err := http.ListenAndServe(":"+cfg.Port, router); err != nil {
-		slog.Error("failed starting server", err)
+		slog.Error("failed starting server", slog.Any("error", err))
 		os.Exit(1)
 	}
 }
