@@ -40,7 +40,7 @@ func main() {
 	dns := fmt.Sprintf("file:%s?cache=shared&mode=ro", cfg.DBPath)
 	client, err := ent.Open(dialect.SQLite, dns)
 	if err != nil {
-		slog.Error("failed opening connection to sqlite", err)
+		slog.Error("failed opening connection to sqlite", slog.Any("error", err))
 		os.Exit(1)
 	}
 	defer client.Close()
