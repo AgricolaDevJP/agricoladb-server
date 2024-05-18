@@ -7,6 +7,7 @@ import (
 	"database/sql/driver"
 	"fmt"
 
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/AgricolaDevJP/agricoladb-server/ent/card"
@@ -23,13 +24,13 @@ func (c *CardQuery) CollectFields(ctx context.Context, satisfies ...string) (*Ca
 	if fc == nil {
 		return c, nil
 	}
-	if err := c.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := c.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
 	return c, nil
 }
 
-func (c *CardQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (c *CardQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -38,13 +39,14 @@ func (c *CardQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+
 		case "revision":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&RevisionClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, revisionImplementors)...); err != nil {
 				return err
 			}
 			c.withRevision = query
@@ -52,25 +54,27 @@ func (c *CardQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 				selectedFields = append(selectedFields, card.FieldRevisionID)
 				fieldSeen[card.FieldRevisionID] = struct{}{}
 			}
+
 		case "products":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&ProductClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, productImplementors)...); err != nil {
 				return err
 			}
 			c.WithNamedProducts(alias, func(wq *ProductQuery) {
 				*wq = *query
 			})
+
 		case "deck":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&DeckClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, deckImplementors)...); err != nil {
 				return err
 			}
 			c.withDeck = query
@@ -78,13 +82,14 @@ func (c *CardQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 				selectedFields = append(selectedFields, card.FieldDeckID)
 				fieldSeen[card.FieldDeckID] = struct{}{}
 			}
+
 		case "cardType":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&CardTypeClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, cardtypeImplementors)...); err != nil {
 				return err
 			}
 			c.withCardType = query
@@ -92,13 +97,14 @@ func (c *CardQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 				selectedFields = append(selectedFields, card.FieldCardTypeID)
 				fieldSeen[card.FieldCardTypeID] = struct{}{}
 			}
+
 		case "cardSpecialColor":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&CardSpecialColorClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, cardspecialcolorImplementors)...); err != nil {
 				return err
 			}
 			c.withCardSpecialColor = query
@@ -106,25 +112,27 @@ func (c *CardQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 				selectedFields = append(selectedFields, card.FieldCardSpecialColorID)
 				fieldSeen[card.FieldCardSpecialColorID] = struct{}{}
 			}
+
 		case "children":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&CardClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, cardImplementors)...); err != nil {
 				return err
 			}
 			c.WithNamedChildren(alias, func(wq *CardQuery) {
 				*wq = *query
 			})
+
 		case "ancestors":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&CardClient{config: c.config}).Query()
 			)
-			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, cardImplementors)...); err != nil {
 				return err
 			}
 			c.WithNamedAncestors(alias, func(wq *CardQuery) {
@@ -347,13 +355,13 @@ func (csc *CardSpecialColorQuery) CollectFields(ctx context.Context, satisfies .
 	if fc == nil {
 		return csc, nil
 	}
-	if err := csc.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := csc.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
 	return csc, nil
 }
 
-func (csc *CardSpecialColorQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (csc *CardSpecialColorQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -362,6 +370,7 @@ func (csc *CardSpecialColorQuery) collectField(ctx context.Context, opCtx *graph
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+
 		case "cards":
 			var (
 				alias = field.Alias
@@ -433,13 +442,17 @@ func (csc *CardSpecialColorQuery) collectField(ctx context.Context, opCtx *graph
 			}
 			path = append(path, edgesField, nodeField)
 			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, opCtx, *field, path, mayAddCondition(satisfies, "Card")...); err != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, cardImplementors)...); err != nil {
 					return err
 				}
 			}
 			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				modify := limitRows(cardspecialcolor.CardsColumn, limit, pager.orderExpr(query))
-				query.modifiers = append(query.modifiers, modify)
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(cardspecialcolor.CardsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
 			} else {
 				query = pager.applyOrder(query)
 			}
@@ -508,13 +521,13 @@ func (ct *CardTypeQuery) CollectFields(ctx context.Context, satisfies ...string)
 	if fc == nil {
 		return ct, nil
 	}
-	if err := ct.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := ct.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
 	return ct, nil
 }
 
-func (ct *CardTypeQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (ct *CardTypeQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -523,6 +536,7 @@ func (ct *CardTypeQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+
 		case "cards":
 			var (
 				alias = field.Alias
@@ -594,13 +608,17 @@ func (ct *CardTypeQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 			}
 			path = append(path, edgesField, nodeField)
 			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, opCtx, *field, path, mayAddCondition(satisfies, "Card")...); err != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, cardImplementors)...); err != nil {
 					return err
 				}
 			}
 			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				modify := limitRows(cardtype.CardsColumn, limit, pager.orderExpr(query))
-				query.modifiers = append(query.modifiers, modify)
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(cardtype.CardsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
 			} else {
 				query = pager.applyOrder(query)
 			}
@@ -669,13 +687,13 @@ func (d *DeckQuery) CollectFields(ctx context.Context, satisfies ...string) (*De
 	if fc == nil {
 		return d, nil
 	}
-	if err := d.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := d.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
 	return d, nil
 }
 
-func (d *DeckQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (d *DeckQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -684,6 +702,7 @@ func (d *DeckQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+
 		case "cards":
 			var (
 				alias = field.Alias
@@ -755,26 +774,31 @@ func (d *DeckQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 			}
 			path = append(path, edgesField, nodeField)
 			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, opCtx, *field, path, mayAddCondition(satisfies, "Card")...); err != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, cardImplementors)...); err != nil {
 					return err
 				}
 			}
 			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				modify := limitRows(deck.CardsColumn, limit, pager.orderExpr(query))
-				query.modifiers = append(query.modifiers, modify)
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(deck.CardsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
 			} else {
 				query = pager.applyOrder(query)
 			}
 			d.WithNamedCards(alias, func(wq *CardQuery) {
 				*wq = *query
 			})
+
 		case "revision":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&RevisionClient{config: d.config}).Query()
 			)
-			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, revisionImplementors)...); err != nil {
 				return err
 			}
 			d.withRevision = query
@@ -849,13 +873,13 @@ func (pr *ProductQuery) CollectFields(ctx context.Context, satisfies ...string) 
 	if fc == nil {
 		return pr, nil
 	}
-	if err := pr.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := pr.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
 	return pr, nil
 }
 
-func (pr *ProductQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (pr *ProductQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -864,6 +888,7 @@ func (pr *ProductQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+
 		case "cards":
 			var (
 				alias = field.Alias
@@ -939,26 +964,31 @@ func (pr *ProductQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			}
 			path = append(path, edgesField, nodeField)
 			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, opCtx, *field, path, mayAddCondition(satisfies, "Card")...); err != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, cardImplementors)...); err != nil {
 					return err
 				}
 			}
 			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				modify := limitRows(product.CardsPrimaryKey[0], limit, pager.orderExpr(query))
-				query.modifiers = append(query.modifiers, modify)
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(product.CardsPrimaryKey[0], limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
 			} else {
 				query = pager.applyOrder(query)
 			}
 			pr.WithNamedCards(alias, func(wq *CardQuery) {
 				*wq = *query
 			})
+
 		case "revision":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&RevisionClient{config: pr.config}).Query()
 			)
-			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, revisionImplementors)...); err != nil {
 				return err
 			}
 			pr.withRevision = query
@@ -1038,13 +1068,13 @@ func (r *RevisionQuery) CollectFields(ctx context.Context, satisfies ...string) 
 	if fc == nil {
 		return r, nil
 	}
-	if err := r.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := r.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
 	return r, nil
 }
 
-func (r *RevisionQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (r *RevisionQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
@@ -1053,6 +1083,7 @@ func (r *RevisionQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+
 		case "cards":
 			var (
 				alias = field.Alias
@@ -1124,38 +1155,44 @@ func (r *RevisionQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			}
 			path = append(path, edgesField, nodeField)
 			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, opCtx, *field, path, mayAddCondition(satisfies, "Card")...); err != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, cardImplementors)...); err != nil {
 					return err
 				}
 			}
 			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				modify := limitRows(revision.CardsColumn, limit, pager.orderExpr(query))
-				query.modifiers = append(query.modifiers, modify)
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(revision.CardsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
 			} else {
 				query = pager.applyOrder(query)
 			}
 			r.WithNamedCards(alias, func(wq *CardQuery) {
 				*wq = *query
 			})
+
 		case "products":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&ProductClient{config: r.config}).Query()
 			)
-			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, productImplementors)...); err != nil {
 				return err
 			}
 			r.WithNamedProducts(alias, func(wq *ProductQuery) {
 				*wq = *query
 			})
+
 		case "decks":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&DeckClient{config: r.config}).Query()
 			)
-			if err := query.collectField(ctx, opCtx, field, path, satisfies...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, deckImplementors)...); err != nil {
 				return err
 			}
 			r.WithNamedDecks(alias, func(wq *DeckQuery) {
@@ -1269,39 +1306,17 @@ func unmarshalArgs(ctx context.Context, whereInput any, args map[string]any) map
 	return args
 }
 
-func limitRows(partitionBy string, limit int, orderBy ...sql.Querier) func(s *sql.Selector) {
-	return func(s *sql.Selector) {
-		d := sql.Dialect(s.Dialect())
-		s.SetDistinct(false)
-		with := d.With("src_query").
-			As(s.Clone()).
-			With("limited_query").
-			As(
-				d.Select("*").
-					AppendSelectExprAs(
-						sql.RowNumber().PartitionBy(partitionBy).OrderExpr(orderBy...),
-						"row_number",
-					).
-					From(d.Table("src_query")),
-			)
-		t := d.Table("limited_query").As(s.TableName())
-		*s = *d.Select(s.UnqualifiedColumns()...).
-			From(t).
-			Where(sql.LTE(t.C("row_number"), limit)).
-			Prefix(with)
-	}
-}
-
 // mayAddCondition appends another type condition to the satisfies list
-// if condition is enabled (Node/Nodes) and it does not exist in the list.
-func mayAddCondition(satisfies []string, typeCond string) []string {
-	if len(satisfies) == 0 {
-		return satisfies
-	}
-	for _, s := range satisfies {
-		if typeCond == s {
-			return satisfies
+// if it does not exist in the list.
+func mayAddCondition(satisfies []string, typeCond []string) []string {
+Cond:
+	for _, c := range typeCond {
+		for _, s := range satisfies {
+			if c == s {
+				continue Cond
+			}
 		}
+		satisfies = append(satisfies, c)
 	}
-	return append(satisfies, typeCond)
+	return satisfies
 }
