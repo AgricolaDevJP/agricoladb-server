@@ -44,7 +44,7 @@ require (
 )
 
 require (
-	entgo.io/contrib v0.4.5
+	entgo.io/contrib v0.5.0
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/caarlos0/env/v10 v10.0.0
 	github.com/cbrewster/slog-env v0.1.1
