@@ -35,3 +35,11 @@ jobs:
       - test-actions
       - test-integration
     uses: ./.github/workflows/wf-build-release-binaries.yml
+  
+  dispatch-deploy:
+    needs:
+      - build-containers
+      - build-release-binaries
+    uses: ./.github/workflows/wf-dispatch-deploy.yml
+    secrets: inherit
+  

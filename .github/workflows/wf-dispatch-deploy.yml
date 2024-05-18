@@ -1,0 +1,24 @@
+on:
+  workflow_call:
+  
+jobs:
+  dispatch-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: 792029
+          private-key: ${{ secrets.AGRICOLADEVJP_BOT_PRIVATE_KEY }}
+          repositories: housemaster
+      - uses: peter-evans/repository-dispatch@v3
+        with:
+          event-type: bump-version
+          repository: AgricolaDevJP/housemaster
+          token: ${{ steps.app-token.outputs.token }}
+          client-payload: |
+            {
+              "new-version": "${{ github.ref_name }}",
+              "target-name": "agricoladb-server",
+              "target-file": "components/agricoladb-server/lambroll/version.txt"
+            }
