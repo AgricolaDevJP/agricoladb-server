@@ -12,7 +12,7 @@ import (
 	"github.com/AgricolaDevJP/agricoladb-server/internal/logger"
 	"github.com/AgricolaDevJP/agricoladb-server/internal/server"
 	"github.com/AgricolaDevJP/agricoladb-server/sqlite"
-	"github.com/caarlos0/env/v10"
+	"github.com/caarlos0/env/v11"
 	"github.com/go-chi/chi/v5"
 )
 

@@ -13,7 +13,7 @@ import (
 	"github.com/AgricolaDevJP/agricoladb-server/sqlite"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
-	"github.com/caarlos0/env/v10"
+	"github.com/caarlos0/env/v11"
 	"github.com/go-chi/chi/v5"
 )
 
