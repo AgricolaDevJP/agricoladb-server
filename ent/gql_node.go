@@ -28,23 +28,35 @@ type Noder interface {
 	IsNode()
 }
 
-// IsNode implements the Node interface check for GQLGen.
-func (n *Card) IsNode() {}
+var cardImplementors = []string{"Card", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
-func (n *CardSpecialColor) IsNode() {}
+func (*Card) IsNode() {}
+
+var cardspecialcolorImplementors = []string{"CardSpecialColor", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
-func (n *CardType) IsNode() {}
+func (*CardSpecialColor) IsNode() {}
+
+var cardtypeImplementors = []string{"CardType", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
-func (n *Deck) IsNode() {}
+func (*CardType) IsNode() {}
+
+var deckImplementors = []string{"Deck", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
-func (n *Product) IsNode() {}
+func (*Deck) IsNode() {}
+
+var productImplementors = []string{"Product", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
-func (n *Revision) IsNode() {}
+func (*Product) IsNode() {}
+
+var revisionImplementors = []string{"Revision", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Revision) IsNode() {}
 
 var errNodeInvalidID = &NotFoundError{"node"}
 
@@ -107,75 +119,57 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 	case card.Table:
 		query := c.Card.Query().
 			Where(card.ID(id))
-		query, err := query.CollectFields(ctx, "Card")
-		if err != nil {
-			return nil, err
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, cardImplementors...); err != nil {
+				return nil, err
+			}
 		}
-		n, err := query.Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return n, nil
+		return query.Only(ctx)
 	case cardspecialcolor.Table:
 		query := c.CardSpecialColor.Query().
 			Where(cardspecialcolor.ID(id))
-		query, err := query.CollectFields(ctx, "CardSpecialColor")
-		if err != nil {
-			return nil, err
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, cardspecialcolorImplementors...); err != nil {
+				return nil, err
+			}
 		}
-		n, err := query.Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return n, nil
+		return query.Only(ctx)
 	case cardtype.Table:
 		query := c.CardType.Query().
 			Where(cardtype.ID(id))
-		query, err := query.CollectFields(ctx, "CardType")
-		if err != nil {
-			return nil, err
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, cardtypeImplementors...); err != nil {
+				return nil, err
+			}
 		}
-		n, err := query.Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return n, nil
+		return query.Only(ctx)
 	case deck.Table:
 		query := c.Deck.Query().
 			Where(deck.ID(id))
-		query, err := query.CollectFields(ctx, "Deck")
-		if err != nil {
-			return nil, err
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, deckImplementors...); err != nil {
+				return nil, err
+			}
 		}
-		n, err := query.Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return n, nil
+		return query.Only(ctx)
 	case product.Table:
 		query := c.Product.Query().
 			Where(product.ID(id))
-		query, err := query.CollectFields(ctx, "Product")
-		if err != nil {
-			return nil, err
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, productImplementors...); err != nil {
+				return nil, err
+			}
 		}
-		n, err := query.Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return n, nil
+		return query.Only(ctx)
 	case revision.Table:
 		query := c.Revision.Query().
 			Where(revision.ID(id))
-		query, err := query.CollectFields(ctx, "Revision")
-		if err != nil {
-			return nil, err
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, revisionImplementors...); err != nil {
+				return nil, err
+			}
 		}
-		n, err := query.Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return n, nil
+		return query.Only(ctx)
 	default:
 		return nil, fmt.Errorf("cannot resolve noder from table %q: %w", table, errNodeInvalidID)
 	}
@@ -252,7 +246,7 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 	case card.Table:
 		query := c.Card.Query().
 			Where(card.IDIn(ids...))
-		query, err := query.CollectFields(ctx, "Card")
+		query, err := query.CollectFields(ctx, cardImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -268,7 +262,7 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 	case cardspecialcolor.Table:
 		query := c.CardSpecialColor.Query().
 			Where(cardspecialcolor.IDIn(ids...))
-		query, err := query.CollectFields(ctx, "CardSpecialColor")
+		query, err := query.CollectFields(ctx, cardspecialcolorImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -284,7 +278,7 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 	case cardtype.Table:
 		query := c.CardType.Query().
 			Where(cardtype.IDIn(ids...))
-		query, err := query.CollectFields(ctx, "CardType")
+		query, err := query.CollectFields(ctx, cardtypeImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -300,7 +294,7 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 	case deck.Table:
 		query := c.Deck.Query().
 			Where(deck.IDIn(ids...))
-		query, err := query.CollectFields(ctx, "Deck")
+		query, err := query.CollectFields(ctx, deckImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -316,7 +310,7 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 	case product.Table:
 		query := c.Product.Query().
 			Where(product.IDIn(ids...))
-		query, err := query.CollectFields(ctx, "Product")
+		query, err := query.CollectFields(ctx, productImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -332,7 +326,7 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 	case revision.Table:
 		query := c.Revision.Query().
 			Where(revision.IDIn(ids...))
-		query, err := query.CollectFields(ctx, "Revision")
+		query, err := query.CollectFields(ctx, revisionImplementors...)
 		if err != nil {
 			return nil, err
 		}
