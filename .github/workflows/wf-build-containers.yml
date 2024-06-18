@@ -38,7 +38,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=sha
       - name: build server image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           push: ${{ inputs.needs-push }}
           context: .
