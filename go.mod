@@ -10,7 +10,7 @@ require (
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/caarlos0/env/v11 v11.0.1
 	github.com/cbrewster/slog-env v0.1.1
-	github.com/go-chi/chi/v5 v5.0.12
+	github.com/go-chi/chi/v5 v5.0.13
 	github.com/go-chi/httplog/v2 v2.0.11
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/jszwec/csvutil v1.10.0
