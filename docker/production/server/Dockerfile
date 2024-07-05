@@ -1,6 +1,8 @@
 FROM --platform=$BUILDPLATFORM golang:1.22-bookworm as builder
 ARG TARGETARCH
 
+ENV GOTOOLCHAIN=auto
+
 WORKDIR /opt/app
 
 COPY go.mod go.sum ./
