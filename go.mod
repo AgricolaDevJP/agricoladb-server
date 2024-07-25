@@ -13,7 +13,7 @@ require (
 	github.com/caarlos0/env/v11 v11.1.0
 	github.com/cbrewster/slog-env v0.1.1
 	github.com/go-chi/chi/v5 v5.1.0
-	github.com/go-chi/httplog/v2 v2.0.11
+	github.com/go-chi/httplog/v2 v2.1.1
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/jszwec/csvutil v1.10.0
 	github.com/phsym/console-slog v0.3.1
