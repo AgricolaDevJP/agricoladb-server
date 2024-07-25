@@ -1,5 +1,11 @@
 # Changelog
 
+## [v2.0.16](https://github.com/AgricolaDevJP/agricoladb-server/compare/v2.0.15...v2.0.16) - 2024-07-25
+- [nit] fix some config about build by @Arthur1 in https://github.com/AgricolaDevJP/agricoladb-server/pull/207
+- Update module modernc.org/sqlite to v1.31.1 by @renovate in https://github.com/AgricolaDevJP/agricoladb-server/pull/209
+- Update module github.com/go-chi/httplog/v2 to v2.1.1 by @renovate in https://github.com/AgricolaDevJP/agricoladb-server/pull/210
+- Update module entgo.io/contrib to v0.6.0 by @renovate in https://github.com/AgricolaDevJP/agricoladb-server/pull/211
+
 ## [v2.0.15](https://github.com/AgricolaDevJP/agricoladb-server/compare/v2.0.14...v2.0.15) - 2024-07-05
 - Update module github.com/caarlos0/env/v11 to v11.0.1 by @renovate in https://github.com/AgricolaDevJP/agricoladb-server/pull/193
 - Update goreleaser/goreleaser-action action to v6 by @renovate in https://github.com/AgricolaDevJP/agricoladb-server/pull/196
