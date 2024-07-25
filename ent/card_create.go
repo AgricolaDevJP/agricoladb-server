@@ -507,10 +507,10 @@ func (cc *CardCreate) check() error {
 	if _, ok := cc.mutation.HasHiringFareIcon(); !ok {
 		return &ValidationError{Name: "has_hiring_fare_icon", err: errors.New(`ent: missing required field "Card.has_hiring_fare_icon"`)}
 	}
-	if _, ok := cc.mutation.RevisionID(); !ok {
+	if len(cc.mutation.RevisionIDs()) == 0 {
 		return &ValidationError{Name: "revision", err: errors.New(`ent: missing required edge "Card.revision"`)}
 	}
-	if _, ok := cc.mutation.CardTypeID(); !ok {
+	if len(cc.mutation.CardTypeIDs()) == 0 {
 		return &ValidationError{Name: "card_type", err: errors.New(`ent: missing required edge "Card.card_type"`)}
 	}
 	return nil

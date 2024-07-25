@@ -746,10 +746,10 @@ func (cu *CardUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (cu *CardUpdate) check() error {
-	if _, ok := cu.mutation.RevisionID(); cu.mutation.RevisionCleared() && !ok {
+	if cu.mutation.RevisionCleared() && len(cu.mutation.RevisionIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Card.revision"`)
 	}
-	if _, ok := cu.mutation.CardTypeID(); cu.mutation.CardTypeCleared() && !ok {
+	if cu.mutation.CardTypeCleared() && len(cu.mutation.CardTypeIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Card.card_type"`)
 	}
 	return nil
@@ -1863,10 +1863,10 @@ func (cuo *CardUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (cuo *CardUpdateOne) check() error {
-	if _, ok := cuo.mutation.RevisionID(); cuo.mutation.RevisionCleared() && !ok {
+	if cuo.mutation.RevisionCleared() && len(cuo.mutation.RevisionIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Card.revision"`)
 	}
-	if _, ok := cuo.mutation.CardTypeID(); cuo.mutation.CardTypeCleared() && !ok {
+	if cuo.mutation.CardTypeCleared() && len(cuo.mutation.CardTypeIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Card.card_type"`)
 	}
 	return nil

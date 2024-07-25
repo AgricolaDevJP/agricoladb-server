@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -88,7 +89,7 @@ func (ctq *CardTypeQuery) QueryCards() *CardQuery {
 // First returns the first CardType entity from the query.
 // Returns a *NotFoundError when no CardType was found.
 func (ctq *CardTypeQuery) First(ctx context.Context) (*CardType, error) {
-	nodes, err := ctq.Limit(1).All(setContextOp(ctx, ctq.ctx, "First"))
+	nodes, err := ctq.Limit(1).All(setContextOp(ctx, ctq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +112,7 @@ func (ctq *CardTypeQuery) FirstX(ctx context.Context) *CardType {
 // Returns a *NotFoundError when no CardType ID was found.
 func (ctq *CardTypeQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = ctq.Limit(1).IDs(setContextOp(ctx, ctq.ctx, "FirstID")); err != nil {
+	if ids, err = ctq.Limit(1).IDs(setContextOp(ctx, ctq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -134,7 +135,7 @@ func (ctq *CardTypeQuery) FirstIDX(ctx context.Context) int {
 // Returns a *NotSingularError when more than one CardType entity is found.
 // Returns a *NotFoundError when no CardType entities are found.
 func (ctq *CardTypeQuery) Only(ctx context.Context) (*CardType, error) {
-	nodes, err := ctq.Limit(2).All(setContextOp(ctx, ctq.ctx, "Only"))
+	nodes, err := ctq.Limit(2).All(setContextOp(ctx, ctq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -162,7 +163,7 @@ func (ctq *CardTypeQuery) OnlyX(ctx context.Context) *CardType {
 // Returns a *NotFoundError when no entities are found.
 func (ctq *CardTypeQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = ctq.Limit(2).IDs(setContextOp(ctx, ctq.ctx, "OnlyID")); err != nil {
+	if ids, err = ctq.Limit(2).IDs(setContextOp(ctx, ctq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -187,7 +188,7 @@ func (ctq *CardTypeQuery) OnlyIDX(ctx context.Context) int {
 
 // All executes the query and returns a list of CardTypes.
 func (ctq *CardTypeQuery) All(ctx context.Context) ([]*CardType, error) {
-	ctx = setContextOp(ctx, ctq.ctx, "All")
+	ctx = setContextOp(ctx, ctq.ctx, ent.OpQueryAll)
 	if err := ctq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -209,7 +210,7 @@ func (ctq *CardTypeQuery) IDs(ctx context.Context) (ids []int, err error) {
 	if ctq.ctx.Unique == nil && ctq.path != nil {
 		ctq.Unique(true)
 	}
-	ctx = setContextOp(ctx, ctq.ctx, "IDs")
+	ctx = setContextOp(ctx, ctq.ctx, ent.OpQueryIDs)
 	if err = ctq.Select(cardtype.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -227,7 +228,7 @@ func (ctq *CardTypeQuery) IDsX(ctx context.Context) []int {
 
 // Count returns the count of the given query.
 func (ctq *CardTypeQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, ctq.ctx, "Count")
+	ctx = setContextOp(ctx, ctq.ctx, ent.OpQueryCount)
 	if err := ctq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -245,7 +246,7 @@ func (ctq *CardTypeQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (ctq *CardTypeQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, ctq.ctx, "Exist")
+	ctx = setContextOp(ctx, ctq.ctx, ent.OpQueryExist)
 	switch _, err := ctq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -563,7 +564,7 @@ func (ctgb *CardTypeGroupBy) Aggregate(fns ...AggregateFunc) *CardTypeGroupBy {
 
 // Scan applies the selector query and scans the result into the given value.
 func (ctgb *CardTypeGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, ctgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, ctgb.build.ctx, ent.OpQueryGroupBy)
 	if err := ctgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -611,7 +612,7 @@ func (cts *CardTypeSelect) Aggregate(fns ...AggregateFunc) *CardTypeSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (cts *CardTypeSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cts.ctx, "Select")
+	ctx = setContextOp(ctx, cts.ctx, ent.OpQuerySelect)
 	if err := cts.prepareQuery(ctx); err != nil {
 		return err
 	}

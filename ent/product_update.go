@@ -179,7 +179,7 @@ func (pu *ProductUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (pu *ProductUpdate) check() error {
-	if _, ok := pu.mutation.RevisionID(); pu.mutation.RevisionCleared() && !ok {
+	if pu.mutation.RevisionCleared() && len(pu.mutation.RevisionIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Product.revision"`)
 	}
 	return nil
@@ -450,7 +450,7 @@ func (puo *ProductUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (puo *ProductUpdateOne) check() error {
-	if _, ok := puo.mutation.RevisionID(); puo.mutation.RevisionCleared() && !ok {
+	if puo.mutation.RevisionCleared() && len(puo.mutation.RevisionIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Product.revision"`)
 	}
 	return nil
