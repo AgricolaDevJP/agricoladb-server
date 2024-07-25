@@ -134,7 +134,7 @@ func (dc *DeckCreate) check() error {
 	if _, ok := dc.mutation.RevisionID(); !ok {
 		return &ValidationError{Name: "revision_id", err: errors.New(`ent: missing required field "Deck.revision_id"`)}
 	}
-	if _, ok := dc.mutation.RevisionID(); !ok {
+	if len(dc.mutation.RevisionIDs()) == 0 {
 		return &ValidationError{Name: "revision", err: errors.New(`ent: missing required edge "Deck.revision"`)}
 	}
 	return nil

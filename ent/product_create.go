@@ -143,7 +143,7 @@ func (pc *ProductCreate) check() error {
 	if _, ok := pc.mutation.IsOfficialJa(); !ok {
 		return &ValidationError{Name: "is_official_ja", err: errors.New(`ent: missing required field "Product.is_official_ja"`)}
 	}
-	if _, ok := pc.mutation.RevisionID(); !ok {
+	if len(pc.mutation.RevisionIDs()) == 0 {
 		return &ValidationError{Name: "revision", err: errors.New(`ent: missing required edge "Product.revision"`)}
 	}
 	return nil

@@ -138,7 +138,7 @@ func (du *DeckUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (du *DeckUpdate) check() error {
-	if _, ok := du.mutation.RevisionID(); du.mutation.RevisionCleared() && !ok {
+	if du.mutation.RevisionCleared() && len(du.mutation.RevisionIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Deck.revision"`)
 	}
 	return nil
@@ -356,7 +356,7 @@ func (duo *DeckUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (duo *DeckUpdateOne) check() error {
-	if _, ok := duo.mutation.RevisionID(); duo.mutation.RevisionCleared() && !ok {
+	if duo.mutation.RevisionCleared() && len(duo.mutation.RevisionIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Deck.revision"`)
 	}
 	return nil

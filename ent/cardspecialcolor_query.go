@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -88,7 +89,7 @@ func (cscq *CardSpecialColorQuery) QueryCards() *CardQuery {
 // First returns the first CardSpecialColor entity from the query.
 // Returns a *NotFoundError when no CardSpecialColor was found.
 func (cscq *CardSpecialColorQuery) First(ctx context.Context) (*CardSpecialColor, error) {
-	nodes, err := cscq.Limit(1).All(setContextOp(ctx, cscq.ctx, "First"))
+	nodes, err := cscq.Limit(1).All(setContextOp(ctx, cscq.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +112,7 @@ func (cscq *CardSpecialColorQuery) FirstX(ctx context.Context) *CardSpecialColor
 // Returns a *NotFoundError when no CardSpecialColor ID was found.
 func (cscq *CardSpecialColorQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = cscq.Limit(1).IDs(setContextOp(ctx, cscq.ctx, "FirstID")); err != nil {
+	if ids, err = cscq.Limit(1).IDs(setContextOp(ctx, cscq.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -134,7 +135,7 @@ func (cscq *CardSpecialColorQuery) FirstIDX(ctx context.Context) int {
 // Returns a *NotSingularError when more than one CardSpecialColor entity is found.
 // Returns a *NotFoundError when no CardSpecialColor entities are found.
 func (cscq *CardSpecialColorQuery) Only(ctx context.Context) (*CardSpecialColor, error) {
-	nodes, err := cscq.Limit(2).All(setContextOp(ctx, cscq.ctx, "Only"))
+	nodes, err := cscq.Limit(2).All(setContextOp(ctx, cscq.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -162,7 +163,7 @@ func (cscq *CardSpecialColorQuery) OnlyX(ctx context.Context) *CardSpecialColor 
 // Returns a *NotFoundError when no entities are found.
 func (cscq *CardSpecialColorQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = cscq.Limit(2).IDs(setContextOp(ctx, cscq.ctx, "OnlyID")); err != nil {
+	if ids, err = cscq.Limit(2).IDs(setContextOp(ctx, cscq.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -187,7 +188,7 @@ func (cscq *CardSpecialColorQuery) OnlyIDX(ctx context.Context) int {
 
 // All executes the query and returns a list of CardSpecialColors.
 func (cscq *CardSpecialColorQuery) All(ctx context.Context) ([]*CardSpecialColor, error) {
-	ctx = setContextOp(ctx, cscq.ctx, "All")
+	ctx = setContextOp(ctx, cscq.ctx, ent.OpQueryAll)
 	if err := cscq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -209,7 +210,7 @@ func (cscq *CardSpecialColorQuery) IDs(ctx context.Context) (ids []int, err erro
 	if cscq.ctx.Unique == nil && cscq.path != nil {
 		cscq.Unique(true)
 	}
-	ctx = setContextOp(ctx, cscq.ctx, "IDs")
+	ctx = setContextOp(ctx, cscq.ctx, ent.OpQueryIDs)
 	if err = cscq.Select(cardspecialcolor.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -227,7 +228,7 @@ func (cscq *CardSpecialColorQuery) IDsX(ctx context.Context) []int {
 
 // Count returns the count of the given query.
 func (cscq *CardSpecialColorQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, cscq.ctx, "Count")
+	ctx = setContextOp(ctx, cscq.ctx, ent.OpQueryCount)
 	if err := cscq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -245,7 +246,7 @@ func (cscq *CardSpecialColorQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (cscq *CardSpecialColorQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, cscq.ctx, "Exist")
+	ctx = setContextOp(ctx, cscq.ctx, ent.OpQueryExist)
 	switch _, err := cscq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -563,7 +564,7 @@ func (cscgb *CardSpecialColorGroupBy) Aggregate(fns ...AggregateFunc) *CardSpeci
 
 // Scan applies the selector query and scans the result into the given value.
 func (cscgb *CardSpecialColorGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cscgb.build.ctx, "GroupBy")
+	ctx = setContextOp(ctx, cscgb.build.ctx, ent.OpQueryGroupBy)
 	if err := cscgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -611,7 +612,7 @@ func (cscs *CardSpecialColorSelect) Aggregate(fns ...AggregateFunc) *CardSpecial
 
 // Scan applies the selector query and scans the result into the given value.
 func (cscs *CardSpecialColorSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, cscs.ctx, "Select")
+	ctx = setContextOp(ctx, cscs.ctx, ent.OpQuerySelect)
 	if err := cscs.prepareQuery(ctx); err != nil {
 		return err
 	}
