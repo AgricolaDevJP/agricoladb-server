@@ -1,12 +1,10 @@
 module github.com/AgricolaDevJP/agricoladb-server
 
-go 1.22.1
-
-toolchain go1.22.5
+go 1.22.5
 
 require (
-	entgo.io/contrib v0.5.0
-	entgo.io/ent v0.13.1
+	entgo.io/contrib v0.6.0
+	entgo.io/ent v0.13.2-0.20240717044502-34158f2c129b
 	github.com/99designs/gqlgen v0.17.49
 	github.com/aws/aws-lambda-go v1.47.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
@@ -24,10 +22,11 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.19.1-0.20240203083654-5948b60a8e43 // indirect
+	ariga.io/atlas v0.25.1-0.20240717145915-af51d3945208 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
+	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.4 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/go-openapi/inflect v0.19.0 // indirect
@@ -48,7 +47,7 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/xrash/smetrics v0.0.0-20240312152122-5f08fbb34913 // indirect
-	github.com/zclconf/go-cty v1.8.0 // indirect
+	github.com/zclconf/go-cty v1.14.4 // indirect
 	golang.org/x/exp v0.0.0-20240112132812-db7319d0e0e3 // indirect
 	golang.org/x/mod v0.18.0 // indirect
 	golang.org/x/sys v0.22.0 // indirect
