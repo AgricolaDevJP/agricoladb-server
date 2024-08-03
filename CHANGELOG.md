@@ -1,5 +1,8 @@
 # Changelog
 
+## [v2.0.17](https://github.com/AgricolaDevJP/agricoladb-server/compare/v2.0.16...v2.0.17) - 2024-08-03
+- Update module entgo.io/ent to v0.14.0 by @renovate in https://github.com/AgricolaDevJP/agricoladb-server/pull/213
+
 ## [v2.0.16](https://github.com/AgricolaDevJP/agricoladb-server/compare/v2.0.15...v2.0.16) - 2024-07-25
 - [nit] fix some config about build by @Arthur1 in https://github.com/AgricolaDevJP/agricoladb-server/pull/207
 - Update module modernc.org/sqlite to v1.31.1 by @renovate in https://github.com/AgricolaDevJP/agricoladb-server/pull/209
