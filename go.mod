@@ -17,7 +17,7 @@ require (
 	github.com/phsym/console-slog v0.3.1
 	github.com/rs/cors v1.11.0
 	github.com/vektah/gqlparser/v2 v2.5.16
-	golang.org/x/sync v0.7.0
+	golang.org/x/sync v0.8.0
 	modernc.org/sqlite v1.31.1
 )
 
