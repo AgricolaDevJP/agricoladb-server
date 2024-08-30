@@ -15,7 +15,7 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/jszwec/csvutil v1.10.0
 	github.com/phsym/console-slog v0.3.1
-	github.com/rs/cors v1.11.0
+	github.com/rs/cors v1.11.1
 	github.com/vektah/gqlparser/v2 v2.5.16
 	golang.org/x/sync v0.7.0
 	modernc.org/sqlite v1.31.1
