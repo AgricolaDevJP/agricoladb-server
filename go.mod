@@ -18,7 +18,7 @@ require (
 	github.com/rs/cors v1.11.0
 	github.com/vektah/gqlparser/v2 v2.5.16
 	golang.org/x/sync v0.7.0
-	modernc.org/sqlite v1.31.1
+	modernc.org/sqlite v1.33.1
 )
 
 require (
