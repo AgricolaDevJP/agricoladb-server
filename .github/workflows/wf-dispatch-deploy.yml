@@ -5,13 +5,13 @@ jobs:
   dispatch-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/create-github-app-token@v1
+      - uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3.0.0
         id: app-token
         with:
           app-id: 792029
           private-key: ${{ secrets.AGRICOLADEVJP_BOT_PRIVATE_KEY }}
           repositories: housemaster
-      - uses: peter-evans/repository-dispatch@v3
+      - uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697 # v4.0.1
         with:
           event-type: bump-version
           repository: AgricolaDevJP/housemaster
