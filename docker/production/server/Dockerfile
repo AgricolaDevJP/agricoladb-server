@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM golang:1.22-bookworm as builder
+FROM --platform=$BUILDPLATFORM golang:1.26-trixie as builder
 ARG TARGETARCH
 
 ENV GOTOOLCHAIN=auto
@@ -12,7 +12,7 @@ COPY . .
 RUN CGO_ENABLED=0 GOARCH=${TARGETARCH} go build -ldflags="-s -w" -o agricoladb-server ./cmd/server && \
   CGO_ENABLED=0 go run ./cmd/migration
 
-FROM gcr.io/distroless/base-debian12:nonroot
+FROM gcr.io/distroless/base-debian13:nonroot
 
 COPY --from=builder --chown=nonroot:nonroot /opt/app/agricoladb-server /agricoladb-server
 COPY --from=builder --chown=nonroot:nonroot /opt/app/agricoladb.sqlite /agricoladb.sqlite

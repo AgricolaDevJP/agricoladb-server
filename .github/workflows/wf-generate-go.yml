@@ -7,19 +7,19 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ github.head_ref }}
           persist-credentials: false
           fetch-depth: 0
-      - uses: actions/create-github-app-token@v1
+      - uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3.0.0
         id: app-token
         with:
           app-id: 792029
           private-key: ${{ secrets.AGRICOLADEVJP_BOT_PRIVATE_KEY }}
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0
         with:
-          go-version: 1.22
+          go-version-file: ./go.mod
       - name: Generate codes
         run: go generate ./...
       - name: Check changes
@@ -37,7 +37,7 @@ jobs:
           git add .
           git commit --author=. -m 'go generate'
       - name: Push changes
-        uses: ad-m/github-push-action@v0.8.0
+        uses: ad-m/github-push-action@77c5b412c50b723d2a4fbc6d71fb5723bcd439aa # v1.0.0
         if: steps.diff.outcome == 'failure'
         with:
           github_token: ${{ steps.app-token.outputs.token }}

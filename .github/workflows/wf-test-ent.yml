@@ -7,8 +7,8 @@ jobs:
   codegen-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0
         with:
-          go-version: 1.22
-      - uses: ent/contrib/ci@master
+          go-version-file: ./go.mod
+      - uses: Arthur1/ent-contrib/ci@5124d1d2a7edd50f8810548c158b6e3220589407
