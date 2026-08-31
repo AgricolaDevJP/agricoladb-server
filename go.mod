@@ -16,7 +16,7 @@ require (
 	github.com/jszwec/csvutil v1.10.0
 	github.com/phsym/console-slog v0.3.1
 	github.com/rs/cors v1.11.0
-	github.com/vektah/gqlparser/v2 v2.5.16
+	github.com/vektah/gqlparser/v2 v2.5.36
 	golang.org/x/sync v0.7.0
 	modernc.org/sqlite v1.31.1
 )
@@ -24,7 +24,7 @@ require (
 require (
 	ariga.io/atlas v0.25.1-0.20240717145915-af51d3945208 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
-	github.com/agnivade/levenshtein v1.1.1 // indirect
+	github.com/agnivade/levenshtein v1.2.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.4 // indirect
