@@ -1,12 +1,12 @@
 module github.com/AgricolaDevJP/agricoladb-server
 
-go 1.22.5
+go 1.26
 
 require (
 	entgo.io/contrib v0.6.0
 	entgo.io/ent v0.14.0
 	github.com/99designs/gqlgen v0.17.49
-	github.com/aws/aws-lambda-go v1.47.0
+	github.com/aws/aws-lambda-go v1.55.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
 	github.com/caarlos0/env/v11 v11.1.0
 	github.com/cbrewster/slog-env v0.1.1
