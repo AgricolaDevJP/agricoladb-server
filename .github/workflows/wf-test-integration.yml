@@ -12,7 +12,7 @@ jobs:
         with:
           go-version: 1.22
       - name: install runn
-        uses: k1LoW/gh-setup@v1
+        uses: k1LoW/gh-setup@5fb38d34ea857e5a942b6fe10f1723e55055f6c0 # v1
         with:
           repo: k1LoW/runn
       - name: install dependencies
@@ -23,7 +23,7 @@ jobs:
         run: go run cmd/server/main.go &
         shell: bash
       - name: server health check
-        uses: jtalk/url-health-check-action@v4
+        uses: jtalk/url-health-check-action@b716ccb6645355dd9fcce8002ce460e5474f7f00 # v4
         with:
           url: http://localhost:8000
           max-attempts: 5
