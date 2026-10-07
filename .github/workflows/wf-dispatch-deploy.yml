@@ -11,7 +11,7 @@ jobs:
           app-id: 792029
           private-key: ${{ secrets.AGRICOLADEVJP_BOT_PRIVATE_KEY }}
           repositories: housemaster
-      - uses: peter-evans/repository-dispatch@v3
+      - uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0 # v3
         with:
           event-type: bump-version
           repository: AgricolaDevJP/housemaster
